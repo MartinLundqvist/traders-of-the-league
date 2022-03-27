@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Board from './components/Board';
 import Europe from './elements/Europe';
+import { Title } from './elements/Typography';
 
 const Wrapper = styled.div`
   display: grid;
@@ -10,35 +11,21 @@ const Wrapper = styled.div`
   grid-template-columns: 100px auto 100px;
   grid-template-rows: 100px auto 100px;
 
-  img {
-    position: absolute;
-    display: inline;
-    grid-column: 1 / -1;
-    grid-row: 1 / -1;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 0% 40%;
-    filter: blur(15px);
-    z-index: -1;
-    overflow: hidden;
+  .header {
+    grid-area: header;
   }
 
-  h1 {
-    margin: 0;
-    padding: 1rem;
-    grid-area: header;
-    font-size: 3rem;
-    font-weight: bold;
-    text-shadow: 3px 3px 3px hsla(57, 145%, 30%, 0.6);
+  .full {
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
   }
 `;
 
 function App() {
   return (
     <Wrapper>
-      <Europe />
-      <h1>Traders of the Hanseatic League</h1>
+      <Europe className='full' />
+      <Title className='header'>Traders of the Hanseatic League</Title>
       <Board />
     </Wrapper>
   );

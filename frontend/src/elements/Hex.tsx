@@ -33,13 +33,36 @@ const Wrapper = styled.div<IWrapperProps>`
     color: var(--color-hex);
     font-weight: bold;
     pointer-events: none;
+    z-index: 2;
+  }
+
+  img.coa {
+    position: absolute;
+    border-radius: 50%;
+    bottom: 5px;
+    ${(props) => props.north && 'top: 5px;'};
+    left: 10px;
+    width: 20px;
+    height: 20px;
+    object-fit: cover;
+    border: 1px solid var(--color-hex);
+    background-color: var(--color-fill);
+    z-index: 2;
   }
 `;
 
-const SVG = styled.svg`
-  fill: none;
+interface ISVGProps {
+  city?: null | ICity;
+}
+
+const SVG = styled.svg<ISVGProps>`
+  opacity: 0.7;
+  fill: var(--color-fill-sea);
+
+  ${(props) => props.city && 'fill: var(--color-fill);'}
+
   &:hover {
-    fill: #dada5f;
+    opacity: 1;
   }
 `;
 
@@ -84,7 +107,9 @@ const Hex = ({
       north={north}
     >
       {city && <span>{city.name}</span>}
+      {city && <img className='coa' src={city.coatOfArms} />}
       <SVG
+        city={city}
         xmlns='http://www.w3.org/2000/svg'
         version='1.1'
         viewBox='0 0 511.544 443.01'

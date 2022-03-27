@@ -5,7 +5,7 @@ import { TCargo } from '../../../shared/types';
 const Wrapper = styled.div`
   position: relative;
   display: inline-block;
-  width: 30px;
+  width: 20px;
   pointer-events: none;
 `;
 

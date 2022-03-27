@@ -7,6 +7,8 @@
 :root {
   --color-bg: rgb(230, 226, 119);
   --color-hex: rgb(94, 111, 238);
+  --color-fill: #c9a87d;
+  --color-fill-sea: #f6cd9e;
 }
 
 body {
