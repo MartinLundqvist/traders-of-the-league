@@ -13,7 +13,7 @@ export type TCity =
   | 'Bergen'
   | 'Hamburg'
   | 'Brügge'
-  | 'Tonsberg'
+  | 'Tønsberg'
   | 'Falsterbo'
   | 'Lübeck'
   | 'Stettin'
@@ -24,12 +24,14 @@ export type TCity =
   | 'Riga'
   | 'Reval';
 
+export type TVictoryPoint = 1 | 2 | 3 | 4 | 5;
+
 export type TCoatOfArms = string;
 
 export type TRegion = 'East' | 'West' | 'Central';
 
 export interface IContract {
-  value: number;
+  value: TVictoryPoint;
   cargo: TCargo[];
   region: TRegion;
 }

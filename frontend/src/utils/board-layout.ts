@@ -101,7 +101,7 @@ export const BOARD_LAYOUT: IBoardLayoutElement[] = [
     column: 5,
     row: 0,
     city: {
-      name: 'Tonsberg',
+      name: 'Tønsberg',
       contracts: [],
       coatOfArms: tonsberg,
       goods: ['blue'],

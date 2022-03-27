@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ICity } from '../../../shared/types';
+import { ICity } from '../../../../shared/types';
 import Cargo from './Cargo';
 import Contracts from './Contracts';
 
@@ -41,9 +41,9 @@ const Wrapper = styled.div<IWrapperProps>`
     border-radius: 50%;
     bottom: 5px;
     ${(props) => props.north && 'top: 5px;'};
-    left: 10px;
-    width: 20px;
-    height: 20px;
+    left: 5px;
+    width: 25px;
+    height: 25px;
     object-fit: cover;
     border: 1px solid var(--color-hex);
     background-color: var(--color-fill);

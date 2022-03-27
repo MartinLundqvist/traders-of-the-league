@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { IContract } from '../../../shared/types';
+import { IContract } from '../../../../shared/types';
+import Contract from './Contract';
 
 interface IWrapperProps {
   north?: boolean;
@@ -19,26 +20,29 @@ const Wrapper = styled.div<IWrapperProps>`
 
   transition: transform 150ms ease-in-out;
 
+  --color-border: hsla(0, 0%, 0%, 0.5);
+  --color-content: hsla(0, 100%, 100%, 0.8);
+
   &:hover {
     transform: scale(2);
-    z-index: 2;
+    z-index: 5;
   }
 
-  div {
+  /* div {
     position: relative;
     display: inline-block;
     width: 25px;
     height: 25px;
-    border: 1.5px solid black;
+    border: 1.5px solid var(--color-border);
     border-left: none;
-    background-color: white;
+    background-color: var(--color-content);
     /* margin: 1px; */
     /* z-index: 2; */
-  }
+  } */
 
-  div:nth-child(1) {
-    border-left: 1.5px solid black;
-  }
+  /* div:nth-child(1) {
+    border-left: 1.5px solid var(--color-border);
+  } */
 `;
 
 interface IContractProps {
@@ -58,9 +62,9 @@ const Contracts = ({
 }: IContractProps): JSX.Element => {
   return (
     <Wrapper north={north} west={west} center={center} farEast={farEast}>
-      <div></div>
-      <div></div>
-      <div></div>
+      {contracts.map((contract, index) => (
+        <Contract contract={contract} key={index} />
+      ))}
     </Wrapper>
   );
 };

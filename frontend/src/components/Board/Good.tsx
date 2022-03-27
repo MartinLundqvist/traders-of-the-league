@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { TCargo } from '../../../shared/types';
+import { TCargo } from '../../../../shared/types';
 
 const Wrapper = styled.div`
   position: relative;
