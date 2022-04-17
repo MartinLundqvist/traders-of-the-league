@@ -1,42 +1,16 @@
-import { ICity } from '../../../shared/types';
-import newcastle from '../assets/newcastle.png';
-import abo from '../assets/abo.png';
-import bergen from '../assets/bergen.png';
-import brugge from '../assets/brugge.png';
-import danzig from '../assets/danzig.png';
-import falsterbo from '../assets/falsterbo.png';
-import hamburg from '../assets/hamburg.png';
-import london from '../assets/london.png';
-import lubeck from '../assets/lubeck.png';
-import reval from '../assets/reval.png';
-import riga from '../assets/riga.png';
-import stettin from '../assets/stettin.png';
-import stockholm from '../assets/stockholm.png';
-import tonsberg from '../assets/tonsberg.png';
-import visby from '../assets/visby.png';
+import { IBoardHexagon, IGameState } from '../types';
 
-interface IBoardLayoutElement {
-  column: number;
-  row: number;
-  north?: boolean;
-  west?: boolean;
-  center?: boolean;
-  farEast?: boolean;
-  city?: ICity;
-}
-
-export const BOARD_LAYOUT: IBoardLayoutElement[] = [
+export const BOARD: IBoardHexagon[] = [
   {
     column: 0,
     row: 3,
     city: {
       name: 'Newcastle',
       contracts: [],
-      coatOfArms: newcastle,
+      coatOfArms: '',
       goods: ['black', 'red'],
       region: 'West',
     },
-    north: true,
   },
   { column: 1, row: 2 },
   { column: 1, row: 4 },
@@ -47,7 +21,7 @@ export const BOARD_LAYOUT: IBoardLayoutElement[] = [
     city: {
       name: 'London',
       contracts: [],
-      coatOfArms: london,
+      coatOfArms: '',
       goods: ['red', 'red'],
       region: 'West',
     },
@@ -64,11 +38,10 @@ export const BOARD_LAYOUT: IBoardLayoutElement[] = [
     city: {
       name: 'Brügge',
       contracts: [],
-      coatOfArms: brugge,
+      coatOfArms: '',
       goods: ['brown', 'brown'],
       region: 'West',
     },
-    west: true,
   },
   {
     column: 3,
@@ -76,11 +49,10 @@ export const BOARD_LAYOUT: IBoardLayoutElement[] = [
     city: {
       name: 'Bergen',
       contracts: [],
-      coatOfArms: bergen,
+      coatOfArms: '',
       goods: ['green', 'green'],
       region: 'West',
     },
-    north: true,
   },
   { column: 3, row: 2 },
   { column: 3, row: 4 },
@@ -90,11 +62,10 @@ export const BOARD_LAYOUT: IBoardLayoutElement[] = [
     city: {
       name: 'Hamburg',
       contracts: [],
-      coatOfArms: hamburg,
+      coatOfArms: '',
       goods: ['green', 'brown'],
       region: 'West',
     },
-    west: true,
   },
   { column: 4, row: 1 },
   {
@@ -103,11 +74,10 @@ export const BOARD_LAYOUT: IBoardLayoutElement[] = [
     city: {
       name: 'Tønsberg',
       contracts: [],
-      coatOfArms: tonsberg,
+      coatOfArms: '',
       goods: ['blue'],
       region: 'Central',
     },
-    north: true,
   },
   { column: 5, row: 2 },
   { column: 5, row: 4 },
@@ -117,7 +87,7 @@ export const BOARD_LAYOUT: IBoardLayoutElement[] = [
     city: {
       name: 'Lübeck',
       contracts: [],
-      coatOfArms: lubeck,
+      coatOfArms: '',
       goods: ['yellow', 'yellow'],
       region: 'Central',
     },
@@ -128,12 +98,10 @@ export const BOARD_LAYOUT: IBoardLayoutElement[] = [
     city: {
       name: 'Falsterbo',
       contracts: [],
-      coatOfArms: falsterbo,
+      coatOfArms: '',
       goods: ['black'],
       region: 'Central',
     },
-    north: true,
-    center: true,
   },
   {
     column: 6,
@@ -141,7 +109,7 @@ export const BOARD_LAYOUT: IBoardLayoutElement[] = [
     city: {
       name: 'Stettin',
       contracts: [],
-      coatOfArms: stettin,
+      coatOfArms: '',
       goods: ['green', 'yellow'],
       region: 'Central',
     },
@@ -154,11 +122,10 @@ export const BOARD_LAYOUT: IBoardLayoutElement[] = [
     city: {
       name: 'Stockholm',
       contracts: [],
-      coatOfArms: stockholm,
+      coatOfArms: '',
       goods: ['blue', 'brown'],
       region: 'East',
     },
-    north: true,
   },
   {
     column: 8,
@@ -166,12 +133,10 @@ export const BOARD_LAYOUT: IBoardLayoutElement[] = [
     city: {
       name: 'Visby',
       contracts: [],
-      coatOfArms: visby,
+      coatOfArms: '',
       goods: ['gray', 'black'],
       region: 'East',
     },
-    farEast: true,
-    north: true,
   },
   {
     column: 8,
@@ -179,11 +144,10 @@ export const BOARD_LAYOUT: IBoardLayoutElement[] = [
     city: {
       name: 'Danzig',
       contracts: [],
-      coatOfArms: danzig,
+      coatOfArms: '',
       goods: ['black', 'brown'],
       region: 'East',
     },
-    west: true,
   },
   {
     column: 9,
@@ -191,11 +155,10 @@ export const BOARD_LAYOUT: IBoardLayoutElement[] = [
     city: {
       name: 'Åbo',
       contracts: [],
-      coatOfArms: abo,
+      coatOfArms: '',
       goods: ['black', 'black'],
       region: 'East',
     },
-    north: true,
   },
   { column: 9, row: 2 },
   { column: 9, row: 4 },
@@ -206,11 +169,10 @@ export const BOARD_LAYOUT: IBoardLayoutElement[] = [
     city: {
       name: 'Riga',
       contracts: [],
-      coatOfArms: riga,
+      coatOfArms: '',
       goods: ['blue', 'blue'],
       region: 'East',
     },
-    west: true,
   },
   {
     column: 11,
@@ -218,10 +180,56 @@ export const BOARD_LAYOUT: IBoardLayoutElement[] = [
     city: {
       name: 'Reval',
       contracts: [],
-      coatOfArms: reval,
+      coatOfArms: '',
       goods: ['gray', 'gray'],
       region: 'East',
     },
-    north: true,
   },
 ];
+
+export const initialGameState: IGameState = {
+  players: [
+    {
+      color: 'blue',
+      name: 'Alfa',
+      uuid: 'asdlkjasdf',
+      contractsFulfilled: [],
+      achievements: [],
+      citiesEmptied: [],
+      position: {
+        column: 3,
+        row: 0,
+      },
+      victoryPoints: 0,
+      cargo: ['black', 'blue'],
+    },
+    {
+      color: 'red',
+      name: 'Beta',
+      uuid: 'asdlkjadsdf',
+      contractsFulfilled: [],
+      achievements: [],
+      citiesEmptied: [],
+      position: {
+        column: 8,
+        row: 1,
+      },
+      victoryPoints: 0,
+      cargo: ['brown', 'gray', 'gray', 'blue', 'black'],
+    },
+    {
+      color: 'green',
+      name: 'Ceta',
+      uuid: 'asdlsdf',
+      contractsFulfilled: [],
+      achievements: [],
+      citiesEmptied: [],
+      position: {
+        column: 3,
+        row: 6,
+      },
+      victoryPoints: 0,
+      cargo: [],
+    },
+  ],
+};

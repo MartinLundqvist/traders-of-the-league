@@ -5,8 +5,24 @@ import Good from './Good';
 
 const Wrapper = styled.div`
   position: absolute;
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: 'left right';
+
+  div:nth-child(1) {
+    grid-area: left;
+    justify-self: end;
+    align-self: center;
+  }
+
+  div:nth-child(2) {
+    grid-area: right;
+    justify-self: start;
+    align-self: center;
+  }
+
+  /* justify-content: center; */
   align-items: center;
   top: 0;
   height: 100%;

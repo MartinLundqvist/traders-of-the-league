@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { IContract } from '../../../../shared/types';
-import { CARGO_COLOR_STRINGS } from '../../utils/cargo-colors';
+import { CARGO_COLOR_STRINGS } from '../../utils/cargoColors';
 
 interface IWrapperProps {
   contract: IContract;
@@ -59,6 +59,7 @@ const Wrapper = styled.div<IWrapperProps>`
         props.contract.value < 3
           ? 'circle(50% at 50% 50%);'
           : 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);'};
+
       background-color: white;
     }
   }

@@ -27,22 +27,6 @@ const Wrapper = styled.div<IWrapperProps>`
     transform: scale(2);
     z-index: 5;
   }
-
-  /* div {
-    position: relative;
-    display: inline-block;
-    width: 25px;
-    height: 25px;
-    border: 1.5px solid var(--color-border);
-    border-left: none;
-    background-color: var(--color-content);
-    /* margin: 1px; */
-    /* z-index: 2; */
-  } */
-
-  /* div:nth-child(1) {
-    border-left: 1.5px solid var(--color-border);
-  } */
 `;
 
 interface IContractProps {

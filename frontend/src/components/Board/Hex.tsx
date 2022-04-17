@@ -1,25 +1,30 @@
 import styled from 'styled-components';
 import { ICity } from '../../../../shared/types';
+import {
+  getLeftForBoardPosition,
+  getTopForBoardPosition,
+  HEX_MAX_DIAMETER,
+  HEX_MIN_DIAMETER,
+} from '../../utils/boardGeometry';
 import Cargo from './Cargo';
 import Contracts from './Contracts';
 
 interface IWrapperProps {
-  top: string;
-  left: string;
-  width: string;
-  height: string;
+  top: number;
+  left: number;
   north?: boolean;
 }
 
 const Wrapper = styled.div<IWrapperProps>`
   position: absolute;
-  height: ${(props) => props.height};
-  width: ${(props) => props.width};
-  top: ${(props) => props.top};
-  left: ${(props) => props.left};
+  height: ${HEX_MIN_DIAMETER}px;
+  width: ${HEX_MAX_DIAMETER}px;
+  top: ${(props) => props.top}px;
+  left: ${(props) => props.left}px;
 
   span {
     position: absolute;
+    top: 0;
     height: 100%;
     width: 100%;
     padding-top: 0.5rem;
@@ -74,40 +79,35 @@ const Polygon = styled.polygon`
 
 interface IHexProps {
   id: number;
-  top: string;
-  left: string;
-  width: string;
-  height: string;
+  row: number;
+  column: number;
   city?: null | ICity;
   north?: boolean;
   west?: boolean;
   center?: boolean;
   farEast?: boolean;
+  onClick: () => void;
 }
 
 const Hex = ({
   id,
   city = null,
-  top,
-  left,
-  width,
-  height,
+  row,
+  column,
   north,
   west,
   center,
   farEast,
+  onClick,
 }: IHexProps): JSX.Element => {
   return (
     <Wrapper
       data-id={id}
-      top={top}
-      left={left}
-      width={width}
-      height={height}
+      top={getTopForBoardPosition({ row, column })}
+      left={getLeftForBoardPosition({ row, column })}
       north={north}
+      onClick={onClick}
     >
-      {city && <span>{city.name}</span>}
-      {city && <img className='coa' src={city.coatOfArms} />}
       <SVG
         city={city}
         xmlns='http://www.w3.org/2000/svg'
@@ -116,15 +116,19 @@ const Hex = ({
       >
         <Polygon points='130.773,438.01 5.774,221.505 130.773,5   380.771,5 505.771,221.505 380.771,438.01 ' />
       </SVG>
-      {city && <Cargo cargo={city.goods} />}
       {city && (
-        <Contracts
-          contracts={city.contracts}
-          north={north}
-          west={west}
-          center={center}
-          farEast={farEast}
-        />
+        <>
+          <span>{city.name}</span>
+          <img className='coa' src={city.coatOfArms} />
+          <Cargo cargo={city.goods} />
+          <Contracts
+            contracts={city.contracts}
+            north={north}
+            west={west}
+            center={center}
+            farEast={farEast}
+          />
+        </>
       )}
     </Wrapper>
   );
