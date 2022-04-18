@@ -1,0 +1,35 @@
+Things to do:
+- User connects. GameState is changed to 'connected'. 
+- If there is no sessionId provided, we create a new one. 
+  - User is asked to provide a name. 
+  - Server creates a new session for this user containing: SessionId, user name, user UUID.
+  - Server sends back the session object
+  - Frontend persists the session object in the localstorage
+  - GameState is changed to 'session_established'
+- If there is an existing session stored, that session is restored
+  - GameState is changed to 'session_established'
+- Server the sends back a list of ongoing games which the user is part of (if any)
+- User can select one of the existing games to continue, or start a new game. 
+- If user selects an existing game, the server sends back the associated IGame object and the GameState is changed to 'playing'
+- If user creates a new game, they pick a Name for the game, sends it to the server, who responds back with a new IGame object. GameState is changed to 'playing'
+
+-> Not clear whether we need this type of GameState on the server side, really. The server doesn't have to manage the frontend's state.
+it only needs to provide the data to feed the frontend. The server only needs to understand the context, and then run the operations within that context. 
+The context includes: 
+  - Session (User)
+  - Current game being played
+
+But hang on! That's implicit in the connection that is established... We store all this in the session:
+
+What is a Session?
+  - Session is a user specific state. It follows the ISession interface which is shared. It has:
+    - Session ID. 
+    - User information: Name, UUID
+    - References to Games the users is playing: Game UUID. 
+
+What is a Game?
+    - Game is game specific state. It follows the IGame interface which is shared between the frontend and gameserver. It has:
+      - Game information: Name and UUID
+      - Player states: One IPlayer interface implemented for each player.
+      - Board state: One TBoard interface. 
+      - Game state: Has the game started? Which player's move is it? Has the game been won? It follows the TGameState interface.

@@ -1,0 +1,145 @@
+import { IGame, ISession, IUser } from '../../../shared/types';
+import { GameStore } from '../stores/gameStore';
+import { SessionStore } from '../stores/sessionStore';
+import { TGameServer } from '../types';
+import { nanoid } from 'nanoid';
+import { BOARD } from '../../../shared/constants';
+import { addPlayerToGame } from '../../../shared/utils/addPlayerToGame';
+
+export class GameSession implements ISession {
+  // Core ISession propertues
+  uuid: string;
+  user: IUser;
+  activeGameUuid: string;
+
+  // References to the socket server and the socket itself
+  private io: TGameServer;
+  private socket: TGameServer;
+
+  // References to the stores
+  private gameStore: GameStore;
+  private sessionStore: SessionStore;
+
+  constructor(
+    io: TGameServer,
+    socket: TGameServer,
+    sessionStore: SessionStore,
+    gameStore: GameStore
+  ) {
+    this.io = io;
+    this.socket = socket;
+
+    this.gameStore = gameStore;
+    this.sessionStore = sessionStore;
+
+    // Initialize the properties with empty values for now.
+    this.uuid = '';
+    this.user = { name: '', uuid: '', connected: true };
+    this.activeGameUuid = '';
+
+    console.log('New connection identified - socket ID is' + this.socket.id);
+
+    // Emit a connection confirmation to the frontend, this will trigger the frontend to fetch a sessionId OR ask to create a new session
+    this.socket.emit('pushConnection', 'Connected');
+
+    // Register listeners
+    this.socket.on(
+      'createSession',
+      (name: string, callback: (session: ISession) => void) =>
+        this.createSession(name, callback)
+    );
+    this.socket.on(
+      'fetchSession',
+      (
+        sessionUuid: string,
+        callback: (session: ISession | undefined) => void
+      ) => this.fetchSession(sessionUuid, callback)
+    );
+    this.socket.on('createAndJoinNewGame', (gameName: string) =>
+      this.createAndJoinNewGame(gameName)
+    );
+    this.socket.on('fetchActiveGame', () => this.pushActiveGame());
+  }
+
+  private createSession(name: string, callback: (session: ISession) => void) {
+    // Create the session
+    let newSession: ISession = {
+      user: { name, uuid: nanoid(), connected: true },
+      uuid: nanoid(),
+      activeGameUuid: '',
+    };
+
+    // Persist it
+    this.sessionStore.saveSession(newSession);
+
+    // And update the local properties (deeply)
+    this.uuid = newSession.uuid;
+    this.user.uuid = newSession.user.uuid;
+    this.user.name = newSession.user.name;
+    this.activeGameUuid = ''; // Not strictly required, but clean
+
+    // And finally callback to the frontend
+    callback(newSession);
+  }
+
+  private fetchSession(
+    sessionUuid: string,
+    callback: (session: ISession | undefined) => void
+  ) {
+    // We also need to initialize the local session properties
+    // TODO: This is a bit unelegant..
+    const fetchedSession = this.sessionStore.getSession(sessionUuid);
+    if (fetchedSession) {
+      this.uuid = fetchedSession.uuid;
+      this.user = {
+        name: fetchedSession.user.name,
+        uuid: fetchedSession.user.uuid,
+        connected: true,
+      };
+      this.activeGameUuid = fetchedSession.activeGameUuid;
+    }
+
+    callback(fetchedSession);
+  }
+
+  private createAndJoinNewGame(gameName: string) {
+    // Create a new game object with initial values
+    const newGame: IGame = {
+      name: gameName,
+      uuid: nanoid(),
+      players: [],
+      board: BOARD,
+    };
+
+    // Add this user as the first player
+    newGame.players.push(addPlayerToGame(this.user, newGame));
+
+    // Persist the game in the game store
+    this.gameStore.saveGame(newGame);
+
+    // Then set this game as the active game locally
+    this.activeGameUuid = newGame.uuid;
+
+    // Remember to update the sessionStore!
+    this.sessionStore.saveSession({
+      user: this.user,
+      activeGameUuid: this.activeGameUuid,
+      uuid: this.uuid,
+    });
+
+    // And execute the fetch command to trigger the frontend
+    this.pushActiveGame();
+  }
+
+  private pushActiveGame() {
+    // Get the game from the store
+    const game = this.gameStore.getGame(this.activeGameUuid);
+
+    if (!game) {
+      this.socket.emit('error', 'Game not found');
+      return;
+    }
+
+    this.socket.emit('pushActiveGame', game);
+  }
+}

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useGame } from '../../contexts/GameProvider';
+import { useLayout } from '../../contexts/LayoutProvider';
 import { ButtonSmall } from '../../elements/Typography';
 import { Player } from './Player';
 
@@ -21,12 +21,12 @@ interface IFooterProps {
 }
 
 const Footer = ({ className }: IFooterProps): JSX.Element => {
-  const { players, dealContracts } = useGame();
+  const { players, dealContracts } = useLayout();
 
   return (
     <Wrapper className={className}>
       {players.map((player) => (
-        <Player player={player} key={player.uuid} />
+        <Player player={player} key={player.user.uuid} />
       ))}
       <ButtonSmall onClick={() => dealContracts()}>Start</ButtonSmall>
     </Wrapper>

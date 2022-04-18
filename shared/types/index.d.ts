@@ -1,3 +1,5 @@
+export * from './socketContracts';
+
 export type TCargo =
   | 'red'
   | 'green'
@@ -61,10 +63,15 @@ export interface IBoardPosition {
   row: number;
 }
 
+export interface IBoardHexagon extends IBoardPosition {
+  city?: ICity;
+}
+
+export type TBoard = IBoardHexagon[];
+
 export interface IPlayer {
   color: TPlayerColor;
-  name: string;
-  uuid: string;
+  user: IUser;
   contractsFulfilled: IContract[];
   citiesEmptied: IEmptiedCity[];
   achievements: IAchievement[];
@@ -73,10 +80,21 @@ export interface IPlayer {
   cargo: TCargo[];
 }
 
-export interface IGameState {
+export interface IGame {
+  name: string;
+  uuid: string;
   players: IPlayer[];
+  board: TBoard;
 }
 
-export interface IBoardHexagon extends IBoardPosition {
-  city?: ICity;
+export interface IUser {
+  name: string;
+  uuid: string;
+  connected: boolean;
+}
+
+export interface ISession {
+  uuid: string;
+  user: IUser;
+  activeGameUuid: string;
 }

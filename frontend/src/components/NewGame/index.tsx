@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import { useGameServer } from '../../contexts/GameServerProvider';
 import { Title, Input, Button } from '../../elements/Typography';
 
 const Wrapper = styled.div`
@@ -25,15 +26,29 @@ interface INewGameProps {
 }
 
 const NewGame = ({ className }: INewGameProps): JSX.Element => {
-  const [showGameCode, setShowGameCode] = useState(false);
+  const [gameName, setGameName] = useState('');
+  const { createAndJoinNewGame } = useGameServer();
+  // const [showGameCode, setShowGameCode] = useState(false);
+
+  const handleKeyDown = (key: string) => {
+    if (key === 'Enter') {
+      createAndJoinNewGame(gameName);
+    }
+  };
+
   return (
     <Wrapper className={className}>
       <div className='container'>
         <Title>Pick a name for your game</Title>
-        <Input type='text' />
-        <Button onClick={() => setShowGameCode(true)}>GO</Button>
+        <Input
+          type='text'
+          value={gameName}
+          onChange={(e) => setGameName(e.target.value)}
+          onKeyDown={(e) => handleKeyDown(e.key)}
+        />
+        <Button onClick={() => createAndJoinNewGame(gameName)}>GO</Button>
       </div>
-      {showGameCode && (
+      {/* {showGameCode && (
         <>
           <div className='container'>
             <Title>
@@ -46,7 +61,7 @@ const NewGame = ({ className }: INewGameProps): JSX.Element => {
           </div>
         </>
       )}
-      <div></div>
+      <div></div> */}
     </Wrapper>
   );
 };

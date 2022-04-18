@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Footer from './components/Footer';
-import { useGame } from './contexts/GameProvider';
+import Header from './components/Header';
+import { useLayout } from './contexts/LayoutProvider';
 import Europe from './elements/Europe';
 import { Title } from './elements/Typography';
 import routes from './routes';
@@ -10,8 +11,8 @@ const Wrapper = styled.div`
   height: 100vh;
   width: 100vw;
   grid-template-areas: 'header header header' 'margin-left game margin-right' 'footer footer footer';
-  grid-template-columns: minmax(100px, 1fr) 1fr minmax(100px, 1fr);
-  grid-template-rows: 120px 1fr minmax(100px, 1fr);
+  grid-template-columns: minmax(100px, auto) 1fr minmax(100px, auto);
+  grid-template-rows: 120px 1fr 120px;
 
   .grid-area--header {
     grid-area: header;
@@ -32,13 +33,11 @@ const Wrapper = styled.div`
 `;
 
 function App() {
-  const { activeRoute } = useGame();
+  const { activeRoute } = useLayout();
   return (
     <Wrapper>
       <Europe className='grid-area--all' />
-      <Title className='grid-area--header'>
-        Traders of the Hanseatic League
-      </Title>
+      <Header className='grid-area--header' />
       {routes[activeRoute]}
       <Footer className='grid-area--footer' />
     </Wrapper>

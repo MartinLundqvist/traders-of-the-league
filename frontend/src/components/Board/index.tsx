@@ -8,7 +8,8 @@ import {
   HEX_LEFT_OFFSET,
   HEX_SIDE_LENGTH,
 } from '../../utils/boardGeometry';
-import { useGame } from '../../contexts/GameProvider';
+import { useLayout } from '../../contexts/LayoutProvider';
+import { useGameServer } from '../../contexts/GameServerProvider';
 
 const Wrapper = styled.div`
   position: relative;
@@ -22,11 +23,11 @@ interface IBoardProps {
 }
 
 const Board = ({ className }: IBoardProps): JSX.Element => {
-  const { movePlayerUUIDTo, myPlayerUUID, boardLayout, dealContracts } =
-    useGame();
+  const { session } = useGameServer();
+  const { movePlayerUUIDTo, boardLayout, dealContracts } = useLayout();
 
   const movePlayerTo = ({ column, row }: IBoardPosition) => {
-    movePlayerUUIDTo(myPlayerUUID, { column, row });
+    movePlayerUUIDTo(session.user.uuid, { column, row });
   };
 
   const Hexagons = useMemo(

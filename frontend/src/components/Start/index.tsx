@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useLayout } from '../../contexts/LayoutProvider';
 import { Title } from '../../elements/Typography';
 
 const Wrapper = styled.div`
@@ -23,9 +24,12 @@ interface IStartProps {
 }
 
 const Start = ({ className }: IStartProps): JSX.Element => {
+  const { setActiveRoute } = useLayout();
   return (
     <Wrapper className={className}>
-      <Title className='button'>Start New Game</Title>
+      <Title className='button' onClick={() => setActiveRoute('newgame')}>
+        Start New Game
+      </Title>
       <Title className='button'>Join Existing Game</Title>
     </Wrapper>
   );

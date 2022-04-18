@@ -1,6 +1,6 @@
-import { IBoardHexagon, IGameState } from '../types';
+import { TBoard, IGame } from '../types';
 
-export const BOARD: IBoardHexagon[] = [
+export const BOARD: TBoard = [
   {
     column: 0,
     row: 3,
@@ -187,12 +187,17 @@ export const BOARD: IBoardHexagon[] = [
   },
 ];
 
-export const initialGameState: IGameState = {
+export const initialGameState: IGame = {
+  name: 'InitialGame',
+  uuid: 'ewoiwje9wr',
   players: [
     {
       color: 'blue',
-      name: 'Alfa',
-      uuid: 'asdlkjasdf',
+      user: {
+        name: 'Alfa',
+        uuid: 'asdlkjasdf',
+        connected: true,
+      },
       contractsFulfilled: [],
       achievements: [],
       citiesEmptied: [],
@@ -205,8 +210,11 @@ export const initialGameState: IGameState = {
     },
     {
       color: 'red',
-      name: 'Beta',
-      uuid: 'asdlkjadsdf',
+      user: {
+        name: 'Beta',
+        uuid: 'asdlkjadsdf',
+        connected: true,
+      },
       contractsFulfilled: [],
       achievements: [],
       citiesEmptied: [],
@@ -219,8 +227,11 @@ export const initialGameState: IGameState = {
     },
     {
       color: 'green',
-      name: 'Ceta',
-      uuid: 'asdlsdf',
+      user: {
+        name: 'Ceta',
+        uuid: 'asdlsdf',
+        connected: true,
+      },
       contractsFulfilled: [],
       achievements: [],
       citiesEmptied: [],
@@ -232,4 +243,5 @@ export const initialGameState: IGameState = {
       cargo: [],
     },
   ],
+  board: BOARD,
 };

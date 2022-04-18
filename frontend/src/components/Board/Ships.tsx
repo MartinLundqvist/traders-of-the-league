@@ -1,7 +1,7 @@
 // import ship from '../../assets/ship.svg';
 import styled from 'styled-components';
 import ship from '../../assets/ship2.png';
-import { useGame } from '../../contexts/GameProvider';
+import { useLayout } from '../../contexts/LayoutProvider';
 import { SHIP_HEIGHT, SHIP_WIDTH } from '../../utils/shipGeometry';
 import Good from './Good';
 
@@ -50,14 +50,14 @@ const Wrapper = styled.div<IWrapperProps>`
 `;
 
 const Ships = (): JSX.Element => {
-  const { shipLayout } = useGame();
+  const { shipLayout } = useLayout();
 
   return (
     <>
       {shipLayout.map((ship) => (
-        <Wrapper top={ship.top} left={ship.left} key={ship.player.uuid}>
+        <Wrapper top={ship.top} left={ship.left} key={ship.player.user.uuid}>
           {ship.player.cargo.map((good, index) => (
-            <Good good={good} key={ship.player.uuid + index} />
+            <Good good={good} key={ship.player.user.uuid + index} />
           ))}
         </Wrapper>
       ))}

@@ -1,5 +1,5 @@
-import { IBoardHexagon } from '../../../shared/types';
-import { BOARD } from '../../../shared/constants';
+import { IBoardHexagon, TBoard } from '../../../shared/types';
+// import { BOARD } from '../../../shared/constants';
 import { cityLayoutProperties } from './cityLayoutProperties';
 
 interface IBoardLayoutElement extends IBoardHexagon {
@@ -11,10 +11,10 @@ interface IBoardLayoutElement extends IBoardHexagon {
 
 export type TBoardLayout = IBoardLayoutElement[];
 
-export const createBoardLayout = (): TBoardLayout => {
+export const createBoardLayout = (board: TBoard): TBoardLayout => {
   const boardLayout: IBoardLayoutElement[] = [];
 
-  BOARD.forEach((hexagon) => {
+  board.forEach((hexagon) => {
     let layoutElement: IBoardLayoutElement = hexagon;
 
     if (layoutElement.city) assignCityProperties(layoutElement);
