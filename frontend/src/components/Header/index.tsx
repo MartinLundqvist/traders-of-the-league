@@ -15,11 +15,12 @@ interface IHeaderProps {
 }
 
 const Header = ({ className }: IHeaderProps) => {
-  const { session } = useGameServer();
+  const { session, game } = useGameServer();
 
   return (
     <Wrapper className={className}>
       <Title>Traders of the Hanseatic League</Title>
+      {game && <TitleSmall>Playing: {game?.name} </TitleSmall>}
       <TitleSmall>
         {session.user.name ? session.user.name : 'Not registered'}
       </TitleSmall>

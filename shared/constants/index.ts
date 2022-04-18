@@ -244,4 +244,10 @@ export const initialGameState: IGame = {
     },
   ],
   board: BOARD,
+  state: {
+    currentPlayerUuid: '',
+    round: 0,
+    started: false,
+    status: 'waiting',
+  },
 };

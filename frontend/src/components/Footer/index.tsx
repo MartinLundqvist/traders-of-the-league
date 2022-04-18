@@ -1,18 +1,24 @@
 import styled from 'styled-components';
-import { useLayout } from '../../contexts/LayoutProvider';
-import { ButtonSmall } from '../../elements/Typography';
-import { Player } from './Player';
+import { Controls } from './Controls';
+import { GameState } from './GameState';
+import { Players } from './Players';
+
+// Game status to take care of:
+// - Not started vs started.
+// - Which round are we in?
+// - Whose move is it?
+//
 
 const Wrapper = styled.div`
   position: relative;
   align-self: end;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   background-color: var(--color-fill-sea-opaque);
 
   width: 100%;
-  height: 75%;
-  padding: 1rem;
+  height: 100%;
+  padding: 0.25rem 1rem 0.25rem 1rem;
   gap: 0.5rem;
 `;
 
@@ -21,14 +27,11 @@ interface IFooterProps {
 }
 
 const Footer = ({ className }: IFooterProps): JSX.Element => {
-  const { players, dealContracts } = useLayout();
-
   return (
     <Wrapper className={className}>
-      {players.map((player) => (
-        <Player player={player} key={player.user.uuid} />
-      ))}
-      <ButtonSmall onClick={() => dealContracts()}>Start</ButtonSmall>
+      <GameState />
+      <Players />
+      <Controls />
     </Wrapper>
   );
 };

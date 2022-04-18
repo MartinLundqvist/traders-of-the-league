@@ -4,9 +4,9 @@ import Ships from './Ships';
 import { useMemo } from 'react';
 import { IBoardPosition } from '../../../../shared/types';
 import {
-  HEX_MIN_DIAMETER,
-  HEX_LEFT_OFFSET,
-  HEX_SIDE_LENGTH,
+  BOARD_WIDTH,
+  BOARD_HEIGHT,
+  BOARD_TOP_BOTTOM_PADDING,
 } from '../../utils/boardGeometry';
 import { useLayout } from '../../contexts/LayoutProvider';
 import { useGameServer } from '../../contexts/GameServerProvider';
@@ -14,8 +14,10 @@ import { useGameServer } from '../../contexts/GameServerProvider';
 const Wrapper = styled.div`
   position: relative;
   place-self: center;
-  width: ${12 * HEX_LEFT_OFFSET + HEX_SIDE_LENGTH / 2}px;
-  height: ${5 * HEX_MIN_DIAMETER}px;
+  width: ${BOARD_WIDTH}px;
+  height: ${BOARD_HEIGHT}px;
+  margin-top: ${BOARD_TOP_BOTTOM_PADDING}px;
+  margin-bottom: ${BOARD_TOP_BOTTOM_PADDING}px;
 `;
 
 interface IBoardProps {

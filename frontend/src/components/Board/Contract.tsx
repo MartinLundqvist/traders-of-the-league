@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { IContract } from '../../../../shared/types';
+import { CONTRACT_HEIGHT } from '../../utils/boardGeometry';
 import { CARGO_COLOR_STRINGS } from '../../utils/cargoColors';
 
 interface IWrapperProps {
@@ -9,8 +10,8 @@ interface IWrapperProps {
 const Wrapper = styled.div<IWrapperProps>`
   position: relative;
   display: inline-block;
-  width: 25px;
-  height: 25px;
+  width: ${CONTRACT_HEIGHT}px; // Square...
+  height: ${CONTRACT_HEIGHT}px;
   margin-right: 2px;
   border: 1.5px solid var(--color-border);
   background-color: var(--color-content);

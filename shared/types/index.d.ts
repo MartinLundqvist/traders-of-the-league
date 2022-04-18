@@ -80,11 +80,21 @@ export interface IPlayer {
   cargo: TCargo[];
 }
 
+export type TGameStatus = 'waiting' | 'playing' | 'won';
+
+export interface IGameState {
+  status: TGameStatus; // What status it the game in?
+  round: number; // Current round
+  currentPlayerUuid: string; // Who is making the current move?
+  started: boolean; // Has the game started or not?
+}
+
 export interface IGame {
   name: string;
   uuid: string;
   players: IPlayer[];
   board: TBoard;
+  state: IGameState;
 }
 
 export interface IUser {

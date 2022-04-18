@@ -43,6 +43,7 @@ const Register = ({ className }: IRegisterProps): JSX.Element => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           onKeyDown={(e) => handleKeyDown(e.key)}
+          autoFocus
         />
         <Button onClick={() => createSession(name)}>Register</Button>
       </div>

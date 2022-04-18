@@ -23,6 +23,9 @@ interface IGameServerContext {
   game: IGame | null;
   createSession: (playerName: string) => void;
   createAndJoinNewGame: (gameName: string) => void;
+  joinGame: (gameUuid: string) => void;
+  startGame: () => void;
+  endMove: () => void;
 }
 
 const initialContext: IGameServerContext = {
@@ -38,6 +41,9 @@ const initialContext: IGameServerContext = {
   game: null,
   createSession: () => {},
   createAndJoinNewGame: () => {},
+  joinGame: () => {},
+  startGame: () => {},
+  endMove: () => {},
 };
 
 const GameServerContext = createContext<IGameServerContext>(initialContext);
@@ -59,6 +65,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
 
   const onErrorListener = useCallback((error: TSocketError) => {
     console.log('GameServer Error: ' + error);
+    window.alert(error);
   }, []);
 
   const onPushConnectionListener = useCallback((message: TSocketConnection) => {
@@ -152,9 +159,45 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     socketRef.current?.emit('createAndJoinNewGame', gameName);
   };
 
+  const joinGame = (gameUuid: string) => {
+    if (gameUuid.length < 21) {
+      window.alert('ID is too short, try again.');
+      return;
+    }
+    console.log('Joining existing game with Uuid ' + gameUuid);
+    socketRef.current?.emit('joinGame', gameUuid);
+  };
+
+  const startGame = () => {
+    if (!game) {
+      window.alert('No game to start');
+      return;
+    }
+
+    console.log('Starting game ' + game.name);
+    socketRef.current?.emit('startGame');
+  };
+
+  const endMove = () => {
+    let confirmed = window.confirm('Are you sure you want to end your move?');
+
+    if (!confirmed) return;
+
+    console.log('Ending move');
+    socketRef.current?.emit('endMove');
+  };
+
   return (
     <GameServerContext.Provider
-      value={{ session, game, createSession, createAndJoinNewGame }}
+      value={{
+        session,
+        game,
+        createSession,
+        createAndJoinNewGame,
+        joinGame,
+        startGame,
+        endMove,
+      }}
     >
       {children}
     </GameServerContext.Provider>

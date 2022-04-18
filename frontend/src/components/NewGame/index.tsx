@@ -45,6 +45,7 @@ const NewGame = ({ className }: INewGameProps): JSX.Element => {
           value={gameName}
           onChange={(e) => setGameName(e.target.value)}
           onKeyDown={(e) => handleKeyDown(e.key)}
+          autoFocus
         />
         <Button onClick={() => createAndJoinNewGame(gameName)}>GO</Button>
       </div>

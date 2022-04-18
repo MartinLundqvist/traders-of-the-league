@@ -30,7 +30,9 @@ const Start = ({ className }: IStartProps): JSX.Element => {
       <Title className='button' onClick={() => setActiveRoute('newgame')}>
         Start New Game
       </Title>
-      <Title className='button'>Join Existing Game</Title>
+      <Title className='button' onClick={() => setActiveRoute('joingame')}>
+        Join Existing Game
+      </Title>
     </Wrapper>
   );
 };

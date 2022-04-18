@@ -5,6 +5,7 @@ import { TGameServer } from '../types';
 import { nanoid } from 'nanoid';
 import { BOARD } from '../../../shared/constants';
 import { addPlayerToGame } from '../../../shared/utils/addPlayerToGame';
+import { GameEngine } from '../game-engine';
 
 export class GameSession implements ISession {
   // Core ISession propertues
@@ -59,6 +60,9 @@ export class GameSession implements ISession {
       this.createAndJoinNewGame(gameName)
     );
     this.socket.on('fetchActiveGame', () => this.pushActiveGame());
+    this.socket.on('joinGame', (gameUuid: string) => this.joinGame(gameUuid));
+    this.socket.on('startGame', () => this.startGame());
+    this.socket.on('endMove', () => this.endMove());
   }
 
   private createSession(name: string, callback: (session: ISession) => void) {
@@ -80,6 +84,14 @@ export class GameSession implements ISession {
 
     // And finally callback to the frontend
     callback(newSession);
+  }
+
+  private persistThisSession() {
+    this.sessionStore.saveSession({
+      user: this.user,
+      activeGameUuid: this.activeGameUuid,
+      uuid: this.uuid,
+    });
   }
 
   private fetchSession(
@@ -109,26 +121,19 @@ export class GameSession implements ISession {
       uuid: nanoid(),
       players: [],
       board: BOARD,
+      state: {
+        currentPlayerUuid: '',
+        round: 0,
+        started: false,
+        status: 'waiting',
+      },
     };
-
-    // Add this user as the first player
-    newGame.players.push(addPlayerToGame(this.user, newGame));
 
     // Persist the game in the game store
     this.gameStore.saveGame(newGame);
 
-    // Then set this game as the active game locally
-    this.activeGameUuid = newGame.uuid;
-
-    // Remember to update the sessionStore!
-    this.sessionStore.saveSession({
-      user: this.user,
-      activeGameUuid: this.activeGameUuid,
-      uuid: this.uuid,
-    });
-
-    // And execute the fetch command to trigger the frontend
-    this.pushActiveGame();
+    // Have user join the game
+    this.joinGame(newGame.uuid);
   }
 
   private pushActiveGame() {
@@ -140,6 +145,72 @@ export class GameSession implements ISession {
       return;
     }
 
-    this.socket.emit('pushActiveGame', game);
+    // Emit the new game state to all user sockets in the game rooom
+    this.io.to(this.activeGameUuid).emit('pushActiveGame', game);
+  }
+
+  private joinGame(gameUuid: string) {
+    // Fetch the game from the store
+    const game = this.gameStore.getGame(gameUuid);
+    if (!game) {
+      this.socket.emit('error', 'Game not found');
+      return;
+    }
+
+    // Add the player to the game
+    if (game.players.length > 4) {
+      this.socket.emit('error', 'Max number of players reached');
+      return;
+    }
+    game.players.push(addPlayerToGame(this.user, game));
+    this.gameStore.saveGame(game);
+
+    // Update local session
+    this.activeGameUuid = gameUuid;
+
+    // Make sure the user socket joins the game room
+    this.socket.join(gameUuid);
+
+    // Persist the new session
+    this.persistThisSession();
+
+    // And finally push the game status to the frontend
+    this.pushActiveGame();
+  }
+
+  private startGame() {
+    const game = this.gameStore.getGame(this.activeGameUuid);
+
+    if (!this.activeGameUuid || !game) {
+      this.socket.emit('error', 'Game not found');
+      return;
+    }
+
+    if (game.players.length < 2) {
+      this.socket.emit('error', 'Not enough players');
+      return;
+    }
+
+    // Initialize the game state. This player is first to go, since they started the game.
+    GameEngine.start(game, this.user.uuid);
+
+    this.gameStore.saveGame(game);
+
+    this.pushActiveGame();
+  }
+
+  private endMove() {
+    const game = this.gameStore.getGame(this.activeGameUuid);
+
+    if (!this.activeGameUuid || !game) {
+      this.socket.emit('error', 'Game not found');
+      return;
+    }
+
+    GameEngine.endMove(game, this.user.uuid);
+
+    this.gameStore.saveGame(game);
+
+    this.pushActiveGame();
   }
 }

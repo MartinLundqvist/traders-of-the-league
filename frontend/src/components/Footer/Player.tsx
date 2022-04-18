@@ -14,7 +14,7 @@ interface IPlayerProps {
 export const Player = ({ player }: IPlayerProps): JSX.Element => {
   return (
     <Wrapper>
-      <TitleSmall>{player.name}</TitleSmall>
+      <TitleSmall>{player.user.name}</TitleSmall>
       <Stats>VPs: {player.victoryPoints}</Stats>
       <Stats>Achievements: {player.achievements.length}</Stats>
       <Stats>Cities Emptied: {player.citiesEmptied.length}</Stats>

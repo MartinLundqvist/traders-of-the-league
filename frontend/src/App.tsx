@@ -3,7 +3,6 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import { useLayout } from './contexts/LayoutProvider';
 import Europe from './elements/Europe';
-import { Title } from './elements/Typography';
 import routes from './routes';
 
 const Wrapper = styled.div`
