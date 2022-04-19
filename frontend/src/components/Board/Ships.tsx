@@ -1,13 +1,27 @@
 // import ship from '../../assets/ship.svg';
 import styled from 'styled-components';
-import ship from '../../assets/ship2.png';
+import ship_black from '../../assets/ship_black.png';
+import ship_blue from '../../assets/ship_blue.png';
+import ship_red from '../../assets/ship_red.png';
+import ship_green from '../../assets/ship_green.png';
+import ship_yellow from '../../assets/ship_yellow.png';
 import { useLayout } from '../../contexts/LayoutProvider';
 import { SHIP_HEIGHT, SHIP_WIDTH } from '../../utils/shipGeometry';
 import Good from './Good';
+import { TPlayerColor } from '../../../../shared/types';
+
+const shipElements = {
+  black: ship_black,
+  blue: ship_blue,
+  red: ship_red,
+  green: ship_green,
+  yellow: ship_yellow,
+};
 
 interface IWrapperProps {
   top: number;
   left: number;
+  ship_url: string;
 }
 
 const Wrapper = styled.div<IWrapperProps>`
@@ -16,7 +30,7 @@ const Wrapper = styled.div<IWrapperProps>`
   left: ${(props) => props.left + 20}px;
   height: ${SHIP_HEIGHT}px;
   width: ${SHIP_WIDTH}px;
-  background-image: url('${ship}');
+  background-image: ${(props) => `url('${props.ship_url}')`};
   background-size: cover;
   background-position: center;
   transform: rotateZ(-30deg);
@@ -55,7 +69,12 @@ const Ships = (): JSX.Element => {
   return (
     <>
       {shipLayout.map((ship) => (
-        <Wrapper top={ship.top} left={ship.left} key={ship.player.user.uuid}>
+        <Wrapper
+          top={ship.top}
+          left={ship.left}
+          key={ship.player.user.uuid}
+          ship_url={shipElements[ship.player.color]}
+        >
           {ship.player.cargo.map((good, index) => (
             <Good good={good} key={ship.player.user.uuid + index} />
           ))}

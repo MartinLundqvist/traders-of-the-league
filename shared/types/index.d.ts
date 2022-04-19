@@ -85,7 +85,11 @@ export type TGameStatus = 'waiting' | 'playing' | 'won';
 export interface IGameState {
   status: TGameStatus; // What status it the game in?
   round: number; // Current round
-  currentPlayerUuid: string; // Who is making the current move?
+  currentRound: {
+    // UUID of the current player as well as how many moves they have left on this round.
+    playerUuid: string;
+    movesLeft: number;
+  };
   started: boolean; // Has the game started or not?
 }
 

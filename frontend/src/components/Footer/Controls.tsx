@@ -9,36 +9,27 @@ const Wrapper = styled.div`
 `;
 
 export const Controls = (): JSX.Element => {
-  const { session, game, startGame, endMove } = useGameServer();
-
-  const isFirstPlayer = (): boolean => {
-    if (!game) return false;
-    return session.user.uuid === game.players[0].user.uuid;
-  };
-
-  const isMyTurn = (): boolean => {
-    if (!game) return false;
-    return session.user.uuid === game.state.currentPlayerUuid;
-  };
+  const { session, game, startGame, endRound, isMyTurn, isMyGameToStart } =
+    useGameServer();
 
   return (
     <Wrapper>
       <TitleSmall>Controls</TitleSmall>
-      {!game?.state.started && isFirstPlayer() && (
+      {isMyGameToStart && (
         <ButtonSmall onClick={() => startGame()}>Start game</ButtonSmall>
       )}
 
       {game?.state.started && (
         <>
           <div>
-            <ButtonSmall disabled={!isMyTurn()}>Sail</ButtonSmall>
-            <ButtonSmall disabled={!isMyTurn()}>Load</ButtonSmall>
-            <ButtonSmall disabled={!isMyTurn()}>Trade</ButtonSmall>
-            <ButtonSmall disabled={!isMyTurn()}>Ditch</ButtonSmall>
+            {/* <ButtonSmall disabled={!isMyTurn()}>Sail</ButtonSmall> */}
+            <ButtonSmall disabled={!isMyTurn}>Load</ButtonSmall>
+            <ButtonSmall disabled={!isMyTurn}>Trade</ButtonSmall>
+            <ButtonSmall disabled={!isMyTurn}>Ditch</ButtonSmall>
           </div>
           <div>
-            <ButtonSmall disabled={!isMyTurn()} onClick={() => endMove()}>
-              End move
+            <ButtonSmall disabled={!isMyTurn} onClick={() => endRound()}>
+              End round
             </ButtonSmall>
           </div>
         </>

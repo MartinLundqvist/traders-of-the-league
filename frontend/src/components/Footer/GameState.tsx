@@ -19,7 +19,7 @@ export const GameState = (): JSX.Element => {
 
   const getCurrentPlayerName = (): string => {
     let player = game?.players.find(
-      (player) => player.user.uuid === game?.state.currentPlayerUuid
+      (player) => player.user.uuid === game?.state.currentRound.playerUuid
     );
     if (!player) return '';
     return player.user.name;
@@ -39,6 +39,7 @@ export const GameState = (): JSX.Element => {
       </Stats>
       <Stats>Round: {game?.state.round}</Stats>
       <Stats>Playing: {getCurrentPlayerName()}</Stats>
+      <Stats>Moves left: {game?.state.currentRound.movesLeft}</Stats>
       <Stats>
         Game code:{' '}
         <span id='code' onClick={() => copyToClipBoard()}>

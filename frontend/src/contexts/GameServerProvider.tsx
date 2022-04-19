@@ -9,6 +9,7 @@ import {
 import { Socket, io } from 'socket.io-client';
 import {
   ClientToServerEvents,
+  IBoardPosition,
   IGame,
   ISession,
   ServerToClientEvents,
@@ -25,7 +26,10 @@ interface IGameServerContext {
   createAndJoinNewGame: (gameName: string) => void;
   joinGame: (gameUuid: string) => void;
   startGame: () => void;
-  endMove: () => void;
+  endRound: () => void;
+  isMyTurn: boolean;
+  isMyGameToStart: boolean;
+  sailTo: (position: IBoardPosition) => void;
 }
 
 const initialContext: IGameServerContext = {
@@ -43,7 +47,10 @@ const initialContext: IGameServerContext = {
   createAndJoinNewGame: () => {},
   joinGame: () => {},
   startGame: () => {},
-  endMove: () => {},
+  endRound: () => {},
+  isMyTurn: false,
+  isMyGameToStart: false,
+  sailTo: () => {},
 };
 
 const GameServerContext = createContext<IGameServerContext>(initialContext);
@@ -57,6 +64,8 @@ interface IGameServerProviderProps {
 export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   const [session, setSession] = useState<ISession>(initialContext.session);
   const [game, setGame] = useState<IGame | null>(initialContext.game);
+  const [isMyTurn, setIsMyTurn] = useState(false);
+  const [isMyGameToStart, setIsMyGameToStart] = useState(false);
   const socketRef = useRef<ChatSocket>();
 
   const onAnyListener = useCallback((event: any, args: any[]) => {
@@ -133,6 +142,19 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     };
   }, []);
 
+  useEffect(() => {
+    let myTurn = false;
+    let myGameToStart = false;
+    if (game && session) {
+      myTurn = session.user.uuid === game.state.currentRound.playerUuid;
+      myGameToStart =
+        session.user.uuid === game.players[0].user.uuid && !game.state.started;
+    }
+
+    setIsMyGameToStart(myGameToStart);
+    setIsMyTurn(myTurn);
+  }, [game]);
+
   const createSession = (playerName: string) => {
     if (playerName.length < 3) {
       window.alert('Name needs to be at least 2 characters long.');
@@ -178,13 +200,23 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     socketRef.current?.emit('startGame');
   };
 
-  const endMove = () => {
+  const endRound = () => {
     let confirmed = window.confirm('Are you sure you want to end your move?');
 
     if (!confirmed) return;
 
     console.log('Ending move');
-    socketRef.current?.emit('endMove');
+    socketRef.current?.emit('endRound');
+  };
+
+  const sailTo = (position: IBoardPosition) => {
+    console.log('Sailing to ' + JSON.stringify(position));
+
+    socketRef.current?.emit('sailTo', position, (valid) => {
+      if (!valid) {
+        window.alert('Not a valid move! Try again.');
+      }
+    });
   };
 
   return (
@@ -196,7 +228,10 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         createAndJoinNewGame,
         joinGame,
         startGame,
-        endMove,
+        endRound,
+        isMyTurn,
+        isMyGameToStart,
+        sailTo,
       }}
     >
       {children}

@@ -1,4 +1,6 @@
-import { TBoard, IGame } from '../types';
+import { TBoard } from '../../../shared/types';
+
+export const MAX_MOVES = 2;
 
 export const BOARD: TBoard = [
   {
@@ -186,71 +188,3 @@ export const BOARD: TBoard = [
     },
   },
 ];
-
-export const initialGameState: IGame = {
-  name: 'InitialGame',
-  uuid: 'ewoiwje9wr',
-  players: [
-    {
-      color: 'blue',
-      user: {
-        name: 'Alfa',
-        uuid: 'asdlkjasdf',
-        connected: true,
-      },
-      contractsFulfilled: [],
-      achievements: [],
-      citiesEmptied: [],
-      position: {
-        column: 3,
-        row: 0,
-      },
-      victoryPoints: 0,
-      cargo: ['black', 'blue'],
-    },
-    {
-      color: 'red',
-      user: {
-        name: 'Beta',
-        uuid: 'asdlkjadsdf',
-        connected: true,
-      },
-      contractsFulfilled: [],
-      achievements: [],
-      citiesEmptied: [],
-      position: {
-        column: 8,
-        row: 1,
-      },
-      victoryPoints: 0,
-      cargo: ['brown', 'gray', 'gray', 'blue', 'black'],
-    },
-    {
-      color: 'green',
-      user: {
-        name: 'Ceta',
-        uuid: 'asdlsdf',
-        connected: true,
-      },
-      contractsFulfilled: [],
-      achievements: [],
-      citiesEmptied: [],
-      position: {
-        column: 3,
-        row: 6,
-      },
-      victoryPoints: 0,
-      cargo: [],
-    },
-  ],
-  board: BOARD,
-  state: {
-    currentRound: {
-      playerUuid: 'asdlsdf',
-      movesLeft: 2,
-    },
-    round: 0,
-    started: false,
-    status: 'waiting',
-  },
-};

@@ -1,4 +1,4 @@
-import { IGame, ISession } from '../../shared/types';
+import { IGame, ISession, IBoardPosition } from '../../shared/types';
 
 export type TSocketError =
   | 'User not found'
@@ -42,7 +42,13 @@ export interface ClientToServerEvents {
   startGame: () => void;
 
   // Client asks to start the currently active game
-  endMove: () => void;
+  endRound: () => void;
+
+  // Client asks to move current player to a new position on the board. This returns a callback with a boolean true/false wether move is allowed.
+  sailTo: (
+    position: IBoardPosition,
+    callback: (valid: boolean) => void
+  ) => void;
 }
 
 export interface InterServerEvents {}

@@ -1,9 +1,9 @@
-import { IGame, ISession, IUser } from '../../../shared/types';
+import { IBoardPosition, IGame, ISession, IUser } from '../../../shared/types';
 import { GameStore } from '../stores/gameStore';
 import { SessionStore } from '../stores/sessionStore';
 import { TGameServer } from '../types';
 import { nanoid } from 'nanoid';
-import { BOARD } from '../../../shared/constants';
+// import { BOARD } from '../../../shared/constants';
 import { addPlayerToGame } from '../../../shared/utils/addPlayerToGame';
 import { GameEngine } from '../game-engine';
 
@@ -62,7 +62,12 @@ export class GameSession implements ISession {
     this.socket.on('fetchActiveGame', () => this.pushActiveGame());
     this.socket.on('joinGame', (gameUuid: string) => this.joinGame(gameUuid));
     this.socket.on('startGame', () => this.startGame());
-    this.socket.on('endMove', () => this.endMove());
+    this.socket.on('endRound', () => this.endRound());
+    this.socket.on(
+      'sailTo',
+      (position: IBoardPosition, callback: (valid: boolean) => void) =>
+        this.sailTo(position, callback)
+    );
   }
 
   private createSession(name: string, callback: (session: ISession) => void) {
@@ -116,18 +121,8 @@ export class GameSession implements ISession {
 
   private createAndJoinNewGame(gameName: string) {
     // Create a new game object with initial values
-    const newGame: IGame = {
-      name: gameName,
-      uuid: nanoid(),
-      players: [],
-      board: BOARD,
-      state: {
-        currentPlayerUuid: '',
-        round: 0,
-        started: false,
-        status: 'waiting',
-      },
-    };
+
+    const newGame = GameEngine.createGame(gameName, nanoid());
 
     // Persist the game in the game store
     this.gameStore.saveGame(newGame);
@@ -199,7 +194,7 @@ export class GameSession implements ISession {
     this.pushActiveGame();
   }
 
-  private endMove() {
+  private endRound() {
     const game = this.gameStore.getGame(this.activeGameUuid);
 
     if (!this.activeGameUuid || !game) {
@@ -207,10 +202,31 @@ export class GameSession implements ISession {
       return;
     }
 
-    GameEngine.endMove(game, this.user.uuid);
+    GameEngine.endCurrentPlayerRound(game);
 
     this.gameStore.saveGame(game);
 
     this.pushActiveGame();
+  }
+
+  private sailTo(position: IBoardPosition, callback: (valid: boolean) => void) {
+    const game = this.gameStore.getGame(this.activeGameUuid);
+
+    if (!this.activeGameUuid || !game) {
+      this.socket.emit('error', 'Game not found');
+      return;
+    }
+
+    // Have the engine figure out wether it is a valid move, and if so, execute it.
+    let validMove = GameEngine.sailCurrentPlayerTo(game, position);
+
+    if (validMove) {
+      // If the move is valid, we persist and push the new game state
+      this.gameStore.saveGame(game);
+      this.pushActiveGame();
+    }
+
+    // Finally, we callback with a confirmation.?????
+    callback(validMove);
   }
 }
