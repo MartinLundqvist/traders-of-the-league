@@ -1,8 +1,9 @@
-import { IBoardPosition, IGame } from '../../../shared/types';
+import { IBoardPosition, IGame, TCargo } from '../../../shared/types';
 import { createNewContracts } from './createNewContracts';
-import { moveIsAllowed } from './moves';
+import { moveIsAllowed } from './moveIsAllowed';
 import { pickContractByRegion } from './pickContractByRegion';
 import { BOARD, MAX_MOVES } from './constants';
+import { loadingIsAllowed } from './loadingIsAllowed';
 
 const createGame = (gameName: string, gameUuid: string): IGame => {
   const newGame: IGame = {
@@ -116,10 +117,49 @@ const sailCurrentPlayerTo = (
 
   return true;
 };
+const loadCargoForCurrentPlayer = (game: IGame, cargo: TCargo[]): boolean => {
+  if (game.state.currentRound.movesLeft === 0) {
+    console.log('Current player has no moves left');
+    return false;
+  }
+
+  const currentPlayer = game.players.find(
+    (player) => player.user.uuid === game.state.currentRound.playerUuid
+  );
+
+  if (!currentPlayer) {
+    console.log('No player found');
+    return false;
+  }
+
+  const currentPosition = currentPlayer.position;
+
+  // First check whether player is in a city, is loading valid cargo, and there is space in the cargo
+  let valid = loadingIsAllowed(currentPlayer, cargo);
+
+  if (!valid) {
+    console.log('Not a valid move');
+    return false;
+  }
+
+  // If it is valid, update the position of the player
+  currentPlayer.cargo = [...currentPlayer.cargo, ...cargo];
+
+  // And decrement moves left
+  game.state.currentRound.movesLeft -= 1;
+
+  // If this was the last move, then end the round
+  if (game.state.currentRound.movesLeft === 0) {
+    endCurrentPlayerRound(game);
+  }
+
+  return true;
+};
 
 export const GameEngine = {
   createGame,
   start,
   endCurrentPlayerRound,
   sailCurrentPlayerTo,
+  loadCargoForCurrentPlayer,
 };

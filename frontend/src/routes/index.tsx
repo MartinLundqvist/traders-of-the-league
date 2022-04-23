@@ -3,14 +3,21 @@ import JoinGame from '../components/JoinGame';
 import Register from '../components/Register';
 import NewGame from './../components/NewGame';
 import Start from './../components/Start';
+import Load from './../components/Load';
 
 export type TRoute = 'register' | 'start' | 'newgame' | 'joingame' | 'board';
+
+export type TActionRoute = 'none' | 'load' | 'unload' | 'ditch';
 
 type TRoutes = {
   [key in TRoute]: JSX.Element;
 };
 
-const routes: TRoutes = {
+type TActionRoutes = {
+  [key in TActionRoute]: JSX.Element;
+};
+
+export const routes: TRoutes = {
   register: <Register className='grid-area--game' />,
   start: <Start className='grid-area--game' />,
   newgame: <NewGame className='grid-area--game' />,
@@ -18,4 +25,9 @@ const routes: TRoutes = {
   board: <Board className='grid-area--game' />,
 };
 
-export default routes;
+export const actionRoutes: TActionRoutes = {
+  none: <></>,
+  load: <Load className='grid-area--game' />,
+  unload: <></>,
+  ditch: <></>,
+};

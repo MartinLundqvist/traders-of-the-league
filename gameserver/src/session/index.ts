@@ -1,4 +1,10 @@
-import { IBoardPosition, IGame, ISession, IUser } from '../../../shared/types';
+import {
+  IBoardPosition,
+  IGame,
+  ISession,
+  IUser,
+  TCargo,
+} from '../../../shared/types';
 import { GameStore } from '../stores/gameStore';
 import { SessionStore } from '../stores/sessionStore';
 import { TGameServer } from '../types';
@@ -59,7 +65,9 @@ export class GameSession implements ISession {
     this.socket.on('createAndJoinNewGame', (gameName: string) =>
       this.createAndJoinNewGame(gameName)
     );
-    this.socket.on('fetchActiveGame', () => this.pushActiveGame());
+    this.socket.on('fetchActiveGame', (callback: (success: boolean) => void) =>
+      this.fetchActiveGame(callback)
+    );
     this.socket.on('joinGame', (gameUuid: string) => this.joinGame(gameUuid));
     this.socket.on('startGame', () => this.startGame());
     this.socket.on('endRound', () => this.endRound());
@@ -68,6 +76,22 @@ export class GameSession implements ISession {
       (position: IBoardPosition, callback: (valid: boolean) => void) =>
         this.sailTo(position, callback)
     );
+    this.socket.on(
+      'loadCargo',
+      (cargo: TCargo[], callback: (valid: boolean) => void) =>
+        this.loadCargo(cargo, callback)
+    );
+    this.socket.on('disconnect', () => this.disconnect());
+  }
+
+  private disconnect() {
+    console.log('User ' + this.user + ' disconnected.');
+
+    // Set user as disconnected and update the session store
+    this.user.connected = false;
+    this.persistThisSession();
+
+    // Remove the user socket from all rooms. A new socket will be created upon reconnecting.
   }
 
   private createSession(name: string, callback: (session: ISession) => void) {
@@ -129,6 +153,22 @@ export class GameSession implements ISession {
 
     // Have user join the game
     this.joinGame(newGame.uuid);
+  }
+
+  private fetchActiveGame(callback: (success: boolean) => void) {
+    const game = this.gameStore.getGame(this.activeGameUuid);
+
+    if (!game) {
+      console.log('No such game exists');
+      callback(false);
+      return;
+    }
+
+    this.socket.join(this.activeGameUuid);
+
+    callback(true);
+
+    this.pushActiveGame();
   }
 
   private pushActiveGame() {
@@ -219,6 +259,27 @@ export class GameSession implements ISession {
 
     // Have the engine figure out wether it is a valid move, and if so, execute it.
     let validMove = GameEngine.sailCurrentPlayerTo(game, position);
+
+    if (validMove) {
+      // If the move is valid, we persist and push the new game state
+      this.gameStore.saveGame(game);
+      this.pushActiveGame();
+    }
+
+    // Finally, we callback with a confirmation.?????
+    callback(validMove);
+  }
+
+  private loadCargo(cargo: TCargo[], callback: (valid: boolean) => void) {
+    const game = this.gameStore.getGame(this.activeGameUuid);
+
+    if (!this.activeGameUuid || !game) {
+      this.socket.emit('error', 'Game not found');
+      return;
+    }
+
+    // Have the engine figure out wether it is a valid move, and if so, execute it.
+    let validMove = GameEngine.loadCargoForCurrentPlayer(game, cargo);
 
     if (validMove) {
       // If the move is valid, we persist and push the new game state

@@ -17,3 +17,13 @@ export const CARGO_COLOR_STRINGS: TGoodColor = {
   brown: ['hsl(27, 79%, 35%);', 'hsl(27,79%, 29%);', 'hsl(27, 79%, 23%);'],
   green: ['hsl(110, 70%, 72%);', 'hsl(110,70%, 66%);', 'hsl(110, 70%, 59%);'],
 };
+
+export const CARGO_ARRAY: TCargo[] = [
+  'black',
+  'red',
+  'blue',
+  'yellow',
+  'gray',
+  'brown',
+  'green',
+];

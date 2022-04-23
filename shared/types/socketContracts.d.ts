@@ -1,4 +1,4 @@
-import { IGame, ISession, IBoardPosition } from '../../shared/types';
+import { IGame, ISession, IBoardPosition, TCargo } from '../../shared/types';
 
 export type TSocketError =
   | 'User not found'
@@ -33,7 +33,7 @@ export interface ClientToServerEvents {
   createAndJoinNewGame: (gameName: string) => void;
 
   // Client asks for the active game state. This time we do not use the callback pattern, but emit a push of the game state instead.
-  fetchActiveGame: () => void;
+  fetchActiveGame: (callback: (success: boolean) => void) => void;
 
   // Client asks to join an existing game.
   joinGame: (gameUuid: string) => void;
@@ -49,6 +49,9 @@ export interface ClientToServerEvents {
     position: IBoardPosition,
     callback: (valid: boolean) => void
   ) => void;
+
+  // Client asks to load cargo from a city. This returns a callback with a boolean true/false whether there's space in the cargo hold.
+  loadCargo: (cargo: TCargo[], callback: (valid: boolean) => void) => void;
 }
 
 export interface InterServerEvents {}

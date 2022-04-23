@@ -23,11 +23,12 @@ const Polygon = styled.polygon<IPolygonProps>`
 
 interface IGoodProps {
   good: TCargo;
+  className?: string;
 }
 
-const Good = ({ good }: IGoodProps): JSX.Element => {
+const Good = ({ good, className = '' }: IGoodProps): JSX.Element => {
   return (
-    <Wrapper>
+    <Wrapper className={className}>
       <SVG
         version='1.1'
         id='Layer_1'

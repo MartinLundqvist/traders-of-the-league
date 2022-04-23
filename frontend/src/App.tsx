@@ -3,7 +3,7 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import { useLayout } from './contexts/LayoutProvider';
 import Europe from './elements/Europe';
-import routes from './routes';
+import { routes, actionRoutes } from './routes';
 
 const Wrapper = styled.div`
   display: grid;
@@ -32,12 +32,13 @@ const Wrapper = styled.div`
 `;
 
 function App() {
-  const { activeRoute } = useLayout();
+  const { activeRoute, activeActionRoute } = useLayout();
   return (
     <Wrapper>
       <Europe className='grid-area--all' />
       <Header className='grid-area--header' />
       {routes[activeRoute]}
+      {actionRoutes[activeActionRoute]}
       <Footer className='grid-area--footer' />
     </Wrapper>
   );

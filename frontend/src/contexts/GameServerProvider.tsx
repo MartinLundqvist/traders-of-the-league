@@ -10,9 +10,12 @@ import { Socket, io } from 'socket.io-client';
 import {
   ClientToServerEvents,
   IBoardPosition,
+  ICity,
   IGame,
+  IPlayer,
   ISession,
   ServerToClientEvents,
+  TCargo,
   TSocketConnection,
   TSocketError,
 } from '../../../shared/types';
@@ -30,6 +33,10 @@ interface IGameServerContext {
   isMyTurn: boolean;
   isMyGameToStart: boolean;
   sailTo: (position: IBoardPosition) => void;
+  isInCity: boolean;
+  currentCity: ICity | null;
+  currentPlayer: IPlayer | null;
+  loadCargo: (cargo: TCargo[]) => void;
 }
 
 const initialContext: IGameServerContext = {
@@ -51,6 +58,10 @@ const initialContext: IGameServerContext = {
   isMyTurn: false,
   isMyGameToStart: false,
   sailTo: () => {},
+  isInCity: false,
+  currentCity: null,
+  currentPlayer: null,
+  loadCargo: () => {},
 };
 
 const GameServerContext = createContext<IGameServerContext>(initialContext);
@@ -64,8 +75,15 @@ interface IGameServerProviderProps {
 export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   const [session, setSession] = useState<ISession>(initialContext.session);
   const [game, setGame] = useState<IGame | null>(initialContext.game);
-  const [isMyTurn, setIsMyTurn] = useState(false);
-  const [isMyGameToStart, setIsMyGameToStart] = useState(false);
+  const [isMyTurn, setIsMyTurn] = useState(initialContext.isMyTurn);
+  const [isMyGameToStart, setIsMyGameToStart] = useState(
+    initialContext.isMyGameToStart
+  );
+  const [isInCity, setIsInCity] = useState(initialContext.isInCity);
+  const [currentCity, setCurrentCity] = useState(initialContext.currentCity);
+  const [currentPlayer, setCurrentPlayer] = useState(
+    initialContext.currentPlayer
+  );
   const socketRef = useRef<ChatSocket>();
 
   const onAnyListener = useCallback((event: any, args: any[]) => {
@@ -127,7 +145,11 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
 
           if (session.activeGameUuid) {
             console.log('Found an active game, asking for it to be pushed.');
-            socketRef.current?.emit('fetchActiveGame');
+            socketRef.current?.emit('fetchActiveGame', (success) => {
+              if (!success) {
+                window.alert('The game you last played seems to have ended!');
+              }
+            });
           }
         }
       });
@@ -142,17 +164,45 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     };
   }, []);
 
+  // This hook modifies booleans for rendering purposes
+  // TODO: Perhaps this should be refactored to the useLayout context?
   useEffect(() => {
     let myTurn = false;
     let myGameToStart = false;
+    let isInCity = false;
+    let currentCity: ICity | null = null;
+    let currentPlayer: IPlayer | null = null;
     if (game && session) {
       myTurn = session.user.uuid === game.state.currentRound.playerUuid;
+      currentPlayer =
+        game.players.find((player) => player.user.uuid === session.user.uuid) ||
+        null;
       myGameToStart =
         session.user.uuid === game.players[0].user.uuid && !game.state.started;
+
+      const currentPosition = game.players.find(
+        (player) => player.user.uuid === session.user.uuid
+      )?.position;
+      if (currentPosition) {
+        const currentHex = game.board.find((hex) => {
+          return (
+            hex.row === currentPosition.row &&
+            hex.column === currentPosition?.column
+          );
+        });
+
+        if (currentHex && currentHex.city) {
+          isInCity = true;
+          currentCity = currentHex.city;
+        }
+      }
     }
 
     setIsMyGameToStart(myGameToStart);
     setIsMyTurn(myTurn);
+    setIsInCity(isInCity);
+    setCurrentCity(currentCity);
+    setCurrentPlayer(currentPlayer);
   }, [game]);
 
   const createSession = (playerName: string) => {
@@ -219,6 +269,28 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     });
   };
 
+  const loadCargo = (cargo: TCargo[]) => {
+    console.log('Loading ' + cargo.length + ' goods from ' + currentCity?.name);
+
+    if (!isInCity || !currentCity || !currentPlayer) {
+      console.log('City or player is not defined!');
+      return;
+    }
+
+    if (cargo.length < 1) {
+      console.log('No cargo to load');
+      return;
+    }
+
+    socketRef.current?.emit('loadCargo', cargo, (valid) => {
+      if (!valid) {
+        window.alert(
+          'Not a valid loading condition. Your cargo hold might be full!'
+        );
+      }
+    });
+  };
+
   return (
     <GameServerContext.Provider
       value={{
@@ -232,6 +304,10 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         isMyTurn,
         isMyGameToStart,
         sailTo,
+        isInCity,
+        currentCity,
+        currentPlayer,
+        loadCargo,
       }}
     >
       {children}

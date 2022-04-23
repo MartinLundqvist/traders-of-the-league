@@ -43,13 +43,18 @@ export const Input = styled.input`
   }
 `;
 
-export const Button = styled.button`
+interface IButtonProps {
+  warning?: boolean;
+}
+
+export const Button = styled.button<IButtonProps>`
   font: inherit;
   font-size: 3rem;
   border-radius: 0.5rem;
   border-style: none;
   box-shadow: 3px 3px 3px hsla(57, 145%, 30%, 0.6);
-  background-color: var(--color-bg);
+  background-color: ${(props) =>
+    props.warning ? 'var(--color-bg-warning)' : 'var(--color-bg)'};
   padding: 0.25rem 1rem 0.25rem 1rem;
   max-height: 4rem;
 

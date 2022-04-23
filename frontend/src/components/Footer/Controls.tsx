@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useGameServer } from '../../contexts/GameServerProvider';
+import { useLayout } from '../../contexts/LayoutProvider';
 import { ButtonSmall, TitleSmall } from '../../elements/Typography';
 
 const Wrapper = styled.div`
@@ -9,8 +10,14 @@ const Wrapper = styled.div`
 `;
 
 export const Controls = (): JSX.Element => {
-  const { session, game, startGame, endRound, isMyTurn, isMyGameToStart } =
+  const { game, startGame, endRound, isMyTurn, isMyGameToStart, isInCity } =
     useGameServer();
+
+  const { setActiveActionRoute } = useLayout();
+
+  const load = () => {
+    console.log('Loading');
+  };
 
   return (
     <Wrapper>
@@ -23,8 +30,13 @@ export const Controls = (): JSX.Element => {
         <>
           <div>
             {/* <ButtonSmall disabled={!isMyTurn()}>Sail</ButtonSmall> */}
-            <ButtonSmall disabled={!isMyTurn}>Load</ButtonSmall>
-            <ButtonSmall disabled={!isMyTurn}>Trade</ButtonSmall>
+            <ButtonSmall
+              disabled={!isMyTurn || !isInCity}
+              onClick={() => setActiveActionRoute('load')}
+            >
+              Load
+            </ButtonSmall>
+            <ButtonSmall disabled={!isMyTurn || !isInCity}>Trade</ButtonSmall>
             <ButtonSmall disabled={!isMyTurn}>Ditch</ButtonSmall>
           </div>
           <div>

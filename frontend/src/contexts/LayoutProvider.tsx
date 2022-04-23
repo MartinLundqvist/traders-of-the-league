@@ -7,7 +7,7 @@ import {
 } from '../utils/boardGeometry';
 import { SHIP_DISTANCE } from '../utils/shipGeometry';
 import { moveIsAllowed } from '../../../shared/utils/moves';
-import { TRoute } from '../routes';
+import { TActionRoute, TRoute } from '../routes';
 import { createBoardLayout, TBoardLayout } from '../utils/createBoardLayout';
 import { createNewContracts } from '../../../shared/utils/createNewContracts';
 import { pickContractByRegion } from '../../../shared/utils/pickContractByRegion';
@@ -27,7 +27,9 @@ interface ILayoutContext {
   // contracts: IContract[];
   movePlayerUUIDTo: (playerUUID: string, to: IBoardPosition) => void;
   activeRoute: TRoute;
+  activeActionRoute: TActionRoute;
   setActiveRoute: (route: TRoute) => void;
+  setActiveActionRoute: (route: TActionRoute) => void;
 }
 
 const initialLayoutContext: ILayoutContext = {
@@ -39,6 +41,8 @@ const initialLayoutContext: ILayoutContext = {
   // contracts: [],
   activeRoute: 'register',
   setActiveRoute: () => {},
+  activeActionRoute: 'none',
+  setActiveActionRoute: () => {},
 };
 
 const LayoutContext = createContext<ILayoutContext>(initialLayoutContext);
@@ -66,6 +70,9 @@ export const LayoutProvider = ({
   // const [contracts, setContracts] = useState<IContract[]>([]);
   const [activeRoute, setActiveRoute] = useState<TRoute>(
     initialLayoutContext.activeRoute
+  );
+  const [activeActionRoute, setActiveActionRoute] = useState<TActionRoute>(
+    initialLayoutContext.activeActionRoute
   );
 
   useEffect(() => {
@@ -166,6 +173,8 @@ export const LayoutProvider = ({
         dealContracts,
         activeRoute,
         setActiveRoute,
+        activeActionRoute,
+        setActiveActionRoute,
       }}
     >
       {children}

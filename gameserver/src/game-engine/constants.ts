@@ -1,6 +1,7 @@
 import { TBoard } from '../../../shared/types';
 
 export const MAX_MOVES = 2;
+export const MAX_CARGO = 5;
 
 export const BOARD: TBoard = [
   {
