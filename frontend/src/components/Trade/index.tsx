@@ -78,6 +78,12 @@ const Trade = ({ className }: ITradeProps): JSX.Element => {
   };
 
   const canFulfillContract = (contract: IContract): boolean => {
+    //First check if the contract has already been traded
+
+    if (contractAlreadyTraded(contract)) return false;
+
+    // Then check if it can be fulfilled
+
     const hasCargo = (cargo: TCargo): boolean => {
       return cityGoods.includes(cargo) || playerCargo.includes(cargo);
     };
@@ -85,19 +91,33 @@ const Trade = ({ className }: ITradeProps): JSX.Element => {
     return hasCargo(contract.cargo[0]) && hasCargo(contract.cargo[1]);
   };
 
+  const contractAlreadyTraded = (contract: IContract): boolean => {
+    let tradedContract = contractsTraded.find(
+      (contractTraded) => contractTraded.uuid === contract.uuid
+    );
+
+    if (tradedContract) return true;
+
+    return false;
+  };
+
   const handleTradeClick = (contract: IContract) => {
+    console.log(contract);
+    const newCityGoods = [...cityGoods];
+    const newPlayerCargo = [...playerCargo];
+
     const fulfillOneGood = (cargo: TCargo): boolean => {
       // First try and fulfill from the city
-      if (cityGoods.includes(cargo)) {
-        let itemIndexToLoad = cityGoods.findIndex((g) => g === cargo);
-        setCityGoods((prevGoods) => prevGoods.splice(itemIndexToLoad, 1));
+      if (newCityGoods.includes(cargo)) {
+        let itemIndexToTrade = newCityGoods.findIndex((g) => g === cargo);
+        newCityGoods.splice(itemIndexToTrade, 1);
         return true;
       }
 
       // Second try and fulfill from the cargo hold
       if (playerCargo.includes(cargo)) {
-        let itemIndexToLoad = playerCargo.findIndex((g) => g === cargo);
-        setPlayerCargo((prevCargo) => prevCargo.splice(itemIndexToLoad, 1));
+        let itemIndexToTrade = newPlayerCargo.findIndex((g) => g === cargo);
+        newPlayerCargo.splice(itemIndexToTrade, 1);
         return true;
       }
 
@@ -108,9 +128,12 @@ const Trade = ({ className }: ITradeProps): JSX.Element => {
     let success =
       fulfillOneGood(contract.cargo[0]) && fulfillOneGood(contract.cargo[1]);
 
-    setContractsTraded((prevContracts) => [...prevContracts, contract]);
-
-    setVpsEarned((prevVps) => prevVps + contract.value);
+    if (success) {
+      setCityGoods(newCityGoods);
+      setPlayerCargo(newPlayerCargo);
+      setContractsTraded((prevContracts) => [...prevContracts, contract]);
+      setVpsEarned((prevVps) => prevVps + contract.value);
+    }
 
     console.log('Contract was fulfilled? ' + success);
   };
@@ -119,64 +142,74 @@ const Trade = ({ className }: ITradeProps): JSX.Element => {
     <Wrapper className={className}>
       <Title>Load cargo from City of {currentCity?.name}</Title>
       <table>
-        <tr>
-          <th>{}</th>
-          {CARGO_ARRAY.map((good) => (
-            <th>
-              {' '}
-              <Good good={good} className='good' />
-            </th>
-          ))}
-          <th></th>
-          <th>VPs earned</th>
-        </tr>
-        <tr>
-          <td>Your cargo</td>
-          {CARGO_ARRAY.map((good) => (
-            <td>{playerCargo.filter((c) => c === good).length || ''}</td>
-          ))}
-        </tr>
-        <tr>
-          <td>City goods</td>
-          {CARGO_ARRAY.map((good) => (
-            <td>{cityGoods.filter((c) => c === good).length || ''}</td>
-          ))}
-        </tr>
-        <tr>
-          <td className='separator' />
-        </tr>
-        {currentCity?.contracts.map((contract, index) => (
+        <thead>
           <tr>
-            <td>
-              Contract {index + 1}:
-              <Contract contract={contract} />{' '}
-            </td>
+            <th>{}</th>
             {CARGO_ARRAY.map((good) => (
-              <td>{contract.cargo.includes(good) ? '•' : ''}</td>
+              <th key={good + 'headline'}>
+                {' '}
+                <Good good={good} className='good' />
+              </th>
             ))}
-            <td>
-              <ButtonSmall
-                disabled={!canFulfillContract(contract)}
-                onClick={() => handleTradeClick(contract)}
-              >
-                Trade
-              </ButtonSmall>
-            </td>
-            <td />
+            <th></th>
+            <th>VPs earned</th>
           </tr>
-        ))}
-        <tr>
-          <td />
-          <td />
-          <td />
-          <td />
-          <td />
-          <td />
-          <td />
-          <td />
-          <td />
-          <td className='vps'>{vpsEarned}</td>
-        </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Your cargo</td>
+            {CARGO_ARRAY.map((good) => (
+              <td key={good + 'cargo'}>
+                {playerCargo.filter((c) => c === good).length || ''}
+              </td>
+            ))}
+          </tr>
+          <tr>
+            <td>City goods</td>
+            {CARGO_ARRAY.map((good) => (
+              <td key={good + 'good'}>
+                {cityGoods.filter((c) => c === good).length || ''}
+              </td>
+            ))}
+          </tr>
+          <tr>
+            <td className='separator' />
+          </tr>
+          {currentCity?.contracts.map((contract, index) => (
+            <tr key={contract.uuid}>
+              <td>
+                Contract {index + 1}:
+                <Contract contract={contract} />{' '}
+              </td>
+              {CARGO_ARRAY.map((good) => (
+                <td key={good + contract.uuid}>
+                  {contract.cargo.includes(good) ? '•' : ''}
+                </td>
+              ))}
+              <td>
+                <ButtonSmall
+                  disabled={!canFulfillContract(contract)}
+                  onClick={() => handleTradeClick(contract)}
+                >
+                  Trade
+                </ButtonSmall>
+              </td>
+              <td />
+            </tr>
+          ))}
+          <tr>
+            <td />
+            <td />
+            <td />
+            <td />
+            <td />
+            <td />
+            <td />
+            <td />
+            <td />
+            <td className='vps'>{vpsEarned}</td>
+          </tr>
+        </tbody>
       </table>
       <div className='action-container'>
         <Button warning onClick={() => setActiveActionRoute('none')}>

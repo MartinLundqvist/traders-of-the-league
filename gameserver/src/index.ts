@@ -1,5 +1,4 @@
 import express from 'express';
-// import cors from 'cors';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { GameSession } from './session';
@@ -8,19 +7,29 @@ import { GameStore } from './stores/gameStore';
 import { SessionStore } from './stores/sessionStore';
 import { MOCK_GAME, MOCK_SESSIONS } from './game-engine/mockData';
 
+// Persist whether we are in development mode or not
+const DEVELOPMENT = process.env.NODE_ENV === 'production' ? false : true;
+
+console.log(
+  `Game server initializing in ${
+    DEVELOPMENT ? 'development' : 'production'
+  } mode.`
+);
+
 // Create the global stores
-const gameStore = new GameStore();
-const sessionStore = new SessionStore();
+const gameStore = new GameStore(DEVELOPMENT);
+const sessionStore = new SessionStore(DEVELOPMENT);
 
 // Add a mock game to the gameStore which we can use for testing purposes
-gameStore.saveGame(MOCK_GAME);
-sessionStore.saveSession(MOCK_SESSIONS[0]);
-sessionStore.saveSession(MOCK_SESSIONS[1]);
+if (DEVELOPMENT) {
+  console.log('Restoring mock game and session');
+  gameStore.saveGame(MOCK_GAME);
+  sessionStore.saveSession(MOCK_SESSIONS[0]);
+  sessionStore.saveSession(MOCK_SESSIONS[1]);
+}
 
 // Wire up the express server
 const app = express();
-
-// app.use(cors());
 
 // This is merely for health checks. Probably don't even need the express package for this app hmm....
 app.get('/', (req, res) => {

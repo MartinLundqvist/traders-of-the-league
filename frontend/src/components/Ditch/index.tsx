@@ -32,6 +32,10 @@ const Wrapper = styled.div`
     }
   }
 
+  td.overload {
+    color: red;
+  }
+
   .good {
     position: relative;
     width: 3rem;
@@ -60,6 +64,10 @@ const Ditch = ({ className }: IDitchProps): JSX.Element => {
     currentPlayer && setPlayerCargo([...currentPlayer?.cargo]);
   }, [currentPlayer]);
 
+  const cargoIsFull = (): boolean => {
+    return playerCargo.length > 4;
+  };
+
   const handleDitchCargoClick = (good: TCargo) => {
     console.log('Ditching ' + good + ' from the local cargohold');
 
@@ -80,31 +88,39 @@ const Ditch = ({ className }: IDitchProps): JSX.Element => {
     <Wrapper className={className}>
       <Title>Ditch cargo</Title>
       <table>
-        <tr>
-          <th>{}</th>
-          {CARGO_ARRAY.map((good) => (
-            <th>
-              {' '}
-              <Good good={good} className='good' />
-            </th>
-          ))}
-        </tr>
-        <tr>
-          <td>Your cargo</td>
-          {CARGO_ARRAY.map((good) => (
-            <td>{playerCargo.filter((c) => c === good).length || ''}</td>
-          ))}
-        </tr>
-        <tr>
-          <td>Ditch?</td>
-          {CARGO_ARRAY.map((good) => (
-            <td>
-              <ButtonSmall onClick={() => handleDitchCargoClick(good)}>
-                -
-              </ButtonSmall>
+        <thead>
+          <tr>
+            <th>{}</th>
+            {CARGO_ARRAY.map((good) => (
+              <th>
+                {' '}
+                <Good good={good} className='good' />
+              </th>
+            ))}
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Your cargo</td>
+            {CARGO_ARRAY.map((good) => (
+              <td>{playerCargo.filter((c) => c === good).length || ''}</td>
+            ))}
+            <td className={cargoIsFull() ? 'overload' : ''}>
+              = {playerCargo.length}
             </td>
-          ))}
-        </tr>
+          </tr>
+          <tr>
+            <td>Ditch?</td>
+            {CARGO_ARRAY.map((good) => (
+              <td>
+                <ButtonSmall onClick={() => handleDitchCargoClick(good)}>
+                  -
+                </ButtonSmall>
+              </td>
+            ))}
+          </tr>
+        </tbody>
       </table>
       <div className='action-container'>
         <Button warning onClick={() => setActiveActionRoute('none')}>

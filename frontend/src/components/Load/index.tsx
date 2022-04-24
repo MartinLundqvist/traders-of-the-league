@@ -32,6 +32,9 @@ const Wrapper = styled.div`
     }
   }
 
+  td.overload {
+    color: red;
+  }
   .good {
     position: relative;
     width: 3rem;
@@ -62,6 +65,14 @@ const Load = ({ className }: ILoadProps): JSX.Element => {
     currentPlayer && setPlayerCargo([...currentPlayer?.cargo]);
   }, [currentCity, currentPlayer]);
 
+  const cityHasGood = (good: TCargo): boolean => {
+    return cityGoods.includes(good);
+  };
+
+  const cargoIsFull = (): boolean => {
+    return playerCargo.length > 4;
+  };
+
   const handleLoadCargoClick = (good: TCargo) => {
     console.log('Addding ' + good + ' to the local cargohold');
 
@@ -83,37 +94,53 @@ const Load = ({ className }: ILoadProps): JSX.Element => {
     <Wrapper className={className}>
       <Title>Load cargo from City of {currentCity?.name}</Title>
       <table>
-        <tr>
-          <th>{}</th>
-          {CARGO_ARRAY.map((good) => (
-            <th>
-              {' '}
-              <Good good={good} className='good' />
-            </th>
-          ))}
-        </tr>
-        <tr>
-          <td>Your cargo</td>
-          {CARGO_ARRAY.map((good) => (
-            <td>{playerCargo.filter((c) => c === good).length || ''}</td>
-          ))}
-        </tr>
-        <tr>
-          <td>City goods</td>
-          {CARGO_ARRAY.map((good) => (
-            <td>{cityGoods.filter((c) => c === good).length || ''}</td>
-          ))}
-        </tr>
-        <tr>
-          <td>Load?</td>
-          {CARGO_ARRAY.map((good) => (
-            <td>
-              <ButtonSmall onClick={() => handleLoadCargoClick(good)}>
-                +
-              </ButtonSmall>
+        <thead>
+          <tr>
+            <th>{}</th>
+            {CARGO_ARRAY.map((good) => (
+              <th key={good + 'headline'}>
+                {' '}
+                <Good good={good} className='good' />
+              </th>
+            ))}
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Your cargo</td>
+            {CARGO_ARRAY.map((good) => (
+              <td key={good + 'cargo'}>
+                {playerCargo.filter((c) => c === good).length || ''}
+              </td>
+            ))}
+            <td className={cargoIsFull() ? 'overload' : ''}>
+              = {playerCargo.length}
             </td>
-          ))}
-        </tr>
+          </tr>
+
+          <tr>
+            <td>City goods</td>
+            {CARGO_ARRAY.map((good) => (
+              <td key={good + 'city'}>
+                {cityGoods.filter((c) => c === good).length || ''}
+              </td>
+            ))}
+          </tr>
+          <tr>
+            <td>Load?</td>
+            {CARGO_ARRAY.map((good) => (
+              <td key={good + 'button'}>
+                <ButtonSmall
+                  onClick={() => handleLoadCargoClick(good)}
+                  disabled={!cityHasGood(good) || cargoIsFull()}
+                >
+                  +
+                </ButtonSmall>
+              </td>
+            ))}
+          </tr>
+        </tbody>
       </table>
       <div className='action-container'>
         <Button warning onClick={() => setActiveActionRoute('none')}>
