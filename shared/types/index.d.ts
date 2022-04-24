@@ -28,7 +28,7 @@ export type TCity =
   | 'Riga'
   | 'Reval';
 
-export type TVictoryPoint = 1 | 2 | 3 | 4 | 5;
+export type TVictoryPoint = 0 | 1 | 2 | 3 | 4 | 5;
 
 export type TCoatOfArms = string;
 
@@ -38,6 +38,7 @@ export interface IContract {
   value: TVictoryPoint;
   cargo: TCargo[];
   region: TRegion;
+  uuid: string;
 }
 
 export interface IEmptiedCity {

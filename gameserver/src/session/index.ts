@@ -1,5 +1,6 @@
 import {
   IBoardPosition,
+  IContract,
   IGame,
   ISession,
   IUser,
@@ -81,11 +82,16 @@ export class GameSession implements ISession {
       (cargo: TCargo[], callback: (valid: boolean) => void) =>
         this.loadCargo(cargo, callback)
     );
+    this.socket.on(
+      'makeTrades',
+      (contracts: IContract[], callback: (valid: boolean) => void) =>
+        this.makeTrades(contracts, callback)
+    );
     this.socket.on('disconnect', () => this.disconnect());
   }
 
   private disconnect() {
-    console.log('User ' + this.user + ' disconnected.');
+    console.log('User ' + this.user.name + ' disconnected.');
 
     // Set user as disconnected and update the session store
     this.user.connected = false;
@@ -289,5 +295,29 @@ export class GameSession implements ISession {
 
     // Finally, we callback with a confirmation.?????
     callback(validMove);
+  }
+
+  private makeTrades(
+    contracts: IContract[],
+    callback: (valid: boolean) => void
+  ) {
+    const game = this.gameStore.getGame(this.activeGameUuid);
+
+    if (!this.activeGameUuid || !game) {
+      this.socket.emit('error', 'Game not found');
+      return;
+    }
+
+    // Have the engine figure out wether these are valid trades, and if so, execute them.
+    let validTrade = GameEngine.makeTradesForCurrentPlayer(game, contracts);
+
+    if (validTrade) {
+      // If the move is valid, we persist and push the new game state
+      this.gameStore.saveGame(game);
+      this.pushActiveGame();
+    }
+
+    // Finally, we callback with a confirmation.?????
+    callback(validTrade);
   }
 }

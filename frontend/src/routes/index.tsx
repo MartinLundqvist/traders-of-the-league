@@ -4,10 +4,11 @@ import Register from '../components/Register';
 import NewGame from './../components/NewGame';
 import Start from './../components/Start';
 import Load from './../components/Load';
+import Trade from '../components/Trade';
 
 export type TRoute = 'register' | 'start' | 'newgame' | 'joingame' | 'board';
 
-export type TActionRoute = 'none' | 'load' | 'unload' | 'ditch';
+export type TActionRoute = 'none' | 'load' | 'trade' | 'ditch';
 
 type TRoutes = {
   [key in TRoute]: JSX.Element;
@@ -28,6 +29,6 @@ export const routes: TRoutes = {
 export const actionRoutes: TActionRoutes = {
   none: <></>,
   load: <Load className='grid-area--game' />,
-  unload: <></>,
+  trade: <Trade className='grid-area--game'></Trade>,
   ditch: <></>,
 };

@@ -1,9 +1,17 @@
-import { IBoardPosition, IGame, TCargo } from '../../../shared/types';
+import {
+  IBoardPosition,
+  ICity,
+  IContract,
+  IGame,
+  IPlayer,
+  TCargo,
+} from '../../../shared/types';
 import { createNewContracts } from './createNewContracts';
 import { moveIsAllowed } from './moveIsAllowed';
 import { pickContractByRegion } from './pickContractByRegion';
 import { BOARD, MAX_MOVES } from './constants';
 import { loadingIsAllowed } from './loadingIsAllowed';
+import { tradeIsAllowed } from './tradeIsAllowed';
 
 const createGame = (gameName: string, gameUuid: string): IGame => {
   const newGame: IGame = {
@@ -132,7 +140,7 @@ const loadCargoForCurrentPlayer = (game: IGame, cargo: TCargo[]): boolean => {
     return false;
   }
 
-  const currentPosition = currentPlayer.position;
+  // const currentPosition = currentPlayer.position;
 
   // First check whether player is in a city, is loading valid cargo, and there is space in the cargo
   let valid = loadingIsAllowed(currentPlayer, cargo);
@@ -142,10 +150,64 @@ const loadCargoForCurrentPlayer = (game: IGame, cargo: TCargo[]): boolean => {
     return false;
   }
 
-  // If it is valid, update the position of the player
+  // If it is valid, update the cargo hold of the player
   currentPlayer.cargo = [...currentPlayer.cargo, ...cargo];
 
   // And decrement moves left
+  game.state.currentRound.movesLeft -= 1;
+
+  // If this was the last move, then end the round
+  if (game.state.currentRound.movesLeft === 0) {
+    endCurrentPlayerRound(game);
+  }
+
+  return true;
+};
+
+const makeTradesForCurrentPlayer = (
+  game: IGame,
+  contracts: IContract[]
+): boolean => {
+  if (game.state.currentRound.movesLeft === 0) {
+    console.log('Current player has no moves left');
+    return false;
+  }
+
+  const currentPlayer = game.players.find(
+    (player) => player.user.uuid === game.state.currentRound.playerUuid
+  );
+
+  if (!currentPlayer) {
+    console.log('No player found');
+    return false;
+  }
+
+  const currentHex = game.board.find(
+    (hex) =>
+      hex.column === currentPlayer.position.column &&
+      hex.row === currentPlayer.position.row
+  );
+
+  if (!currentHex || !currentHex.city) {
+    console.log('Player is not in a city');
+    return false;
+  }
+
+  if (contracts.length < 1) {
+    console.log('No contracts to trade');
+    return false;
+  }
+
+  // Now we can attempt to execute the trade.
+  // IMPORTANT!! This function mutates the game, if the trade is successful!
+  let valid = tradeIsAllowed(currentPlayer, currentHex.city, contracts);
+
+  if (!valid) {
+    console.log('Not a valid trade');
+    return false;
+  }
+
+  // If it is valid, decrement moves left
   game.state.currentRound.movesLeft -= 1;
 
   // If this was the last move, then end the round
@@ -162,4 +224,5 @@ export const GameEngine = {
   endCurrentPlayerRound,
   sailCurrentPlayerTo,
   loadCargoForCurrentPlayer,
+  makeTradesForCurrentPlayer,
 };

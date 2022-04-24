@@ -1,4 +1,5 @@
 import { IContract, TCargo, TVictoryPoint } from '../../../shared/types';
+import { nanoid } from 'nanoid';
 
 /**
  * A contract is characterized by
@@ -62,6 +63,7 @@ export const createNewContracts = (): IContract[] => {
           value: values[0] as TVictoryPoint,
           cargo: [colorArray[i], colorArray[j]],
           region: 'West',
+          uuid: nanoid(),
         });
       }
       if (values[1]) {
@@ -69,6 +71,7 @@ export const createNewContracts = (): IContract[] => {
           value: values[1] as TVictoryPoint,
           cargo: [colorArray[i], colorArray[j]],
           region: 'Central',
+          uuid: nanoid(),
         });
       }
       if (values[2]) {
@@ -76,6 +79,7 @@ export const createNewContracts = (): IContract[] => {
           value: values[2] as TVictoryPoint,
           cargo: [colorArray[i], colorArray[j]],
           region: 'East',
+          uuid: nanoid(),
         });
       }
     }

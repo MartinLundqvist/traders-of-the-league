@@ -6,10 +6,16 @@ import { GameSession } from './session';
 import { TGameServer } from './types';
 import { GameStore } from './stores/gameStore';
 import { SessionStore } from './stores/sessionStore';
+import { MOCK_GAME, MOCK_SESSIONS } from './game-engine/mockData';
 
 // Create the global stores
 const gameStore = new GameStore();
 const sessionStore = new SessionStore();
+
+// Add a mock game to the gameStore which we can use for testing purposes
+gameStore.saveGame(MOCK_GAME);
+sessionStore.saveSession(MOCK_SESSIONS[0]);
+sessionStore.saveSession(MOCK_SESSIONS[1]);
 
 // Wire up the express server
 const app = express();

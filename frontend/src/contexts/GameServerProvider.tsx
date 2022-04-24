@@ -11,6 +11,7 @@ import {
   ClientToServerEvents,
   IBoardPosition,
   ICity,
+  IContract,
   IGame,
   IPlayer,
   ISession,
@@ -37,6 +38,7 @@ interface IGameServerContext {
   currentCity: ICity | null;
   currentPlayer: IPlayer | null;
   loadCargo: (cargo: TCargo[]) => void;
+  makeTrades: (contracts: IContract[]) => void;
 }
 
 const initialContext: IGameServerContext = {
@@ -62,6 +64,7 @@ const initialContext: IGameServerContext = {
   currentCity: null,
   currentPlayer: null,
   loadCargo: () => {},
+  makeTrades: () => {},
 };
 
 const GameServerContext = createContext<IGameServerContext>(initialContext);
@@ -291,6 +294,28 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     });
   };
 
+  const makeTrades = (contracts: IContract[]) => {
+    console.log(
+      'Trading ' + contracts.length + ' goods from ' + currentCity?.name
+    );
+
+    if (!isInCity || !currentCity || !currentPlayer) {
+      console.log('City or player is not defined!');
+      return;
+    }
+
+    if (contracts.length < 1) {
+      console.log('No contracts to trade!');
+      return;
+    }
+
+    socketRef.current?.emit('makeTrades', contracts, (valid) => {
+      if (!valid) {
+        window.alert('Not a valid trade. ');
+      }
+    });
+  };
+
   return (
     <GameServerContext.Provider
       value={{
@@ -308,6 +333,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         currentCity,
         currentPlayer,
         loadCargo,
+        makeTrades,
       }}
     >
       {children}

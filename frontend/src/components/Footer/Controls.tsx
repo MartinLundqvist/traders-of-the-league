@@ -15,10 +15,6 @@ export const Controls = (): JSX.Element => {
 
   const { setActiveActionRoute } = useLayout();
 
-  const load = () => {
-    console.log('Loading');
-  };
-
   return (
     <Wrapper>
       <TitleSmall>Controls</TitleSmall>
@@ -36,7 +32,12 @@ export const Controls = (): JSX.Element => {
             >
               Load
             </ButtonSmall>
-            <ButtonSmall disabled={!isMyTurn || !isInCity}>Trade</ButtonSmall>
+            <ButtonSmall
+              disabled={!isMyTurn || !isInCity}
+              onClick={() => setActiveActionRoute('trade')}
+            >
+              Trade
+            </ButtonSmall>
             <ButtonSmall disabled={!isMyTurn}>Ditch</ButtonSmall>
           </div>
           <div>

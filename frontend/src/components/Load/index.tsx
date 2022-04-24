@@ -56,19 +56,34 @@ const Load = ({ className }: ILoadProps): JSX.Element => {
   const [cargoLoaded, setCargoLoaded] = useState<TCargo[]>([]);
 
   useEffect(() => {
-    console.log('First render');
+    console.log('Load UseEffect: New city or player object received');
     console.log(currentCity);
     currentCity && setCityGoods([...currentCity?.goods]);
     currentPlayer && setPlayerCargo([...currentPlayer?.cargo]);
-  }, []);
+  }, [currentCity, currentPlayer]);
 
   const handleLoadCargoClick = (good: TCargo) => {
-    let itemIndexToLoad = cityGoods.findIndex((g) => g === good);
-    if (itemIndexToLoad < 0) return;
-    setCityGoods((prevGoods) => prevGoods.splice(itemIndexToLoad, 1));
+    console.log('Addding ' + good + ' to the local cargohold');
+
+    const newCityGoods = [...cityGoods];
+    const itemIndexToLoad = newCityGoods.findIndex((g) => g === good);
+    newCityGoods.splice(itemIndexToLoad, 1);
+
+    setCityGoods(newCityGoods);
     setPlayerCargo((prevCargo) => [...prevCargo, good]);
     setCargoLoaded((prevCargo) => [...prevCargo, good]);
   };
+
+  useEffect(() => {
+    console.log('---------------------------');
+    console.log('Current local state in the Load component:');
+    console.log('City');
+    console.log(cityGoods);
+    console.log('Player');
+    console.log(playerCargo);
+    console.log('Cargo loaded');
+    console.log(cargoLoaded);
+  });
 
   const handleDoneClick = () => {
     loadCargo(cargoLoaded);
@@ -91,13 +106,13 @@ const Load = ({ className }: ILoadProps): JSX.Element => {
         <tr>
           <td>Your cargo</td>
           {CARGO_ARRAY.map((good) => (
-            <td>{playerCargo.filter((c) => c === good).length}</td>
+            <td>{playerCargo.filter((c) => c === good).length || ''}</td>
           ))}
         </tr>
         <tr>
           <td>City goods</td>
           {CARGO_ARRAY.map((good) => (
-            <td>{cityGoods.filter((c) => c === good).length}</td>
+            <td>{cityGoods.filter((c) => c === good).length || ''}</td>
           ))}
         </tr>
         <tr>

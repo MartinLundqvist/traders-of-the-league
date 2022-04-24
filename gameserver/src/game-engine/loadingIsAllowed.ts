@@ -20,8 +20,10 @@ export const loadingIsAllowed = (
   // Is the cargo valid?
   let cargoStr = [...cargo].sort().toString();
   let cityGoodsStr = [...currentHex.city.goods].sort().toString();
-  if (cargoStr != cityGoodsStr) {
-    console.log('Cargo not valid: ' + cargoStr + ' != ' + cityGoodsStr);
+  if (!cityGoodsStr.includes(cargoStr)) {
+    console.log(
+      'Cargo not valid: ' + cargoStr + ' not part of ' + cityGoodsStr
+    );
     return false;
   }
 
