@@ -64,6 +64,7 @@ export const createNewContracts = (): IContract[] => {
           value: values[0] as TVictoryPoint,
           cargo: [colorArray[i], colorArray[j]],
           region: 'West',
+          uuid: '',
         });
       }
       if (values[1]) {
@@ -71,6 +72,7 @@ export const createNewContracts = (): IContract[] => {
           value: values[1] as TVictoryPoint,
           cargo: [colorArray[i], colorArray[j]],
           region: 'Central',
+          uuid: '',
         });
       }
       if (values[2]) {
@@ -78,6 +80,7 @@ export const createNewContracts = (): IContract[] => {
           value: values[2] as TVictoryPoint,
           cargo: [colorArray[i], colorArray[j]],
           region: 'East',
+          uuid: '',
         });
       }
     }
