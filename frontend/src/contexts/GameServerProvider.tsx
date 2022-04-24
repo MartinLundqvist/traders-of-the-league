@@ -38,6 +38,7 @@ interface IGameServerContext {
   currentCity: ICity | null;
   currentPlayer: IPlayer | null;
   loadCargo: (cargo: TCargo[]) => void;
+  ditchCargo: (cargo: TCargo[]) => void;
   makeTrades: (contracts: IContract[]) => void;
 }
 
@@ -64,6 +65,7 @@ const initialContext: IGameServerContext = {
   currentCity: null,
   currentPlayer: null,
   loadCargo: () => {},
+  ditchCargo: () => {},
   makeTrades: () => {},
 };
 
@@ -294,6 +296,26 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     });
   };
 
+  const ditchCargo = (cargo: TCargo[]) => {
+    console.log('Ditching ' + cargo.length + ' goods');
+
+    if (!currentPlayer) {
+      console.log('Player is not defined!');
+      return;
+    }
+
+    if (cargo.length < 1) {
+      console.log('No cargo to ditch');
+      return;
+    }
+
+    socketRef.current?.emit('ditchCargo', cargo, (valid) => {
+      if (!valid) {
+        window.alert('Failed to ditch cargo!');
+      }
+    });
+  };
+
   const makeTrades = (contracts: IContract[]) => {
     console.log(
       'Trading ' + contracts.length + ' goods from ' + currentCity?.name
@@ -333,6 +355,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         currentCity,
         currentPlayer,
         loadCargo,
+        ditchCargo,
         makeTrades,
       }}
     >

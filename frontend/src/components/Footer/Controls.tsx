@@ -38,7 +38,12 @@ export const Controls = (): JSX.Element => {
             >
               Trade
             </ButtonSmall>
-            <ButtonSmall disabled={!isMyTurn}>Ditch</ButtonSmall>
+            <ButtonSmall
+              disabled={!isMyTurn}
+              onClick={() => setActiveActionRoute('ditch')}
+            >
+              Ditch
+            </ButtonSmall>
           </div>
           <div>
             <ButtonSmall disabled={!isMyTurn} onClick={() => endRound()}>

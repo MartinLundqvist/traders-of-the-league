@@ -5,6 +5,7 @@ import NewGame from './../components/NewGame';
 import Start from './../components/Start';
 import Load from './../components/Load';
 import Trade from '../components/Trade';
+import Ditch from '../components/Ditch';
 
 export type TRoute = 'register' | 'start' | 'newgame' | 'joingame' | 'board';
 
@@ -30,5 +31,5 @@ export const actionRoutes: TActionRoutes = {
   none: <></>,
   load: <Load className='grid-area--game' />,
   trade: <Trade className='grid-area--game'></Trade>,
-  ditch: <></>,
+  ditch: <Ditch className='grid-area--game'></Ditch>,
 };

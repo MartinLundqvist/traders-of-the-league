@@ -80,6 +80,11 @@ export class GameSession implements ISession {
         this.loadCargo(cargo, callback)
     );
     this.socket.on(
+      'ditchCargo',
+      (cargo: TCargo[], callback: (valid: boolean) => void) =>
+        this.ditchCargo(cargo, callback)
+    );
+    this.socket.on(
       'makeTrades',
       (contracts: IContract[], callback: (valid: boolean) => void) =>
         this.makeTrades(contracts, callback)
@@ -286,6 +291,27 @@ export class GameSession implements ISession {
 
     // Have the engine figure out wether it is a valid move, and if so, execute it.
     let validMove = GameEngine.loadCargoForCurrentPlayer(game, cargo);
+
+    if (validMove) {
+      // If the move is valid, we persist and push the new game state
+      this.gameStore.saveGame(game);
+      this.pushActiveGame();
+    }
+
+    // Finally, we callback with a confirmation.?????
+    callback(validMove);
+  }
+
+  private ditchCargo(cargo: TCargo[], callback: (valid: boolean) => void) {
+    const game = this.gameStore.getGame(this.activeGameUuid);
+
+    if (!this.activeGameUuid || !game) {
+      this.socket.emit('error', 'Game not found');
+      return;
+    }
+
+    // Have the engine figure out wether it is a valid move, and if so, execute it.
+    let validMove = GameEngine.ditchCargoForCurrentPlayer(game, cargo);
 
     if (validMove) {
       // If the move is valid, we persist and push the new game state

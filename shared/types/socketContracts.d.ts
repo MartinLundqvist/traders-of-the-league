@@ -59,6 +59,9 @@ export interface ClientToServerEvents {
   // Client asks to load cargo from a city. This returns a callback with a boolean true/false whether there's space in the cargo hold.
   loadCargo: (cargo: TCargo[], callback: (valid: boolean) => void) => void;
 
+  // Client asks to load cargo from a city. This returns a callback with a boolean true/false whether there's space in the cargo hold.
+  ditchCargo: (cargo: TCargo[], callback: (valid: boolean) => void) => void;
+
   // Client asks to complete a trade of goods for one or more contracts. This returns a callback with a boolean true/false whether the trade could be completed.
   makeTrades: (
     contracts: IContract[],

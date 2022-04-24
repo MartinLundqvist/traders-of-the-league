@@ -17,6 +17,7 @@ import {
 } from './constants';
 import { loadingIsAllowed } from './loadingIsAllowed';
 import { tradeIsAllowed } from './tradeIsAllowed';
+import { ditchingIsAllowed } from './ditchingIsAllowed';
 
 const createGame = (gameName: string, gameUuid: string): IGame => {
   const newGame: IGame = {
@@ -190,6 +191,37 @@ const loadCargoForCurrentPlayer = (game: IGame, cargo: TCargo[]): boolean => {
   return true;
 };
 
+const ditchCargoForCurrentPlayer = (game: IGame, cargo: TCargo[]): boolean => {
+  const currentPlayer = game.players.find(
+    (player) => player.user.uuid === game.state.currentRound.playerUuid
+  );
+
+  if (!currentPlayer) {
+    console.log('No player found');
+    return false;
+  }
+
+  // const currentPosition = currentPlayer.position;
+
+  // First check whether player is in a city, is loading valid cargo, and there is space in the cargo
+  let valid = ditchingIsAllowed(currentPlayer, cargo);
+
+  if (!valid) {
+    console.log('Not a valid ditch');
+    return false;
+  }
+
+  // If it is valid, update the cargo hold of the player
+  cargo.forEach((cargoToDitch) => {
+    const indexToDitch = currentPlayer.cargo.findIndex(
+      (playerCargo) => playerCargo === cargoToDitch
+    );
+    currentPlayer.cargo.splice(indexToDitch, 1);
+  });
+
+  return true;
+};
+
 const makeTradesForCurrentPlayer = (
   game: IGame,
   contracts: IContract[]
@@ -251,5 +283,6 @@ export const GameEngine = {
   endCurrentPlayerRound,
   sailCurrentPlayerTo,
   loadCargoForCurrentPlayer,
+  ditchCargoForCurrentPlayer,
   makeTradesForCurrentPlayer,
 };
