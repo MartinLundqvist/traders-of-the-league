@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 import { IContract } from '../../../../shared/types';
 import Contract from './Contract';

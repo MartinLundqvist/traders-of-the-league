@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { ICity, IPlayer, TCargo } from '../../../../shared/types';
+import { TCargo } from '../../../../shared/types';
 import { useGameServer } from '../../contexts/GameServerProvider';
 import { useLayout } from '../../contexts/LayoutProvider';
 import { Button, ButtonSmall, Title } from '../../elements/Typography';
@@ -73,17 +73,6 @@ const Load = ({ className }: ILoadProps): JSX.Element => {
     setPlayerCargo((prevCargo) => [...prevCargo, good]);
     setCargoLoaded((prevCargo) => [...prevCargo, good]);
   };
-
-  useEffect(() => {
-    console.log('---------------------------');
-    console.log('Current local state in the Load component:');
-    console.log('City');
-    console.log(cityGoods);
-    console.log('Player');
-    console.log(playerCargo);
-    console.log('Cargo loaded');
-    console.log(cargoLoaded);
-  });
 
   const handleDoneClick = () => {
     loadCargo(cargoLoaded);

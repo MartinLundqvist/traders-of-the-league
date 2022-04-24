@@ -8,7 +8,6 @@ import ship_yellow from '../../assets/ship_yellow.png';
 import { useLayout } from '../../contexts/LayoutProvider';
 import { SHIP_HEIGHT, SHIP_WIDTH } from '../../utils/shipGeometry';
 import Good from './Good';
-import { TPlayerColor } from '../../../../shared/types';
 
 const shipElements = {
   black: ship_black,

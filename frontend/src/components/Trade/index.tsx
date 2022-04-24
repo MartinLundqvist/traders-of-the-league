@@ -1,12 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import {
-  ICity,
-  IContract,
-  IPlayer,
-  TCargo,
-  TVictoryPoint,
-} from '../../../../shared/types';
+import { IContract, TCargo } from '../../../../shared/types';
 import { useGameServer } from '../../contexts/GameServerProvider';
 import { useLayout } from '../../contexts/LayoutProvider';
 import { Button, ButtonSmall, Title } from '../../elements/Typography';

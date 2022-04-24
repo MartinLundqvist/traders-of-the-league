@@ -1,16 +1,12 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { initialGameState } from '../../../shared/constants';
-import { IBoardPosition, IPlayer } from '../../../shared/types';
+import { IPlayer } from '../../../shared/types';
 import {
   getLeftForBoardPosition,
   getTopForBoardPosition,
 } from '../utils/boardGeometry';
 import { SHIP_DISTANCE } from '../utils/shipGeometry';
-import { moveIsAllowed } from '../../../shared/utils/moves';
 import { TActionRoute, TRoute } from '../routes';
 import { createBoardLayout, TBoardLayout } from '../utils/createBoardLayout';
-import { createNewContracts } from '../../../shared/utils/createNewContracts';
-import { pickContractByRegion } from '../../../shared/utils/pickContractByRegion';
 import { useGameServer } from './GameServerProvider';
 
 type TShipLayout = {
@@ -20,12 +16,8 @@ type TShipLayout = {
 }[];
 
 interface ILayoutContext {
-  players: IPlayer[];
   boardLayout: TBoardLayout;
   shipLayout: TShipLayout;
-  dealContracts: () => void;
-  // contracts: IContract[];
-  movePlayerUUIDTo: (playerUUID: string, to: IBoardPosition) => void;
   activeRoute: TRoute;
   activeActionRoute: TActionRoute;
   setActiveRoute: (route: TRoute) => void;
@@ -33,12 +25,8 @@ interface ILayoutContext {
 }
 
 const initialLayoutContext: ILayoutContext = {
-  players: [],
-  movePlayerUUIDTo: () => {},
   boardLayout: [],
   shipLayout: [],
-  dealContracts: () => {},
-  // contracts: [],
   activeRoute: 'register',
   setActiveRoute: () => {},
   activeActionRoute: 'none',
@@ -57,17 +45,12 @@ export const LayoutProvider = ({
   children,
 }: ILayoutProviderProps): JSX.Element => {
   const { session, game } = useGameServer();
-  // const [myPlayerUUID, setMyPlayerUUID] = useState(
-  //   initialGameState.players[0].user.uuid
-  // );
-  const [players, setPlayers] = useState<IPlayer[]>(initialGameState.players);
   const [shipLayout, setShipLayout] = useState<TShipLayout>(
     initialLayoutContext.shipLayout
   );
   const [boardLayout, setBoardLayout] = useState<TBoardLayout>(
     initialLayoutContext.boardLayout
   );
-  // const [contracts, setContracts] = useState<IContract[]>([]);
   const [activeRoute, setActiveRoute] = useState<TRoute>(
     initialLayoutContext.activeRoute
   );
@@ -124,53 +107,14 @@ export const LayoutProvider = ({
     game && setShipLayout(getShipLayout());
   }, [game]);
 
-  const movePlayerUUIDTo = (playerUUID: string, to: IBoardPosition) => {
-    let targetPlayer = players.find((plr) => plr.user.uuid === playerUUID);
-    if (!targetPlayer) return;
-
-    if (moveIsAllowed(targetPlayer.position, to)) {
-      // console.log('Is allowed.');
-      targetPlayer.position = to;
-    }
-
-    let tempPlayers = players.filter((plr) => plr.user.uuid !== playerUUID);
-    setPlayers([...tempPlayers, targetPlayer]);
-  };
-
-  const dealContracts = () => {
-    // console.log('In dealContracts');
-    const newContracts = createNewContracts();
-    // console.log('Created ' + newContracts.length + ' new contracts');
-    const tempBoardLayout = [...boardLayout];
-    tempBoardLayout.forEach((element) => {
-      if (element.city) {
-        let pickedContracts = [];
-        pickedContracts.push(
-          pickContractByRegion(newContracts, element.city.region)
-        );
-        pickedContracts.push(
-          pickContractByRegion(newContracts, element.city.region)
-        );
-        pickedContracts.push(
-          pickContractByRegion(newContracts, element.city.region)
-        );
-        element.city.contracts = pickedContracts;
-      }
-    });
-
-    // console.log(boardLayout);
-
-    setBoardLayout(tempBoardLayout);
-  };
-
   return (
     <LayoutContext.Provider
       value={{
-        movePlayerUUIDTo,
-        players,
+        // movePlayerUUIDTo,
+        // players,
         shipLayout,
         boardLayout,
-        dealContracts,
+        // dealContracts,
         activeRoute,
         setActiveRoute,
         activeActionRoute,

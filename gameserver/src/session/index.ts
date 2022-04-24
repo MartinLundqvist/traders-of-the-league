@@ -1,7 +1,6 @@
 import {
   IBoardPosition,
   IContract,
-  IGame,
   ISession,
   IUser,
   TCargo,
@@ -10,8 +9,6 @@ import { GameStore } from '../stores/gameStore';
 import { SessionStore } from '../stores/sessionStore';
 import { TGameServer } from '../types';
 import { nanoid } from 'nanoid';
-// import { BOARD } from '../../../shared/constants';
-import { addPlayerToGame } from '../../../shared/utils/addPlayerToGame';
 import { GameEngine } from '../game-engine';
 
 export class GameSession implements ISession {
@@ -203,7 +200,10 @@ export class GameSession implements ISession {
       this.socket.emit('error', 'Max number of players reached');
       return;
     }
-    game.players.push(addPlayerToGame(this.user, game));
+
+    const newPlayer = GameEngine.addPlayerToGame(this.user, game);
+    game.players.push(newPlayer);
+
     this.gameStore.saveGame(game);
 
     // Update local session

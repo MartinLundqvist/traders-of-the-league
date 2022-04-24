@@ -1,15 +1,20 @@
 import {
   IBoardPosition,
-  ICity,
   IContract,
   IGame,
   IPlayer,
+  IUser,
   TCargo,
 } from '../../../shared/types';
 import { createNewContracts } from './createNewContracts';
 import { moveIsAllowed } from './moveIsAllowed';
 import { pickContractByRegion } from './pickContractByRegion';
-import { BOARD, MAX_MOVES } from './constants';
+import {
+  BOARD,
+  MAX_MOVES,
+  playerColors,
+  playerInitialCargo,
+} from './constants';
 import { loadingIsAllowed } from './loadingIsAllowed';
 import { tradeIsAllowed } from './tradeIsAllowed';
 
@@ -40,6 +45,27 @@ const start = (game: IGame, firstPlayerUuid: string) => {
   game.state.round = 1;
 
   dealContracts(game);
+};
+
+const addPlayerToGame = (user: IUser, game: IGame): IPlayer => {
+  // Pick the next avaiable player color
+  // Put the player in Lübeck by default
+  // Provide initial cargo as per game instructions
+
+  const thisPlayerIndex = game.players.length;
+
+  let newPlayer: IPlayer = {
+    color: playerColors[thisPlayerIndex],
+    user,
+    contractsFulfilled: [],
+    citiesEmptied: [],
+    achievements: [],
+    position: { column: 5, row: 6 },
+    victoryPoints: 0,
+    cargo: thisPlayerIndex === 0 ? [] : [playerInitialCargo[thisPlayerIndex]],
+  };
+
+  return newPlayer;
 };
 
 const dealContracts = (game: IGame) => {
@@ -221,6 +247,7 @@ const makeTradesForCurrentPlayer = (
 export const GameEngine = {
   createGame,
   start,
+  addPlayerToGame,
   endCurrentPlayerRound,
   sailCurrentPlayerTo,
   loadCargoForCurrentPlayer,

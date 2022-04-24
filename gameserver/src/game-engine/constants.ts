@@ -1,8 +1,32 @@
-import { TBoard } from '../../../shared/types';
+import { TBoard, TCargo, TPlayerColor } from '../../../shared/types';
 
 export const MAX_MOVES = 2;
 export const MAX_CARGO = 5;
 export const VP_EMPTY_CITY = 2;
+
+type TPlayerColorMap = {
+  [key: number]: TPlayerColor;
+};
+
+type TPlayerInitialCargoMap = {
+  [key: number]: TCargo;
+};
+
+export const playerColors: TPlayerColorMap = {
+  0: 'black',
+  1: 'blue',
+  2: 'green',
+  3: 'red',
+  4: 'yellow',
+};
+
+export const playerInitialCargo: TPlayerInitialCargoMap = {
+  // 0: Empty. No cargo.
+  1: 'yellow',
+  2: 'black',
+  3: 'green',
+  4: 'blue',
+};
 
 export const BOARD: TBoard = [
   {
