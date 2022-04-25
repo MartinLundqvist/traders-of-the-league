@@ -12,6 +12,10 @@ type TPlayerInitialCargoMap = {
   [key: number]: TCargo;
 };
 
+type TNumberOfCitiesToEmptyMap = {
+  [key: number]: number;
+};
+
 export const playerColors: TPlayerColorMap = {
   0: 'black',
   1: 'blue',
@@ -26,6 +30,16 @@ export const playerInitialCargo: TPlayerInitialCargoMap = {
   2: 'black',
   3: 'green',
   4: 'blue',
+};
+
+/**
+ * Array indexed by [numberOfPlayers]: numberOfCitiesToEmpty
+ */
+export const numberOfCitiesToEmpty: TNumberOfCitiesToEmptyMap = {
+  2: 5,
+  3: 6,
+  4: 7,
+  5: 8,
 };
 
 export const BOARD: TBoard = [

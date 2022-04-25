@@ -12,6 +12,7 @@ import { pickContractByRegion } from './pickContractByRegion';
 import {
   BOARD,
   MAX_MOVES,
+  numberOfCitiesToEmpty,
   playerColors,
   playerInitialCargo,
 } from './constants';
@@ -24,6 +25,7 @@ const createGame = (gameName: string, gameUuid: string): IGame => {
     name: gameName,
     uuid: gameUuid,
     players: [],
+    numberOfCitiesToEmpty: 5,
     board: BOARD,
     state: {
       currentRound: {
@@ -34,6 +36,7 @@ const createGame = (gameName: string, gameUuid: string): IGame => {
       round: 0,
       started: false,
       status: 'waiting',
+      numberOfCitiesEmptied: 0,
     },
   };
 
@@ -45,6 +48,7 @@ const start = (game: IGame, firstPlayerUuid: string) => {
   game.state.started = true;
   game.state.currentRound.playerUuid = firstPlayerUuid;
   game.state.round = 1;
+  game.numberOfCitiesToEmpty = numberOfCitiesToEmpty[game.players.length];
 
   dealContracts(game);
 };
@@ -65,6 +69,7 @@ const addPlayerToGame = (user: IUser, game: IGame): IPlayer => {
     position: { column: 5, row: 6 },
     victoryPoints: 0,
     cargo: thisPlayerIndex === 0 ? [] : [playerInitialCargo[thisPlayerIndex]],
+    hasMadeEndGameMove: false,
   };
 
   return newPlayer;
@@ -91,11 +96,48 @@ const dealContracts = (game: IGame) => {
 };
 
 const endCurrentPlayerRound = (game: IGame) => {
-  // Compute the current state of the game
-  // TODO: TBD
+  // Update citiesEmptied counter
+  game.state.numberOfCitiesEmptied = game.players.reduce((sum, player) => {
+    console.log(
+      'Player ' +
+        player.user.name +
+        ' has ' +
+        player.citiesEmptied.length +
+        ' cities emptied'
+    );
+    return sum + player.citiesEmptied.length;
+  }, 0);
 
-  // Figure out if the game has been won
-  // TODO: TBD
+  // Get a reference to the current player for convenience
+  const currentPlayer = game.players.find(
+    (player) => player.user.uuid === game.state.currentRound.playerUuid
+  );
+
+  if (!currentPlayer) {
+    console.log(
+      'Something went wrong when fetching current player in the endCurrentPlayerRound function'
+    );
+    return;
+  }
+
+  // Are we in the end game?
+  // We need to check more than or equal to, since additional cities may be emptied during the endgame
+  if (game.state.numberOfCitiesEmptied >= game.numberOfCitiesToEmpty) {
+    // Ensure we switch to / remain in  'endgame' status
+    game.state.status = 'endgame';
+  }
+
+  // If we are in the endgame, toggle the hasMadeEndGameMove flag on the Player state
+  if (game.state.status === 'endgame') {
+    currentPlayer.hasMadeEndGameMove = true;
+  }
+
+  // Check whether the game is over. This happens when all the player's endgame moves have been made.
+  if (game.players.every((player) => player.hasMadeEndGameMove === true)) {
+    console.log('WON!!');
+    game.state.status = 'won';
+    return;
+  }
 
   // Set to the next player
   const currentPlayerIndex = game.players.findIndex(

@@ -12,12 +12,6 @@ export const tradeIsAllowed = (
   const mockCity: ICity = JSON.parse(JSON.stringify(currentCity));
   const validTrades: boolean[] = [];
 
-  // console.log('MockCity at the start of trade is allowed: ');
-  // console.log(JSON.stringify(mockCity));
-
-  // console.log('CurrentCity at the start of trade is allowed: ');
-  // console.log(JSON.stringify(currentCity));
-
   contracts.forEach((contract) => {
     if (
       fulfillOneGood(contract.cargo[0], mockPlayer, mockCity) &&
@@ -26,10 +20,7 @@ export const tradeIsAllowed = (
       validTrades.push(true);
       mockPlayer.contractsFulfilled.push(contract);
       mockPlayer.victoryPoints += contract.value;
-      // console.log('Looking for contract: ');
-      // console.log(contract);
-      // console.log('Among these in the city: ');
-      // console.log(JSON.stringify(mockCity.contracts));
+
       mockCity.contracts = mockCity.contracts.filter(
         (c) => c.uuid != contract.uuid
       );

@@ -215,10 +215,12 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         }
       }
 
-      if (_myTurn && _isInCity) {
+      if (_myTurn) {
         _canSail = !game.state.currentRound.movesMade.includes('sail');
-        _canTrade = !game.state.currentRound.movesMade.includes('trade');
-        _canLoad = !game.state.currentRound.movesMade.includes('load');
+        _canTrade =
+          _isInCity && !game.state.currentRound.movesMade.includes('trade');
+        _canLoad =
+          _isInCity && !game.state.currentRound.movesMade.includes('load');
       }
     }
 

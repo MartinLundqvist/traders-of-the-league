@@ -79,9 +79,10 @@ export interface IPlayer {
   position: IBoardPosition;
   victoryPoints: number;
   cargo: TCargo[];
+  hasMadeEndGameMove: boolean;
 }
 
-export type TGameStatus = 'waiting' | 'playing' | 'won';
+export type TGameStatus = 'waiting' | 'playing' | 'endgame' | 'won';
 
 export type TMoves = 'sail' | 'load' | 'trade';
 
@@ -95,12 +96,14 @@ export interface IGameState {
     movesMade: TMoves[];
   };
   started: boolean; // Has the game started or not?
+  numberOfCitiesEmptied: number;
 }
 
 export interface IGame {
   name: string;
   uuid: string;
   players: IPlayer[];
+  numberOfCitiesToEmpty: number;
   board: TBoard;
   state: IGameState;
 }

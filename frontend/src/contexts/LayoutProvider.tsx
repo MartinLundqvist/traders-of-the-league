@@ -74,9 +74,11 @@ export const LayoutProvider = ({
       setActiveRoute('start');
     }
 
-    // If there is an active game running, we just stay there
+    // If there is an active game running, we check what the status is and route accordingly
     if (game) {
-      setActiveRoute('board');
+      game.state.status === 'playing' && setActiveRoute('board');
+      game.state.status === 'endgame' && setActiveRoute('board');
+      game.state.status === 'won' && setActiveRoute('won');
     }
   }, [session.user.connected, session.uuid, game]);
 

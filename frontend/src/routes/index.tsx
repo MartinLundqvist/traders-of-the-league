@@ -6,8 +6,15 @@ import Start from './../components/Start';
 import Load from './../components/Load';
 import Trade from '../components/Trade';
 import Ditch from '../components/Ditch';
+import Won from '../components/Won';
 
-export type TRoute = 'register' | 'start' | 'newgame' | 'joingame' | 'board';
+export type TRoute =
+  | 'register'
+  | 'start'
+  | 'newgame'
+  | 'joingame'
+  | 'board'
+  | 'won';
 
 export type TActionRoute = 'none' | 'load' | 'trade' | 'ditch';
 
@@ -25,6 +32,7 @@ export const routes: TRoutes = {
   newgame: <NewGame className='grid-area--game' />,
   joingame: <JoinGame className='grid-area--game' />,
   board: <Board className='grid-area--game' />,
+  won: <Won className='grid-area--game' />,
 };
 
 export const actionRoutes: TActionRoutes = {

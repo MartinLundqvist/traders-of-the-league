@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import Hex from './Hex';
 import Ships from './Ships';
 import { useMemo } from 'react';
-import { IBoardPosition } from '../../../../shared/types';
 import {
   BOARD_WIDTH,
   BOARD_HEIGHT,

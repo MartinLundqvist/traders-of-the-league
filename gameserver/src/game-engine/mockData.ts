@@ -3,10 +3,12 @@ import { IGame, ISession } from '../../../shared/types';
 export const MOCK_GAME: IGame = {
   name: 'lyndens game',
   uuid: 'dDV7I0PZkSX1SdDCILTkA',
+  numberOfCitiesToEmpty: 10,
   players: [
     {
       color: 'black',
       user: { name: 'lynden', uuid: '1UiCjICtBFvRPSVb2cTAP', connected: true },
+      hasMadeEndGameMove: false,
       contractsFulfilled: [
         {
           value: 2,
@@ -131,6 +133,7 @@ export const MOCK_GAME: IGame = {
     {
       color: 'blue',
       user: { name: 'person1', uuid: '4s1zxMT_G5DsCnP5GRk7l', connected: true },
+      hasMadeEndGameMove: false,
       contractsFulfilled: [
         {
           value: 3,
@@ -506,6 +509,7 @@ export const MOCK_GAME: IGame = {
     round: 100,
     started: true,
     status: 'playing',
+    numberOfCitiesEmptied: 9,
   },
 };
 

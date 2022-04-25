@@ -5,4 +5,5 @@
 - Claim an achievement at the end of your turn
 - Add hover over effect on the ship to zoom in on it's contents
 - Implement end-of-game rules
+- Add a cities emptied vs number of cities to empty state
 - Add a status text at the top "Waiting for player X to make a move"
