@@ -7,7 +7,7 @@ import {
 } from '../../../shared/types';
 import { GameStore } from '../stores/gameStore';
 import { SessionStore } from '../stores/sessionStore';
-import { TGameServer } from '../types';
+import { TGameServer, TGameSocket } from '../types';
 import { nanoid } from 'nanoid';
 import { GameEngine } from '../game-engine';
 
@@ -19,7 +19,7 @@ export class GameSession implements ISession {
 
   // References to the socket server and the socket itself
   private io: TGameServer;
-  private socket: TGameServer;
+  private socket: TGameSocket;
 
   // References to the stores
   private gameStore: GameStore;
@@ -27,7 +27,7 @@ export class GameSession implements ISession {
 
   constructor(
     io: TGameServer,
-    socket: TGameServer,
+    socket: TGameSocket,
     sessionStore: SessionStore,
     gameStore: GameStore
   ) {
