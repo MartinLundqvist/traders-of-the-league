@@ -83,6 +83,8 @@ export interface IPlayer {
 
 export type TGameStatus = 'waiting' | 'playing' | 'won';
 
+export type TMoves = 'sail' | 'load' | 'trade';
+
 export interface IGameState {
   status: TGameStatus; // What status it the game in?
   round: number; // Current round
@@ -90,6 +92,7 @@ export interface IGameState {
     // UUID of the current player as well as how many moves they have left on this round.
     playerUuid: string;
     movesLeft: number;
+    movesMade: TMoves[];
   };
   started: boolean; // Has the game started or not?
 }

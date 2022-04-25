@@ -29,6 +29,7 @@ const createGame = (gameName: string, gameUuid: string): IGame => {
       currentRound: {
         playerUuid: '',
         movesLeft: 2,
+        movesMade: [],
       },
       round: 0,
       started: false,
@@ -106,6 +107,7 @@ const endCurrentPlayerRound = (game: IGame) => {
 
   game.state.currentRound.playerUuid = game.players[nextPlayerIndex].user.uuid;
   game.state.currentRound.movesLeft = MAX_MOVES;
+  game.state.currentRound.movesMade = [];
 
   // Increment round counter
   game.state.round += 1;
@@ -117,6 +119,11 @@ const sailCurrentPlayerTo = (
 ): boolean => {
   if (game.state.currentRound.movesLeft === 0) {
     console.log('Current player has no moves left');
+    return false;
+  }
+
+  if (game.state.currentRound.movesMade.includes('sail')) {
+    console.log('Current player has already sailed');
     return false;
   }
 
@@ -145,6 +152,9 @@ const sailCurrentPlayerTo = (
   // And decrement moves left
   game.state.currentRound.movesLeft -= 1;
 
+  // And add the 'sail' as a move made
+  game.state.currentRound.movesMade.push('sail');
+
   // If this was the last move, then end the round
   if (game.state.currentRound.movesLeft === 0) {
     endCurrentPlayerRound(game);
@@ -155,6 +165,11 @@ const sailCurrentPlayerTo = (
 const loadCargoForCurrentPlayer = (game: IGame, cargo: TCargo[]): boolean => {
   if (game.state.currentRound.movesLeft === 0) {
     console.log('Current player has no moves left');
+    return false;
+  }
+
+  if (game.state.currentRound.movesMade.includes('load')) {
+    console.log('Current player has already loaded cargo');
     return false;
   }
 
@@ -182,6 +197,9 @@ const loadCargoForCurrentPlayer = (game: IGame, cargo: TCargo[]): boolean => {
 
   // And decrement moves left
   game.state.currentRound.movesLeft -= 1;
+
+  // And add the 'load' as a move made
+  game.state.currentRound.movesMade.push('load');
 
   // If this was the last move, then end the round
   if (game.state.currentRound.movesLeft === 0) {
@@ -231,6 +249,11 @@ const makeTradesForCurrentPlayer = (
     return false;
   }
 
+  if (game.state.currentRound.movesMade.includes('trade')) {
+    console.log('Current player has already traded cargo');
+    return false;
+  }
+
   const currentPlayer = game.players.find(
     (player) => player.user.uuid === game.state.currentRound.playerUuid
   );
@@ -267,6 +290,9 @@ const makeTradesForCurrentPlayer = (
 
   // If it is valid, decrement moves left
   game.state.currentRound.movesLeft -= 1;
+
+  // And add the 'trade' as a move made
+  game.state.currentRound.movesMade.push('trade');
 
   // If this was the last move, then end the round
   if (game.state.currentRound.movesLeft === 0) {

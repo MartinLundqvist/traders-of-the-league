@@ -40,6 +40,9 @@ interface IGameServerContext {
   loadCargo: (cargo: TCargo[]) => void;
   ditchCargo: (cargo: TCargo[]) => void;
   makeTrades: (contracts: IContract[]) => void;
+  canLoad: boolean;
+  canTrade: boolean;
+  canSail: boolean;
 }
 
 const initialContext: IGameServerContext = {
@@ -67,6 +70,9 @@ const initialContext: IGameServerContext = {
   loadCargo: () => {},
   ditchCargo: () => {},
   makeTrades: () => {},
+  canLoad: false,
+  canTrade: false,
+  canSail: false,
 };
 
 const GameServerContext = createContext<IGameServerContext>(initialContext);
@@ -89,6 +95,9 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   const [currentPlayer, setCurrentPlayer] = useState(
     initialContext.currentPlayer
   );
+  const [canLoad, setCanLoad] = useState(initialContext.canLoad);
+  const [canSail, setCanSail] = useState(initialContext.canSail);
+  const [canTrade, setCanTrade] = useState(initialContext.canTrade);
   const socketRef = useRef<ChatSocket>();
 
   const onAnyListener = useCallback((event: any, args: any[]) => {
@@ -172,17 +181,21 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   // This hook modifies booleans for rendering purposes
   // TODO: Perhaps this should be refactored to the useLayout context?
   useEffect(() => {
-    let myTurn = false;
-    let myGameToStart = false;
-    let isInCity = false;
-    let currentCity: ICity | null = null;
-    let currentPlayer: IPlayer | null = null;
+    let _myTurn = false;
+    let _myGameToStart = false;
+    let _isInCity = false;
+    let _currentCity: ICity | null = null;
+    let _currentPlayer: IPlayer | null = null;
+    let _canSail = false;
+    let _canTrade = false;
+    let _canLoad = false;
     if (game && session) {
-      myTurn = session.user.uuid === game.state.currentRound.playerUuid;
-      currentPlayer =
+      _myTurn = session.user.uuid === game.state.currentRound.playerUuid;
+
+      _currentPlayer =
         game.players.find((player) => player.user.uuid === session.user.uuid) ||
         null;
-      myGameToStart =
+      _myGameToStart =
         session.user.uuid === game.players[0].user.uuid && !game.state.started;
 
       const currentPosition = game.players.find(
@@ -197,17 +210,26 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         });
 
         if (currentHex && currentHex.city) {
-          isInCity = true;
-          currentCity = currentHex.city;
+          _isInCity = true;
+          _currentCity = currentHex.city;
         }
+      }
+
+      if (_myTurn && _isInCity) {
+        _canSail = !game.state.currentRound.movesMade.includes('sail');
+        _canTrade = !game.state.currentRound.movesMade.includes('trade');
+        _canLoad = !game.state.currentRound.movesMade.includes('load');
       }
     }
 
-    setIsMyGameToStart(myGameToStart);
-    setIsMyTurn(myTurn);
-    setIsInCity(isInCity);
-    setCurrentCity(currentCity);
-    setCurrentPlayer(currentPlayer);
+    setIsMyGameToStart(_myGameToStart);
+    setIsMyTurn(_myTurn);
+    setIsInCity(_isInCity);
+    setCurrentCity(_currentCity);
+    setCurrentPlayer(_currentPlayer);
+    setCanSail(_canSail);
+    setCanTrade(_canTrade);
+    setCanLoad(_canLoad);
   }, [game]);
 
   const createSession = (playerName: string) => {
@@ -267,6 +289,13 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   const sailTo = (position: IBoardPosition) => {
     console.log('Sailing to ' + JSON.stringify(position));
 
+    if (!canSail) {
+      window.alert(
+        'You cannot sail. Not your turn or you have already sailed once on your move.'
+      );
+      return;
+    }
+
     socketRef.current?.emit('sailTo', position, (valid) => {
       if (!valid) {
         window.alert('Not a valid move! Try again.');
@@ -279,6 +308,13 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
 
     if (!isInCity || !currentCity || !currentPlayer) {
       console.log('City or player is not defined!');
+      return;
+    }
+
+    if (!canLoad) {
+      window.alert(
+        'You cannot load. Not your turn or you have already loaded once on your move.'
+      );
       return;
     }
 
@@ -326,6 +362,13 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
       return;
     }
 
+    if (!canTrade) {
+      window.alert(
+        'You cannot trade. Not your turn or you have already traded once on your move.'
+      );
+      return;
+    }
+
     if (contracts.length < 1) {
       console.log('No contracts to trade!');
       return;
@@ -357,6 +400,9 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         loadCargo,
         ditchCargo,
         makeTrades,
+        canTrade,
+        canSail,
+        canLoad,
       }}
     >
       {children}

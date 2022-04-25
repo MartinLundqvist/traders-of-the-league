@@ -10,8 +10,15 @@ const Wrapper = styled.div`
 `;
 
 export const Controls = (): JSX.Element => {
-  const { game, startGame, endRound, isMyTurn, isMyGameToStart, isInCity } =
-    useGameServer();
+  const {
+    game,
+    startGame,
+    endRound,
+    isMyTurn,
+    isMyGameToStart,
+    canTrade,
+    canLoad,
+  } = useGameServer();
 
   const { setActiveActionRoute } = useLayout();
 
@@ -25,15 +32,14 @@ export const Controls = (): JSX.Element => {
       {game?.state.started && (
         <>
           <div>
-            {/* <ButtonSmall disabled={!isMyTurn()}>Sail</ButtonSmall> */}
             <ButtonSmall
-              disabled={!isMyTurn || !isInCity}
+              disabled={!canLoad}
               onClick={() => setActiveActionRoute('load')}
             >
               Load
             </ButtonSmall>
             <ButtonSmall
-              disabled={!isMyTurn || !isInCity}
+              disabled={!canTrade}
               onClick={() => setActiveActionRoute('trade')}
             >
               Trade

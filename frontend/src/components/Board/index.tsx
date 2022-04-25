@@ -25,16 +25,8 @@ interface IBoardProps {
 }
 
 const Board = ({ className }: IBoardProps): JSX.Element => {
-  const { isMyTurn, sailTo } = useGameServer();
+  const { sailTo } = useGameServer();
   const { boardLayout } = useLayout();
-
-  const handleHexClick = (position: IBoardPosition) => {
-    if (isMyTurn) {
-      sailTo(position);
-      return;
-    }
-    console.log('Not your turn!');
-  };
 
   const Hexagons = useMemo(
     () =>
@@ -49,7 +41,7 @@ const Board = ({ className }: IBoardProps): JSX.Element => {
           west={hex.west}
           center={hex.center}
           farEast={hex.farEast}
-          onClick={() => handleHexClick({ column: hex.column, row: hex.row })}
+          onClick={() => sailTo({ column: hex.column, row: hex.row })}
         />
       )),
 
