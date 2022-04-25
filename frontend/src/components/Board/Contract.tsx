@@ -1,7 +1,8 @@
 import styled from 'styled-components';
-import { IContract } from '../../../../shared/types';
+import { IContract, TVictoryPoint } from '../../../../shared/types';
 import { CONTRACT_HEIGHT } from '../../utils/boardGeometry';
 import { CARGO_COLOR_STRINGS } from '../../utils/cargoColors';
+import { valueClipPaths } from '../../utils/valueClipPaths';
 
 interface IWrapperProps {
   contract: IContract;
@@ -56,10 +57,7 @@ const Wrapper = styled.div<IWrapperProps>`
       height: 70%;
       font-size: 0.8rem;
       text-align: center;
-      clip-path: ${(props) =>
-        props.contract.value < 3
-          ? 'circle(50% at 50% 50%);'
-          : 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);'};
+      clip-path: ${(props) => valueClipPaths[props.contract.value]};
 
       background-color: white;
     }

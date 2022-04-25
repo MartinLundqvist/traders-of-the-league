@@ -1,7 +1,5 @@
 - Add color cube to title user name
 - Make the black cargo contrast the black ship
-- Show total contents of cargo at all times
-- Stop cargo loading ones max cargo is reached. (maybe)
 - Fix the graphics for the contract worth 4 or 5 points
 - Add claimed city tiles to the player achievement
 - Claim an achievement at the end of your turn
