@@ -24,7 +24,7 @@ export const Controls = (): JSX.Element => {
 
   return (
     <Wrapper>
-      <TitleSmall>Controls</TitleSmall>
+      <TitleSmall>{isMyTurn ? 'Make a move' : 'Wait for your turn'}</TitleSmall>
       {isMyGameToStart && (
         <ButtonSmall onClick={() => startGame()}>Start game</ButtonSmall>
       )}

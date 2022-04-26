@@ -11,7 +11,7 @@ const Wrapper = styled.div`
   width: 100vw;
   grid-template-areas: 'header header header' 'margin-left game margin-right' 'footer footer footer';
   grid-template-columns: minmax(100px, auto) 1fr minmax(100px, auto);
-  grid-template-rows: 120px 1fr 120px;
+  grid-template-rows: 100px 1fr 120px;
 
   .grid-area--header {
     grid-area: header;

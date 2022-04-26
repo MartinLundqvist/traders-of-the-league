@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Controls } from './Controls';
-import { GameState } from './GameState';
+import { GameCode } from './GameCode';
 import { Players } from './Players';
 
 // Game status to take care of:
@@ -15,6 +15,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   background-color: var(--color-fill-sea-opaque);
+  box-shadow: 0 -3px 5px var(--color-bg-shadow);
 
   width: 100%;
   height: 100%;
@@ -29,7 +30,7 @@ interface IFooterProps {
 const Footer = ({ className }: IFooterProps): JSX.Element => {
   return (
     <Wrapper className={className}>
-      <GameState />
+      <GameCode />
       <Players />
       <Controls />
     </Wrapper>

@@ -1,9 +1,4 @@
 - Add color cube to title user name
 - Make the black cargo contrast the black ship
-- Fix the graphics for the contract worth 4 or 5 points
-- Add claimed city tiles to the player achievement
 - Claim an achievement at the end of your turn
 - Add hover over effect on the ship to zoom in on it's contents
-- Implement end-of-game rules
-- Add a cities emptied vs number of cities to empty state
-- Add a status text at the top "Waiting for player X to make a move"

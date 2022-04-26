@@ -3,9 +3,19 @@ import { IPlayer } from '../../../../shared/types';
 import { Stats, TitleSmall } from '../../elements/Typography';
 
 const Wrapper = styled.div`
-  position: relative;
-  height: 100%;
-  width: 10rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.25rem 1rem 0.25rem 1rem;
+  font-size: 1.2rem;
+  border-radius: 0.25rem;
+
+  background-color: var(--color-bg);
+  box-shadow: 3px 3px 3px var(--color-bg-shadow);
+
+  .content {
+    font-size: 1rem;
+  }
 
   .black {
     display: inline-block;
@@ -55,13 +65,15 @@ interface IPlayerProps {
 export const Player = ({ player }: IPlayerProps): JSX.Element => {
   return (
     <Wrapper>
-      <TitleSmall>
+      <div className='player'>
         <div className={player.color}></div>
         {player.user.name}
-      </TitleSmall>
-      <Stats>VPs: {player.victoryPoints}</Stats>
-      <Stats>Achievements: {player.achievements.length}</Stats>
-      <Stats>Cities Emptied: {player.citiesEmptied.length}</Stats>
+      </div>
+      <div className='content'>VPs: {player.victoryPoints}</div>
+      <div className='content'>Achievements: {player.achievements.length}</div>
+      <div className='content'>
+        Cities Emptied: {player.citiesEmptied.length}
+      </div>
     </Wrapper>
   );
 };

@@ -6,7 +6,7 @@ export const Title = styled.h1`
   padding: 0;
   font-size: 3rem;
   font-weight: bold;
-  text-shadow: 3px 3px 3px hsla(57, 145%, 30%, 0.6);
+  text-shadow: 3px 3px 3px var(--color-bg-shadow);
 `;
 
 export const TitleSmall = styled.h3`
@@ -14,7 +14,7 @@ export const TitleSmall = styled.h3`
   padding: 0;
   font-size: 1.2rem;
   font-weight: bold;
-  text-shadow: 3px 3px 3px hsla(57, 145%, 30%, 0.6);
+  text-shadow: 3px 3px 3px var(--color-bg-shadow);
 `;
 
 export const Stats = styled.div`
@@ -31,7 +31,7 @@ export const Input = styled.input`
   border-style: none;
   outline: none;
   padding: 0.25rem 1rem 0.25rem 1rem;
-  box-shadow: 3px 3px 3px hsla(57, 145%, 30%, 0.6);
+  box-shadow: 3px 3px 3px var(--color-bg-shadow);
   font: inherit;
   font-size: 3rem;
   font-weight: bold;
@@ -52,7 +52,7 @@ export const Button = styled.button<IButtonProps>`
   font-size: 3rem;
   border-radius: 0.5rem;
   border-style: none;
-  box-shadow: 3px 3px 3px hsla(57, 145%, 30%, 0.6);
+  box-shadow: 3px 3px 3px var(--color-bg-shadow);
   background-color: ${(props) =>
     props.warning ? 'var(--color-bg-warning)' : 'var(--color-bg)'};
   padding: 0.25rem 1rem 0.25rem 1rem;
@@ -68,7 +68,7 @@ export const ButtonSmall = styled.button`
   font-size: 1.2rem;
   border-radius: 0.5rem;
   border-style: none;
-  box-shadow: 3px 3px 3px hsla(57, 145%, 30%, 0.6);
+  box-shadow: 3px 3px 3px var(--color-bg-shadow);
   background-color: var(--color-bg);
   padding: 0.25rem 1rem 0.25rem 1rem;
   max-height: 2rem;

@@ -5,13 +5,14 @@
 }
 
 :root {
-  --color-bg: rgb(230, 226, 119);
-  --color-bg-warning: rgb(230, 152, 119);
-  --color-bg-highlight: rgb(218, 216, 169);
-  --color-hex: rgb(94, 111, 238);
+  --color-bg: hsl(58, 69%, 68%);
+  --color-bg-warning: hsl(18, 69%, 68%);
+  --color-bg-highlight: hsl(58, 40%, 76%);
+  --color-bg-shadow: hsla(57, 145%, 10%, 0.6);
+  --color-hex: hsl(233, 81%, 65%);
   --color-fill: #c9a87d;
   --color-fill-sea: #f6cd9e;
-  --color-fill-sea-opaque: rgba(246, 205, 158, 0.6);
+  --color-fill-sea-opaque: hsla(32, 83%, 79%, 0.6);
 }
 
 body {
