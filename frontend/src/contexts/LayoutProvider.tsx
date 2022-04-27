@@ -44,7 +44,7 @@ interface ILayoutProviderProps {
 export const LayoutProvider = ({
   children,
 }: ILayoutProviderProps): JSX.Element => {
-  const { session, game } = useGameServer();
+  const { session, game, canAchieve } = useGameServer();
   const [shipLayout, setShipLayout] = useState<TShipLayout>(
     initialLayoutContext.shipLayout
   );
@@ -64,23 +64,25 @@ export const LayoutProvider = ({
 
   // This hook manages the UI states programmatically based on the status of the GameServer session
   useEffect(() => {
-    // If user is connected, but there is no sessionUuid, we ask the user to register
-    if (session.user.connected && !session.uuid) {
-      setActiveRoute('register');
-    }
-
-    // If user is connected AND we have a sessionUuid, then we ask the user to pick a game
-    if (session.user.connected && session.uuid) {
-      setActiveRoute('start');
-    }
-
     // If there is an active game running, we check what the status is and route accordingly
     if (game) {
       game.state.status === 'playing' && setActiveRoute('board');
       game.state.status === 'endgame' && setActiveRoute('board');
       game.state.status === 'won' && setActiveRoute('won');
+    } else {
+      // If there is no active game running, we start from the top.
+
+      // If user is connected, but there is no sessionUuid, we ask the user to register
+      if (session.user.connected && !session.uuid) {
+        setActiveRoute('register');
+      }
+
+      // If user is connected AND we have a sessionUuid, then we ask the user to pick a game
+      if (session.user.connected && session.uuid) {
+        setActiveRoute('start');
+      }
     }
-  }, [session.user.connected, session.uuid, game]);
+  }, [session.user.connected, session.uuid, game, canAchieve]);
 
   useEffect(() => {
     const getShipLayout = (): TShipLayout => {

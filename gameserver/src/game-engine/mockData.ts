@@ -504,7 +504,8 @@ export const MOCK_GAME: IGame = {
     currentRound: {
       playerUuid: '4s1zxMT_G5DsCnP5GRk7l',
       movesLeft: 1,
-      movesMade: [],
+      movesAvailable: ['sail', 'load'],
+      achievementsEarned: [],
     },
     round: 100,
     started: true,

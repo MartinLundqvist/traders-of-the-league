@@ -7,6 +7,8 @@ import Load from './../components/Load';
 import Trade from '../components/Trade';
 import Ditch from '../components/Ditch';
 import Won from '../components/Won';
+import Achieve from '../components/Achieve';
+import Pause from '../components/Pause';
 
 export type TRoute =
   | 'register'
@@ -16,7 +18,7 @@ export type TRoute =
   | 'board'
   | 'won';
 
-export type TActionRoute = 'none' | 'load' | 'trade' | 'ditch';
+export type TActionRoute = 'none' | 'load' | 'trade' | 'ditch' | 'achieve';
 
 type TRoutes = {
   [key in TRoute]: JSX.Element;
@@ -40,4 +42,5 @@ export const actionRoutes: TActionRoutes = {
   load: <Load className='grid-area--game' />,
   trade: <Trade className='grid-area--game'></Trade>,
   ditch: <Ditch className='grid-area--game'></Ditch>,
+  achieve: <Achieve className='grid-area--all'></Achieve>,
 };

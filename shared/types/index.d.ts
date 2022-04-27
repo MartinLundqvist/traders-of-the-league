@@ -82,9 +82,9 @@ export interface IPlayer {
   hasMadeEndGameMove: boolean;
 }
 
-export type TGameStatus = 'waiting' | 'playing' | 'endgame' | 'won';
+export type TGameStatus = 'waiting' | 'playing' | 'pause' | 'endgame' | 'won';
 
-export type TMoves = 'sail' | 'load' | 'trade';
+export type TMoves = 'sail' | 'load' | 'trade' | 'achieve';
 
 export interface IGameState {
   status: TGameStatus; // What status it the game in?
@@ -92,8 +92,12 @@ export interface IGameState {
   currentRound: {
     // UUID of the current player as well as how many moves they have left on this round.
     playerUuid: string;
+    // Player gets TWO moves
     movesLeft: number;
-    movesMade: TMoves[];
+    // Cannot repeat moves, so we need to record them
+    movesAvailable: TMoves[];
+    // After the moves have been done, achievements are to be picked
+    achievementsEarned: IAchievement[];
   };
   started: boolean; // Has the game started or not?
   numberOfCitiesEmptied: number;

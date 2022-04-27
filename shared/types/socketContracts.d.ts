@@ -67,6 +67,12 @@ export interface ClientToServerEvents {
     contracts: IContract[],
     callback: (valid: boolean) => void
   ) => void;
+
+  // Client asks to pick an achievement. This returns a callback with a boolean true/false whether the pick could be made. It also finally ends a round.
+  pickAchievement: (
+    achievement: IAchievement,
+    callback: (valid: boolean) => void
+  ) => void;
 }
 
 export interface InterServerEvents {}

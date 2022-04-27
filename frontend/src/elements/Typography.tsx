@@ -63,7 +63,11 @@ export const Button = styled.button<IButtonProps>`
   }
 `;
 
-export const ButtonSmall = styled.button`
+interface IButtonSmallProps {
+  pulse?: boolean;
+}
+
+export const ButtonSmall = styled.button<IButtonSmallProps>`
   font: inherit;
   font-size: 1.2rem;
   border-radius: 0.5rem;
@@ -73,7 +77,16 @@ export const ButtonSmall = styled.button`
   padding: 0.25rem 1rem 0.25rem 1rem;
   max-height: 2rem;
 
+  ${(props) =>
+    props.pulse && 'animation: pulse 500ms ease-in-out alternate infinite;'};
+
   &:hover {
     background-color: var(--color-bg-highlight);
+  }
+
+  @keyframes pulse {
+    to {
+      transform: scale(1.1);
+    }
   }
 `;

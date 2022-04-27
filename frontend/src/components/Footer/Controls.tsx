@@ -18,6 +18,7 @@ export const Controls = (): JSX.Element => {
     isMyGameToStart,
     canTrade,
     canLoad,
+    canAchieve,
   } = useGameServer();
 
   const { setActiveActionRoute } = useLayout();
@@ -52,8 +53,18 @@ export const Controls = (): JSX.Element => {
             </ButtonSmall>
           </div>
           <div>
-            <ButtonSmall disabled={!isMyTurn} onClick={() => endRound()}>
+            <ButtonSmall
+              disabled={!isMyTurn || canAchieve}
+              onClick={() => endRound()}
+            >
               End round
+            </ButtonSmall>
+            <ButtonSmall
+              disabled={!canAchieve}
+              pulse={canAchieve}
+              onClick={() => setActiveActionRoute('achieve')}
+            >
+              Pick achievements
             </ButtonSmall>
           </div>
         </>

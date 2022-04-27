@@ -1,4 +1,5 @@
 import {
+  IAchievement,
   IBoardPosition,
   IContract,
   IGame,
@@ -19,6 +20,7 @@ import {
 import { loadingIsAllowed } from './loadingIsAllowed';
 import { tradeIsAllowed } from './tradeIsAllowed';
 import { ditchingIsAllowed } from './ditchingIsAllowed';
+import { findAchievementsEarned } from './findAchievementsEarned';
 
 const createGame = (gameName: string, gameUuid: string): IGame => {
   const newGame: IGame = {
@@ -31,7 +33,8 @@ const createGame = (gameName: string, gameUuid: string): IGame => {
       currentRound: {
         playerUuid: '',
         movesLeft: 2,
-        movesMade: [],
+        movesAvailable: ['load', 'sail', 'trade'],
+        achievementsEarned: [],
       },
       round: 0,
       started: false,
@@ -96,18 +99,6 @@ const dealContracts = (game: IGame) => {
 };
 
 const endCurrentPlayerRound = (game: IGame) => {
-  // Update citiesEmptied counter
-  game.state.numberOfCitiesEmptied = game.players.reduce((sum, player) => {
-    console.log(
-      'Player ' +
-        player.user.name +
-        ' has ' +
-        player.citiesEmptied.length +
-        ' cities emptied'
-    );
-    return sum + player.citiesEmptied.length;
-  }, 0);
-
   // Get a reference to the current player for convenience
   const currentPlayer = game.players.find(
     (player) => player.user.uuid === game.state.currentRound.playerUuid
@@ -140,6 +131,11 @@ const endCurrentPlayerRound = (game: IGame) => {
   }
 
   // Set to the next player
+  nextPlayer(game);
+};
+
+const nextPlayer = (game: IGame) => {
+  // Set to the next player
   const currentPlayerIndex = game.players.findIndex(
     (player) => player.user.uuid === game.state.currentRound.playerUuid
   );
@@ -149,10 +145,36 @@ const endCurrentPlayerRound = (game: IGame) => {
 
   game.state.currentRound.playerUuid = game.players[nextPlayerIndex].user.uuid;
   game.state.currentRound.movesLeft = MAX_MOVES;
-  game.state.currentRound.movesMade = [];
+  game.state.currentRound.movesAvailable = ['load', 'sail', 'trade'];
 
   // Increment round counter
   game.state.round += 1;
+};
+
+const processEndOfRoundAchievements = (game: IGame) => {
+  // Reset the moves available
+  game.state.currentRound.movesAvailable = [];
+
+  const currentPlayer = game.players.find(
+    (player) => player.user.uuid === game.state.currentRound.playerUuid
+  );
+
+  if (!currentPlayer) {
+    console.log('No player found');
+    return;
+  }
+
+  const achievements = findAchievementsEarned(currentPlayer, game);
+
+  if (achievements.length > 0) {
+    game.state.currentRound.achievementsEarned = achievements.map((a) => {
+      return { ...a };
+    });
+    game.state.currentRound.movesAvailable.push('achieve');
+    return;
+  }
+
+  endCurrentPlayerRound(game);
 };
 
 const sailCurrentPlayerTo = (
@@ -164,7 +186,7 @@ const sailCurrentPlayerTo = (
     return false;
   }
 
-  if (game.state.currentRound.movesMade.includes('sail')) {
+  if (!game.state.currentRound.movesAvailable.includes('sail')) {
     console.log('Current player has already sailed');
     return false;
   }
@@ -194,12 +216,14 @@ const sailCurrentPlayerTo = (
   // And decrement moves left
   game.state.currentRound.movesLeft -= 1;
 
-  // And add the 'sail' as a move made
-  game.state.currentRound.movesMade.push('sail');
+  // And remove the 'sail' as a move available
+  game.state.currentRound.movesAvailable =
+    game.state.currentRound.movesAvailable.filter((move) => move != 'sail');
 
   // If this was the last move, then end the round
   if (game.state.currentRound.movesLeft === 0) {
-    endCurrentPlayerRound(game);
+    // endCurrentPlayerRound(game);
+    processEndOfRoundAchievements(game);
   }
 
   return true;
@@ -210,7 +234,7 @@ const loadCargoForCurrentPlayer = (game: IGame, cargo: TCargo[]): boolean => {
     return false;
   }
 
-  if (game.state.currentRound.movesMade.includes('load')) {
+  if (!game.state.currentRound.movesAvailable.includes('load')) {
     console.log('Current player has already loaded cargo');
     return false;
   }
@@ -240,12 +264,14 @@ const loadCargoForCurrentPlayer = (game: IGame, cargo: TCargo[]): boolean => {
   // And decrement moves left
   game.state.currentRound.movesLeft -= 1;
 
-  // And add the 'load' as a move made
-  game.state.currentRound.movesMade.push('load');
+  // And remove the 'load' as am available move
+  game.state.currentRound.movesAvailable =
+    game.state.currentRound.movesAvailable.filter((move) => move !== 'load');
 
   // If this was the last move, then end the round
   if (game.state.currentRound.movesLeft === 0) {
-    endCurrentPlayerRound(game);
+    // endCurrentPlayerRound(game);
+    processEndOfRoundAchievements(game);
   }
 
   return true;
@@ -291,7 +317,7 @@ const makeTradesForCurrentPlayer = (
     return false;
   }
 
-  if (game.state.currentRound.movesMade.includes('trade')) {
+  if (!game.state.currentRound.movesAvailable.includes('trade')) {
     console.log('Current player has already traded cargo');
     return false;
   }
@@ -333,13 +359,93 @@ const makeTradesForCurrentPlayer = (
   // If it is valid, decrement moves left
   game.state.currentRound.movesLeft -= 1;
 
-  // And add the 'trade' as a move made
-  game.state.currentRound.movesMade.push('trade');
+  // And remove the 'trade' as a valid move
+  game.state.currentRound.movesAvailable =
+    game.state.currentRound.movesAvailable.filter((move) => move !== 'trade');
+
+  // Update citiesEmptied counter in case a city was emptied
+  game.state.numberOfCitiesEmptied = game.players.reduce(
+    (sum, player) => sum + player.citiesEmptied.length,
+    0
+  );
 
   // If this was the last move, then end the round
   if (game.state.currentRound.movesLeft === 0) {
-    endCurrentPlayerRound(game);
+    // endCurrentPlayerRound(game);
+    processEndOfRoundAchievements(game);
   }
+
+  return true;
+};
+
+// /**
+//  * Mutates the game AND returns the number of achievements earned
+//  */
+// const addAchievementsToCurrentGameRound = (game: IGame): number => {
+//   const currentPlayer = game.players.find(
+//     (player) => player.user.uuid === game.state.currentRound.playerUuid
+//   );
+
+//   if (!currentPlayer) {
+//     console.log('No player found');
+//     return 0;
+//   }
+
+//   const achievements = findAchievementsEarned(currentPlayer, game);
+
+//   if (achievements.length > 0) {
+//     game.state.currentRound.achievementsEarned = achievements.map((a) => {
+//       return { ...a };
+//     });
+//   }
+
+//   return achievements.length;
+// };
+
+const pickAchievementForCurrentPlayer = (
+  game: IGame,
+  achievement: IAchievement
+): boolean => {
+  const currentPlayer = game.players.find(
+    (player) => player.user.uuid === game.state.currentRound.playerUuid
+  );
+
+  if (!currentPlayer) {
+    console.log('No player found');
+    return false;
+  }
+
+  if (!achievement) {
+    console.log('No achievement to pick');
+    return false;
+  }
+
+  if (!game.state.currentRound.movesAvailable.includes('achieve')) {
+    console.log('Player already picked achievements');
+    return false;
+  }
+
+  // Likely unecessary, but bells and whistles...
+  let valid =
+    game.state.currentRound.achievementsEarned.findIndex(
+      (a) => a.name === achievement.name
+    ) > -1;
+
+  if (!valid) {
+    console.log('Not a valid pick');
+    return false;
+  }
+
+  // If it is valid, add the achievement to the player state, remove it from the game inventory (TBD), the currentRound state and increment points
+  // TODO: ADD INVENTORY OF ACHIEVEMENTS!!!
+  currentPlayer.achievements.push(achievement);
+  currentPlayer.victoryPoints += achievement.value;
+  game.state.currentRound.achievementsEarned = [];
+  game.state.currentRound.movesAvailable =
+    game.state.currentRound.movesAvailable.filter((move) => move !== 'achieve');
+
+  // Finalize the round.
+  endCurrentPlayerRound(game);
 
   return true;
 };
@@ -348,9 +454,10 @@ export const GameEngine = {
   createGame,
   start,
   addPlayerToGame,
-  endCurrentPlayerRound,
   sailCurrentPlayerTo,
   loadCargoForCurrentPlayer,
   ditchCargoForCurrentPlayer,
   makeTradesForCurrentPlayer,
+  pickAchievementForCurrentPlayer,
+  processEndOfRoundAchievements,
 };

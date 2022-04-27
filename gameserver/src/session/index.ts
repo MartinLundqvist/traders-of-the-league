@@ -1,4 +1,5 @@
 import {
+  IAchievement,
   IBoardPosition,
   IContract,
   ISession,
@@ -88,6 +89,11 @@ export class GameSession implements ISession {
       'makeTrades',
       (contracts: IContract[], callback: (valid: boolean) => void) =>
         this.makeTrades(contracts, callback)
+    );
+    this.socket.on(
+      'pickAchievement',
+      (achievement: IAchievement, callback: (valid: boolean) => void) =>
+        this.pickAchievement(achievement, callback)
     );
     this.socket.on('disconnect', () => this.disconnect());
   }
@@ -253,7 +259,7 @@ export class GameSession implements ISession {
       return;
     }
 
-    GameEngine.endCurrentPlayerRound(game);
+    GameEngine.processEndOfRoundAchievements(game);
 
     this.gameStore.saveGame(game);
 
@@ -345,5 +351,33 @@ export class GameSession implements ISession {
 
     // Finally, we callback with a confirmation.?????
     callback(validTrade);
+  }
+
+  private pickAchievement(
+    achievement: IAchievement,
+    callback: (valid: boolean) => void
+  ) {
+    console.log('Picking achievement!');
+    const game = this.gameStore.getGame(this.activeGameUuid);
+
+    if (!this.activeGameUuid || !game) {
+      this.socket.emit('error', 'Game not found');
+      return;
+    }
+
+    // Have the engine figure out wether these are valid trades, and if so, execute them.
+    let validPick = GameEngine.pickAchievementForCurrentPlayer(
+      game,
+      achievement
+    );
+
+    if (validPick) {
+      // If the move is valid, we persist and push the new game state
+      this.gameStore.saveGame(game);
+      this.pushActiveGame();
+    }
+
+    // Finally, we callback with a confirmation.?????
+    callback(validPick);
   }
 }

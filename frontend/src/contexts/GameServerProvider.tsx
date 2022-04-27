@@ -9,6 +9,7 @@ import {
 import { Socket, io } from 'socket.io-client';
 import {
   ClientToServerEvents,
+  IAchievement,
   IBoardPosition,
   ICity,
   IContract,
@@ -43,6 +44,9 @@ interface IGameServerContext {
   canLoad: boolean;
   canTrade: boolean;
   canSail: boolean;
+  canAchieve: boolean;
+  availableAchievements: IAchievement[];
+  pickAchievement: (achievement: IAchievement) => void;
 }
 
 const initialContext: IGameServerContext = {
@@ -73,6 +77,9 @@ const initialContext: IGameServerContext = {
   canLoad: false,
   canTrade: false,
   canSail: false,
+  canAchieve: false,
+  availableAchievements: [],
+  pickAchievement: () => {},
 };
 
 const GameServerContext = createContext<IGameServerContext>(initialContext);
@@ -98,6 +105,10 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   const [canLoad, setCanLoad] = useState(initialContext.canLoad);
   const [canSail, setCanSail] = useState(initialContext.canSail);
   const [canTrade, setCanTrade] = useState(initialContext.canTrade);
+  const [canAchieve, setCanAchieve] = useState(initialContext.canAchieve);
+  const [availableAchievements, setAvailableAchievements] = useState(
+    initialContext.availableAchievements
+  );
   const socketRef = useRef<ChatSocket>();
 
   const onAnyListener = useCallback((event: any, args: any[]) => {
@@ -189,18 +200,23 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     let _canSail = false;
     let _canTrade = false;
     let _canLoad = false;
+    let _canAchieve = false;
+    let _availableAchievements: IAchievement[] = [];
+
     if (game && session) {
       _myTurn = session.user.uuid === game.state.currentRound.playerUuid;
 
       _currentPlayer =
         game.players.find((player) => player.user.uuid === session.user.uuid) ||
         null;
+
       _myGameToStart =
         session.user.uuid === game.players[0].user.uuid && !game.state.started;
 
       const currentPosition = game.players.find(
         (player) => player.user.uuid === session.user.uuid
       )?.position;
+
       if (currentPosition) {
         const currentHex = game.board.find((hex) => {
           return (
@@ -216,11 +232,18 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
       }
 
       if (_myTurn) {
-        _canSail = !game.state.currentRound.movesMade.includes('sail');
+        _availableAchievements = game.state.currentRound.achievementsEarned;
+
+        _canAchieve =
+          game.state.currentRound.movesAvailable.includes('achieve');
+
+        _canSail = game.state.currentRound.movesAvailable.includes('sail');
+
         _canTrade =
-          _isInCity && !game.state.currentRound.movesMade.includes('trade');
+          _isInCity && game.state.currentRound.movesAvailable.includes('trade');
+
         _canLoad =
-          _isInCity && !game.state.currentRound.movesMade.includes('load');
+          _isInCity && game.state.currentRound.movesAvailable.includes('load');
       }
     }
 
@@ -232,6 +255,8 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     setCanSail(_canSail);
     setCanTrade(_canTrade);
     setCanLoad(_canLoad);
+    setCanAchieve(_canAchieve);
+    setAvailableAchievements(_availableAchievements);
   }, [game]);
 
   const createSession = (playerName: string) => {
@@ -383,6 +408,21 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     });
   };
 
+  const pickAchievement = (achievement: IAchievement) => {
+    console.log('Picking ' + JSON.stringify(achievement));
+
+    if (!canAchieve || availableAchievements.length < 1) {
+      console.log('Not eligble to achieve');
+      return;
+    }
+
+    socketRef.current?.emit('pickAchievement', achievement, (valid) => {
+      if (!valid) {
+        window.alert('Not a valid achievement ');
+      }
+    });
+  };
+
   return (
     <GameServerContext.Provider
       value={{
@@ -405,6 +445,9 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         canTrade,
         canSail,
         canLoad,
+        canAchieve,
+        availableAchievements,
+        pickAchievement,
       }}
     >
       {children}
