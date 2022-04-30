@@ -23,6 +23,8 @@ export const Controls = (): JSX.Element => {
 
   const { setActiveActionRoute } = useLayout();
 
+  if (game?.state.status === 'won') return <div></div>;
+
   return (
     <Wrapper>
       <TitleSmall>{isMyTurn ? 'Make a move' : 'Wait for your turn'}</TitleSmall>

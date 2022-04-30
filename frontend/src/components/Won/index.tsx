@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useLayout } from '../../contexts/LayoutProvider';
-import { Title } from '../../elements/Typography';
+import { Button, ButtonSmall, Title } from '../../elements/Typography';
 
 const Wrapper = styled.div`
   display: flex;
@@ -28,6 +28,9 @@ const Won = ({ className }: IStartProps): JSX.Element => {
   return (
     <Wrapper className={className}>
       <Title>GAME OVER</Title>
+      <ButtonSmall onClick={() => setActiveRoute('start')}>
+        Start over
+      </ButtonSmall>
     </Wrapper>
   );
 };
