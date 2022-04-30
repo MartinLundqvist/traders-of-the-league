@@ -1,8 +1,7 @@
 import styled from 'styled-components';
-import { IAchievement } from '../../../../shared/types';
 import { useGameServer } from '../../contexts/GameServerProvider';
-import { useLayout } from '../../contexts/LayoutProvider';
-import { Button, ButtonSmall, Title } from '../../elements/Typography';
+import { Title, TitleSmall } from '../../elements/Typography';
+import { Achievement } from './Achievement';
 
 const Wrapper = styled.div`
   position: relative;
@@ -17,6 +16,16 @@ const Wrapper = styled.div`
   background-color: var(--color-fill-sea-opaque);
   backdrop-filter: blur(10px);
   z-index: 10;
+
+  .container {
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
 `;
 
 interface IAchieveProps {
@@ -24,25 +33,17 @@ interface IAchieveProps {
 }
 
 const Achieve = ({ className }: IAchieveProps): JSX.Element => {
-  const { availableAchievements, pickAchievement } = useGameServer();
-  const { setActiveActionRoute } = useLayout();
-
-  const handlePickAchievementClick = (achievement: IAchievement) => {
-    pickAchievement(achievement);
-    setActiveActionRoute('none');
-  };
+  const { availableAchievements } = useGameServer();
 
   return (
     <Wrapper className={className}>
-      <Title>Achieve</Title>
-      {availableAchievements.map((achievement) => (
-        <div>
-          <div key={achievement.name}>{achievement.name}</div>
-          <ButtonSmall onClick={() => handlePickAchievementClick(achievement)}>
-            Pick
-          </ButtonSmall>
-        </div>
-      ))}
+      <Title>You earned the following achievements!</Title>
+      <div className='container'>
+        {availableAchievements.map((achievement) => (
+          <Achievement key={achievement.name} achievement={achievement} />
+        ))}
+      </div>
+      <TitleSmall>Pick one</TitleSmall>
     </Wrapper>
   );
 };

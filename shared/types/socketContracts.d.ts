@@ -4,6 +4,7 @@ import {
   IBoardPosition,
   TCargo,
   IContract,
+  IAchievement,
 } from '../../shared/types';
 
 export type TSocketError =
