@@ -1,9 +1,11 @@
 import { IGame, ISession } from '../../../shared/types';
+import { ACHIEVEMENTS } from './constants';
 
 export const MOCK_GAME: IGame = {
   name: 'lyndens game',
   uuid: 'dDV7I0PZkSX1SdDCILTkA',
   numberOfCitiesToEmpty: 10,
+  achievements: ACHIEVEMENTS,
   players: [
     {
       color: 'black',

@@ -1,5 +1,6 @@
 import { IContract, TCargo, TVictoryPoint } from '../../../shared/types';
 import { nanoid } from 'nanoid';
+import { cargoColors } from './constants';
 
 /**
  * A contract is characterized by
@@ -9,17 +10,6 @@ import { nanoid } from 'nanoid';
  */
 export const createNewContracts = (): IContract[] => {
   const results: IContract[] = [];
-
-  // We start by creating a helper array with all cargo types (colors)
-  const colorArray: TCargo[] = [
-    'red',
-    'yellow',
-    'gray',
-    'green',
-    'blue',
-    'brown',
-    'black',
-  ];
 
   // This is directly from the game-makers instructions. We assume West, Central, East order from top to bottom. '0' means skip creating this contract.
   const valueArray = [
@@ -49,8 +39,8 @@ export const createNewContracts = (): IContract[] => {
   // Then we loop through each color pair (avoiding similar pairs)
   let valueIndex = 0;
 
-  for (let i = 0; i < colorArray.length - 1; i++) {
-    for (let j = i + 1; j < colorArray.length; j++) {
+  for (let i = 0; i < cargoColors.length - 1; i++) {
+    for (let j = i + 1; j < cargoColors.length; j++) {
       const values = valueArray[valueIndex];
       valueIndex++;
 
@@ -61,7 +51,7 @@ export const createNewContracts = (): IContract[] => {
       if (values[0]) {
         results.push({
           value: values[0] as TVictoryPoint,
-          cargo: [colorArray[i], colorArray[j]],
+          cargo: [cargoColors[i], cargoColors[j]],
           region: 'West',
           uuid: nanoid(),
         });
@@ -69,7 +59,7 @@ export const createNewContracts = (): IContract[] => {
       if (values[1]) {
         results.push({
           value: values[1] as TVictoryPoint,
-          cargo: [colorArray[i], colorArray[j]],
+          cargo: [cargoColors[i], cargoColors[j]],
           region: 'Central',
           uuid: nanoid(),
         });
@@ -77,7 +67,7 @@ export const createNewContracts = (): IContract[] => {
       if (values[2]) {
         results.push({
           value: values[2] as TVictoryPoint,
-          cargo: [colorArray[i], colorArray[j]],
+          cargo: [cargoColors[i], cargoColors[j]],
           region: 'East',
           uuid: nanoid(),
         });

@@ -11,6 +11,7 @@ import { createNewContracts } from './createNewContracts';
 import { moveIsAllowed } from './moveIsAllowed';
 import { pickContractByRegion } from './pickContractByRegion';
 import {
+  ACHIEVEMENTS,
   BOARD,
   MAX_MOVES,
   numberOfCitiesToEmpty,
@@ -28,6 +29,7 @@ const createGame = (gameName: string, gameUuid: string): IGame => {
     uuid: gameUuid,
     players: [],
     numberOfCitiesToEmpty: 5,
+    achievements: ACHIEVEMENTS,
     board: BOARD,
     state: {
       currentRound: {
@@ -436,10 +438,14 @@ const pickAchievementForCurrentPlayer = (
     return false;
   }
 
-  // If it is valid, add the achievement to the player state, remove it from the game inventory (TBD), the currentRound state and increment points
-  // TODO: ADD INVENTORY OF ACHIEVEMENTS!!!
+  // If it is valid, add the achievement to the player state, remove it from the game inventory, the currentRound state and increment points
   currentPlayer.achievements.push(achievement);
   currentPlayer.victoryPoints += achievement.value;
+
+  game.achievements = game.achievements.filter(
+    (a) => a.name !== achievement.name
+  );
+
   game.state.currentRound.achievementsEarned = [];
   game.state.currentRound.movesAvailable =
     game.state.currentRound.movesAvailable.filter((move) => move !== 'achieve');

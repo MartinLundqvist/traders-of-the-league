@@ -8,7 +8,8 @@
     "prebuild": "rm -rf build",
     "build": "tsc --outDir ./build",
     "start": "NODE_ENV=production node ./build/index.js",
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon src/index.ts",
+    "test:gameengine": "nodemon src/tests/gameEngineTests.ts"
   },
   "keywords": [],
   "author": "",

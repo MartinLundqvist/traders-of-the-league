@@ -46,8 +46,26 @@ export interface IEmptiedCity {
   value: TVictoryPoint;
 }
 
+export type TAchievement =
+  | 'Diversifier A'
+  | 'Diversifier B'
+  | 'Regional Trader A'
+  | 'Regional Trader B'
+  | 'Monopolist A'
+  | 'Monopolist B'
+  | 'Explorer A'
+  | 'Explorer B'
+  | 'Supplier A'
+  | 'Supplier B'
+  | 'Specialist A'
+  | 'Specialist B'
+  | 'Merchant A'
+  | 'Merchant B'
+  | 'Banker A'
+  | 'Banker B';
+
 export interface IAchievement {
-  name: string;
+  name: TAchievement;
   value: TVictoryPoint;
 }
 
@@ -110,6 +128,7 @@ export interface IGame {
   numberOfCitiesToEmpty: number;
   board: TBoard;
   state: IGameState;
+  achievements: IAchievement[];
 }
 
 export interface IUser {

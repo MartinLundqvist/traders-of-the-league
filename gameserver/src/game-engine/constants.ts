@@ -1,8 +1,15 @@
-import { TBoard, TCargo, TPlayerColor } from '../../../shared/types';
+import {
+  IAchievement,
+  TBoard,
+  TCargo,
+  TPlayerColor,
+  TRegion,
+} from '../../../shared/types';
 
 export const MAX_MOVES = 2;
 export const MAX_CARGO = 5;
 export const VP_EMPTY_CITY = 2;
+export const CARGO_COLORS = 7;
 
 type TPlayerColorMap = {
   [key: number]: TPlayerColor;
@@ -24,6 +31,18 @@ export const playerColors: TPlayerColorMap = {
   4: 'yellow',
 };
 
+export const cargoColors: TCargo[] = [
+  'red',
+  'yellow',
+  'gray',
+  'green',
+  'blue',
+  'brown',
+  'black',
+];
+
+export const regions: TRegion[] = ['Central', 'East', 'West'];
+
 export const playerInitialCargo: TPlayerInitialCargoMap = {
   // 0: Empty. No cargo.
   1: 'yellow',
@@ -41,6 +60,77 @@ export const numberOfCitiesToEmpty: TNumberOfCitiesToEmptyMap = {
   4: 7,
   5: 8,
 };
+
+/**
+ * Game rules assert 16 specific achievements.
+ * Their names are unique, so we do not need unique ids.
+ */
+export const ACHIEVEMENTS: IAchievement[] = [
+  {
+    name: 'Diversifier A',
+    value: 4,
+  },
+  {
+    name: 'Diversifier B',
+    value: 4,
+  },
+  {
+    name: 'Regional Trader A',
+    value: 5,
+  },
+  {
+    name: 'Regional Trader B',
+    value: 3,
+  },
+  {
+    name: 'Monopolist A',
+    value: 4,
+  },
+  {
+    name: 'Monopolist B',
+    value: 3,
+  },
+  {
+    name: 'Explorer A',
+    value: 4,
+  },
+  {
+    name: 'Explorer B',
+    value: 3,
+  },
+  {
+    name: 'Supplier A',
+    value: 3,
+  },
+  {
+    name: 'Supplier B',
+    value: 4,
+  },
+  {
+    name: 'Specialist A',
+    value: 3,
+  },
+  {
+    name: 'Specialist B',
+    value: 4,
+  },
+  {
+    name: 'Merchant A',
+    value: 5,
+  },
+  {
+    name: 'Merchant B',
+    value: 4,
+  },
+  {
+    name: 'Banker A',
+    value: 4,
+  },
+  {
+    name: 'Banker B',
+    value: 3,
+  },
+];
 
 export const BOARD: TBoard = [
   {
