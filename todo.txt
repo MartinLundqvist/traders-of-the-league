@@ -1,9 +1,10 @@
 - Add color cube to title user name
 - Make the black cargo contrast the black ship
-- Claim an achievement at the end of your turn
     
-
-
 - Add hover over effect on the ship to zoom in on it's contents
 - Add game rules
 - Add About section
+- Add game timer?
+- Add a proper win screen.
+- Add possibility to end a game prematurely
+- Add proper achievement graphics
