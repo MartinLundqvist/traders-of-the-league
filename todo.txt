@@ -6,5 +6,5 @@
 - Add About section
 - Add game timer?
 - Add a proper win screen.
-- Add possibility to end a game prematurely
 - Add proper achievement graphics
+- Add a chat function

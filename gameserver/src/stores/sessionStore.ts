@@ -23,6 +23,14 @@ export class SessionStore {
     return this.sessions.delete(sessionUuid);
   }
 
+  public clearGameState(gameUid: string) {
+    this.sessions.forEach((session) => {
+      if (session.activeGameUuid === gameUid) {
+        session.activeGameUuid = '';
+      }
+    });
+  }
+
   private saveToFile(session: ISession) {
     const data = JSON.stringify(session);
     fs.writeFile(`./saves/session_${session.uuid}.json`, data, () => {

@@ -1,8 +1,11 @@
 import styled from 'styled-components';
 import { useGameServer } from '../../contexts/GameServerProvider';
-import { TitleSmall } from '../../elements/Typography';
+import { ButtonSmall, TitleSmall } from '../../elements/Typography';
 
 const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 
   span {
     font-family: 'Roboto';
@@ -15,13 +18,19 @@ const Wrapper = styled.div`
 }
 `;
 
-export const GameCode = (): JSX.Element => {
-  const { game } = useGameServer();
+export const Game = (): JSX.Element => {
+  const { game, endGame, isStarted, isMyGame } = useGameServer();
 
   const copyToClipBoard = async () => {
     if (!game) return;
     await navigator.clipboard.writeText(game.uuid);
     window.alert('Copied code ' + game.uuid + ' to clipboard.');
+  };
+
+  const handleClickEndGame = () => {
+    if (!window.confirm('Are you sure you want to end the game?')) return;
+
+    endGame();
   };
 
   return (
@@ -32,6 +41,12 @@ export const GameCode = (): JSX.Element => {
           {game?.uuid}
         </span>
       </div>
+      <ButtonSmall
+        disabled={!(isMyGame && isStarted)}
+        onClick={() => handleClickEndGame()}
+      >
+        End game
+      </ButtonSmall>
     </Wrapper>
   );
 };

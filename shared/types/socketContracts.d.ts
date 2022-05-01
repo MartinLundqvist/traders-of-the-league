@@ -22,6 +22,9 @@ export interface ServerToClientEvents {
   // Server sends the current game state
   pushActiveGame: (game: IGame) => void;
 
+  // Server sends game termination message (this is only for when the first user terminates the game prematurely)
+  gameTerminated: () => void;
+
   // Server sends an error
   error: (error: TSocketError) => void;
 }
@@ -74,6 +77,9 @@ export interface ClientToServerEvents {
     achievement: IAchievement,
     callback: (valid: boolean) => void
   ) => void;
+
+  // Client asks to end game. This set the state of the game to 'not started', clears the session from the game, and disconnects all user sockets from that game.
+  endGame: () => void;
 }
 
 export interface InterServerEvents {}

@@ -11,11 +11,12 @@ const Wrapper = styled.div`
 
 export const Controls = (): JSX.Element => {
   const {
-    game,
     startGame,
     endRound,
     isMyTurn,
-    isMyGameToStart,
+    isMyGame,
+    isStarted,
+    isWon,
     canTrade,
     canLoad,
     canAchieve,
@@ -23,16 +24,16 @@ export const Controls = (): JSX.Element => {
 
   const { setActiveActionRoute } = useLayout();
 
-  if (game?.state.status === 'won') return <div></div>;
+  if (isWon) return <div></div>;
 
   return (
     <Wrapper>
       <TitleSmall>{isMyTurn ? 'Make a move' : 'Wait for your turn'}</TitleSmall>
-      {isMyGameToStart && (
+      {isMyGame && !isStarted && (
         <ButtonSmall onClick={() => startGame()}>Start game</ButtonSmall>
       )}
 
-      {game?.state.started && (
+      {isStarted && (
         <>
           <div>
             <ButtonSmall

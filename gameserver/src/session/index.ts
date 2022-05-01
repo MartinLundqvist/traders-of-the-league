@@ -95,6 +95,7 @@ export class GameSession implements ISession {
       (achievement: IAchievement, callback: (valid: boolean) => void) =>
         this.pickAchievement(achievement, callback)
     );
+    this.socket.on('endGame', () => this.endGame());
     this.socket.on('disconnect', () => this.disconnect());
   }
 
@@ -144,7 +145,9 @@ export class GameSession implements ISession {
     // We also need to initialize the local session properties
     // TODO: This is a bit unelegant..
     const fetchedSession = this.sessionStore.getSession(sessionUuid);
+
     if (fetchedSession) {
+      // Update the local session
       this.uuid = fetchedSession.uuid;
       this.user = {
         name: fetchedSession.user.name,
@@ -152,6 +155,10 @@ export class GameSession implements ISession {
         connected: true,
       };
       this.activeGameUuid = fetchedSession.activeGameUuid;
+
+      // Remember to update the store with the user connection status
+      fetchedSession.user.connected = true;
+      this.persistThisSession();
     }
 
     callback(fetchedSession);
@@ -379,5 +386,25 @@ export class GameSession implements ISession {
 
     // Finally, we callback with a confirmation.?????
     callback(validPick);
+  }
+
+  private endGame() {
+    console.log('Ending the game ' + this.activeGameUuid);
+    const game = this.gameStore.getGame(this.activeGameUuid);
+
+    if (!game || !this.activeGameUuid) {
+      this.socket.emit('error', 'Game not found');
+      return;
+    }
+
+    // Send message to all players that the game has been terminated
+    this.io.to(this.activeGameUuid).emit('gameTerminated');
+
+    // Remove the activegame from from all sesssions. Remember to clear the local one aswell.
+    this.activeGameUuid = '';
+    this.sessionStore.clearGameState(this.activeGameUuid);
+
+    // Disconnect all active sockets from the room.
+    this.io.socketsLeave(this.activeGameUuid);
   }
 }

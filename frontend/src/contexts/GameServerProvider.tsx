@@ -33,7 +33,9 @@ interface IGameServerContext {
   startGame: () => void;
   endRound: () => void;
   isMyTurn: boolean;
-  isMyGameToStart: boolean;
+  isMyGame: boolean;
+  isStarted: boolean;
+  isWon: boolean;
   sailTo: (position: IBoardPosition) => void;
   isInCity: boolean;
   currentCity: ICity | null;
@@ -47,6 +49,7 @@ interface IGameServerContext {
   canAchieve: boolean;
   availableAchievements: IAchievement[];
   pickAchievement: (achievement: IAchievement) => void;
+  endGame: () => void;
 }
 
 const initialContext: IGameServerContext = {
@@ -66,7 +69,9 @@ const initialContext: IGameServerContext = {
   startGame: () => {},
   endRound: () => {},
   isMyTurn: false,
-  isMyGameToStart: false,
+  isMyGame: false,
+  isStarted: false,
+  isWon: false,
   sailTo: () => {},
   isInCity: false,
   currentCity: null,
@@ -80,6 +85,7 @@ const initialContext: IGameServerContext = {
   canAchieve: false,
   availableAchievements: [],
   pickAchievement: () => {},
+  endGame: () => {},
 };
 
 const GameServerContext = createContext<IGameServerContext>(initialContext);
@@ -94,10 +100,10 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   const [session, setSession] = useState<ISession>(initialContext.session);
   const [game, setGame] = useState<IGame | null>(initialContext.game);
   const [isMyTurn, setIsMyTurn] = useState(initialContext.isMyTurn);
-  const [isMyGameToStart, setIsMyGameToStart] = useState(
-    initialContext.isMyGameToStart
-  );
+  const [isMyGame, setIsMyGame] = useState(initialContext.isMyGame);
   const [isInCity, setIsInCity] = useState(initialContext.isInCity);
+  const [isStarted, setIsStarted] = useState(initialContext.isStarted);
+  const [isWon, setIsWon] = useState(initialContext.isWon);
   const [currentCity, setCurrentCity] = useState(initialContext.currentCity);
   const [currentPlayer, setCurrentPlayer] = useState(
     initialContext.currentPlayer
@@ -134,6 +140,12 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     setGame(game);
   }, []);
 
+  const onGameTerminated = useCallback(() => {
+    console.log('Game termination signal received');
+    window.alert('Game was terminatd by player');
+    setGame(null);
+  }, []);
+
   // This hook initializes the socket on first render of the Provider
   useEffect(() => {
     // First we connect to the server
@@ -149,6 +161,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     socketRef.current?.on('error', onErrorListener);
     socketRef.current?.on('pushConnection', onPushConnectionListener);
     socketRef.current?.on('pushActiveGame', onPushActiveGameListener);
+    socketRef.current?.on('gameTerminated', onGameTerminated);
 
     // Now we figure out if there is an existing session we can use
     let sessionUuid = window.localStorage.getItem('sessionUuid');
@@ -186,6 +199,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
       socketRef.current?.off('error', onErrorListener);
       socketRef.current?.off('pushConnection', onPushConnectionListener);
       socketRef.current?.off('pushActiveGame', onPushActiveGameListener);
+      socketRef.current?.off('gameTerminated', onGameTerminated);
     };
   }, []);
 
@@ -193,8 +207,10 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   // TODO: Perhaps this should be refactored to the useLayout context?
   useEffect(() => {
     let _myTurn = false;
-    let _myGameToStart = false;
+    let _myGame = false;
     let _isInCity = false;
+    let _isStarted = false;
+    let _isWon = false;
     let _currentCity: ICity | null = null;
     let _currentPlayer: IPlayer | null = null;
     let _canSail = false;
@@ -204,14 +220,15 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     let _availableAchievements: IAchievement[] = [];
 
     if (game && session) {
+      _isStarted = game.state.started;
+      _isWon = game.state.status === 'won';
       _myTurn = session.user.uuid === game.state.currentRound.playerUuid;
 
       _currentPlayer =
         game.players.find((player) => player.user.uuid === session.user.uuid) ||
         null;
 
-      _myGameToStart =
-        session.user.uuid === game.players[0].user.uuid && !game.state.started;
+      _myGame = session.user.uuid === game.players[0].user.uuid;
 
       const currentPosition = game.players.find(
         (player) => player.user.uuid === session.user.uuid
@@ -247,8 +264,10 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
       }
     }
 
-    setIsMyGameToStart(_myGameToStart);
+    setIsMyGame(_myGame);
     setIsMyTurn(_myTurn);
+    setIsStarted(_isStarted);
+    setIsWon(_isWon);
     setIsInCity(_isInCity);
     setCurrentCity(_currentCity);
     setCurrentPlayer(_currentPlayer);
@@ -423,6 +442,17 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     });
   };
 
+  const endGame = () => {
+    console.log('Ending the game');
+
+    if (!game || !isMyGame) {
+      window.alert('No game running that you can end.');
+      return;
+    }
+
+    socketRef.current?.emit('endGame');
+  };
+
   return (
     <GameServerContext.Provider
       value={{
@@ -434,7 +464,9 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         startGame,
         endRound,
         isMyTurn,
-        isMyGameToStart,
+        isMyGame,
+        isStarted,
+        isWon,
         sailTo,
         isInCity,
         currentCity,
@@ -448,6 +480,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         canAchieve,
         availableAchievements,
         pickAchievement,
+        endGame,
       }}
     >
       {children}

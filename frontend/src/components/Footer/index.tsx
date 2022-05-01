@@ -1,13 +1,7 @@
 import styled from 'styled-components';
 import { Controls } from './Controls';
-import { GameCode } from './GameCode';
+import { Game } from './Game';
 import { Players } from './Players';
-
-// Game status to take care of:
-// - Not started vs started.
-// - Which round are we in?
-// - Whose move is it?
-//
 
 const Wrapper = styled.div`
   position: relative;
@@ -30,7 +24,7 @@ interface IFooterProps {
 const Footer = ({ className }: IFooterProps): JSX.Element => {
   return (
     <Wrapper className={className}>
-      <GameCode />
+      <Game />
       <Players />
       <Controls />
     </Wrapper>
