@@ -100,7 +100,12 @@ export interface IPlayer {
   hasMadeEndGameMove: boolean;
 }
 
-export type TGameStatus = 'waiting' | 'playing' | 'pause' | 'endgame' | 'won';
+export type TGameStatus =
+  | 'waiting'
+  | 'playing'
+  | 'endgame'
+  | 'won'
+  | 'terminated';
 
 export type TMoves = 'sail' | 'load' | 'trade' | 'achieve';
 
@@ -117,7 +122,6 @@ export interface IGameState {
     // After the moves have been done, achievements are to be picked
     achievementsEarned: IAchievement[];
   };
-  started: boolean; // Has the game started or not?
   numberOfCitiesEmptied: number;
 }
 

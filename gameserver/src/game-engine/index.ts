@@ -39,7 +39,6 @@ const createGame = (gameName: string, gameUuid: string): IGame => {
         achievementsEarned: [],
       },
       round: 0,
-      started: false,
       status: 'waiting',
       numberOfCitiesEmptied: 0,
     },
@@ -50,12 +49,15 @@ const createGame = (gameName: string, gameUuid: string): IGame => {
 
 const start = (game: IGame, firstPlayerUuid: string) => {
   game.state.status = 'playing';
-  game.state.started = true;
   game.state.currentRound.playerUuid = firstPlayerUuid;
   game.state.round = 1;
   game.numberOfCitiesToEmpty = numberOfCitiesToEmpty[game.players.length];
 
   dealContracts(game);
+};
+
+const terminate = (game: IGame) => {
+  game.state.status = 'terminated';
 };
 
 const addPlayerToGame = (user: IUser, game: IGame): IPlayer => {
@@ -380,30 +382,6 @@ const makeTradesForCurrentPlayer = (
   return true;
 };
 
-// /**
-//  * Mutates the game AND returns the number of achievements earned
-//  */
-// const addAchievementsToCurrentGameRound = (game: IGame): number => {
-//   const currentPlayer = game.players.find(
-//     (player) => player.user.uuid === game.state.currentRound.playerUuid
-//   );
-
-//   if (!currentPlayer) {
-//     console.log('No player found');
-//     return 0;
-//   }
-
-//   const achievements = findAchievementsEarned(currentPlayer, game);
-
-//   if (achievements.length > 0) {
-//     game.state.currentRound.achievementsEarned = achievements.map((a) => {
-//       return { ...a };
-//     });
-//   }
-
-//   return achievements.length;
-// };
-
 const pickAchievementForCurrentPlayer = (
   game: IGame,
   achievement: IAchievement
@@ -459,6 +437,7 @@ const pickAchievementForCurrentPlayer = (
 export const GameEngine = {
   createGame,
   start,
+  terminate,
   addPlayerToGame,
   sailCurrentPlayerTo,
   loadCargoForCurrentPlayer,

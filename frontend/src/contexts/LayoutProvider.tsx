@@ -70,6 +70,7 @@ export const LayoutProvider = ({
       game.state.status === 'endgame' && setActiveRoute('board');
       game.state.status === 'waiting' && setActiveRoute('board');
       game.state.status === 'won' && setActiveRoute('won');
+      game.state.status === 'terminated' && setActiveRoute('terminated');
     } else {
       // If there is no active game running, we start from the top.
 

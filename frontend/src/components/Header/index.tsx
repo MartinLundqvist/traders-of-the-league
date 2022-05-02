@@ -37,7 +37,7 @@ const Header = ({ className }: IHeaderProps) => {
     return (
       game.players.find(
         (player) => player.user.uuid === game.state.currentRound.playerUuid
-      )?.user.name || ''
+      )?.user.name || 'None'
     );
   };
 

@@ -18,6 +18,7 @@ import {
   ISession,
   ServerToClientEvents,
   TCargo,
+  TGameStatus,
   TSocketConnection,
   TSocketError,
 } from '../../../shared/types';
@@ -30,12 +31,16 @@ interface IGameServerContext {
   createSession: (playerName: string) => void;
   createAndJoinNewGame: (gameName: string) => void;
   joinGame: (gameUuid: string) => void;
+  leaveGame: () => void;
   startGame: () => void;
   endRound: () => void;
   isMyTurn: boolean;
   isMyGame: boolean;
-  isStarted: boolean;
-  isWon: boolean;
+  gameStatus: TGameStatus;
+  // isPlaying: boolean;
+  // isWaiting: boolean;
+  // isWon: boolean;
+  // isTerminated: boolean;
   sailTo: (position: IBoardPosition) => void;
   isInCity: boolean;
   currentCity: ICity | null;
@@ -66,12 +71,16 @@ const initialContext: IGameServerContext = {
   createSession: () => {},
   createAndJoinNewGame: () => {},
   joinGame: () => {},
+  leaveGame: () => {},
   startGame: () => {},
   endRound: () => {},
   isMyTurn: false,
   isMyGame: false,
-  isStarted: false,
-  isWon: false,
+  gameStatus: 'waiting',
+  // isPlaying: false,
+  // isWaiting: false,
+  // isWon: false,
+  // isTerminated: false,
   sailTo: () => {},
   isInCity: false,
   currentCity: null,
@@ -102,8 +111,13 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   const [isMyTurn, setIsMyTurn] = useState(initialContext.isMyTurn);
   const [isMyGame, setIsMyGame] = useState(initialContext.isMyGame);
   const [isInCity, setIsInCity] = useState(initialContext.isInCity);
-  const [isStarted, setIsStarted] = useState(initialContext.isStarted);
-  const [isWon, setIsWon] = useState(initialContext.isWon);
+  const [gameStatus, setGameStatus] = useState<TGameStatus>(
+    initialContext.gameStatus
+  );
+  // const [isPlaying, setIsPlaying] = useState(initialContext.isPlaying);
+  // const [isWaiting, setIsWaiting] = useState(initialContext.isWaiting);
+  // const [isWon, setIsWon] = useState(initialContext.isWon);
+  // const [isTerminated, setIsTerminated] = useState(initialContext.isTerminated);
   const [currentCity, setCurrentCity] = useState(initialContext.currentCity);
   const [currentPlayer, setCurrentPlayer] = useState(
     initialContext.currentPlayer
@@ -140,10 +154,9 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     setGame(game);
   }, []);
 
-  const onGameTerminated = useCallback(() => {
-    console.log('Game termination signal received');
-    window.alert('Game was terminatd by player');
-    setGame(null);
+  const onPushSessionListener = useCallback((session: ISession) => {
+    console.log('Updated session received');
+    setSession(session);
   }, []);
 
   // This hook initializes the socket on first render of the Provider
@@ -161,7 +174,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     socketRef.current?.on('error', onErrorListener);
     socketRef.current?.on('pushConnection', onPushConnectionListener);
     socketRef.current?.on('pushActiveGame', onPushActiveGameListener);
-    socketRef.current?.on('gameTerminated', onGameTerminated);
+    socketRef.current?.on('pushSession', onPushSessionListener);
 
     // Now we figure out if there is an existing session we can use
     let sessionUuid = window.localStorage.getItem('sessionUuid');
@@ -199,18 +212,20 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
       socketRef.current?.off('error', onErrorListener);
       socketRef.current?.off('pushConnection', onPushConnectionListener);
       socketRef.current?.off('pushActiveGame', onPushActiveGameListener);
-      socketRef.current?.off('gameTerminated', onGameTerminated);
     };
   }, []);
 
   // This hook modifies booleans for rendering purposes
   // TODO: Perhaps this should be refactored to the useLayout context?
   useEffect(() => {
-    let _myTurn = false;
-    let _myGame = false;
+    let _isMyTurn = false;
+    let _isMyGame = false;
     let _isInCity = false;
-    let _isStarted = false;
-    let _isWon = false;
+    let _gameStatus: TGameStatus = 'waiting';
+    // let _isPlaying = false;
+    // let _isWon = false;
+    // let _isWaiting = false;
+    // let _isTerminated = false;
     let _currentCity: ICity | null = null;
     let _currentPlayer: IPlayer | null = null;
     let _canSail = false;
@@ -219,16 +234,22 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     let _canAchieve = false;
     let _availableAchievements: IAchievement[] = [];
 
+    // If there is no gameUuid active, we make sure to nullify the game object
+    !session.activeGameUuid && setGame(null);
+
     if (game && session) {
-      _isStarted = game.state.started;
-      _isWon = game.state.status === 'won';
-      _myTurn = session.user.uuid === game.state.currentRound.playerUuid;
+      _gameStatus = game.state.status;
+      // _isPlaying = game.state.status === 'playing';
+      // _isWon = game.state.status === 'won';
+      // _isWaiting = game.state.status === 'waiting';
+      // _isTerminated = game.state.status === 'terminated';
+      _isMyTurn = session.user.uuid === game.state.currentRound.playerUuid;
 
       _currentPlayer =
         game.players.find((player) => player.user.uuid === session.user.uuid) ||
         null;
 
-      _myGame = session.user.uuid === game.players[0].user.uuid;
+      _isMyGame = session.user.uuid === game.players[0].user.uuid;
 
       const currentPosition = game.players.find(
         (player) => player.user.uuid === session.user.uuid
@@ -248,7 +269,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         }
       }
 
-      if (_myTurn) {
+      if (_isMyTurn) {
         _availableAchievements = game.state.currentRound.achievementsEarned;
 
         _canAchieve =
@@ -264,10 +285,13 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
       }
     }
 
-    setIsMyGame(_myGame);
-    setIsMyTurn(_myTurn);
-    setIsStarted(_isStarted);
-    setIsWon(_isWon);
+    setIsMyGame(_isMyGame);
+    setIsMyTurn(_isMyTurn);
+    setGameStatus(_gameStatus);
+    // setIsPlaying(_isPlaying);
+    // setIsWon(_isWon);
+    // setIsWaiting(_isWaiting);
+    // setIsTerminated(_isTerminated);
     setIsInCity(_isInCity);
     setCurrentCity(_currentCity);
     setCurrentPlayer(_currentPlayer);
@@ -276,7 +300,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     setCanLoad(_canLoad);
     setCanAchieve(_canAchieve);
     setAvailableAchievements(_availableAchievements);
-  }, [game]);
+  }, [game, session]);
 
   const createSession = (playerName: string) => {
     if (playerName.length < 3) {
@@ -311,6 +335,11 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     }
     console.log('Joining existing game with Uuid ' + gameUuid);
     socketRef.current?.emit('joinGame', gameUuid);
+  };
+
+  const leaveGame = () => {
+    console.log('Leaving game with Uuid ' + session.activeGameUuid);
+    socketRef.current?.emit('leaveGame');
   };
 
   const startGame = () => {
@@ -461,12 +490,16 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         createSession,
         createAndJoinNewGame,
         joinGame,
+        leaveGame,
         startGame,
         endRound,
         isMyTurn,
         isMyGame,
-        isStarted,
-        isWon,
+        gameStatus,
+        // isPlaying,
+        // isWaiting,
+        // isWon,
+        // isTerminated,
         sailTo,
         isInCity,
         currentCity,

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { IContract, TVictoryPoint } from '../../../../shared/types';
+import { IContract } from '../../../../shared/types';
 import { CONTRACT_HEIGHT } from '../../utils/boardGeometry';
 import { CARGO_COLOR_STRINGS } from '../../utils/cargoColors';
 import { valueClipPaths } from '../../utils/valueClipPaths';

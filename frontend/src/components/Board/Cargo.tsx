@@ -43,9 +43,6 @@ interface ICargoProps {
 }
 
 const Cargo = ({ cargo }: ICargoProps): JSX.Element => {
-  const [color, setColor] = useState(['']);
-  const [good, setGoods] = useState<JSX.Element[]>([]);
-
   return (
     <Wrapper>
       {cargo.map((good, index) => (

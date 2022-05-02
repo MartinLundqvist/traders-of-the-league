@@ -1,6 +1,7 @@
 import styled from 'styled-components';
+import { useGameServer } from '../../contexts/GameServerProvider';
 import { useLayout } from '../../contexts/LayoutProvider';
-import { ButtonSmall, Title } from '../../elements/Typography';
+import { Button, ButtonSmall, Title } from '../../elements/Typography';
 
 const Wrapper = styled.div`
   display: flex;
@@ -23,16 +24,21 @@ interface IStartProps {
   className: string;
 }
 
-const Won = ({ className }: IStartProps): JSX.Element => {
+const Terminated = ({ className }: IStartProps): JSX.Element => {
+  const { leaveGame } = useGameServer();
   const { setActiveRoute } = useLayout();
+
+  const handleRestartClick = () => {
+    leaveGame();
+    setActiveRoute('start');
+  };
+
   return (
     <Wrapper className={className}>
-      <Title>GAME OVER</Title>
-      <ButtonSmall onClick={() => setActiveRoute('start')}>
-        Start over
-      </ButtonSmall>
+      <Title>GAME TERMINATED</Title>
+      <ButtonSmall onClick={() => handleRestartClick()}>Start over</ButtonSmall>
     </Wrapper>
   );
 };
 
-export default Won;
+export default Terminated;

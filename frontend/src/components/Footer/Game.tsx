@@ -19,7 +19,7 @@ const Wrapper = styled.div`
 `;
 
 export const Game = (): JSX.Element => {
-  const { game, endGame, isStarted, isMyGame } = useGameServer();
+  const { game, endGame, gameStatus, isMyGame } = useGameServer();
 
   const copyToClipBoard = async () => {
     if (!game) return;
@@ -42,7 +42,7 @@ export const Game = (): JSX.Element => {
         </span>
       </div>
       <ButtonSmall
-        disabled={!(isMyGame && isStarted)}
+        disabled={!(isMyGame && !(gameStatus === 'waiting'))}
         onClick={() => handleClickEndGame()}
       >
         End game

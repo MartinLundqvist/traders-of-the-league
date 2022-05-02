@@ -510,7 +510,6 @@ export const MOCK_GAME: IGame = {
       achievementsEarned: [],
     },
     round: 100,
-    started: true,
     status: 'playing',
     numberOfCitiesEmptied: 9,
   },

@@ -9,6 +9,7 @@ import Ditch from '../components/Ditch';
 import Won from '../components/Won';
 import Achieve from '../components/Achieve';
 import Pause from '../components/Pause';
+import Terminated from '../components/Terminated';
 
 export type TRoute =
   | 'register'
@@ -16,7 +17,8 @@ export type TRoute =
   | 'newgame'
   | 'joingame'
   | 'board'
-  | 'won';
+  | 'won'
+  | 'terminated';
 
 export type TActionRoute = 'none' | 'load' | 'trade' | 'ditch' | 'achieve';
 
@@ -35,6 +37,7 @@ export const routes: TRoutes = {
   joingame: <JoinGame className='grid-area--game' />,
   board: <Board className='grid-area--game' />,
   won: <Won className='grid-area--game' />,
+  terminated: <Terminated className='grid-area--game' />,
 };
 
 export const actionRoutes: TActionRoutes = {

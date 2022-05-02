@@ -22,8 +22,8 @@ export interface ServerToClientEvents {
   // Server sends the current game state
   pushActiveGame: (game: IGame) => void;
 
-  // Server sends game termination message (this is only for when the first user terminates the game prematurely)
-  gameTerminated: () => void;
+  // Server sends the current session
+  pushSession: (session: ISession) => void;
 
   // Server sends an error
   error: (error: TSocketError) => void;
@@ -47,6 +47,9 @@ export interface ClientToServerEvents {
 
   // Client asks to join an existing game.
   joinGame: (gameUuid: string) => void;
+
+  // Client asks to join an existing game.
+  leaveGame: () => void;
 
   // Client asks to start the currently active game
   startGame: () => void;

@@ -68,6 +68,7 @@ export class GameSession implements ISession {
       this.fetchActiveGame(callback)
     );
     this.socket.on('joinGame', (gameUuid: string) => this.joinGame(gameUuid));
+    this.socket.on('leaveGame', () => this.leaveGame());
     this.socket.on('startGame', () => this.startGame());
     this.socket.on('endRound', () => this.endRound());
     this.socket.on(
@@ -128,6 +129,16 @@ export class GameSession implements ISession {
 
     // And finally callback to the frontend
     callback(newSession);
+  }
+
+  private pushThisSession() {
+    const thisSession: ISession = {
+      uuid: this.uuid,
+      user: this.user,
+      activeGameUuid: this.activeGameUuid,
+    };
+
+    this.socket.emit('pushSession', thisSession);
   }
 
   private persistThisSession() {
@@ -232,6 +243,9 @@ export class GameSession implements ISession {
 
     // Persist the new session
     this.persistThisSession();
+
+    // Push it
+    this.pushThisSession();
 
     // And finally push the game status to the frontend
     this.pushActiveGame();
@@ -388,6 +402,26 @@ export class GameSession implements ISession {
     callback(validPick);
   }
 
+  private leaveGame() {
+    console.log('Leaving the game ' + this.activeGameUuid);
+
+    if (!this.activeGameUuid) {
+      this.socket.emit('error', 'Game not found');
+      return;
+    }
+
+    // Leave the room
+    this.socket.leave(this.activeGameUuid);
+
+    // Remove the activegame reference and persist the session
+    this.activeGameUuid = '';
+
+    this.persistThisSession();
+
+    // And update the client.
+    this.pushThisSession();
+  }
+
   private endGame() {
     console.log('Ending the game ' + this.activeGameUuid);
     const game = this.gameStore.getGame(this.activeGameUuid);
@@ -397,14 +431,14 @@ export class GameSession implements ISession {
       return;
     }
 
-    // Send message to all players that the game has been terminated
-    this.io.to(this.activeGameUuid).emit('gameTerminated');
+    GameEngine.terminate(game);
+    this.gameStore.saveGame(game);
 
-    // Remove the activegame from from all sesssions. Remember to clear the local one aswell.
-    this.activeGameUuid = '';
-    this.sessionStore.clearGameState(this.activeGameUuid);
+    this.pushActiveGame();
 
-    // Disconnect all active sockets from the room.
-    this.io.socketsLeave(this.activeGameUuid);
+    // // Send message to all players that the game has been terminated
+    // this.io.to(this.activeGameUuid).emit('gameTerminated');
+
+    this.leaveGame();
   }
 }
