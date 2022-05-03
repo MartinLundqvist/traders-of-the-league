@@ -1,3 +1,4 @@
+Functional
 - Add color cube to title user name
 - Make the black cargo contrast the black ship
 - Add hover over effect on the ship to zoom in on its contents
@@ -6,3 +7,6 @@
 - Add game timer?
 - Add proper achievement graphics
 - Add a chat function
+
+Non-functional
+- Clean up the use of context hooks across the entire code base
