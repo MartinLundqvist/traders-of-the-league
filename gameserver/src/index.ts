@@ -1,10 +1,12 @@
 import express from 'express';
+import cors from 'cors';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { GameSession } from './session';
 import { TGameServer } from './types';
 import { GameStore } from './stores/gameStore';
 import { SessionStore } from './stores/sessionStore';
+import { GameEngine } from './game-engine/';
 import { MOCK_GAME, MOCK_SESSIONS } from './game-engine/mockData';
 
 // Persist whether we are in development mode or not
@@ -30,6 +32,23 @@ if (DEVELOPMENT) {
 
 // Wire up the express server
 const app = express();
+app.use(cors());
+
+// This route gets game results for a gameUuid
+app.get('/gameresults/:gameUuid', (req, res) => {
+  const gameUuid = req.params.gameUuid;
+
+  const game = gameStore.getGame(gameUuid);
+
+  if (!game) {
+    res.status(500).send({ message: 'Game not found' });
+    return;
+  }
+
+  const results = GameEngine.getGameResults(game);
+
+  res.status(200).send({ message: 'Game found', results });
+});
 
 // This is merely for health checks. Probably don't even need the express package for this app hmm....
 app.get('/', (req, res) => {

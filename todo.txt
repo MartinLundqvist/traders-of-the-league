@@ -1,10 +1,8 @@
 - Add color cube to title user name
 - Make the black cargo contrast the black ship
-    
-- Add hover over effect on the ship to zoom in on it's contents
+- Add hover over effect on the ship to zoom in on its contents
 - Add game rules
 - Add About section
 - Add game timer?
-- Add a proper win screen.
 - Add proper achievement graphics
 - Add a chat function

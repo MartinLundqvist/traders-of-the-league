@@ -22,6 +22,7 @@ import { loadingIsAllowed } from './loadingIsAllowed';
 import { tradeIsAllowed } from './tradeIsAllowed';
 import { ditchingIsAllowed } from './ditchingIsAllowed';
 import { findAchievementsEarned } from './findAchievementsEarned';
+import { getGameResults } from './getGameResults';
 
 const createGame = (gameName: string, gameUuid: string): IGame => {
   const newGame: IGame = {
@@ -129,8 +130,9 @@ const endCurrentPlayerRound = (game: IGame) => {
 
   // Check whether the game is over. This happens when all the player's endgame moves have been made.
   if (game.players.every((player) => player.hasMadeEndGameMove === true)) {
-    console.log('WON!!');
+    console.log('Game won');
     game.state.status = 'won';
+
     return;
   }
 
@@ -445,4 +447,5 @@ export const GameEngine = {
   makeTradesForCurrentPlayer,
   pickAchievementForCurrentPlayer,
   processEndOfRoundAchievements,
+  getGameResults,
 };

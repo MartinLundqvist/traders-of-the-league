@@ -14,8 +14,10 @@ import {
   ICity,
   IContract,
   IGame,
+  IGameResults,
   IPlayer,
   ISession,
+  IUser,
   ServerToClientEvents,
   TCargo,
   TGameStatus,
@@ -26,10 +28,15 @@ import {
 export type ChatSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
 interface IGameServerContext {
+  // Session specific. Only changes if new session is collected from Game Server.
   session: ISession;
-  game: IGame | null;
+  me: IUser;
+  activeGameUuid: string;
   createSession: (playerName: string) => void;
   createAndJoinNewGame: (gameName: string) => void;
+
+  // Game specific. Only changes if game state is updated.
+  game: IGame | null;
   joinGame: (gameUuid: string) => void;
   leaveGame: () => void;
   startGame: () => void;
@@ -37,6 +44,7 @@ interface IGameServerContext {
   isMyTurn: boolean;
   isMyGame: boolean;
   gameStatus: TGameStatus;
+  gameResults: IGameResults | null;
   // isPlaying: boolean;
   // isWaiting: boolean;
   // isWon: boolean;
@@ -67,6 +75,12 @@ const initialContext: IGameServerContext = {
     },
     activeGameUuid: '',
   },
+  me: {
+    name: '',
+    uuid: '',
+    connected: false,
+  },
+  activeGameUuid: '',
   game: null,
   createSession: () => {},
   createAndJoinNewGame: () => {},
@@ -77,6 +91,7 @@ const initialContext: IGameServerContext = {
   isMyTurn: false,
   isMyGame: false,
   gameStatus: 'waiting',
+  gameResults: null,
   // isPlaying: false,
   // isWaiting: false,
   // isWon: false,
@@ -107,12 +122,20 @@ interface IGameServerProviderProps {
 
 export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   const [session, setSession] = useState<ISession>(initialContext.session);
+  const [me, setMe] = useState<IUser>(initialContext.me);
+  const [activeGameUuid, setActiveGameUuid] = useState(
+    initialContext.activeGameUuid
+  );
+
   const [game, setGame] = useState<IGame | null>(initialContext.game);
   const [isMyTurn, setIsMyTurn] = useState(initialContext.isMyTurn);
   const [isMyGame, setIsMyGame] = useState(initialContext.isMyGame);
   const [isInCity, setIsInCity] = useState(initialContext.isInCity);
   const [gameStatus, setGameStatus] = useState<TGameStatus>(
     initialContext.gameStatus
+  );
+  const [gameResults, setGameResults] = useState<IGameResults | null>(
+    initialContext.gameResults
   );
   // const [isPlaying, setIsPlaying] = useState(initialContext.isPlaying);
   // const [isWaiting, setIsWaiting] = useState(initialContext.isWaiting);
@@ -215,17 +238,13 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     };
   }, []);
 
-  // This hook modifies booleans for rendering purposes
+  // This hook modifies game specific booleans for rendering purposes
   // TODO: Perhaps this should be refactored to the useLayout context?
   useEffect(() => {
     let _isMyTurn = false;
     let _isMyGame = false;
     let _isInCity = false;
     let _gameStatus: TGameStatus = 'waiting';
-    // let _isPlaying = false;
-    // let _isWon = false;
-    // let _isWaiting = false;
-    // let _isTerminated = false;
     let _currentCity: ICity | null = null;
     let _currentPlayer: IPlayer | null = null;
     let _canSail = false;
@@ -235,21 +254,18 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     let _availableAchievements: IAchievement[] = [];
 
     // If there is no gameUuid active, we make sure to nullify the game object
-    !session.activeGameUuid && setGame(null);
+    !activeGameUuid && setGame(null);
 
-    if (game && session) {
+    if (game) {
       _gameStatus = game.state.status;
-      // _isPlaying = game.state.status === 'playing';
-      // _isWon = game.state.status === 'won';
-      // _isWaiting = game.state.status === 'waiting';
-      // _isTerminated = game.state.status === 'terminated';
-      _isMyTurn = session.user.uuid === game.state.currentRound.playerUuid;
+
+      _isMyTurn = me.uuid === game.state.currentRound.playerUuid;
 
       _currentPlayer =
         game.players.find((player) => player.user.uuid === session.user.uuid) ||
         null;
 
-      _isMyGame = session.user.uuid === game.players[0].user.uuid;
+      _isMyGame = me.uuid === game.players[0].user.uuid;
 
       const currentPosition = game.players.find(
         (player) => player.user.uuid === session.user.uuid
@@ -300,7 +316,44 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     setCanLoad(_canLoad);
     setCanAchieve(_canAchieve);
     setAvailableAchievements(_availableAchievements);
-  }, [game, session]);
+  }, [game]);
+
+  // Special hook for fetching gameresults if the game state is won
+  useEffect(() => {
+    const fetchGameResults = async () => {
+      const URL = import.meta.env.VITE_URL;
+
+      if (!activeGameUuid) {
+        console.log('No game Uuid in this session');
+        return;
+      }
+
+      try {
+        const raw = await fetch(`${URL}/gameResults/${activeGameUuid}`);
+
+        if (raw.ok) {
+          const results = await raw.json();
+          setGameResults(results.results);
+        } else {
+          throw Error('No game results found on server');
+        }
+      } catch (e) {
+        console.log('Failed to fetch game results');
+        console.log(e);
+      }
+    };
+
+    if (gameStatus === 'won') {
+      console.log('Fetching game results');
+      fetchGameResults();
+    }
+  }, [gameStatus]);
+
+  // This hook modifies game specific booleans for rendering purposes
+  useEffect(() => {
+    setMe(session.user);
+    setActiveGameUuid(session.activeGameUuid);
+  }, [session]);
 
   const createSession = (playerName: string) => {
     if (playerName.length < 3) {
@@ -487,6 +540,8 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
       value={{
         session,
         game,
+        me,
+        activeGameUuid,
         createSession,
         createAndJoinNewGame,
         joinGame,
@@ -496,6 +551,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         isMyTurn,
         isMyGame,
         gameStatus,
+        gameResults,
         // isPlaying,
         // isWaiting,
         // isWon,

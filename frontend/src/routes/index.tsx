@@ -8,7 +8,6 @@ import Trade from '../components/Trade';
 import Ditch from '../components/Ditch';
 import Won from '../components/Won';
 import Achieve from '../components/Achieve';
-import Pause from '../components/Pause';
 import Terminated from '../components/Terminated';
 
 export type TRoute =

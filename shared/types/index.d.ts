@@ -146,3 +146,17 @@ export interface ISession {
   user: IUser;
   activeGameUuid: string;
 }
+
+export interface IPlayerStats {
+  uuid: string;
+  name: string;
+  rank: number;
+  victoryPoints: number;
+  nrContractsFulfilled: number;
+}
+
+export interface IGameResults {
+  game: IGame;
+  playerStats: IPlayerStats[];
+  tie: boolean;
+}
