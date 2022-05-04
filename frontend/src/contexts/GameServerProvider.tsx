@@ -45,10 +45,6 @@ interface IGameServerContext {
   isMyGame: boolean;
   gameStatus: TGameStatus;
   gameResults: IGameResults | null;
-  // isPlaying: boolean;
-  // isWaiting: boolean;
-  // isWon: boolean;
-  // isTerminated: boolean;
   sailTo: (position: IBoardPosition) => void;
   isInCity: boolean;
   currentCity: ICity | null;
@@ -92,10 +88,6 @@ const initialContext: IGameServerContext = {
   isMyGame: false,
   gameStatus: 'waiting',
   gameResults: null,
-  // isPlaying: false,
-  // isWaiting: false,
-  // isWon: false,
-  // isTerminated: false,
   sailTo: () => {},
   isInCity: false,
   currentCity: null,
@@ -137,10 +129,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   const [gameResults, setGameResults] = useState<IGameResults | null>(
     initialContext.gameResults
   );
-  // const [isPlaying, setIsPlaying] = useState(initialContext.isPlaying);
-  // const [isWaiting, setIsWaiting] = useState(initialContext.isWaiting);
-  // const [isWon, setIsWon] = useState(initialContext.isWon);
-  // const [isTerminated, setIsTerminated] = useState(initialContext.isTerminated);
+
   const [currentCity, setCurrentCity] = useState(initialContext.currentCity);
   const [currentPlayer, setCurrentPlayer] = useState(
     initialContext.currentPlayer
@@ -268,7 +257,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
       _isMyGame = me.uuid === game.players[0].user.uuid;
 
       const currentPosition = game.players.find(
-        (player) => player.user.uuid === session.user.uuid
+        (player) => player.user.uuid === me.uuid
       )?.position;
 
       if (currentPosition) {
@@ -304,10 +293,6 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     setIsMyGame(_isMyGame);
     setIsMyTurn(_isMyTurn);
     setGameStatus(_gameStatus);
-    // setIsPlaying(_isPlaying);
-    // setIsWon(_isWon);
-    // setIsWaiting(_isWaiting);
-    // setIsTerminated(_isTerminated);
     setIsInCity(_isInCity);
     setCurrentCity(_currentCity);
     setCurrentPlayer(_currentPlayer);
@@ -349,7 +334,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     }
   }, [gameStatus]);
 
-  // This hook modifies game specific booleans for rendering purposes
+  // This hook modifies session specific booleans for rendering purposes
   useEffect(() => {
     setMe(session.user);
     setActiveGameUuid(session.activeGameUuid);
@@ -552,10 +537,6 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         isMyGame,
         gameStatus,
         gameResults,
-        // isPlaying,
-        // isWaiting,
-        // isWon,
-        // isTerminated,
         sailTo,
         isInCity,
         currentCity,

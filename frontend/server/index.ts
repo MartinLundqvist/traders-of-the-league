@@ -12,8 +12,30 @@ app.use(
   })
 );
 
+// VM health check purposes only
+app.get('/healthz', (req, res) => {
+  res.status(200).send({ message: 'OK' });
+});
+
 app.get('*', (req, res) => res.sendFile(path.join(cwd, 'dist/index.html')));
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log('Server started on port ' + PORT);
+});
+
+// Manage VM operations
+process.on('SIGINT', () => {
+  console.log('SIGINT received, closing down server.');
+  server.close(() => {
+    console.log('Server closed');
+  });
+  process.exit(0);
+});
+
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received, closing down server.');
+  server.close(() => {
+    console.log('Server closed');
+  });
+  process.exit(0);
 });

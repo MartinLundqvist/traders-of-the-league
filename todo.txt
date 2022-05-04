@@ -10,3 +10,5 @@ Functional
 
 Non-functional
 - Clean up the use of context hooks across the entire code base
+- Add health check and proper process control into frontend production server
+- Consider refactoring game engine around XState.
