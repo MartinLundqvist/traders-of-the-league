@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useGameServer } from '../../contexts/GameServerProvider';
+import { useLayout } from '../../contexts/LayoutProvider';
 import { ButtonSmall, TitleSmall } from '../../elements/Typography';
 
 const Wrapper = styled.div`
@@ -7,7 +8,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   gap: 1rem;
 
-  span {
+  div#code {
     font-family: 'Roboto';
     font-size: 0.8rem;
 
@@ -15,16 +16,24 @@ const Wrapper = styled.div`
       cursor: pointer;
     }
   }
+
+  .buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 0.25rem;
+  }
+
 }
 `;
 
 export const Game = (): JSX.Element => {
-  const { game, endGame, gameStatus, isMyGame } = useGameServer();
+  const { activeGameUuid, endGame, gameStatus, isMyGame } = useGameServer();
+  const { setActiveActionRoute } = useLayout();
 
   const copyToClipBoard = async () => {
-    if (!game) return;
-    await navigator.clipboard.writeText(game.uuid);
-    window.alert('Copied code ' + game.uuid + ' to clipboard.');
+    if (!activeGameUuid) return;
+    await navigator.clipboard.writeText(activeGameUuid);
+    window.alert('Copied code ' + activeGameUuid + ' to clipboard.');
   };
 
   const handleClickEndGame = () => {
@@ -36,17 +45,20 @@ export const Game = (): JSX.Element => {
   return (
     <Wrapper>
       <TitleSmall>Game Code (click to copy)</TitleSmall>
-      <div>
-        <span id='code' onClick={() => copyToClipBoard()}>
-          {game?.uuid}
-        </span>
+      <div id='code' onClick={() => copyToClipBoard()}>
+        {activeGameUuid}
       </div>
-      <ButtonSmall
-        disabled={!(isMyGame && !(gameStatus === 'waiting'))}
-        onClick={() => handleClickEndGame()}
-      >
-        End game
-      </ButtonSmall>
+      <div className='buttons'>
+        <ButtonSmall onClick={() => setActiveActionRoute('about')}>
+          Learn to play
+        </ButtonSmall>
+        <ButtonSmall
+          disabled={!(isMyGame && !(gameStatus === 'waiting'))}
+          onClick={() => handleClickEndGame()}
+        >
+          End game
+        </ButtonSmall>
+      </div>
     </Wrapper>
   );
 };
