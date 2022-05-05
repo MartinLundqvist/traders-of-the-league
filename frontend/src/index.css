@@ -12,7 +12,7 @@
   --color-hex: hsl(233, 81%, 65%);
   --color-fill: #c9a87d;
   --color-fill-sea: #f6cd9e;
-  --color-fill-sea-opaque: hsla(32, 83%, 79%, 0.6);
+  --color-fill-sea-opaque: hsla(32, 83%, 79%, 0.8);
 }
 
 body {
