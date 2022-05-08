@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { TCargo } from '../../../../shared/types';
 import Good from './Good';
@@ -28,14 +27,6 @@ const Wrapper = styled.div`
   height: 100%;
   width: 100%;
   pointer-events: none;
-`;
-
-interface IPolygonProps {
-  fill: string;
-}
-
-const Polygon = styled.polygon<IPolygonProps>`
-  fill: ${(props) => props.fill};
 `;
 
 interface ICargoProps {

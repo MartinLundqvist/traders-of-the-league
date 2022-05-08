@@ -37,6 +37,7 @@ interface IGameServerContext {
 
   // Game specific. Only changes if game state is updated.
   game: IGame | null;
+  gameName: string;
   joinGame: (gameUuid: string) => void;
   leaveGame: () => void;
   startGame: () => void;
@@ -78,6 +79,7 @@ const initialContext: IGameServerContext = {
   },
   activeGameUuid: '',
   game: null,
+  gameName: '',
   createSession: () => {},
   createAndJoinNewGame: () => {},
   joinGame: () => {},
@@ -120,6 +122,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   );
 
   const [game, setGame] = useState<IGame | null>(initialContext.game);
+  const [gameName, setGameName] = useState<string>(initialContext.gameName);
   const [isMyTurn, setIsMyTurn] = useState(initialContext.isMyTurn);
   const [isMyGame, setIsMyGame] = useState(initialContext.isMyGame);
   const [isInCity, setIsInCity] = useState(initialContext.isInCity);
@@ -232,6 +235,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   useEffect(() => {
     let _isMyTurn = false;
     let _isMyGame = false;
+    let _gameName = '';
     let _isInCity = false;
     let _gameStatus: TGameStatus = 'waiting';
     let _currentCity: ICity | null = null;
@@ -247,6 +251,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
 
     if (game) {
       _gameStatus = game.state.status;
+      _gameName = game.name;
 
       _isMyTurn = me.uuid === game.state.currentRound.playerUuid;
 
@@ -291,6 +296,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     }
 
     setIsMyGame(_isMyGame);
+    setGameName(_gameName);
     setIsMyTurn(_isMyTurn);
     setGameStatus(_gameStatus);
     setIsInCity(_isInCity);
@@ -525,6 +531,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
       value={{
         session,
         game,
+        gameName,
         me,
         activeGameUuid,
         createSession,

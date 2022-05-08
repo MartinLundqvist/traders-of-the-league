@@ -29,27 +29,14 @@ interface IHeaderProps {
 }
 
 const Header = ({ className }: IHeaderProps) => {
-  const { session, game } = useGameServer();
-
-  const currentUserName = (): string => {
-    if (!game) return '';
-
-    return (
-      game.players.find(
-        (player) => player.user.uuid === game.state.currentRound.playerUuid
-      )?.user.name || 'None'
-    );
-  };
+  const { me, game, currentPlayer } = useGameServer();
 
   return (
     <Wrapper className={className}>
       <Title>
         <div className='logo'></div>Traders of the Hanseatic League
       </Title>
-      <Card
-        title='You are'
-        content={session.user.name ? session.user.name : 'Not registered'}
-      />
+      <Card title='You are' content={me.name ? me.name : 'Not registered'} />
       {game && (
         <>
           <Card title='Playing' content={game?.name} />
@@ -63,7 +50,7 @@ const Header = ({ className }: IHeaderProps) => {
             content={`${game.state.numberOfCitiesEmptied.toString()} of ${game.numberOfCitiesToEmpty.toString()}`}
           />
           <Card title='Round' content={game?.state.round.toString()} />
-          <Card title='Playing' content={currentUserName()} />
+          <Card title='Playing' content={currentPlayer?.user.name || ''} />
           <Card
             title='Moves left'
             content={game?.state.currentRound.movesLeft.toString()}

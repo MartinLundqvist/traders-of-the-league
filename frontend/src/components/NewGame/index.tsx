@@ -28,7 +28,6 @@ interface INewGameProps {
 const NewGame = ({ className }: INewGameProps): JSX.Element => {
   const [gameName, setGameName] = useState('');
   const { createAndJoinNewGame } = useGameServer();
-  // const [showGameCode, setShowGameCode] = useState(false);
 
   const handleKeyDown = (key: string) => {
     if (key === 'Enter') {

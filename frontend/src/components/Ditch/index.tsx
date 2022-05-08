@@ -59,9 +59,7 @@ const Ditch = ({ className }: IDitchProps): JSX.Element => {
   const [cargoDitched, setCargoDitched] = useState<TCargo[]>([]);
 
   useEffect(() => {
-    // console.log('Load UseEffect: New city or player object received');
-    // console.log(currentCity);
-    currentPlayer && setPlayerCargo([...currentPlayer?.cargo]);
+    currentPlayer && setPlayerCargo([...currentPlayer.cargo]);
   }, [currentPlayer]);
 
   const cargoIsFull = (): boolean => {

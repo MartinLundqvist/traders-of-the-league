@@ -23,7 +23,6 @@ interface IJoinGameProps {
 const JoinGame = ({ className }: IJoinGameProps): JSX.Element => {
   const [gameUuid, setGameUuid] = useState('');
   const { joinGame } = useGameServer();
-  // const [showGameCode, setShowGameCode] = useState(false);
 
   const handleKeyDown = (key: string) => {
     if (key === 'Enter') {
