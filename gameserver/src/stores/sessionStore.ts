@@ -31,6 +31,11 @@ export class SessionStore {
     });
   }
 
+  public getSessions(): ISession[] {
+    const result = [...this.sessions].map((session) => session[1]);
+    return result;
+  }
+
   private saveToFile(session: ISession) {
     const data = JSON.stringify(session);
     fs.writeFile(`./saves/session_${session.uuid}.json`, data, () => {

@@ -19,6 +19,11 @@ export class GameStore {
     return this.games.get(gameUuid);
   }
 
+  public getGames(): IGame[] {
+    const result = [...this.games].map((game) => game[1]);
+    return result;
+  }
+
   private saveToFile(game: IGame) {
     const data = JSON.stringify(game);
     fs.writeFile(`./saves/game_${game.uuid}.json`, data, () => {

@@ -34,6 +34,35 @@ if (DEVELOPMENT) {
 const app = express();
 app.use(cors());
 
+// This route gets information about all games
+app.get('/games', (req, res) => {
+  const games = gameStore.getGames();
+
+  const results = games.map((game) => {
+    return {
+      name: game.name,
+      uuid: game.uuid,
+      status: game.state.status,
+    };
+  });
+
+  res.status(200).send(results);
+});
+
+// This route gets information about all sessions
+app.get('/sessions', (req, res) => {
+  const sessions = sessionStore.getSessions();
+
+  const results = sessions.map((session) => {
+    return {
+      user: session.user,
+      uuid: session.user.uuid,
+    };
+  });
+
+  res.status(200).send(results);
+});
+
 // This route gets game results for a gameUuid
 app.get('/gameresults/:gameUuid', (req, res) => {
   const gameUuid = req.params.gameUuid;
