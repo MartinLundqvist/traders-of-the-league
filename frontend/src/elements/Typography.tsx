@@ -43,6 +43,26 @@ export const Input = styled.input`
   }
 `;
 
+export const InputSmall = styled.input`
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  border-radius: 0.5rem;
+  border-style: none;
+  outline: none;
+  padding: 0.25rem 1rem 0.25rem 1rem;
+  box-shadow: 3px 3px 3px var(--color-bg-shadow);
+  font: inherit;
+  font-size: 1.2rem;
+  font-weight: bold;
+  background-color: hsla(0, 0%, 60%, 0.3);
+  max-height: 2rem;
+
+  &:focus {
+    background-color: hsla(0, 0%, 90%, 0.5);
+  }
+`;
+
 interface IButtonProps {
   warning?: boolean;
 }

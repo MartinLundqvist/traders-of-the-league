@@ -7,7 +7,8 @@ import { TGameServer } from './types';
 import { GameStore } from './stores/gameStore';
 import { SessionStore } from './stores/sessionStore';
 import { GameEngine } from './game-engine/';
-import { MOCK_GAME, MOCK_SESSIONS } from './game-engine/mockData';
+import { MOCK_CHAT, MOCK_GAME, MOCK_SESSIONS } from './game-engine/mockData';
+import { ChatStore } from './stores/chatStore';
 
 // Persist whether we are in development mode or not
 const DEVELOPMENT = process.env.NODE_ENV === 'production' ? false : true;
@@ -21,6 +22,7 @@ console.log(
 // Create the global stores
 const gameStore = new GameStore(DEVELOPMENT);
 const sessionStore = new SessionStore(DEVELOPMENT);
+const chatStore = new ChatStore(DEVELOPMENT);
 
 // Add a mock game to the gameStore which we can use for testing purposes
 if (DEVELOPMENT) {
@@ -28,6 +30,7 @@ if (DEVELOPMENT) {
   gameStore.saveGame(MOCK_GAME);
   sessionStore.saveSession(MOCK_SESSIONS[0]);
   sessionStore.saveSession(MOCK_SESSIONS[1]);
+  chatStore.saveChat(MOCK_CHAT);
 }
 
 // Wire up the express server
@@ -57,6 +60,20 @@ app.get('/sessions', (req, res) => {
     return {
       user: session.user,
       uuid: session.user.uuid,
+    };
+  });
+
+  res.status(200).send(results);
+});
+
+// This route gets information about all chats
+app.get('/chats', (req, res) => {
+  const chats = chatStore.getChats();
+
+  const results = chats.map((chat) => {
+    return {
+      uuid: chat.gameUuid,
+      nrMessages: chat.messages.length,
     };
   });
 
@@ -94,7 +111,7 @@ const io = new Server<TGameServer>(httpServer, {
 
 // Listen for connections to the socket, and create an GameSession object for each connection
 io.on('connection', (socket) => {
-  new GameSession(io, socket, sessionStore, gameStore);
+  new GameSession(io, socket, sessionStore, gameStore, chatStore);
 });
 
 // Start the server

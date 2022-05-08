@@ -5,6 +5,8 @@ import {
   TCargo,
   IContract,
   IAchievement,
+  IMessage,
+  IChat,
 } from '../../shared/types';
 
 export type TSocketError =
@@ -12,6 +14,7 @@ export type TSocketError =
   | 'Game not found'
   | 'Max number of players reached'
   | 'Not enough players'
+  | 'Chat error'
   | 'Other';
 export type TSocketConnection = 'Connected' | 'Disconnected';
 
@@ -24,6 +27,9 @@ export interface ServerToClientEvents {
 
   // Server sends the current session
   pushSession: (session: ISession) => void;
+
+  // Server sends current chat object with all messages
+  pushActiveChat: (chat: IChat) => void;
 
   // Server sends an error
   error: (error: TSocketError) => void;
@@ -83,6 +89,9 @@ export interface ClientToServerEvents {
 
   // Client asks to end game. This set the state of the game to 'not started', clears the session from the game, and disconnects all user sockets from that game.
   endGame: () => void;
+
+  // Client sends a chat message.
+  sendMessage: (message: IMessage) => void;
 }
 
 export interface InterServerEvents {}

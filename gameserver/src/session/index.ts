@@ -1,7 +1,9 @@
 import {
   IAchievement,
   IBoardPosition,
+  IChat,
   IContract,
+  IMessage,
   ISession,
   IUser,
   TCargo,
@@ -11,6 +13,7 @@ import { SessionStore } from '../stores/sessionStore';
 import { TGameServer, TGameSocket } from '../types';
 import { nanoid } from 'nanoid';
 import { GameEngine } from '../game-engine';
+import { ChatStore } from 'src/stores/chatStore';
 
 export class GameSession implements ISession {
   // Core ISession propertues
@@ -25,18 +28,21 @@ export class GameSession implements ISession {
   // References to the stores
   private gameStore: GameStore;
   private sessionStore: SessionStore;
+  private chatStore: ChatStore;
 
   constructor(
     io: TGameServer,
     socket: TGameSocket,
     sessionStore: SessionStore,
-    gameStore: GameStore
+    gameStore: GameStore,
+    chatStore: ChatStore
   ) {
     this.io = io;
     this.socket = socket;
 
     this.gameStore = gameStore;
     this.sessionStore = sessionStore;
+    this.chatStore = chatStore;
 
     // Initialize the properties with empty values for now.
     this.uuid = '';
@@ -97,6 +103,9 @@ export class GameSession implements ISession {
         this.pickAchievement(achievement, callback)
     );
     this.socket.on('endGame', () => this.endGame());
+    this.socket.on('sendMessage', (message: IMessage) =>
+      this.sendMessage(message)
+    );
     this.socket.on('disconnect', () => this.disconnect());
   }
 
@@ -214,6 +223,9 @@ export class GameSession implements ISession {
 
     // Emit the new game state to all user sockets in the game rooom
     this.io.to(this.activeGameUuid).emit('pushActiveGame', game);
+
+    // Also, emit the current chat object in case a user had to reconnect
+    this.pushActiveChat();
   }
 
   private joinGame(gameUuid: string) {
@@ -440,5 +452,49 @@ export class GameSession implements ISession {
     // this.io.to(this.activeGameUuid).emit('gameTerminated');
 
     this.leaveGame();
+  }
+
+  private pushActiveChat() {
+    // Get the game from the store
+    const chat = this.chatStore.getChat(this.activeGameUuid);
+
+    if (!chat) {
+      // this.socket.emit('error', 'Chat error');
+      return;
+    }
+
+    // Emit the new game state to all user sockets in the game rooom
+    this.io.to(this.activeGameUuid).emit('pushActiveChat', chat);
+  }
+
+  private sendMessage(message: IMessage) {
+    if (!message) {
+      this.socket.emit('error', 'Chat error');
+      return;
+    }
+
+    message.uuid = nanoid();
+
+    let chat = this.chatStore.getChat(this.activeGameUuid);
+
+    if (!chat) {
+      console.log('No chat created yet. Creating one.');
+      // Create a chat object for the game
+      const newChat: IChat = {
+        gameUuid: this.activeGameUuid,
+        messages: [],
+      };
+      this.chatStore.saveChat(newChat);
+
+      chat = this.chatStore.getChat(this.activeGameUuid);
+    }
+
+    // Now we know it exists...
+    chat!.messages.push(message);
+
+    this.chatStore.saveChat(chat!);
+
+    // Finally push the chats
+    this.pushActiveChat();
   }
 }

@@ -160,3 +160,14 @@ export interface IGameResults {
   playerStats: IPlayerStats[];
   tie: boolean;
 }
+
+export interface IMessage {
+  uuid: string;
+  from: IUser;
+  message: string;
+}
+
+export interface IChat {
+  gameUuid: string;
+  messages: IMessage[];
+}

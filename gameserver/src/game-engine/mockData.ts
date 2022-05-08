@@ -1,4 +1,4 @@
-import { IGame, ISession } from '../../../shared/types';
+import { IChat, IGame, ISession } from '../../../shared/types';
 import { ACHIEVEMENTS } from './constants';
 
 export const MOCK_GAME: IGame = {
@@ -527,3 +527,79 @@ export const MOCK_SESSIONS: ISession[] = [
     uuid: 'ul0BTmoadsDeBo1yKysKb',
   },
 ];
+
+export const MOCK_CHAT: IChat = {
+  gameUuid: 'dDV7I0PZkSX1SdDCILTkA',
+  messages: [
+    {
+      uuid: '0syDyCcqbi9f2Xhnx7PzS',
+      from: {
+        name: 'person1',
+        uuid: '4s1zxMT_G5DsCnP5GRk7l',
+        connected: true,
+      },
+      message:
+        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been',
+    },
+    {
+      uuid: '78n7n4At3seZJ3DSeHLZy',
+      from: {
+        name: 'lynden',
+        uuid: '1UiCjICtBFvRPSVb2cTAP',
+        connected: true,
+      },
+      message:
+        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been',
+    },
+    {
+      uuid: '2lJeKY38O5Gion6pGPoPr',
+      from: {
+        name: 'person1',
+        uuid: '4s1zxMT_G5DsCnP5GRk7l',
+        connected: true,
+      },
+      message:
+        'lly unchanged. It was popularised in the 1960s with the release of Letraset sheets conta',
+    },
+    {
+      uuid: 'Gb1Y-IdzB-Y4tvOThwCPV',
+      from: {
+        name: 'lynden',
+        uuid: '1UiCjICtBFvRPSVb2cTAP',
+        connected: true,
+      },
+      message:
+        'Use setTimeout in your React components to execute a function or block of code after a period of time. Let’s explore ho',
+    },
+    {
+      uuid: '3iAUyNQ6PzLwvBhNvWwSY',
+      from: {
+        name: 'lynden',
+        uuid: '1UiCjICtBFvRPSVb2cTAP',
+        connected: true,
+      },
+      message:
+        'For example, the code below prints “Hello, World!” to the developer console after 3,000 milliseconds (or 3 seconds).',
+    },
+    {
+      uuid: 'VUrYqPDVC9dV6TJ3Hn0TC',
+      from: {
+        name: 'person1',
+        uuid: '4s1zxMT_G5DsCnP5GRk7l',
+        connected: true,
+      },
+      message:
+        'It is a long established fact that a reader will be distracted by the readable content of a pa',
+    },
+    {
+      uuid: 'KAlgBRi7lwqahhbwogvZa',
+      from: {
+        name: 'lynden',
+        uuid: '1UiCjICtBFvRPSVb2cTAP',
+        connected: true,
+      },
+      message:
+        'tTimeout inside of the useEffect Hook, which is the equivalent of the componentDidMount lifecycle method in Class components',
+    },
+  ],
+};

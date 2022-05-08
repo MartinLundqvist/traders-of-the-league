@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Chat from './components/Chat';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import { useLayout } from './contexts/LayoutProvider';
@@ -29,6 +30,10 @@ const Wrapper = styled.div`
   .grid-area--footer {
     grid-area: footer;
   }
+
+  .grid-area--margin-left {
+    grid-area: margin-left;
+  }
 `;
 
 function App() {
@@ -40,6 +45,7 @@ function App() {
       {routes[activeRoute]}
       {actionRoutes[activeActionRoute]}
       <Footer className='grid-area--footer' />
+      <Chat className='grid-area--margin-left' />
     </Wrapper>
   );
 }

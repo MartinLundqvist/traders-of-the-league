@@ -11,10 +11,12 @@ import {
   ClientToServerEvents,
   IAchievement,
   IBoardPosition,
+  IChat,
   ICity,
   IContract,
   IGame,
   IGameResults,
+  IMessage,
   IPlayer,
   ISession,
   IUser,
@@ -60,6 +62,8 @@ interface IGameServerContext {
   availableAchievements: IAchievement[];
   pickAchievement: (achievement: IAchievement) => void;
   endGame: () => void;
+  chat: IChat;
+  sendMessage: (message: IMessage) => void;
 }
 
 const initialContext: IGameServerContext = {
@@ -104,6 +108,11 @@ const initialContext: IGameServerContext = {
   availableAchievements: [],
   pickAchievement: () => {},
   endGame: () => {},
+  chat: {
+    gameUuid: '',
+    messages: [],
+  },
+  sendMessage: () => {},
 };
 
 const GameServerContext = createContext<IGameServerContext>(initialContext);
@@ -144,6 +153,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   const [availableAchievements, setAvailableAchievements] = useState(
     initialContext.availableAchievements
   );
+  const [chat, setChat] = useState<IChat>(initialContext.chat);
   const socketRef = useRef<ChatSocket>();
 
   const onAnyListener = useCallback((event: any, args: any[]) => {
@@ -169,6 +179,11 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     setGame(game);
   }, []);
 
+  const onPushActiveChatListener = useCallback((chat: IChat) => {
+    console.log('Updated chat object received');
+    setChat(chat);
+  }, []);
+
   const onPushSessionListener = useCallback((session: ISession) => {
     console.log('Updated session received');
     setSession(session);
@@ -189,6 +204,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     socketRef.current?.on('error', onErrorListener);
     socketRef.current?.on('pushConnection', onPushConnectionListener);
     socketRef.current?.on('pushActiveGame', onPushActiveGameListener);
+    socketRef.current?.on('pushActiveChat', onPushActiveChatListener);
     socketRef.current?.on('pushSession', onPushSessionListener);
 
     // Now we figure out if there is an existing session we can use
@@ -221,12 +237,36 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
       });
     }
 
+    // // TODO: Development purposes only!!
+    // setChat({
+    //   gameUuid: '',
+    //   messages: [
+    //     {
+    //       from: { name: 'Martin', uuid: 'dsdf', connected: true },
+    //       uuid: 'asdfasd',
+    //       message: 'Testing a little bit of text text text text',
+    //     },
+    //     {
+    //       from: { name: 'Person1', uuid: 'dsdf', connected: true },
+    //       uuid: 'asdfadsd',
+    //       message: 'Testing again a little bit of text text text text',
+    //     },
+    //     {
+    //       from: { name: 'Martin', uuid: 'dsdf', connected: true },
+    //       uuid: 'asdfddadsd',
+    //       message: 'Testasdfing again a little bit of text text text text',
+    //     },
+    //   ],
+    // });
+
     // Clean up all listeners
     return () => {
       socketRef.current?.offAny(onAnyListener);
       socketRef.current?.off('error', onErrorListener);
       socketRef.current?.off('pushConnection', onPushConnectionListener);
       socketRef.current?.off('pushActiveGame', onPushActiveGameListener);
+      socketRef.current?.off('pushActiveChat', onPushActiveChatListener);
+      socketRef.current?.off('pushSession', onPushSessionListener);
     };
   }, []);
 
@@ -526,6 +566,12 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     socketRef.current?.emit('endGame');
   };
 
+  const sendMessage = (message: IMessage) => {
+    console.log('Sending message ' + message.message);
+
+    socketRef.current?.emit('sendMessage', message);
+  };
+
   return (
     <GameServerContext.Provider
       value={{
@@ -558,6 +604,8 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         availableAchievements,
         pickAchievement,
         endGame,
+        chat,
+        sendMessage,
       }}
     >
       {children}
