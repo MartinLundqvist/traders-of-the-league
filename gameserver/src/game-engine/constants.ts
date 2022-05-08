@@ -100,11 +100,11 @@ export const ACHIEVEMENTS: IAchievement[] = [
   },
   {
     name: 'Supplier A',
-    value: 3,
+    value: 4,
   },
   {
     name: 'Supplier B',
-    value: 4,
+    value: 3,
   },
   {
     name: 'Specialist A',

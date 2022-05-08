@@ -9,10 +9,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   background-color: var(--color-fill-sea-opaque);
-
   z-index: 10;
-
-  }
 `;
 
 interface IAboutProps {

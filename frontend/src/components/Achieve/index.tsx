@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useGameServer } from '../../contexts/GameServerProvider';
 import { Title, TitleSmall } from '../../elements/Typography';
 import { Achievement } from './Achievement';
+import { ACHIEVEMENTS } from './tests';
 
 const Wrapper = styled.div`
   position: relative;
