@@ -48,20 +48,6 @@ const NewGame = ({ className }: INewGameProps): JSX.Element => {
         />
         <Button onClick={() => createAndJoinNewGame(gameName)}>GO</Button>
       </div>
-      {/* {showGameCode && (
-        <>
-          <div className='container'>
-            <Title>
-              Your game code is <span className='code'>3e32ewrk</span> Share it
-              with your friends!
-            </Title>
-          </div>
-          <div className='container'>
-            <Button>Start game!</Button>
-          </div>
-        </>
-      )}
-      <div></div> */}
     </Wrapper>
   );
 };
