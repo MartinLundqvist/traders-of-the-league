@@ -1,0 +1,40 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+}
+
+.container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  display: grid;
+  padding: 1rem;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 100px auto;
+  grid-template-areas: 'header header header' 'sessions games chats';
+}
+
+.header {
+  grid-area: header;
+}
+
+.sessions {
+  grid-area: sessions;
+}
+
+.games {
+  grid-area: games;
+}
+
+.chats {
+  grid-area: chats;
+}

@@ -1,14 +1,6 @@
-Functional
-- Add color cube to title user name
-- Make the black cargo contrast the black ship
-- Add hover over effect on the ship to zoom in on its contents
-- Add game rules
-- Add About section
-- Add game timer?
-- Add proper achievement graphics
-- Add a chat function
+Main backlog / roadmap:
+- See https://docs.google.com/spreadsheets/d/1pZlO3jaKaqQo5EimY2Gv-TxU7UxMxufbf8IqdgJm_1Q/edit?usp=sharing
 
-Non-functional
+More technical things:
 - Clean up the use of context hooks across the entire code base
-- Add health check and proper process control into frontend production server
 - Consider refactoring game engine around XState.
