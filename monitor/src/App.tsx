@@ -27,6 +27,7 @@ const App = (): JSX.Element => {
   useEffect(() => {
     const getData = async () => {
       const url = import.meta.env.VITE_URL;
+      console.log(url);
 
       try {
         const sessionsResults = await fetch(`${url}/sessions`);

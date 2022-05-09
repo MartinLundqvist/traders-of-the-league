@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# add 'gameserver' or 'frontend' as the second argument
+# add 'gameserver', 'frontend' or 'monitor' as the second argument
 
 echo "Deploying $1"
 
