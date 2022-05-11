@@ -194,7 +194,7 @@ const Trade = ({ className }: ITradeProps): JSX.Element => {
                   Trade
                 </ButtonSmall>
               </td>
-              <td />
+              <td>{contract.value}</td>
             </tr>
           ))}
           <tr>
