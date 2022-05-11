@@ -28,7 +28,7 @@ export const Controls = (): JSX.Element => {
   return (
     <Wrapper>
       <TitleSmall>
-        {gameStatus === 'playing'
+        {gameStatus === 'playing' || gameStatus === 'endgame'
           ? isMyTurn
             ? 'Make a move'
             : 'Wait for your turn'
