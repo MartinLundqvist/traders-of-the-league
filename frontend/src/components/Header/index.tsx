@@ -39,7 +39,7 @@ const Header = ({ className }: IHeaderProps) => {
       <Card title='You are' content={me.name ? me.name : 'Not registered'} />
       {game && (
         <>
-          <Card title='Playing' content={game?.name} />
+          <Card title='Game' content={game?.name} />
           <Card
             title='Status'
             content={game?.state.status}
@@ -50,7 +50,7 @@ const Header = ({ className }: IHeaderProps) => {
             content={`${game.state.numberOfCitiesEmptied.toString()} of ${game.numberOfCitiesToEmpty.toString()}`}
           />
           <Card title='Round' content={game?.state.round.toString()} />
-          <Card title='Playing' content={currentPlayer?.user.name || ''} />
+          <Card title='Turn' content={currentPlayer?.user.name || ''} />
           <Card
             title='Moves left'
             content={game?.state.currentRound.movesLeft.toString()}
