@@ -237,28 +237,6 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
       });
     }
 
-    // // TODO: Development purposes only!!
-    // setChat({
-    //   gameUuid: '',
-    //   messages: [
-    //     {
-    //       from: { name: 'Martin', uuid: 'dsdf', connected: true },
-    //       uuid: 'asdfasd',
-    //       message: 'Testing a little bit of text text text text',
-    //     },
-    //     {
-    //       from: { name: 'Person1', uuid: 'dsdf', connected: true },
-    //       uuid: 'asdfadsd',
-    //       message: 'Testing again a little bit of text text text text',
-    //     },
-    //     {
-    //       from: { name: 'Martin', uuid: 'dsdf', connected: true },
-    //       uuid: 'asdfddadsd',
-    //       message: 'Testasdfing again a little bit of text text text text',
-    //     },
-    //   ],
-    // });
-
     // Clean up all listeners
     return () => {
       socketRef.current?.offAny(onAnyListener);
@@ -384,6 +362,10 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   useEffect(() => {
     setMe(session.user);
     setActiveGameUuid(session.activeGameUuid);
+    // If the game has been reset, remove the game object, as well as the ongoing chat.
+    if (!session.activeGameUuid) {
+      setGame(null);
+    }
   }, [session]);
 
   const createSession = (playerName: string) => {

@@ -451,7 +451,7 @@ export class GameSession implements ISession {
     // // Send message to all players that the game has been terminated
     // this.io.to(this.activeGameUuid).emit('gameTerminated');
 
-    this.leaveGame();
+    // this.leaveGame();
   }
 
   private pushActiveChat() {
