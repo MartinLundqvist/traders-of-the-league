@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Chat from './components/Chat';
 import Footer from './components/Footer';
 import Header from './components/Header';
+import Notifications from './components/Notifications';
 import { useLayout } from './contexts/LayoutProvider';
 import Europe from './elements/Europe';
 import { routes, actionRoutes } from './routes';
@@ -47,6 +48,7 @@ function App() {
       {actionRoutes[activeActionRoute]}
       <Footer className='grid-area--footer' />
       <Chat className='grid-area--margin-left' />
+      <Notifications className='grid-area--game' />
     </Wrapper>
   );
 }

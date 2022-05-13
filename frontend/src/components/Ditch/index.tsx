@@ -53,14 +53,14 @@ interface IDitchProps {
 }
 
 const Ditch = ({ className }: IDitchProps): JSX.Element => {
-  const { currentPlayer, ditchCargo } = useGameServer();
+  const { myPlayer, ditchCargo } = useGameServer();
   const { setActiveActionRoute } = useLayout();
   const [playerCargo, setPlayerCargo] = useState<TCargo[]>([]);
   const [cargoDitched, setCargoDitched] = useState<TCargo[]>([]);
 
   useEffect(() => {
-    currentPlayer && setPlayerCargo([...currentPlayer.cargo]);
-  }, [currentPlayer]);
+    myPlayer && setPlayerCargo([...myPlayer.cargo]);
+  }, [myPlayer]);
 
   const cargoIsFull = (): boolean => {
     return playerCargo.length > 4;

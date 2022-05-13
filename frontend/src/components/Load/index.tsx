@@ -52,7 +52,7 @@ interface ILoadProps {
 }
 
 const Load = ({ className }: ILoadProps): JSX.Element => {
-  const { currentCity, currentPlayer, loadCargo } = useGameServer();
+  const { currentCity, myPlayer, loadCargo } = useGameServer();
   const { setActiveActionRoute } = useLayout();
   const [playerCargo, setPlayerCargo] = useState<TCargo[]>([]);
   const [cityGoods, setCityGoods] = useState<TCargo[]>([]);
@@ -61,9 +61,9 @@ const Load = ({ className }: ILoadProps): JSX.Element => {
   useEffect(() => {
     console.log('Load UseEffect: New city or player object received');
     console.log(currentCity);
-    currentCity && setCityGoods([...currentCity?.goods]);
-    currentPlayer && setPlayerCargo([...currentPlayer?.cargo]);
-  }, [currentCity, currentPlayer]);
+    currentCity && setCityGoods([...currentCity.goods]);
+    myPlayer && setPlayerCargo([...myPlayer.cargo]);
+  }, [currentCity, myPlayer]);
 
   const cityHasGood = (good: TCargo): boolean => {
     return cityGoods.includes(good);

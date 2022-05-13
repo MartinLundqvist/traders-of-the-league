@@ -29,7 +29,7 @@ interface IHeaderProps {
 }
 
 const Header = ({ className }: IHeaderProps) => {
-  const { me, game, currentPlayer } = useGameServer();
+  const { me, game, currentTurnPlayer } = useGameServer();
 
   return (
     <Wrapper className={className}>
@@ -50,7 +50,7 @@ const Header = ({ className }: IHeaderProps) => {
             content={`${game.state.numberOfCitiesEmptied.toString()} of ${game.numberOfCitiesToEmpty.toString()}`}
           />
           <Card title='Round' content={game?.state.round.toString()} />
-          <Card title='Turn' content={currentPlayer?.user.name || ''} />
+          <Card title='Turn' content={currentTurnPlayer?.user.name || ''} />
           <Card
             title='Moves left'
             content={game?.state.currentRound.movesLeft.toString()}

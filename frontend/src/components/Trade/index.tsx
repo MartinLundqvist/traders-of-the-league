@@ -58,7 +58,7 @@ interface ITradeProps {
 }
 
 const Trade = ({ className }: ITradeProps): JSX.Element => {
-  const { currentCity, currentPlayer, makeTrades } = useGameServer();
+  const { currentCity, myPlayer, makeTrades } = useGameServer();
   const { setActiveActionRoute } = useLayout();
   const [playerCargo, setPlayerCargo] = useState<TCargo[]>([]);
   const [cityGoods, setCityGoods] = useState<TCargo[]>([]);
@@ -68,8 +68,8 @@ const Trade = ({ className }: ITradeProps): JSX.Element => {
   useEffect(() => {
     console.log('First render');
     console.log(currentCity);
-    currentCity && setCityGoods([...currentCity?.goods]);
-    currentPlayer && setPlayerCargo([...currentPlayer?.cargo]);
+    currentCity && setCityGoods([...currentCity.goods]);
+    myPlayer && setPlayerCargo([...myPlayer.cargo]);
   }, []);
 
   const handleDoneClick = () => {

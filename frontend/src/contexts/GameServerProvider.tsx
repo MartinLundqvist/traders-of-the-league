@@ -44,6 +44,7 @@ interface IGameServerContext {
   leaveGame: () => void;
   startGame: () => void;
   endRound: () => void;
+  myPlayer: IPlayer | null;
   isMyTurn: boolean;
   isMyGame: boolean;
   gameStatus: TGameStatus;
@@ -51,7 +52,7 @@ interface IGameServerContext {
   sailTo: (position: IBoardPosition) => void;
   isInCity: boolean;
   currentCity: ICity | null;
-  currentPlayer: IPlayer | null;
+  currentTurnPlayer: IPlayer | null;
   loadCargo: (cargo: TCargo[]) => void;
   ditchCargo: (cargo: TCargo[]) => void;
   makeTrades: (contracts: IContract[]) => void;
@@ -77,6 +78,7 @@ const initialContext: IGameServerContext = {
     },
     activeGameUuid: '',
   },
+  myPlayer: null,
   me: {
     name: '',
     uuid: '',
@@ -98,7 +100,7 @@ const initialContext: IGameServerContext = {
   sailTo: () => {},
   isInCity: false,
   currentCity: null,
-  currentPlayer: null,
+  currentTurnPlayer: null,
   loadCargo: () => {},
   ditchCargo: () => {},
   makeTrades: () => {},
@@ -144,9 +146,10 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     initialContext.gameResults
   );
 
+  const [myPlayer, setMyPlayer] = useState(initialContext.myPlayer);
   const [currentCity, setCurrentCity] = useState(initialContext.currentCity);
-  const [currentPlayer, setCurrentPlayer] = useState(
-    initialContext.currentPlayer
+  const [currentTurnPlayer, setCurrentTurnPlayer] = useState(
+    initialContext.currentTurnPlayer
   );
   const [canLoad, setCanLoad] = useState(initialContext.canLoad);
   const [canSail, setCanSail] = useState(initialContext.canSail);
@@ -260,7 +263,8 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     let _isInCity = false;
     let _gameStatus: TGameStatus = 'waiting';
     let _currentCity: ICity | null = null;
-    let _currentPlayer: IPlayer | null = null;
+    let _currentTurnPlayer: IPlayer | null = null;
+    let _myPlayer: IPlayer | null = null;
     let _canSail = false;
     let _canTrade = false;
     let _canLoad = false;
@@ -278,9 +282,12 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
 
       _isMyTurn = me.uuid === game.state.currentRound.playerUuid;
 
-      _currentPlayer =
-        game.players.find((player) => player.user.uuid === session.user.uuid) ||
-        null;
+      _currentTurnPlayer =
+        game.players.find(
+          (player) => player.user.uuid === game.state.currentRound.playerUuid
+        ) || null;
+      _myPlayer =
+        game.players.find((player) => player.user.uuid === me.uuid) || null;
 
       _isMyGame = me.uuid === game.players[0].user.uuid;
 
@@ -324,7 +331,8 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     setGameStatus(_gameStatus);
     setIsInCity(_isInCity);
     setCurrentCity(_currentCity);
-    setCurrentPlayer(_currentPlayer);
+    setCurrentTurnPlayer(_currentTurnPlayer);
+    setMyPlayer(_myPlayer);
     setCanSail(_canSail);
     setCanTrade(_canTrade);
     setCanLoad(_canLoad);
@@ -453,7 +461,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   const loadCargo = (cargo: TCargo[]) => {
     console.log('Loading ' + cargo.length + ' goods from ' + currentCity?.name);
 
-    if (!isInCity || !currentCity || !currentPlayer) {
+    if (!isInCity || !currentCity || !me) {
       console.log('City or player is not defined!');
       return;
     }
@@ -482,7 +490,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   const ditchCargo = (cargo: TCargo[]) => {
     console.log('Ditching ' + cargo.length + ' goods');
 
-    if (!currentPlayer) {
+    if (!me) {
       console.log('Player is not defined!');
       return;
     }
@@ -504,7 +512,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
       'Trading ' + contracts.length + ' goods from ' + currentCity?.name
     );
 
-    if (!isInCity || !currentCity || !currentPlayer) {
+    if (!isInCity || !currentCity || !me) {
       console.log('City or player is not defined!');
       return;
     }
@@ -581,7 +589,8 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         sailTo,
         isInCity,
         currentCity,
-        currentPlayer,
+        currentTurnPlayer,
+        myPlayer,
         loadCargo,
         ditchCargo,
         makeTrades,
