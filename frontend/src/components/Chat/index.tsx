@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { FOOTER, HEADER } from '../../utils/layoutGeometry';
 import ChatBox from './ChatBox';
 
 const Wrapper = styled.div`
+  position: absolute;
+  top: ${HEADER}px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: calc(100% - 2rem);
+  height: calc(100% - 2rem - ${FOOTER + HEADER}px);
   width: 2rem;
   background-color: var(--color-fill-sea-opaque);
   box-shadow: 0 3px 5px var(--color-bg-shadow);

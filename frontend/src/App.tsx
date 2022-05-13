@@ -5,14 +5,15 @@ import Header from './components/Header';
 import { useLayout } from './contexts/LayoutProvider';
 import Europe from './elements/Europe';
 import { routes, actionRoutes } from './routes';
+import { FOOTER, HEADER, MARGIN } from './utils/layoutGeometry';
 
 const Wrapper = styled.div`
   display: grid;
   height: 100vh;
   width: 100vw;
   grid-template-areas: 'header header header' 'margin-left game margin-right' 'footer footer footer';
-  grid-template-columns: minmax(100px, auto) 1fr minmax(100px, auto);
-  grid-template-rows: 100px 1fr 120px;
+  grid-template-columns: minmax(${MARGIN}px, auto) 1fr minmax(${MARGIN}px, auto);
+  grid-template-rows: ${HEADER}px 1fr ${FOOTER}px;
 
   .grid-area--header {
     grid-area: header;

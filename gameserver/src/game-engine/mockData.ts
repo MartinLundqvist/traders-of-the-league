@@ -1,11 +1,16 @@
 import { IChat, IGame, ISession } from '../../../shared/types';
-import { ACHIEVEMENTS } from './constants';
 
 export const MOCK_GAME: IGame = {
   name: 'lyndens game',
   uuid: 'dDV7I0PZkSX1SdDCILTkA',
   numberOfCitiesToEmpty: 10,
-  achievements: ACHIEVEMENTS,
+  achievements: [
+    { name: 'Diversifier A', value: 4 },
+    { name: 'Merchant A', value: 5 },
+    { name: 'Regional Trader A', value: 5 },
+    { name: 'Monopolist B', value: 3 },
+    { name: 'Specialist A', value: 3 },
+  ],
   players: [
     {
       color: 'black',

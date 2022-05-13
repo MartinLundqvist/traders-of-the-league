@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ColoredDiv, EmptyDiv } from './';
+import { ColoredDiv, EmptyDiv } from './ContractDivs';
 
 const Wrapper = styled.div`
   position: relative;

@@ -1,8 +1,10 @@
 import styled from 'styled-components';
+import { IAchievement } from '../../../../shared/types';
 import { useGameServer } from '../../contexts/GameServerProvider';
+import { useLayout } from '../../contexts/LayoutProvider';
 import { Title, TitleSmall } from '../../elements/Typography';
-import { Achievement } from './Achievement';
-import { ACHIEVEMENTS } from './tests';
+import { Achievement } from './elements/Achievement';
+// import { ACHIEVEMENTS } from './tests';
 
 const Wrapper = styled.div`
   position: relative;
@@ -34,14 +36,25 @@ interface IAchieveProps {
 }
 
 const Achieve = ({ className }: IAchieveProps): JSX.Element => {
-  const { availableAchievements } = useGameServer();
+  const { availableAchievements, pickAchievement } = useGameServer();
+
+  const { setActiveActionRoute } = useLayout();
+
+  const handlePickAchievementClick = (achievement: IAchievement) => {
+    pickAchievement(achievement);
+    setActiveActionRoute('none');
+  };
 
   return (
     <Wrapper className={className}>
       <Title>You earned the following achievements!</Title>
       <div className='container'>
         {availableAchievements.map((achievement) => (
-          <Achievement key={achievement.name} achievement={achievement} />
+          <Achievement
+            key={achievement.name}
+            achievement={achievement}
+            onClick={() => handlePickAchievementClick(achievement)}
+          />
         ))}
       </div>
       <TitleSmall>Pick one</TitleSmall>

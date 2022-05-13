@@ -13,6 +13,7 @@ export type TSocketError =
   | 'User not found'
   | 'Game not found'
   | 'Max number of players reached'
+  | 'Game already started'
   | 'Not enough players'
   | 'Chat error'
   | 'Other';

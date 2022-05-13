@@ -23,6 +23,7 @@ import { tradeIsAllowed } from './tradeIsAllowed';
 import { ditchingIsAllowed } from './ditchingIsAllowed';
 import { findAchievementsEarned } from './findAchievementsEarned';
 import { getGameResults } from './getGameResults';
+import { pickRandomAchievements } from './pickRandomAchievements';
 
 const createGame = (gameName: string, gameUuid: string): IGame => {
   const newGame: IGame = {
@@ -30,7 +31,7 @@ const createGame = (gameName: string, gameUuid: string): IGame => {
     uuid: gameUuid,
     players: [],
     numberOfCitiesToEmpty: 5,
-    achievements: ACHIEVEMENTS,
+    achievements: [],
     board: BOARD,
     state: {
       currentRound: {
@@ -55,6 +56,7 @@ const start = (game: IGame, firstPlayerUuid: string) => {
   game.numberOfCitiesToEmpty = numberOfCitiesToEmpty[game.players.length];
 
   dealContracts(game);
+  dealAchievements(game);
 };
 
 const terminate = (game: IGame) => {
@@ -101,6 +103,10 @@ const dealContracts = (game: IGame) => {
       element.city.contracts = pickedContracts;
     }
   });
+};
+
+const dealAchievements = (game: IGame) => {
+  game.achievements = pickRandomAchievements(game.players.length + 1);
 };
 
 const endCurrentPlayerRound = (game: IGame) => {

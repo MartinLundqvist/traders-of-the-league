@@ -236,12 +236,19 @@ export class GameSession implements ISession {
       return;
     }
 
-    // Add the player to the game
+    // Check if the game is waiting to start
+    if (game.state.status !== 'waiting') {
+      this.socket.emit('error', 'Game already started');
+      return;
+    }
+
+    // Check if the game has reaced max number of players
     if (game.players.length > 4) {
       this.socket.emit('error', 'Max number of players reached');
       return;
     }
 
+    // Add the player
     const newPlayer = GameEngine.addPlayerToGame(this.user, game);
     game.players.push(newPlayer);
 

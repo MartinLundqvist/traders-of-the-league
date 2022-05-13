@@ -59,6 +59,7 @@ interface IGameServerContext {
   canTrade: boolean;
   canSail: boolean;
   canAchieve: boolean;
+  achievements: IAchievement[];
   availableAchievements: IAchievement[];
   pickAchievement: (achievement: IAchievement) => void;
   endGame: () => void;
@@ -106,6 +107,7 @@ const initialContext: IGameServerContext = {
   canSail: false,
   canAchieve: false,
   availableAchievements: [],
+  achievements: [],
   pickAchievement: () => {},
   endGame: () => {},
   chat: {
@@ -150,6 +152,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   const [canSail, setCanSail] = useState(initialContext.canSail);
   const [canTrade, setCanTrade] = useState(initialContext.canTrade);
   const [canAchieve, setCanAchieve] = useState(initialContext.canAchieve);
+  const [achievements, setAchievements] = useState(initialContext.achievements);
   const [availableAchievements, setAvailableAchievements] = useState(
     initialContext.availableAchievements
   );
@@ -263,6 +266,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     let _canLoad = false;
     let _canAchieve = false;
     let _availableAchievements: IAchievement[] = [];
+    let _achievements: IAchievement[] = [];
 
     // If there is no gameUuid active, we make sure to nullify the game object
     !activeGameUuid && setGame(null);
@@ -270,6 +274,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     if (game) {
       _gameStatus = game.state.status;
       _gameName = game.name;
+      _achievements = game.achievements;
 
       _isMyTurn = me.uuid === game.state.currentRound.playerUuid;
 
@@ -325,6 +330,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     setCanLoad(_canLoad);
     setCanAchieve(_canAchieve);
     setAvailableAchievements(_availableAchievements);
+    setAchievements(_achievements);
   }, [game]);
 
   // Special hook for fetching gameresults if the game state is won
@@ -583,6 +589,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         canSail,
         canLoad,
         canAchieve,
+        achievements,
         availableAchievements,
         pickAchievement,
         endGame,

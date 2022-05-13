@@ -25,6 +25,7 @@ const Wrapper = styled.div`
       border-radius: 50%;
       border: 1px solid black;
       font-size: 0.8rem;
+      background-color: white;
     }
   }
 `;

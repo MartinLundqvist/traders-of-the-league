@@ -1,6 +1,7 @@
 import { findAchievementsEarned } from '../game-engine/findAchievementsEarned';
 import * as Tests from '../game-engine/achievementTests';
 import { MOCK_GAME } from '../game-engine/mockData';
+import { pickRandomAchievements } from '../game-engine/pickRandomAchievements';
 
 const testAchievements = () => {
   const mockPlayer = MOCK_GAME.players[0];
@@ -55,4 +56,11 @@ const testAchievements = () => {
   console.log(earnedAchievements);
 };
 
-testAchievements();
+const testPickAchievements = () => {
+  console.log(pickRandomAchievements(3));
+  console.log(pickRandomAchievements(4));
+  console.log(pickRandomAchievements(5));
+};
+
+// testAchievements();
+testPickAchievements();

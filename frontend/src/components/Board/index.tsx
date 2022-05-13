@@ -9,14 +9,25 @@ import {
 } from '../../utils/boardGeometry';
 import { useLayout } from '../../contexts/LayoutProvider';
 import { useGameServer } from '../../contexts/GameServerProvider';
+import Achievements from './Achievements';
 
 const Wrapper = styled.div`
+  // New version
   position: relative;
-  place-self: center;
-  width: ${BOARD_WIDTH}px;
-  height: ${BOARD_HEIGHT}px;
-  margin-top: ${BOARD_TOP_BOTTOM_PADDING}px;
-  margin-bottom: ${BOARD_TOP_BOTTOM_PADDING}px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+
+  .hexagons {
+    position: relative;
+    width: ${BOARD_WIDTH}px;
+    height: ${BOARD_HEIGHT}px;
+    /* margin-top: ${BOARD_TOP_BOTTOM_PADDING}px;
+    margin-bottom: ${BOARD_TOP_BOTTOM_PADDING}px; */
+  }
 `;
 
 interface IBoardProps {
@@ -49,8 +60,12 @@ const Board = ({ className }: IBoardProps): JSX.Element => {
 
   return (
     <Wrapper className={className}>
-      {Hexagons}
-      <Ships />
+      <div className='hexagons'>
+        {Hexagons}
+        <Ships />
+      </div>
+
+      <Achievements />
     </Wrapper>
   );
 };
