@@ -52,10 +52,7 @@ export const Game = (): JSX.Element => {
         <ButtonSmall onClick={() => setActiveActionRoute('about')}>
           Learn to play
         </ButtonSmall>
-        <ButtonSmall
-          disabled={!(isMyGame && !(gameStatus === 'waiting'))}
-          onClick={() => handleClickEndGame()}
-        >
+        <ButtonSmall disabled={!isMyGame} onClick={() => handleClickEndGame()}>
           End game
         </ButtonSmall>
       </div>

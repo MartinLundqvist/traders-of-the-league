@@ -498,13 +498,12 @@ export class GameSession implements ISession {
         gameUuid: this.activeGameUuid,
         messages: [],
       };
-      this.chatStore.saveChat(newChat);
 
-      chat = await this.chatStore.getChat(this.activeGameUuid);
+      chat = newChat;
     }
 
     // Now we know it exists...
-    chat!.messages.push(message);
+    chat.messages.push(message);
 
     await this.chatStore.saveChat(chat!);
 

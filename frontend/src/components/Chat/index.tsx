@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useGameServer } from '../../contexts/GameServerProvider';
 import { FOOTER, HEADER } from '../../utils/layoutGeometry';
 import ChatBox from './ChatBox';
 
@@ -42,12 +43,15 @@ interface IChatProps {
 }
 
 const Chat = ({ className = '' }: IChatProps): JSX.Element => {
+  const { session } = useGameServer();
   const [open, setOpen] = useState(false);
   const [classes, setClasses] = useState(className);
 
   useEffect(() => {
     setClasses(`${className} ${open ? 'open' : ''}`);
   }, [open]);
+
+  if (session.activeGameUuid === '') return <></>;
 
   return (
     <Wrapper className={classes}>
