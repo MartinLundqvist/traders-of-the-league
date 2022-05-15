@@ -9,6 +9,8 @@ import { SessionStore } from './stores/sessionStore';
 import { GameEngine } from './game-engine/';
 import { MOCK_CHAT, MOCK_GAME, MOCK_SESSIONS } from './game-engine/mockData';
 import { ChatStore } from './stores/chatStore';
+import { closeDBConnection, connectToDB } from './database';
+import { gameModel, sessionModel, chatModel } from './models';
 
 // Persist whether we are in development mode or not
 const DEVELOPMENT = process.env.NODE_ENV === 'production' ? false : true;
@@ -20,26 +22,17 @@ console.log(
 );
 
 // Create the global stores
-const gameStore = new GameStore(DEVELOPMENT);
-const sessionStore = new SessionStore(DEVELOPMENT);
-const chatStore = new ChatStore(DEVELOPMENT);
-
-// Add a mock game to the gameStore which we can use for testing purposes
-if (DEVELOPMENT) {
-  console.log('Restoring mock game and session');
-  gameStore.saveGame(MOCK_GAME);
-  sessionStore.saveSession(MOCK_SESSIONS[0]);
-  sessionStore.saveSession(MOCK_SESSIONS[1]);
-  chatStore.saveChat(MOCK_CHAT);
-}
+const gameStore = new GameStore(DEVELOPMENT, gameModel);
+const sessionStore = new SessionStore(DEVELOPMENT, sessionModel);
+const chatStore = new ChatStore(DEVELOPMENT, chatModel);
 
 // Wire up the express server
 const app = express();
 app.use(cors());
 
 // This route gets information about all games
-app.get('/games', (req, res) => {
-  const games = gameStore.getGames();
+app.get('/games', async (req, res) => {
+  const games = await gameStore.getGames();
 
   const results = games.map((game) => {
     return {
@@ -53,8 +46,8 @@ app.get('/games', (req, res) => {
 });
 
 // This route gets information about all sessions
-app.get('/sessions', (req, res) => {
-  const sessions = sessionStore.getSessions();
+app.get('/sessions', async (req, res) => {
+  const sessions = await sessionStore.getSessions();
 
   const results = sessions.map((session) => {
     return {
@@ -67,8 +60,8 @@ app.get('/sessions', (req, res) => {
 });
 
 // This route gets information about all chats
-app.get('/chats', (req, res) => {
-  const chats = chatStore.getChats();
+app.get('/chats', async (req, res) => {
+  const chats = await chatStore.getChats();
 
   const results = chats.map((chat) => {
     return {
@@ -81,10 +74,10 @@ app.get('/chats', (req, res) => {
 });
 
 // This route gets game results for a gameUuid
-app.get('/gameresults/:gameUuid', (req, res) => {
+app.get('/gameresults/:gameUuid', async (req, res) => {
   const gameUuid = req.params.gameUuid;
 
-  const game = gameStore.getGame(gameUuid);
+  const game = await gameStore.getGame(gameUuid);
 
   if (!game) {
     res.status(500).send({ message: 'Game not found' });
@@ -116,20 +109,39 @@ io.on('connection', (socket) => {
 
 // Start the server
 const PORT = process.env.PORT || 4000;
-httpServer.listen(PORT, () => {
+httpServer.listen(PORT, async () => {
   console.log('Server started on port ' + PORT.toString());
   console.log('Current working directory is ' + process.cwd());
+
+  try {
+    await connectToDB();
+    console.log('Connected to database');
+
+    // Add a mock game to the gameStore which we can use for testing purposes
+    if (DEVELOPMENT) {
+      console.log('Restoring mock game and session');
+      await gameStore.saveGame(MOCK_GAME);
+      await sessionStore.saveSession(MOCK_SESSIONS[0]);
+      await sessionStore.saveSession(MOCK_SESSIONS[1]);
+      await chatStore.saveChat(MOCK_CHAT);
+    }
+  } catch (err) {
+    console.log('Error connecting to database');
+    console.log(err);
+  }
 });
 
 // Manage VM operations
-process.on('SIGINT', () => {
+process.on('SIGINT', async () => {
   console.log('SIGINT received, closing down server.');
   httpServer.close();
+  await closeDBConnection();
   process.exit(0);
 });
 
-process.on('SIGTERM', () => {
+process.on('SIGTERM', async () => {
   console.log('SIGTERM received, closing down server.');
   httpServer.close();
+  await closeDBConnection();
   process.exit(0);
 });

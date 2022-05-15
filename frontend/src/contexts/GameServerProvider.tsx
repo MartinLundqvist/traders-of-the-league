@@ -257,6 +257,10 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   // This hook modifies game specific booleans for rendering purposes
   // TODO: Perhaps this should be refactored to the useLayout context?
   useEffect(() => {
+    // DEBUG!
+    console.log('New game: ');
+    console.log(game);
+
     let _isMyTurn = false;
     let _isMyGame = false;
     let _gameName = '';

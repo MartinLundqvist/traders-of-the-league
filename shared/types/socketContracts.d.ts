@@ -43,7 +43,7 @@ export interface ClientToServerEvents {
   // Client fetches the session from the server. The server will call back with the session object.
   fetchSession: (
     sessionId: string,
-    callback: (session: ISession | undefined) => void
+    callback: (session: ISession | null) => void
   ) => void;
 
   //  Client asks to create and join a new game

@@ -1,27 +1,53 @@
 import { IChat } from '../../../shared/types';
 import fs from 'fs';
+import { Model } from 'mongoose';
 
 export class ChatStore {
-  private chats: Map<string, IChat>;
+  // private chats: Map<string, IChat>;
   private debug: boolean;
+  private chatModel: Model<IChat>;
 
-  constructor(debug: boolean = false) {
-    this.chats = new Map();
+  constructor(debug: boolean = false, chatModel: Model<IChat>) {
+    // this.chats = new Map();
     this.debug = debug;
+    this.chatModel = chatModel;
   }
 
-  public saveChat(chat: IChat): void {
-    this.chats.set(chat.gameUuid, chat);
+  public async saveChat(chat: IChat) {
+    // this.chats.set(chat.gameUuid, chat);
     this.debug && this.saveToFile(chat);
+
+    try {
+      await this.chatModel
+        .replaceOne({ gameUuid: chat.gameUuid }, chat, { upsert: true })
+        .exec();
+    } catch (err) {
+      console.log('Error while replacing chat in mongo database');
+      console.log(JSON.stringify(err));
+    }
   }
 
-  public getChat(gameUuid: string): IChat | undefined {
-    return this.chats.get(gameUuid);
+  public async getChat(gameUuid: string): Promise<IChat | null> {
+    const foundChat: IChat | null = await this.chatModel
+      .findOne({ gameUuid: gameUuid }, null, {})
+      .exec();
+
+    return foundChat;
+    // return this.chats.get(gameUuid);
   }
 
-  public getChats(): IChat[] {
-    const result = [...this.chats].map((chat) => chat[1]);
-    return result;
+  public async getChats(): Promise<IChat[]> {
+    let results: IChat[] = [];
+
+    try {
+      results = await this.chatModel.find().exec();
+    } catch (err) {
+      console.log('Error while fetching all chats from mongo');
+      console.log(JSON.stringify(err));
+      results = [];
+    }
+
+    return results;
   }
 
   private saveToFile(chat: IChat) {

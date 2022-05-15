@@ -12,14 +12,21 @@ React front-end boostrapped with Vite.js.
 
 ## gameserver
 
-Node.JS with Express and Socket.IO server that handles communication, storage and the game engine
+Node.JS with Express and Socket.IO server that handles communication, storage / database management and the game engine.
+You also need access to a mongodb database.
 
+For development purposes:
+
+- Run `./start_dh.sh` from the monorepo root directory. This will pull, build and start a Docker container with the latest mongo image. Note: You need Docker Desktop installed (or similar).
 - Run `npm install`
+- Create `.env` file with a `DB_STRING_LOCAL` variable pointing at your local mongo image. The string should be of format `mongodb://<user>:<password>@localhost:5000/traderdb?authSource=admin&readPreference=primary&ssl=false`. The user and password are defined in the `docker-compose-db.yml` file in the root.
 - Run `npm run dev`
+
+For production, you need to point the server to a proper MongoDB instance. I use MongoDB.com (atlas). Spin it up, then add a `DB_STRING` to the same `.env` file which points to that service.
 
 ## monitor
 
-React front-end boo tstrapped with Vite.js that just pulls some simple metrics from the gameserver to show activity.
+React front-end bootstrapped with Vite.js that just pulls some simple metrics from the gameserver to show activity.
 
 ## shared
 

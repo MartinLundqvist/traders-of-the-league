@@ -62,10 +62,8 @@ export class GameSession implements ISession {
     );
     this.socket.on(
       'fetchSession',
-      (
-        sessionUuid: string,
-        callback: (session: ISession | undefined) => void
-      ) => this.fetchSession(sessionUuid, callback)
+      (sessionUuid: string, callback: (session: ISession | null) => void) =>
+        this.fetchSession(sessionUuid, callback)
     );
     this.socket.on('createAndJoinNewGame', (gameName: string) =>
       this.createAndJoinNewGame(gameName)
@@ -119,7 +117,10 @@ export class GameSession implements ISession {
     // Remove the user socket from all rooms. A new socket will be created upon reconnecting.
   }
 
-  private createSession(name: string, callback: (session: ISession) => void) {
+  private async createSession(
+    name: string,
+    callback: (session: ISession) => void
+  ) {
     // Create the session
     let newSession: ISession = {
       user: { name, uuid: nanoid(), connected: true },
@@ -128,7 +129,7 @@ export class GameSession implements ISession {
     };
 
     // Persist it
-    this.sessionStore.saveSession(newSession);
+    await this.sessionStore.saveSession(newSession);
 
     // And update the local properties (deeply)
     this.uuid = newSession.uuid;
@@ -150,21 +151,21 @@ export class GameSession implements ISession {
     this.socket.emit('pushSession', thisSession);
   }
 
-  private persistThisSession() {
-    this.sessionStore.saveSession({
+  private async persistThisSession() {
+    await this.sessionStore.saveSession({
       user: this.user,
       activeGameUuid: this.activeGameUuid,
       uuid: this.uuid,
     });
   }
 
-  private fetchSession(
+  private async fetchSession(
     sessionUuid: string,
-    callback: (session: ISession | undefined) => void
+    callback: (session: ISession | null) => void
   ) {
     // We also need to initialize the local session properties
     // TODO: This is a bit unelegant..
-    const fetchedSession = this.sessionStore.getSession(sessionUuid);
+    const fetchedSession = await this.sessionStore.getSession(sessionUuid);
 
     if (fetchedSession) {
       // Update the local session
@@ -184,20 +185,20 @@ export class GameSession implements ISession {
     callback(fetchedSession);
   }
 
-  private createAndJoinNewGame(gameName: string) {
+  private async createAndJoinNewGame(gameName: string) {
     // Create a new game object with initial values
 
     const newGame = GameEngine.createGame(gameName, nanoid());
 
     // Persist the game in the game store
-    this.gameStore.saveGame(newGame);
+    await this.gameStore.saveGame(newGame);
 
     // Have user join the game
     this.joinGame(newGame.uuid);
   }
 
-  private fetchActiveGame(callback: (success: boolean) => void) {
-    const game = this.gameStore.getGame(this.activeGameUuid);
+  private async fetchActiveGame(callback: (success: boolean) => void) {
+    const game = await this.gameStore.getGame(this.activeGameUuid);
 
     if (!game) {
       console.log('No such game exists');
@@ -212,9 +213,9 @@ export class GameSession implements ISession {
     this.pushActiveGame();
   }
 
-  private pushActiveGame() {
+  private async pushActiveGame() {
     // Get the game from the store
-    const game = this.gameStore.getGame(this.activeGameUuid);
+    const game = await this.gameStore.getGame(this.activeGameUuid);
 
     if (!game) {
       this.socket.emit('error', 'Game not found');
@@ -228,9 +229,9 @@ export class GameSession implements ISession {
     this.pushActiveChat();
   }
 
-  private joinGame(gameUuid: string) {
+  private async joinGame(gameUuid: string) {
     // Fetch the game from the store
-    const game = this.gameStore.getGame(gameUuid);
+    const game = await this.gameStore.getGame(gameUuid);
     if (!game) {
       this.socket.emit('error', 'Game not found');
       return;
@@ -252,7 +253,7 @@ export class GameSession implements ISession {
     const newPlayer = GameEngine.addPlayerToGame(this.user, game);
     game.players.push(newPlayer);
 
-    this.gameStore.saveGame(game);
+    await this.gameStore.saveGame(game);
 
     // Update local session
     this.activeGameUuid = gameUuid;
@@ -270,8 +271,8 @@ export class GameSession implements ISession {
     this.pushActiveGame();
   }
 
-  private startGame() {
-    const game = this.gameStore.getGame(this.activeGameUuid);
+  private async startGame() {
+    const game = await this.gameStore.getGame(this.activeGameUuid);
 
     if (!this.activeGameUuid || !game) {
       this.socket.emit('error', 'Game not found');
@@ -286,13 +287,13 @@ export class GameSession implements ISession {
     // Initialize the game state. This player is first to go, since they started the game.
     GameEngine.start(game, this.user.uuid);
 
-    this.gameStore.saveGame(game);
+    await this.gameStore.saveGame(game);
 
     this.pushActiveGame();
   }
 
-  private endRound() {
-    const game = this.gameStore.getGame(this.activeGameUuid);
+  private async endRound() {
+    const game = await this.gameStore.getGame(this.activeGameUuid);
 
     if (!this.activeGameUuid || !game) {
       this.socket.emit('error', 'Game not found');
@@ -301,13 +302,16 @@ export class GameSession implements ISession {
 
     GameEngine.processEndOfRoundAchievements(game);
 
-    this.gameStore.saveGame(game);
+    await this.gameStore.saveGame(game);
 
     this.pushActiveGame();
   }
 
-  private sailTo(position: IBoardPosition, callback: (valid: boolean) => void) {
-    const game = this.gameStore.getGame(this.activeGameUuid);
+  private async sailTo(
+    position: IBoardPosition,
+    callback: (valid: boolean) => void
+  ) {
+    const game = await this.gameStore.getGame(this.activeGameUuid);
 
     if (!this.activeGameUuid || !game) {
       this.socket.emit('error', 'Game not found');
@@ -319,7 +323,7 @@ export class GameSession implements ISession {
 
     if (validMove) {
       // If the move is valid, we persist and push the new game state
-      this.gameStore.saveGame(game);
+      await this.gameStore.saveGame(game);
       this.pushActiveGame();
     }
 
@@ -327,8 +331,8 @@ export class GameSession implements ISession {
     callback(validMove);
   }
 
-  private loadCargo(cargo: TCargo[], callback: (valid: boolean) => void) {
-    const game = this.gameStore.getGame(this.activeGameUuid);
+  private async loadCargo(cargo: TCargo[], callback: (valid: boolean) => void) {
+    const game = await this.gameStore.getGame(this.activeGameUuid);
 
     if (!this.activeGameUuid || !game) {
       this.socket.emit('error', 'Game not found');
@@ -340,7 +344,7 @@ export class GameSession implements ISession {
 
     if (validMove) {
       // If the move is valid, we persist and push the new game state
-      this.gameStore.saveGame(game);
+      await this.gameStore.saveGame(game);
       this.pushActiveGame();
     }
 
@@ -348,8 +352,11 @@ export class GameSession implements ISession {
     callback(validMove);
   }
 
-  private ditchCargo(cargo: TCargo[], callback: (valid: boolean) => void) {
-    const game = this.gameStore.getGame(this.activeGameUuid);
+  private async ditchCargo(
+    cargo: TCargo[],
+    callback: (valid: boolean) => void
+  ) {
+    const game = await this.gameStore.getGame(this.activeGameUuid);
 
     if (!this.activeGameUuid || !game) {
       this.socket.emit('error', 'Game not found');
@@ -361,7 +368,7 @@ export class GameSession implements ISession {
 
     if (validMove) {
       // If the move is valid, we persist and push the new game state
-      this.gameStore.saveGame(game);
+      await this.gameStore.saveGame(game);
       this.pushActiveGame();
     }
 
@@ -369,11 +376,11 @@ export class GameSession implements ISession {
     callback(validMove);
   }
 
-  private makeTrades(
+  private async makeTrades(
     contracts: IContract[],
     callback: (valid: boolean) => void
   ) {
-    const game = this.gameStore.getGame(this.activeGameUuid);
+    const game = await this.gameStore.getGame(this.activeGameUuid);
 
     if (!this.activeGameUuid || !game) {
       this.socket.emit('error', 'Game not found');
@@ -385,7 +392,7 @@ export class GameSession implements ISession {
 
     if (validTrade) {
       // If the move is valid, we persist and push the new game state
-      this.gameStore.saveGame(game);
+      await this.gameStore.saveGame(game);
       this.pushActiveGame();
     }
 
@@ -393,12 +400,12 @@ export class GameSession implements ISession {
     callback(validTrade);
   }
 
-  private pickAchievement(
+  private async pickAchievement(
     achievement: IAchievement,
     callback: (valid: boolean) => void
   ) {
     console.log('Picking achievement!');
-    const game = this.gameStore.getGame(this.activeGameUuid);
+    const game = await this.gameStore.getGame(this.activeGameUuid);
 
     if (!this.activeGameUuid || !game) {
       this.socket.emit('error', 'Game not found');
@@ -413,7 +420,7 @@ export class GameSession implements ISession {
 
     if (validPick) {
       // If the move is valid, we persist and push the new game state
-      this.gameStore.saveGame(game);
+      await this.gameStore.saveGame(game);
       this.pushActiveGame();
     }
 
@@ -441,9 +448,9 @@ export class GameSession implements ISession {
     this.pushThisSession();
   }
 
-  private endGame() {
+  private async endGame() {
     console.log('Ending the game ' + this.activeGameUuid);
-    const game = this.gameStore.getGame(this.activeGameUuid);
+    const game = await this.gameStore.getGame(this.activeGameUuid);
 
     if (!game || !this.activeGameUuid) {
       this.socket.emit('error', 'Game not found');
@@ -451,7 +458,7 @@ export class GameSession implements ISession {
     }
 
     GameEngine.terminate(game);
-    this.gameStore.saveGame(game);
+    await this.gameStore.saveGame(game);
 
     this.pushActiveGame();
 
@@ -461,9 +468,9 @@ export class GameSession implements ISession {
     // this.leaveGame();
   }
 
-  private pushActiveChat() {
+  private async pushActiveChat() {
     // Get the game from the store
-    const chat = this.chatStore.getChat(this.activeGameUuid);
+    const chat = await this.chatStore.getChat(this.activeGameUuid);
 
     if (!chat) {
       // this.socket.emit('error', 'Chat error');
@@ -474,7 +481,7 @@ export class GameSession implements ISession {
     this.io.to(this.activeGameUuid).emit('pushActiveChat', chat);
   }
 
-  private sendMessage(message: IMessage) {
+  private async sendMessage(message: IMessage) {
     if (!message) {
       this.socket.emit('error', 'Chat error');
       return;
@@ -482,7 +489,7 @@ export class GameSession implements ISession {
 
     message.uuid = nanoid();
 
-    let chat = this.chatStore.getChat(this.activeGameUuid);
+    let chat = await this.chatStore.getChat(this.activeGameUuid);
 
     if (!chat) {
       console.log('No chat created yet. Creating one.');
@@ -493,13 +500,13 @@ export class GameSession implements ISession {
       };
       this.chatStore.saveChat(newChat);
 
-      chat = this.chatStore.getChat(this.activeGameUuid);
+      chat = await this.chatStore.getChat(this.activeGameUuid);
     }
 
     // Now we know it exists...
     chat!.messages.push(message);
 
-    this.chatStore.saveChat(chat!);
+    await this.chatStore.saveChat(chat!);
 
     // Finally push the chats
     this.pushActiveChat();
