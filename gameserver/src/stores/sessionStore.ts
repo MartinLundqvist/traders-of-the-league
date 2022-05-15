@@ -19,7 +19,7 @@ export class SessionStore {
 
     try {
       await this.sessionModel
-        .replaceOne({ uuid: session.uuid }, session, { upsert: true })
+        .replaceOne({ email: session.email }, session, { upsert: true })
         .exec();
     } catch (err) {
       console.log('Error while replacing session in mongo database');
@@ -27,9 +27,9 @@ export class SessionStore {
     }
   }
 
-  public async getSession(sessionUuid: string): Promise<ISession | null> {
+  public async getSession(email: string): Promise<ISession | null> {
     const foundSession: ISession | null = await this.sessionModel
-      .findOne({ uuid: sessionUuid }, null, {})
+      .findOne({ email: email }, null, {})
       .exec();
 
     return foundSession;

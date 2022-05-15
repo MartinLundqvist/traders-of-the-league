@@ -144,6 +144,7 @@ export interface IUser {
 export interface ISession {
   uuid: string;
   user: IUser;
+  email: string;
   activeGameUuid: string;
 }
 

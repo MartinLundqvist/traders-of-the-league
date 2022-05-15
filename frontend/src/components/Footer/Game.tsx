@@ -1,3 +1,4 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import styled from 'styled-components';
 import { useGameServer } from '../../contexts/GameServerProvider';
 import { useLayout } from '../../contexts/LayoutProvider';
@@ -27,8 +28,9 @@ const Wrapper = styled.div`
 `;
 
 export const Game = (): JSX.Element => {
-  const { activeGameUuid, endGame, gameStatus, isMyGame } = useGameServer();
+  const { activeGameUuid, endGame, isMyGame } = useGameServer();
   const { setActiveActionRoute } = useLayout();
+  const { logout } = useAuth0();
 
   const copyToClipBoard = async () => {
     if (!activeGameUuid) return;
@@ -55,6 +57,7 @@ export const Game = (): JSX.Element => {
         <ButtonSmall disabled={!isMyGame} onClick={() => handleClickEndGame()}>
           End game
         </ButtonSmall>
+        <ButtonSmall onClick={() => logout()}>Logout</ButtonSmall>
       </div>
     </Wrapper>
   );

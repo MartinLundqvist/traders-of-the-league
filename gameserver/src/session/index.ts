@@ -19,6 +19,7 @@ export class GameSession implements ISession {
   // Core ISession propertues
   uuid: string;
   user: IUser;
+  email: string;
   activeGameUuid: string;
 
   // References to the socket server and the socket itself
@@ -48,6 +49,7 @@ export class GameSession implements ISession {
     this.uuid = '';
     this.user = { name: '', uuid: '', connected: true };
     this.activeGameUuid = '';
+    this.email = '';
 
     console.log('New connection identified - socket ID is' + this.socket.id);
 
@@ -57,13 +59,13 @@ export class GameSession implements ISession {
     // Register listeners
     this.socket.on(
       'createSession',
-      (name: string, callback: (session: ISession) => void) =>
-        this.createSession(name, callback)
+      (name: string, email: string, callback: (session: ISession) => void) =>
+        this.createSession(name, email, callback)
     );
     this.socket.on(
       'fetchSession',
-      (sessionUuid: string, callback: (session: ISession | null) => void) =>
-        this.fetchSession(sessionUuid, callback)
+      (email: string, callback: (session: ISession | null) => void) =>
+        this.fetchSession(email, callback)
     );
     this.socket.on('createAndJoinNewGame', (gameName: string) =>
       this.createAndJoinNewGame(gameName)
@@ -119,12 +121,14 @@ export class GameSession implements ISession {
 
   private async createSession(
     name: string,
+    email: string,
     callback: (session: ISession) => void
   ) {
     // Create the session
     let newSession: ISession = {
       user: { name, uuid: nanoid(), connected: true },
       uuid: nanoid(),
+      email,
       activeGameUuid: '',
     };
 
@@ -146,6 +150,7 @@ export class GameSession implements ISession {
       uuid: this.uuid,
       user: this.user,
       activeGameUuid: this.activeGameUuid,
+      email: this.email,
     };
 
     this.socket.emit('pushSession', thisSession);
@@ -156,16 +161,17 @@ export class GameSession implements ISession {
       user: this.user,
       activeGameUuid: this.activeGameUuid,
       uuid: this.uuid,
+      email: this.email,
     });
   }
 
   private async fetchSession(
-    sessionUuid: string,
+    email: string,
     callback: (session: ISession | null) => void
   ) {
     // We also need to initialize the local session properties
     // TODO: This is a bit unelegant..
-    const fetchedSession = await this.sessionStore.getSession(sessionUuid);
+    const fetchedSession = await this.sessionStore.getSession(email);
 
     if (fetchedSession) {
       // Update the local session

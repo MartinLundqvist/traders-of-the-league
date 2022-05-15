@@ -80,6 +80,7 @@ export const Button = styled.button<IButtonProps>`
 
   &:hover {
     background-color: var(--color-bg-highlight);
+    cursor: pointer;
   }
 `;
 

@@ -96,6 +96,7 @@ const sessionSchema = new mongoose.Schema<ISession>({
     uuid: String,
     connected: Boolean,
   },
+  email: String,
   activeGameUuid: String,
 });
 

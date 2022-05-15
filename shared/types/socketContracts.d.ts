@@ -38,11 +38,15 @@ export interface ServerToClientEvents {
 
 export interface ClientToServerEvents {
   // Client adds a new user to the server and creates the session
-  createSession: (name: string, callback: (session: ISession) => void) => void;
+  createSession: (
+    name: string,
+    email: string,
+    callback: (session: ISession) => void
+  ) => void;
 
   // Client fetches the session from the server. The server will call back with the session object.
   fetchSession: (
-    sessionId: string,
+    email: string,
     callback: (session: ISession | null) => void
   ) => void;
 

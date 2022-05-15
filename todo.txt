@@ -4,3 +4,10 @@ Main backlog / roadmap:
 More technical things:
 - Clean up the use of context hooks across the entire code base
 - Consider refactoring game engine around XState.
+
+
+Notes: 
+- Authorize user. This gives access to an email. 
+- Use email to search for a session in the database. 
+- If there is a session in the database, then find it and push it to the browser.
+- If there is no session in the database, 

@@ -1,5 +1,5 @@
 import { useGameServer } from '../../contexts/GameServerProvider';
-import { Title, TitleSmall } from '../../elements/Typography';
+import { Title } from '../../elements/Typography';
 import logo from '../../favicon.png';
 import styled from 'styled-components';
 import Card from '../../elements/Card';
@@ -36,6 +36,7 @@ const Header = ({ className }: IHeaderProps) => {
       <Title>
         <div className='logo'></div>Traders of the Hanseatic League
       </Title>
+
       <Card title='You are' content={me.name ? me.name : 'Not registered'} />
       {game && (
         <>

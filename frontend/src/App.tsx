@@ -1,7 +1,9 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import styled from 'styled-components';
 import Chat from './components/Chat';
 import Footer from './components/Footer';
 import Header from './components/Header';
+import Login from './components/Login';
 import Notifications from './components/Notifications';
 import { useLayout } from './contexts/LayoutProvider';
 import Europe from './elements/Europe';
@@ -38,8 +40,14 @@ const Wrapper = styled.div`
   }
 `;
 
-function App() {
+const App = (): JSX.Element => {
   const { activeRoute, activeActionRoute } = useLayout();
+  const { isAuthenticated, user } = useAuth0();
+
+  if (!isAuthenticated) return <Login className='grid-area--all' />;
+
+  console.log(user);
+
   return (
     <Wrapper>
       <Europe className='grid-area--all' />
@@ -51,6 +59,6 @@ function App() {
       <Notifications className='grid-area--game' />
     </Wrapper>
   );
-}
+};
 
 export default App;

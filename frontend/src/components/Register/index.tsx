@@ -33,9 +33,7 @@ const Register = ({ className }: IRegisterProps): JSX.Element => {
 
   return (
     <Wrapper className={className}>
-      <TitleSmall>
-        This appears to be your first time connecting from this browser
-      </TitleSmall>
+      <TitleSmall>This appears to be your first time here!</TitleSmall>
       <div className='form-container'>
         <Title>Choose a trader name</Title>
         <Input
