@@ -57,7 +57,11 @@ export const Game = (): JSX.Element => {
         <ButtonSmall disabled={!isMyGame} onClick={() => handleClickEndGame()}>
           End game
         </ButtonSmall>
-        <ButtonSmall onClick={() => logout()}>Logout</ButtonSmall>
+        <ButtonSmall
+          onClick={() => logout({ returnTo: window.location.origin })}
+        >
+          Logout
+        </ButtonSmall>
       </div>
     </Wrapper>
   );
