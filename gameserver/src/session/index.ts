@@ -128,7 +128,7 @@ export class GameSession implements ISession {
     let newSession: ISession = {
       user: { name, uuid: nanoid(), connected: true },
       uuid: nanoid(),
-      email,
+      email: email,
       activeGameUuid: '',
     };
 
@@ -140,6 +140,7 @@ export class GameSession implements ISession {
     this.user.uuid = newSession.user.uuid;
     this.user.name = newSession.user.name;
     this.activeGameUuid = ''; // Not strictly required, but clean
+    this.email = newSession.email;
 
     // And finally callback to the frontend
     callback(newSession);
@@ -182,6 +183,7 @@ export class GameSession implements ISession {
         connected: true,
       };
       this.activeGameUuid = fetchedSession.activeGameUuid;
+      this.email = fetchedSession.email;
 
       // Remember to update the store with the user connection status
       fetchedSession.user.connected = true;
@@ -215,7 +217,6 @@ export class GameSession implements ISession {
     this.socket.join(this.activeGameUuid);
 
     callback(true);
-
     this.pushActiveGame();
   }
 
@@ -434,7 +435,7 @@ export class GameSession implements ISession {
     callback(validPick);
   }
 
-  private leaveGame() {
+  private async leaveGame() {
     console.log('Leaving the game ' + this.activeGameUuid);
 
     if (!this.activeGameUuid) {
@@ -448,7 +449,7 @@ export class GameSession implements ISession {
     // Remove the activegame reference and persist the session
     this.activeGameUuid = '';
 
-    this.persistThisSession();
+    await this.persistThisSession();
 
     // And update the client.
     this.pushThisSession();
