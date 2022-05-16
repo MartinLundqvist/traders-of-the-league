@@ -359,6 +359,11 @@ const makeTradesForCurrentPlayer = (
     return false;
   }
 
+  if (contracts.length > 2) {
+    console.log('Too man contracts being traded');
+    return false;
+  }
+
   // Now we can attempt to execute the trade.
   // IMPORTANT!! This function mutates the game, if the trade is successful!
   let valid = tradeIsAllowed(currentPlayer, currentHex.city, contracts);

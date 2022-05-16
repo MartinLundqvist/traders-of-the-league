@@ -135,7 +135,7 @@ export const MOCK_GAME: IGame = {
       achievements: [],
       position: { column: 8, row: 5 },
       victoryPoints: 47,
-      cargo: ['brown', 'green', 'green', 'red', 'red'],
+      cargo: ['blue', 'blue', 'yellow', 'yellow', 'yellow'],
     },
     {
       color: 'blue',
@@ -452,10 +452,22 @@ export const MOCK_GAME: IGame = {
         name: 'Danzig',
         contracts: [
           {
-            value: 5,
-            cargo: ['red', 'green'],
+            value: 1,
+            cargo: ['blue', 'black'],
             region: 'East',
-            uuid: '644fflzQz3Po-uAyyUPGn',
+            uuid: '644fflzQz3Po-uAyyUPGnd',
+          },
+          {
+            value: 2,
+            cargo: ['yellow', 'brown'],
+            region: 'East',
+            uuid: '644fflzQz3Po-uAyyUPGne',
+          },
+          {
+            value: 2,
+            cargo: ['yellow', 'black'],
+            region: 'East',
+            uuid: '644fflzQz3Po-uAyyUPGnf',
           },
         ],
         coatOfArms: '',

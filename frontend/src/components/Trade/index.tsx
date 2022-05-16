@@ -79,11 +79,12 @@ const Trade = ({ className }: ITradeProps): JSX.Element => {
 
   const canFulfillContract = (contract: IContract): boolean => {
     //First check if the contract has already been traded
-
     if (contractAlreadyTraded(contract)) return false;
 
-    // Then check if it can be fulfilled
+    // Then check if player has already traded two contracts
+    if (contractsTraded.length >= 2) return false;
 
+    // Then check if it can be fulfilled
     const hasCargo = (cargo: TCargo): boolean => {
       return cityGoods.includes(cargo) || playerCargo.includes(cargo);
     };
@@ -103,16 +104,12 @@ const Trade = ({ className }: ITradeProps): JSX.Element => {
 
   const handleTradeClick = (contract: IContract) => {
     console.log(contract);
-    const newCityGoods = [...cityGoods];
+    // const newCityGoods = [...cityGoods];
     const newPlayerCargo = [...playerCargo];
 
     const fulfillOneGood = (cargo: TCargo): boolean => {
       // First try and fulfill from the city
-      if (newCityGoods.includes(cargo)) {
-        let itemIndexToTrade = newCityGoods.findIndex((g) => g === cargo);
-        newCityGoods.splice(itemIndexToTrade, 1);
-        return true;
-      }
+      if (cityGoods.includes(cargo)) return true;
 
       // Second try and fulfill from the cargo hold
       if (playerCargo.includes(cargo)) {
@@ -129,7 +126,7 @@ const Trade = ({ className }: ITradeProps): JSX.Element => {
       fulfillOneGood(contract.cargo[0]) && fulfillOneGood(contract.cargo[1]);
 
     if (success) {
-      setCityGoods(newCityGoods);
+      // setCityGoods(newCityGoods);
       setPlayerCargo(newPlayerCargo);
       setContractsTraded((prevContracts) => [...prevContracts, contract]);
       setVpsEarned((prevVps) => prevVps + contract.value);
@@ -158,16 +155,16 @@ const Trade = ({ className }: ITradeProps): JSX.Element => {
         <tbody>
           <tr>
             <td>Your cargo</td>
-            {CARGO_ARRAY.map((good) => (
-              <td key={good + 'cargo'}>
+            {CARGO_ARRAY.map((good, index) => (
+              <td key={good + 'cargo' + index.toString()}>
                 {playerCargo.filter((c) => c === good).length || ''}
               </td>
             ))}
           </tr>
           <tr>
             <td>City goods</td>
-            {CARGO_ARRAY.map((good) => (
-              <td key={good + 'good'}>
+            {CARGO_ARRAY.map((good, index) => (
+              <td key={good + 'good' + +index.toString()}>
                 {cityGoods.filter((c) => c === good).length || ''}
               </td>
             ))}
@@ -176,13 +173,13 @@ const Trade = ({ className }: ITradeProps): JSX.Element => {
             <td className='separator' />
           </tr>
           {currentCity?.contracts.map((contract, index) => (
-            <tr key={contract.uuid}>
+            <tr key={contract.uuid + index.toString()}>
               <td>
                 Contract {index + 1}:
                 <Contract contract={contract} />{' '}
               </td>
-              {CARGO_ARRAY.map((good) => (
-                <td key={good + contract.uuid}>
+              {CARGO_ARRAY.map((good, index) => (
+                <td key={good + contract.uuid + index.toString()}>
                   {contract.cargo.includes(good) ? '•' : ''}
                 </td>
               ))}
@@ -194,7 +191,7 @@ const Trade = ({ className }: ITradeProps): JSX.Element => {
                   Trade
                 </ButtonSmall>
               </td>
-              <td>{contract.value}</td>
+              <td>{contractAlreadyTraded(contract) && contract.value}</td>
             </tr>
           ))}
           <tr>

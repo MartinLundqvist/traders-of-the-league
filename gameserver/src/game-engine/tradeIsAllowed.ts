@@ -68,11 +68,7 @@ const fulfillOneGood = (
   city: ICity
 ): boolean => {
   // First try and fulfill from the city
-  if (city.goods.includes(cargo)) {
-    let itemIndexToLoad = city.goods.findIndex((g) => g === cargo);
-    city.goods.splice(itemIndexToLoad, 1);
-    return true;
-  }
+  if (city.goods.includes(cargo)) return true;
 
   // Second try and fulfill from the cargo hold
   if (player.cargo.includes(cargo)) {

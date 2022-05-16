@@ -51,6 +51,9 @@ const Board = ({ className }: IBoardProps): JSX.Element => {
           west={hex.west}
           center={hex.center}
           farEast={hex.farEast}
+          // onClick={() => {
+          //   console.log(JSON.stringify({ column: hex.column, row: hex.row }));
+          // }}
           onClick={() => sailTo({ column: hex.column, row: hex.row })}
         />
       )),

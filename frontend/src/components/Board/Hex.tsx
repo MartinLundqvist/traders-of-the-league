@@ -22,6 +22,9 @@ const Wrapper = styled.div<IWrapperProps>`
   top: ${(props) => props.top}px;
   left: ${(props) => props.left}px;
 
+  // This is in order to make sure the Polygon restricts the pointer event surface!
+  pointer-events: none;
+
   span {
     position: absolute;
     top: 0;
@@ -66,6 +69,7 @@ const SVG = styled.svg<ISVGProps>`
 
   ${(props) => props.city && 'fill: var(--color-fill);'}
 
+  // This still works since events "bubble up" from the Polygon to the parent
   &:hover {
     opacity: 1;
   }
@@ -75,6 +79,9 @@ const Polygon = styled.polygon`
   stroke: var(--color-hex);
   stroke-width: 10;
   stroke-miterlimit: 10;
+
+  // This is where we want the pointer events to happen!
+  pointer-events: auto;
 `;
 
 interface IHexProps {
@@ -106,7 +113,7 @@ const Hex = ({
       top={getTopForBoardPosition({ row, column })}
       left={getLeftForBoardPosition({ row, column })}
       north={north}
-      onClick={onClick}
+      // onClick={onClick}
     >
       <SVG
         city={city}
@@ -114,7 +121,10 @@ const Hex = ({
         version='1.1'
         viewBox='0 0 511.544 443.01'
       >
-        <Polygon points='130.773,438.01 5.774,221.505 130.773,5   380.771,5 505.771,221.505 380.771,438.01 ' />
+        <Polygon
+          points='130.773,438.01 5.774,221.505 130.773,5   380.771,5 505.771,221.505 380.771,438.01 '
+          onClick={onClick}
+        />
       </SVG>
       {city && (
         <>
