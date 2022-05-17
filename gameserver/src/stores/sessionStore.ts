@@ -3,18 +3,17 @@ import fs from 'fs';
 import { Model } from 'mongoose';
 
 export class SessionStore {
-  // private sessions: Map<string, ISession>;
   private debug: boolean;
   private sessionModel: Model<ISession>;
 
   constructor(debug: boolean = false, sessionModel: Model<ISession>) {
-    // this.sessions = new Map();
     this.debug = debug;
     this.sessionModel = sessionModel;
   }
 
   public async saveSession(session: ISession) {
-    // this.sessions.set(session.uuid, session);
+    console.log('Saving session!');
+
     this.debug && this.saveToFile(session);
 
     try {
@@ -33,20 +32,7 @@ export class SessionStore {
       .exec();
 
     return foundSession;
-    // return this.sessions.get(sessionUuid);
   }
-
-  // public removeSession(sessionUuid: string) {
-  //   return this.sessions.delete(sessionUuid);
-  // }
-
-  // public clearGameState(gameUid: string) {
-  //   this.sessions.forEach((session) => {
-  //     if (session.activeGameUuid === gameUid) {
-  //       session.activeGameUuid = '';
-  //     }
-  //   });
-  // }
 
   public async getSessions(): Promise<ISession[]> {
     let results: ISession[] = [];

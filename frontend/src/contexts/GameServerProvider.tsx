@@ -220,36 +220,6 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     socketRef.current?.on('pushActiveChat', onPushActiveChatListener);
     socketRef.current?.on('pushSession', onPushSessionListener);
 
-    // // Now we figure out if there is an existing session we can use
-    // let sessionUuid = window.localStorage.getItem('sessionUuid');
-
-    // if (sessionUuid) {
-    //   socketRef.current.emit('fetchSession', sessionUuid, (session) => {
-    //     if (!session) {
-    //       console.log(
-    //         'No session found on game server with uuid ' + sessionUuid
-    //       );
-    //     } else {
-    //       console.log(
-    //         'Session found and restored for user ' + session.user.name
-    //       );
-
-    //       setSession(session);
-
-    //       // Also, if there exists an active game, we will ask the server to push it to us.
-
-    //       if (session.activeGameUuid) {
-    //         console.log('Found an active game, asking for it to be pushed.');
-    //         socketRef.current?.emit('fetchActiveGame', (success) => {
-    //           if (!success) {
-    //             window.alert('The game you last played seems to have ended!');
-    //           }
-    //         });
-    //       }
-    //     }
-    //   });
-    // }
-
     // Clean up all listeners
     return () => {
       socketRef.current?.offAny(onAnyListener);
@@ -264,7 +234,6 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
 
   // This hook manages the authentication status so that a valid session can be fetched
   useEffect(() => {
-    console.log('Rendering the [isAuthenticated, user] effecthook');
     if (isAuthenticated) {
       user &&
         user.email &&

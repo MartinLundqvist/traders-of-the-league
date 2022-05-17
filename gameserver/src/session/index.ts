@@ -114,9 +114,11 @@ export class GameSession implements ISession {
 
     // Set user as disconnected and update the session store
     this.user.connected = false;
-    this.persistThisSession();
 
-    // Remove the user socket from all rooms. A new socket will be created upon reconnecting.
+    // Only persist the session if it's actually a valid session!
+    if (this.uuid.length < 1) return;
+
+    this.persistThisSession();
   }
 
   private async createSession(
@@ -172,6 +174,12 @@ export class GameSession implements ISession {
   ) {
     // We also need to initialize the local session properties
     // TODO: This is a bit unelegant..
+
+    // This is to prevent accidental dealings with bad sessions.
+    if (!email || email.length < 2) {
+      callback(null);
+    }
+
     const fetchedSession = await this.sessionStore.getSession(email);
 
     if (fetchedSession) {
