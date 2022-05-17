@@ -5,7 +5,7 @@ type TGoodColor = {
 };
 
 export const CARGO_COLOR_STRINGS: TGoodColor = {
-  black: ['hsl(255, 00%, 12%);', 'hsl(255,00%, 6%);', 'hsl(255, 00%, 0%);'],
+  black: ['hsl(255, 00%, 28%);', 'hsl(255,00%, 18%);', 'hsl(255, 00%, 0%);'],
   red: ['hsl(0, 70%, 72%);', 'hsl(0,70%, 66%);', 'hsl(0, 70%, 59%);'],
   blue: [
     'hsl(240, 100%, 72%);',

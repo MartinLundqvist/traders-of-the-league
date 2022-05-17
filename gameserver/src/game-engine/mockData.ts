@@ -135,7 +135,7 @@ export const MOCK_GAME: IGame = {
       achievements: [],
       position: { column: 8, row: 5 },
       victoryPoints: 47,
-      cargo: ['blue', 'blue', 'yellow', 'yellow', 'yellow'],
+      cargo: ['black', 'blue', 'yellow', 'black', 'black'],
     },
     {
       color: 'blue',
