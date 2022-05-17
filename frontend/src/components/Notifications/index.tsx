@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
-import { useGameServer } from '../../contexts/GameServerProvider';
-import { Title } from '../../elements/Typography';
+import { useNotifications } from '../../contexts/NotificationsProvider';
+import CustomNotification from './Notification';
 
 const Wrapper = styled.div`
   position: relative;
@@ -10,31 +10,7 @@ const Wrapper = styled.div`
   height: 100%;
   width: 100%;
   z-index: 1000;
-  opacity: 0;
   pointer-events: none;
-
-  &.ismyturn {
-    animation: come-and-go 3000ms ease-in-out;
-  }
-
-  @keyframes come-and-go {
-    0% {
-      opacity: 0;
-      transform: scale(0);
-    }
-    30% {
-      opacity: 1;
-      transform: scale(3);
-    }
-    70% {
-      opacity: 1;
-      transform: scale(3);
-    }
-    100% {
-      opacity: 0;
-      transform: scale(0);
-    }
-  }
 `;
 
 interface INotificationsProps {
@@ -42,18 +18,17 @@ interface INotificationsProps {
 }
 
 const Notifications = ({ className }: INotificationsProps): JSX.Element => {
-  const { isMyTurn } = useGameServer();
-  const [classes, setClasses] = useState('');
-
-  useEffect(() => {
-    let tempClasses = className;
-    isMyTurn && (tempClasses += ' ismyturn');
-    setClasses(tempClasses);
-  }, [isMyTurn]);
+  const { notifications, removeNotification } = useNotifications();
 
   return (
-    <Wrapper className={classes}>
-      <Title>Your turn</Title>
+    <Wrapper className={className}>
+      {notifications.map((notification) => (
+        <CustomNotification
+          key={notification.uuid}
+          notification={notification}
+          remove={() => removeNotification(notification.uuid)}
+        />
+      ))}
     </Wrapper>
   );
 };

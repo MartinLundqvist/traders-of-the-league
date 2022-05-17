@@ -8,6 +8,7 @@ import { SHIP_DISTANCE } from '../utils/shipGeometry';
 import { TActionRoute, TRoute } from '../routes';
 import { createBoardLayout, TBoardLayout } from '../utils/createBoardLayout';
 import { useGameServer } from './GameServerProvider';
+import { useNotifications } from './NotificationsProvider';
 
 type TShipLayout = {
   player: IPlayer;
@@ -44,7 +45,7 @@ interface ILayoutProviderProps {
 export const LayoutProvider = ({
   children,
 }: ILayoutProviderProps): JSX.Element => {
-  const { session, game, canAchieve } = useGameServer();
+  const { session, game, canAchieve, isMyTurn } = useGameServer();
   const [shipLayout, setShipLayout] = useState<TShipLayout>(
     initialLayoutContext.shipLayout
   );
@@ -57,6 +58,8 @@ export const LayoutProvider = ({
   const [activeActionRoute, setActiveActionRoute] = useState<TActionRoute>(
     initialLayoutContext.activeActionRoute
   );
+
+  const { createNotification } = useNotifications();
 
   useEffect(() => {
     game && setBoardLayout(createBoardLayout(game.board));
@@ -84,6 +87,7 @@ export const LayoutProvider = ({
     }
   }, [session, game, canAchieve]);
 
+  // This hook manages the board and ship layouts programmatically based on the status of the GameServer game
   useEffect(() => {
     const getShipLayout = (): TShipLayout => {
       let shipLayout: TShipLayout = [];
@@ -110,6 +114,15 @@ export const LayoutProvider = ({
 
     game && setShipLayout(getShipLayout());
   }, [game]);
+
+  // These hooks fire off notifications based on the game state
+  useEffect(() => {
+    isMyTurn && createNotification('Your turn');
+  }, [isMyTurn]);
+
+  useEffect(() => {
+    canAchieve && createNotification('You have achievements');
+  }, [canAchieve]);
 
   return (
     <LayoutContext.Provider

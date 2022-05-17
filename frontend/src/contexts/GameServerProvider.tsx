@@ -29,6 +29,7 @@ import {
   TSocketConnection,
   TSocketError,
 } from '../../../shared/types';
+import { useNotifications } from './NotificationsProvider';
 
 export type ChatSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
@@ -135,6 +136,7 @@ interface IGameServerProviderProps {
 
 export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   const { isAuthenticated, user } = useAuth0();
+  const { createNotification } = useNotifications();
   const [session, setSession] = useState<ISession>(initialContext.session);
   const [me, setMe] = useState<IUser>(initialContext.me);
   const [activeGameUuid, setActiveGameUuid] = useState(
@@ -554,6 +556,12 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     socketRef.current?.emit('makeTrades', contracts, (valid) => {
       if (!valid) {
         window.alert('Not a valid trade. ');
+        return;
+      }
+
+      // Check if player emptied the city
+      if (contracts.length === currentCity.contracts.length) {
+        createNotification('City emptied');
       }
     });
   };
