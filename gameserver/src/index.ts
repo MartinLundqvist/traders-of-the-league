@@ -6,11 +6,12 @@ import { GameSession } from './session';
 import { TGameServer } from './types';
 import { GameStore } from './stores/gameStore';
 import { SessionStore } from './stores/sessionStore';
+import { BugReportStore } from './stores/bugReportStore';
 import { GameEngine } from './game-engine/';
 import { MOCK_CHAT, MOCK_GAME, MOCK_SESSIONS } from './game-engine/mockData';
 import { ChatStore } from './stores/chatStore';
 import { closeDBConnection, connectToDB } from './database';
-import { gameModel, sessionModel, chatModel } from './models';
+import { gameModel, sessionModel, chatModel, bugReportModel } from './models';
 
 // Persist whether we are in development mode or not
 const DEVELOPMENT = process.env.NODE_ENV === 'production' ? false : true;
@@ -25,10 +26,12 @@ console.log(
 const gameStore = new GameStore(DEVELOPMENT, gameModel);
 const sessionStore = new SessionStore(DEVELOPMENT, sessionModel);
 const chatStore = new ChatStore(DEVELOPMENT, chatModel);
+const bugReportStore = new BugReportStore(DEVELOPMENT, bugReportModel);
 
 // Wire up the express server
 const app = express();
 app.use(cors());
+app.use(express.json());
 
 // This route gets information about all games
 app.get('/games', async (req, res) => {
@@ -87,6 +90,21 @@ app.get('/gameresults/:gameUuid', async (req, res) => {
   const results = GameEngine.getGameResults(game);
 
   res.status(200).send({ message: 'Game found', results });
+});
+
+// This route posts a bugreport
+app.post('/postbugreport', async (req, res) => {
+  console.log(req.body);
+
+  try {
+    await bugReportStore.saveBugReport(req.body);
+  } catch (err) {
+    console.log('Error saving bugreport');
+    console.log(err);
+    res.status(500).send({ message: 'Error saving bugreport' });
+  }
+
+  res.status(200).send({ message: 'Report posted' });
 });
 
 // This is merely for health checks. Probably don't even need the express package for this app hmm....

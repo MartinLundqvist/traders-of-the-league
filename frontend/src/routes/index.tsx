@@ -10,6 +10,7 @@ import Won from '../components/Won';
 import Achieve from '../components/Achieve';
 import Terminated from '../components/Terminated';
 import About from '../components/About';
+import Report from '../components/Report';
 
 export type TRoute =
   | 'register'
@@ -26,7 +27,8 @@ export type TActionRoute =
   | 'trade'
   | 'ditch'
   | 'achieve'
-  | 'about';
+  | 'about'
+  | 'report';
 
 type TRoutes = {
   [key in TRoute]: JSX.Element;
@@ -49,8 +51,9 @@ export const routes: TRoutes = {
 export const actionRoutes: TActionRoutes = {
   none: <></>,
   load: <Load className='grid-area--game' />,
-  trade: <Trade className='grid-area--game'></Trade>,
-  ditch: <Ditch className='grid-area--game'></Ditch>,
-  achieve: <Achieve className='grid-area--all'></Achieve>,
-  about: <About className='grid-area--all'></About>,
+  trade: <Trade className='grid-area--game' />,
+  ditch: <Ditch className='grid-area--game' />,
+  achieve: <Achieve className='grid-area--all' />,
+  about: <About className='grid-area--all' />,
+  report: <Report className='grid-area--game' />,
 };

@@ -172,3 +172,17 @@ export interface IChat {
   gameUuid: string;
   messages: IMessage[];
 }
+
+export type TPriority = 'Low' | 'Medium' | 'High';
+
+export interface IBugReport {
+  date: Date;
+  email: string; // User email
+  userReport: {
+    action: string;
+    bug: string;
+    expectation: string;
+    priority: TPriority;
+  };
+  game: IGame;
+}

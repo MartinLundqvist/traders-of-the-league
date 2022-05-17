@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { IChat, IGame, ISession } from '../../../shared/types';
+import { IBugReport, IChat, IGame, ISession } from '../../../shared/types';
 
 const gameSchema = new mongoose.Schema<IGame>({
   name: String,
@@ -115,6 +115,18 @@ const chatSchema = new mongoose.Schema<IChat>({
   ],
 });
 
+const bugReportSchema = new mongoose.Schema<IBugReport>({
+  date: Date,
+  email: String,
+  userReport: {
+    action: String,
+    bug: String,
+    priority: String,
+  },
+  game: gameSchema,
+});
+
 export const gameModel = mongoose.model('Game', gameSchema);
 export const sessionModel = mongoose.model('Session', sessionSchema);
 export const chatModel = mongoose.model('Chat', chatSchema);
+export const bugReportModel = mongoose.model('BugReport', bugReportSchema);

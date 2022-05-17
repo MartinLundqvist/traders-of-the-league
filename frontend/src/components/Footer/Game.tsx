@@ -7,24 +7,13 @@ import { ButtonSmall, TitleSmall } from '../../elements/Typography';
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.25rem;
 
-  div#code {
-    font-family: 'Roboto';
-    font-size: 0.8rem;
-
-    &:hover {
-      cursor: pointer;
-    }
-  }
-
-  .buttons {
+  .row {
     display: flex;
     flex-direction: row;
     gap: 0.25rem;
   }
-
-}
 `;
 
 export const Game = (): JSX.Element => {
@@ -46,14 +35,15 @@ export const Game = (): JSX.Element => {
 
   return (
     <Wrapper>
-      <TitleSmall>Game Code (click to copy)</TitleSmall>
-      <div id='code' onClick={() => copyToClipBoard()}>
-        {activeGameUuid}
-      </div>
-      <div className='buttons'>
+      <div className='row'>
+        <ButtonSmall onClick={() => copyToClipBoard()}>
+          Invite players
+        </ButtonSmall>
         <ButtonSmall onClick={() => setActiveActionRoute('about')}>
           Learn to play
         </ButtonSmall>
+      </div>
+      <div className='row'>
         <ButtonSmall disabled={!isMyGame} onClick={() => handleClickEndGame()}>
           End game
         </ButtonSmall>
@@ -61,6 +51,9 @@ export const Game = (): JSX.Element => {
           onClick={() => logout({ returnTo: window.location.origin })}
         >
           Logout
+        </ButtonSmall>
+        <ButtonSmall onClick={() => setActiveActionRoute('report')}>
+          Report a bug
         </ButtonSmall>
       </div>
     </Wrapper>

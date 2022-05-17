@@ -1,4 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import { response } from 'express';
 import {
   createContext,
   useCallback,
@@ -12,6 +13,7 @@ import {
   ClientToServerEvents,
   IAchievement,
   IBoardPosition,
+  IBugReport,
   IChat,
   ICity,
   IContract,
@@ -67,6 +69,7 @@ interface IGameServerContext {
   endGame: () => void;
   chat: IChat;
   sendMessage: (message: IMessage) => void;
+  sendBugReport: (bugReport: IBugReport) => void;
 }
 
 const initialContext: IGameServerContext = {
@@ -119,6 +122,7 @@ const initialContext: IGameServerContext = {
     messages: [],
   },
   sendMessage: () => {},
+  sendBugReport: () => {},
 };
 
 const GameServerContext = createContext<IGameServerContext>(initialContext);
@@ -617,6 +621,37 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     socketRef.current?.emit('sendMessage', message);
   };
 
+  const sendBugReport = async (bugReport: IBugReport) => {
+    if (!bugReport) {
+      return;
+    }
+
+    console.log('Sending bugreport ' + bugReport);
+
+    try {
+      const URL = import.meta.env.VITE_URL || '';
+
+      const response = await fetch(`${URL}/postbugreport`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bugReport),
+      });
+
+      if (!response.ok) {
+        window.alert('Error sending bugreport');
+        return;
+      }
+
+      window.alert('Successfully sent bugreport');
+    } catch (err) {
+      console.log('Error sending bugreport');
+      console.log(err);
+      window.alert('Error sending bugreport');
+    }
+  };
+
   return (
     <GameServerContext.Provider
       value={{
@@ -653,6 +688,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         endGame,
         chat,
         sendMessage,
+        sendBugReport,
       }}
     >
       {children}

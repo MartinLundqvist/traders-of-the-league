@@ -86,6 +86,7 @@ export const Button = styled.button<IButtonProps>`
 
 interface IButtonSmallProps {
   pulse?: boolean;
+  warning?: boolean;
 }
 
 export const ButtonSmall = styled.button<IButtonSmallProps>`
@@ -94,7 +95,8 @@ export const ButtonSmall = styled.button<IButtonSmallProps>`
   border-radius: 0.5rem;
   border-style: none;
   box-shadow: 3px 3px 3px var(--color-bg-shadow);
-  background-color: var(--color-bg);
+  background-color: ${(props) =>
+    props.warning ? 'var(--color-bg-warning)' : 'var(--color-bg)'};
   padding: 0.25rem 1rem 0.25rem 1rem;
   max-height: 2rem;
 
@@ -110,4 +112,16 @@ export const ButtonSmall = styled.button<IButtonSmallProps>`
       transform: scale(1.1);
     }
   }
+`;
+
+export const SelectSmall = styled.select`
+  font: inherit;
+  font-size: 1.2rem;
+  border-radius: 0.5rem;
+  border-style: none;
+  box-shadow: 3px 3px 3px var(--color-bg-shadow);
+  background-color: var(--color-bg);
+  padding: 0.25rem 1rem 0.25rem 1rem;
+  max-height: 2rem;
+  outline: none;
 `;
