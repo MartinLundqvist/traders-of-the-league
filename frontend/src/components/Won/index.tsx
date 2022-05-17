@@ -30,7 +30,7 @@ interface IStartProps {
 }
 
 const Won = ({ className }: IStartProps): JSX.Element => {
-  const { gameResults } = useGameServer();
+  const { gameResults, leaveGame } = useGameServer();
   const { setActiveRoute } = useLayout();
 
   if (!gameResults) return <></>;
@@ -59,9 +59,7 @@ const Won = ({ className }: IStartProps): JSX.Element => {
           ))}
         </tbody>
       </table>
-      <ButtonSmall onClick={() => setActiveRoute('start')}>
-        Start over
-      </ButtonSmall>
+      <ButtonSmall onClick={() => leaveGame()}>Start over</ButtonSmall>
     </Wrapper>
   );
 };

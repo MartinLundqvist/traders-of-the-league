@@ -51,6 +51,7 @@ interface IGameServerContext {
   myPlayer: IPlayer | null;
   isMyTurn: boolean;
   isMyGame: boolean;
+  isEndGame: boolean;
   gameStatus: TGameStatus;
   gameResults: IGameResults | null;
   sailTo: (position: IBoardPosition) => void;
@@ -101,6 +102,7 @@ const initialContext: IGameServerContext = {
   endRound: () => {},
   isMyTurn: false,
   isMyGame: false,
+  isEndGame: false,
   gameStatus: 'waiting',
   gameResults: null,
   sailTo: () => {},
@@ -147,6 +149,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   const [gameName, setGameName] = useState<string>(initialContext.gameName);
   const [isMyTurn, setIsMyTurn] = useState(initialContext.isMyTurn);
   const [isMyGame, setIsMyGame] = useState(initialContext.isMyGame);
+  const [isEndGame, setIsEndGame] = useState(initialContext.isEndGame);
   const [isInCity, setIsInCity] = useState(initialContext.isInCity);
   const [gameStatus, setGameStatus] = useState<TGameStatus>(
     initialContext.gameStatus
@@ -276,6 +279,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
 
     let _isMyTurn = false;
     let _isMyGame = false;
+    let _isEndGame = false;
     let _gameName = '';
     let _isInCity = false;
     let _gameStatus: TGameStatus = 'waiting';
@@ -298,6 +302,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
       _achievements = game.achievements;
 
       _isMyTurn = me.uuid === game.state.currentRound.playerUuid;
+      _isEndGame = game.state.status === 'endgame';
 
       _currentTurnPlayer =
         game.players.find(
@@ -345,6 +350,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     setIsMyGame(_isMyGame);
     setGameName(_gameName);
     setIsMyTurn(_isMyTurn);
+    setIsEndGame(_isEndGame);
     setGameStatus(_gameStatus);
     setIsInCity(_isInCity);
     setCurrentCity(_currentCity);
@@ -645,6 +651,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         endRound,
         isMyTurn,
         isMyGame,
+        isEndGame,
         gameStatus,
         gameResults,
         sailTo,

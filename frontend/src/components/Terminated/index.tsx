@@ -26,17 +26,11 @@ interface IStartProps {
 
 const Terminated = ({ className }: IStartProps): JSX.Element => {
   const { leaveGame } = useGameServer();
-  const { setActiveRoute } = useLayout();
-
-  const handleRestartClick = () => {
-    leaveGame();
-    setActiveRoute('start');
-  };
 
   return (
     <Wrapper className={className}>
       <Title>GAME TERMINATED</Title>
-      <ButtonSmall onClick={() => handleRestartClick()}>Start over</ButtonSmall>
+      <ButtonSmall onClick={() => leaveGame()}>Start over</ButtonSmall>
     </Wrapper>
   );
 };

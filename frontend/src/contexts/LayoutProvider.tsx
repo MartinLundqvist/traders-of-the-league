@@ -45,7 +45,7 @@ interface ILayoutProviderProps {
 export const LayoutProvider = ({
   children,
 }: ILayoutProviderProps): JSX.Element => {
-  const { session, game, canAchieve, isMyTurn } = useGameServer();
+  const { session, game, canAchieve, isMyTurn, isEndGame } = useGameServer();
   const [shipLayout, setShipLayout] = useState<TShipLayout>(
     initialLayoutContext.shipLayout
   );
@@ -70,10 +70,10 @@ export const LayoutProvider = ({
     // If there is an active game running, we check what the status is and route accordingly
     if (game) {
       game.state.status === 'playing' && setActiveRoute('board');
-      game.state.status === 'endgame' && setActiveRoute('board');
       game.state.status === 'waiting' && setActiveRoute('board');
       game.state.status === 'won' && setActiveRoute('won');
       game.state.status === 'terminated' && setActiveRoute('terminated');
+      game.state.status === 'endgame' && setActiveRoute('board');
     } else {
       // If there is no active game running, we start from the top.
 
@@ -123,6 +123,10 @@ export const LayoutProvider = ({
   useEffect(() => {
     canAchieve && createNotification('You have achievements');
   }, [canAchieve]);
+
+  useEffect(() => {
+    isEndGame && createNotification('End game');
+  }, [isEndGame]);
 
   return (
     <LayoutContext.Provider
