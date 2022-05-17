@@ -121,6 +121,7 @@ const bugReportSchema = new mongoose.Schema<IBugReport>({
   userReport: {
     action: String,
     bug: String,
+    expectation: String,
     priority: String,
   },
   game: gameSchema,
