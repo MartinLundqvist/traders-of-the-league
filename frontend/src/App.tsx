@@ -42,11 +42,9 @@ const Wrapper = styled.div`
 
 const App = (): JSX.Element => {
   const { activeRoute, activeActionRoute } = useLayout();
-  const { isAuthenticated, user } = useAuth0();
+  const { isAuthenticated } = useAuth0();
 
   if (!isAuthenticated) return <Login className='grid-area--all' />;
-
-  console.log(user);
 
   return (
     <Wrapper>
