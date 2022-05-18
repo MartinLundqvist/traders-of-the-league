@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { IMessage } from '../../../../shared/types';
 import { useGameServer } from '../../contexts/GameServerProvider';
@@ -39,13 +39,24 @@ const ChatBox = (): JSX.Element => {
   const { chat, sendMessage, me } = useGameServer();
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
+  const endOfMessagesRef = useRef<HTMLDivElement>(null);
 
   // This is to avoid game layout problems while the parent element is animating
   useEffect(() => {
-    const timer = setTimeout(() => setOpen(true), 200);
+    const openTimer = setTimeout(() => setOpen(true), 200);
+    const scrollTimer = setTimeout(() => {
+      endOfMessagesRef.current?.scrollIntoView();
+    }, 400);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(openTimer);
+      clearTimeout(scrollTimer);
+    };
   }, []);
+
+  useEffect(() => {
+    endOfMessagesRef.current?.scrollIntoView();
+  }, [chat]);
 
   const handleKeyDown = (key: string) => {
     if (key === 'Enter' && message.length > 0) {
@@ -70,6 +81,7 @@ const ChatBox = (): JSX.Element => {
                 {message.from.name}: {message.message}
               </div>
             ))}
+            <div ref={endOfMessagesRef} />
           </div>
           <div className='chat-input'>
             <InputSmall

@@ -20,9 +20,27 @@ const Wrapper = styled.div`
   writing-mode: vertical-lr;
   z-index: 20;
   transition: width 200ms ease-in-out;
-
-  span {
+  
+  .actionarea {
+    position: relative;
     cursor: pointer;
+
+    span {
+      position: absolute;
+      top: 110%;
+      left: 10%;
+      padding: 0.25rem 0.1rem;
+      font-size: 1.1em;
+      background-color: var(--color-bg);
+      border-radius: 50%;
+      animation: pulse 1s linear alternate infinite;
+      
+      @keyframes pulse {
+        from {transform: scale(0.8)}
+        to {transform scale(1.2)}
+      }
+      
+    }
   }
 
   &:hover {
@@ -43,23 +61,23 @@ interface IChatProps {
 }
 
 const Chat = ({ className = '' }: IChatProps): JSX.Element => {
-  const { session } = useGameServer();
+  const { session, chat } = useGameServer();
   const [open, setOpen] = useState(false);
   const [classes, setClasses] = useState(className);
+  const [readMessages, setReadMessages] = useState(0);
 
   useEffect(() => {
     setClasses(`${className} ${open ? 'open' : ''}`);
-  }, [open]);
+    open && setReadMessages(chat.messages.length);
+  }, [open, chat]);
 
   if (session.activeGameUuid === '') return <></>;
 
   return (
     <Wrapper className={classes}>
-      <div>
-        <span onClick={() => setOpen((open) => !open)}>
-          {open ? 'Close' : 'Open'}{' '}
-        </span>
-        Chat
+      <div className='actionarea' onClick={() => setOpen((open) => !open)}>
+        {open ? 'Close' : 'Open'} Chat{' '}
+        {chat.messages.length > readMessages && <span>!</span>}
       </div>
       {open && <ChatBox />}
     </Wrapper>
