@@ -69,6 +69,11 @@ const SVG = styled.svg<ISVGProps>`
 
   ${(props) => props.city && 'fill: var(--color-fill);'}
 
+  &.highlight {
+    /* filter: drop-shadow(0 0 15px var(--color-bg-shadow)); */
+    filter: drop-shadow(0 0 15px white);
+  }
+
   // This still works since events "bubble up" from the Polygon to the parent
   &:hover {
     opacity: 1;
@@ -79,6 +84,27 @@ const Polygon = styled.polygon`
   stroke: var(--color-hex);
   stroke-width: 10;
   stroke-miterlimit: 10;
+
+  &.highlight {
+    animation: stroke 1000ms infinite;
+    /* stroke: var(--color-hex-highlight); */
+    /* stroke: white; */
+  }
+
+  @keyframes stroke {
+    0% {
+      stroke: var(--color-hex);
+      stroke-width: 10;
+    }
+    50% {
+      stroke: var(--color-hex-highlight);
+      stroke-width: 10;
+    }
+    100% {
+      stroke: var(--color-hex);
+      stroke-width: 10;
+    }
+  }
 
   // This is where we want the pointer events to happen!
   pointer-events: auto;
@@ -93,6 +119,7 @@ interface IHexProps {
   west?: boolean;
   center?: boolean;
   farEast?: boolean;
+  highlight?: boolean;
   onClick: () => void;
 }
 
@@ -106,6 +133,7 @@ const Hex = ({
   center,
   farEast,
   onClick,
+  highlight,
 }: IHexProps): JSX.Element => {
   return (
     <Wrapper
@@ -120,10 +148,12 @@ const Hex = ({
         xmlns='http://www.w3.org/2000/svg'
         version='1.1'
         viewBox='0 0 511.544 443.01'
+        className={highlight ? 'highlight' : ''}
       >
         <Polygon
           points='130.773,438.01 5.774,221.505 130.773,5   380.771,5 505.771,221.505 380.771,438.01 '
           onClick={onClick}
+          className={highlight ? 'highlight' : ''}
         />
       </SVG>
       {city && (

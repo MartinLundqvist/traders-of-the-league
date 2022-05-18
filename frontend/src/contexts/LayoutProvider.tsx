@@ -45,7 +45,8 @@ interface ILayoutProviderProps {
 export const LayoutProvider = ({
   children,
 }: ILayoutProviderProps): JSX.Element => {
-  const { session, game, canAchieve, isMyTurn, isEndGame } = useGameServer();
+  const { session, game, canAchieve, isMyTurn, isEndGame, myPlayer, canSail } =
+    useGameServer();
   const [shipLayout, setShipLayout] = useState<TShipLayout>(
     initialLayoutContext.shipLayout
   );
@@ -62,8 +63,9 @@ export const LayoutProvider = ({
   const { createNotification } = useNotifications();
 
   useEffect(() => {
-    game && setBoardLayout(createBoardLayout(game.board));
-  }, [game]);
+    if (game && myPlayer)
+      setBoardLayout(createBoardLayout(game.board, myPlayer, canSail));
+  }, [game, myPlayer, canSail]);
 
   // This hook manages the UI states programmatically based on the status of the GameServer session
   useEffect(() => {
