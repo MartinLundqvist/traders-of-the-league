@@ -16,6 +16,7 @@ const Wrapper = styled.div<IWrapperProps>`
   ${(props) => props.center && 'left: 16px'};
   ${(props) => props.farEast && 'left: -55px'};
   ${(props) => props.farEast && 'top: 0px'};
+  pointer-events: auto;
 
   transition: transform 150ms ease-in-out;
 

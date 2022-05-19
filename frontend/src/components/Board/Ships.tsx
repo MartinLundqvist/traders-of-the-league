@@ -60,6 +60,58 @@ const Wrapper = styled.div<IWrapperProps>`
   div:nth-child(5) {
     grid-row: 6 / 7;
   }
+
+  &:hover {
+    > span.hover {
+      opacity: 1;
+    }
+  }
+
+  span.hover {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    /* width: 10rem;
+    height: 4rem; */
+    backdrop-filter: blur(5px);
+    background-color: var(--color-fill-sea-opaque);
+    box-shadow: 3px 3px 3px var(--color-bg-shadow);
+    padding: 0.5rem;
+    transform: rotateZ(30deg);
+    opacity: 0;
+    transition: opacity 200ms ease-in-out;
+    pointer-events: none;
+
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+      grid-template-rows: 1fr 1fr;
+      grid-template-areas: 'captain name' 'cargo goods';
+      gap: 0.5rem;
+
+      .captain {
+        grid-area: captain;
+      }
+
+      .name {
+        grid-area: name;
+      }
+
+      .cargo {
+        grid-area: cargo;
+      }
+
+      .goods {
+        grid-area: goods;
+        display: flex;
+        width: 100%;
+
+        > * {
+          position: relative;
+        }
+      }
+    }
+  }
 `;
 
 const Ships = (): JSX.Element => {
@@ -77,6 +129,21 @@ const Ships = (): JSX.Element => {
           {ship.player.cargo.map((good, index) => (
             <Good good={good} key={ship.player.user.uuid + index} />
           ))}
+          <span className='hover'>
+            <div className='container'>
+              <div className='captain'>Captain</div>
+              <div className='name'>{ship.player.user.name}</div>
+              <div className='cargo'>Cargo</div>
+              <div className='goods'>
+                {ship.player.cargo.map((good, index) => (
+                  <Good
+                    good={good}
+                    key={ship.player.user.uuid + 'detail' + index}
+                  />
+                ))}
+              </div>
+            </div>
+          </span>
         </Wrapper>
       ))}
     </>
