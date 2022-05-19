@@ -14,10 +14,14 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  width: 100%;
-  height: 90%;
   gap: 1rem;
-  font-size: 2rem;
+  font-size: 1.5rem;
+  overflow: hidden;
+  padding-bottom: 1rem;
+
+  .scrollable {
+    overflow: scroll;
+  }
 
   table {
     border-spacing: 2rem;
@@ -96,52 +100,54 @@ const Won = ({ className }: IStartProps): JSX.Element => {
       </Title>
 
       <Title>Player ranking</Title>
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Player</th>
-            <th>Contracts fulfilled</th>
-            <th>Cities Emptied</th>
-            <th>Achievements</th>
-            <th>VPs</th>
-          </tr>
-        </thead>
-        <tbody>
-          {gameResults.playerStats.map((player) => (
-            <tr key={player.uuid}>
-              <td>{player.rank}</td>
-              <td>{player.name}</td>
-              <td>
-                <div className='container'>
-                  {getContracts(player.uuid).map((contract) => (
-                    <Contract key={contract.uuid} contract={contract} />
-                  ))}
-                </div>
-              </td>
-              <td>
-                <div className='container'>
-                  {getCities(player.uuid).map((city) => (
-                    <div key={city.name} className='city'>
-                      {city.name}
-                    </div>
-                  ))}
-                </div>
-              </td>
-              <td>
-                <div className='container achievements'>
-                  {getAchievements(player.uuid).map((achievement) => (
-                    <div key={achievement.name} className='city'>
-                      {achievement.name}
-                    </div>
-                  ))}
-                </div>
-              </td>
-              <td>{player.victoryPoints}</td>
+      <div className='scrollable'>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Player</th>
+              <th>Contracts fulfilled</th>
+              <th>Cities Emptied</th>
+              <th>Achievements</th>
+              <th>VPs</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {gameResults.playerStats.map((player) => (
+              <tr key={player.uuid}>
+                <td>{player.rank}</td>
+                <td>{player.name}</td>
+                <td>
+                  <div className='container'>
+                    {getContracts(player.uuid).map((contract) => (
+                      <Contract key={contract.uuid} contract={contract} />
+                    ))}
+                  </div>
+                </td>
+                <td>
+                  <div className='container'>
+                    {getCities(player.uuid).map((city) => (
+                      <div key={city.name} className='city'>
+                        {city.name}
+                      </div>
+                    ))}
+                  </div>
+                </td>
+                <td>
+                  <div className='container achievements'>
+                    {getAchievements(player.uuid).map((achievement) => (
+                      <div key={achievement.name} className='city'>
+                        {achievement.name}
+                      </div>
+                    ))}
+                  </div>
+                </td>
+                <td>{player.victoryPoints}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <ButtonSmall onClick={() => leaveGame()}>Start over</ButtonSmall>
     </Wrapper>
   );
