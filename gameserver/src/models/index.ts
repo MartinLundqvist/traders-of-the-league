@@ -4,6 +4,8 @@ import { IBugReport, IChat, IGame, ISession } from '../../../shared/types';
 const gameSchema = new mongoose.Schema<IGame>({
   name: String,
   uuid: String,
+  startTime: Number,
+  endTime: Number,
   players: [
     {
       color: String,

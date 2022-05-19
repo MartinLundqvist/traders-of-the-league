@@ -11,6 +11,8 @@ export const MOCK_GAME: IGame = {
     { name: 'Monopolist B', value: 3 },
     { name: 'Specialist A', value: 3 },
   ],
+  startTime: new Date().getTime(),
+  endTime: 0,
   players: [
     {
       color: 'black',

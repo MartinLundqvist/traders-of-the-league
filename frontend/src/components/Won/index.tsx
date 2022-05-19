@@ -1,9 +1,7 @@
-import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { IGameResults } from '../../../../shared/types';
 import { useGameServer } from '../../contexts/GameServerProvider';
-import { useLayout } from '../../contexts/LayoutProvider';
 import { ButtonSmall, Title } from '../../elements/Typography';
+import { timeToString } from '../../utils/timeToString';
 
 const Wrapper = styled.div`
   display: flex;
@@ -11,10 +9,10 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: flex-start;
   gap: 1rem;
-
+  font-size: 2rem;
   table {
     padding: 2rem 0 2rem 0;
-    font-size: 2rem;
+
     width: 70%;
     /* height: 50%; */
 
@@ -31,13 +29,16 @@ interface IStartProps {
 
 const Won = ({ className }: IStartProps): JSX.Element => {
   const { gameResults, leaveGame } = useGameServer();
-  const { setActiveRoute } = useLayout();
 
   if (!gameResults) return <></>;
 
   return (
     <Wrapper className={className}>
       <Title>GAME OVER</Title>
+      <div>
+        Game duration{' '}
+        {timeToString(gameResults.game.startTime, gameResults.game.endTime)}
+      </div>
       <Title>Player ranking</Title>
       <table>
         <thead>

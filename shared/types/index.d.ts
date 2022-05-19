@@ -133,6 +133,8 @@ export interface IGame {
   board: TBoard;
   state: IGameState;
   achievements: IAchievement[];
+  startTime: number; // In Epoch ms
+  endTime: number; // In Epoch ms
 }
 
 export interface IUser {

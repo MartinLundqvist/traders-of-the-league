@@ -72,6 +72,7 @@ interface IGameServerContext {
   chat: IChat;
   sendMessage: (message: IMessage) => void;
   sendBugReport: (bugReport: IBugReport) => void;
+  startTime: number;
 }
 
 const initialContext: IGameServerContext = {
@@ -126,6 +127,7 @@ const initialContext: IGameServerContext = {
   },
   sendMessage: () => {},
   sendBugReport: () => {},
+  startTime: 0,
 };
 
 const GameServerContext = createContext<IGameServerContext>(initialContext);
@@ -172,6 +174,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     initialContext.availableAchievements
   );
   const [chat, setChat] = useState<IChat>(initialContext.chat);
+  const [startTime, setStartTime] = useState(initialContext.startTime);
   const socketRef = useRef<ChatSocket>();
 
   const onAnyListener = useCallback((event: any, args: any[]) => {
@@ -292,6 +295,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     let _canAchieve = false;
     let _availableAchievements: IAchievement[] = [];
     let _achievements: IAchievement[] = [];
+    let _startTime = 0;
 
     // If there is no gameUuid active, we make sure to nullify the game object
     !activeGameUuid && setGame(null);
@@ -300,6 +304,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
       _gameStatus = game.state.status;
       _gameName = game.name;
       _achievements = game.achievements;
+      _startTime = game.startTime;
 
       _isMyTurn = me.uuid === game.state.currentRound.playerUuid;
       _isEndGame = game.state.status === 'endgame';
@@ -362,6 +367,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     setCanAchieve(_canAchieve);
     setAvailableAchievements(_availableAchievements);
     setAchievements(_achievements);
+    setStartTime(_startTime);
   }, [game]);
 
   // Special hook for fetching gameresults if the game state is won
@@ -673,6 +679,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         chat,
         sendMessage,
         sendBugReport,
+        startTime,
       }}
     >
       {children}

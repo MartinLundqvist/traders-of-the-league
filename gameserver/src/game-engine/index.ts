@@ -11,7 +11,6 @@ import { createNewContracts } from './createNewContracts';
 import { moveIsAllowed } from './moveIsAllowed';
 import { pickContractByRegion } from './pickContractByRegion';
 import {
-  ACHIEVEMENTS,
   BOARD,
   MAX_MOVES,
   numberOfCitiesToEmpty,
@@ -33,6 +32,8 @@ const createGame = (gameName: string, gameUuid: string): IGame => {
     numberOfCitiesToEmpty: 5,
     achievements: [],
     board: BOARD,
+    startTime: 0,
+    endTime: 0,
     state: {
       currentRound: {
         playerUuid: '',
@@ -54,6 +55,7 @@ const start = (game: IGame, firstPlayerUuid: string) => {
   game.state.currentRound.playerUuid = firstPlayerUuid;
   game.state.round = 1;
   game.numberOfCitiesToEmpty = numberOfCitiesToEmpty[game.players.length];
+  game.startTime = new Date().getTime();
 
   dealContracts(game);
   dealAchievements(game);
@@ -61,6 +63,7 @@ const start = (game: IGame, firstPlayerUuid: string) => {
 
 const terminate = (game: IGame) => {
   game.state.status = 'terminated';
+  game.endTime = new Date().getTime();
 };
 
 const addPlayerToGame = (user: IUser, game: IGame): IPlayer => {
@@ -138,6 +141,7 @@ const endCurrentPlayerRound = (game: IGame) => {
   if (game.players.every((player) => player.hasMadeEndGameMove === true)) {
     console.log('Game won');
     game.state.status = 'won';
+    game.endTime = new Date().getTime();
 
     return;
   }
