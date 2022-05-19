@@ -88,6 +88,10 @@ const addPlayerToGame = (user: IUser, game: IGame): IPlayer => {
   return newPlayer;
 };
 
+const removeUserUuidFromGame = (userUuid: string, game: IGame) => {
+  game.players = game.players.filter((player) => player.user.uuid !== userUuid);
+};
+
 const dealContracts = (game: IGame) => {
   const newContracts = createNewContracts();
   const board = game.board;
@@ -456,6 +460,7 @@ export const GameEngine = {
   start,
   terminate,
   addPlayerToGame,
+  removeUserUuidFromGame,
   sailCurrentPlayerTo,
   loadCargoForCurrentPlayer,
   ditchCargoForCurrentPlayer,

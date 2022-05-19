@@ -46,6 +46,7 @@ interface IGameServerContext {
   gameName: string;
   joinGame: (gameUuid: string) => void;
   leaveGame: () => void;
+  yieldGame: () => void;
   startGame: () => void;
   endRound: () => void;
   myPlayer: IPlayer | null;
@@ -99,6 +100,7 @@ const initialContext: IGameServerContext = {
   createAndJoinNewGame: () => {},
   joinGame: () => {},
   leaveGame: () => {},
+  yieldGame: () => {},
   startGame: () => {},
   endRound: () => {},
   isMyTurn: false,
@@ -458,6 +460,15 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     socketRef.current?.emit('leaveGame');
   };
 
+  const yieldGame = () => {
+    if (!game) return;
+
+    if (window.confirm('Are you sure you want to abandon?')) {
+      console.log('Leaving game with Uuid ' + session.activeGameUuid);
+      socketRef.current?.emit('yieldGame');
+    }
+  };
+
   const startGame = () => {
     if (!game) {
       window.alert('No game to start');
@@ -653,6 +664,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         createAndJoinNewGame,
         joinGame,
         leaveGame,
+        yieldGame,
         startGame,
         endRound,
         isMyTurn,

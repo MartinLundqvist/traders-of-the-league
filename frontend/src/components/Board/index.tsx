@@ -11,6 +11,7 @@ import { useLayout } from '../../contexts/LayoutProvider';
 import { useGameServer } from '../../contexts/GameServerProvider';
 import Achievements from './Achievements';
 import Clock from './Clock';
+import Yield from './Yield';
 
 const Wrapper = styled.div`
   // New version
@@ -72,6 +73,7 @@ const Board = ({ className }: IBoardProps): JSX.Element => {
 
       <Achievements />
       <Clock />
+      <Yield />
     </Wrapper>
   );
 };

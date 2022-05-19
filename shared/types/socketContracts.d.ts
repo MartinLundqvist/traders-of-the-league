@@ -59,8 +59,11 @@ export interface ClientToServerEvents {
   // Client asks to join an existing game.
   joinGame: (gameUuid: string) => void;
 
-  // Client asks to join an existing game.
+  // Client asks to disconnect from an existing game.
   leaveGame: () => void;
+
+  // Client asks to remove player from an existing game.
+  yieldGame: () => void;
 
   // Client asks to start the currently active game
   startGame: () => void;

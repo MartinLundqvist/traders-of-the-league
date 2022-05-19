@@ -40,8 +40,6 @@ export const createBoardLayout = (
     boardLayout.push(layoutElement);
   });
 
-  console.log(boardLayout);
-
   return boardLayout as TBoardLayout;
 };
 

@@ -17,8 +17,6 @@ const Clock = (): JSX.Element => {
   const { startTime } = useGameServer();
   const [timePlayed, setTimePlayed] = useState('00:00');
 
-  console.log(startTime);
-
   useEffect(() => {
     const timer = setInterval(() => {
       const currentTime = new Date().getTime();

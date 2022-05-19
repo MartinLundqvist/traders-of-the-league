@@ -75,6 +75,7 @@ export class GameSession implements ISession {
     );
     this.socket.on('joinGame', (gameUuid: string) => this.joinGame(gameUuid));
     this.socket.on('leaveGame', () => this.leaveGame());
+    this.socket.on('yieldGame', () => this.yieldGame());
     this.socket.on('startGame', () => this.startGame());
     this.socket.on('endRound', () => this.endRound());
     this.socket.on(
@@ -441,6 +442,33 @@ export class GameSession implements ISession {
 
     // Finally, we callback with a confirmation.?????
     callback(validPick);
+  }
+
+  private async yieldGame() {
+    console.log('Yielding the game ' + this.activeGameUuid);
+
+    const game = await this.gameStore.getGame(this.activeGameUuid);
+
+    if (!game) {
+      this.socket.emit('error', 'Game not found');
+      return;
+    }
+
+    // If this is the last player, we terminate the game
+    if (game.players.length === 1) {
+      this.endGame();
+      return;
+    }
+
+    // First eliminate the player from the game state
+    GameEngine.removeUserUuidFromGame(this.user.uuid, game);
+
+    // Persist and push the new game state
+    await this.gameStore.saveGame(game);
+    await this.pushActiveGame();
+
+    // Then disconnect from session
+    this.leaveGame();
   }
 
   private async leaveGame() {
