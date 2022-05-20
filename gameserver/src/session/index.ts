@@ -16,7 +16,7 @@ import { GameEngine } from '../game-engine';
 import { ChatStore } from 'src/stores/chatStore';
 
 export class GameSession implements ISession {
-  // Core ISession propertues
+  // Core ISession properties
   uuid: string;
   user: IUser;
   email: string;

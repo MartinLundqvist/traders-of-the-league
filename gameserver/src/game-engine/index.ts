@@ -8,7 +8,7 @@ import {
   TCargo,
 } from '../../../shared/types';
 import { createNewContracts } from './createNewContracts';
-import { moveIsAllowed } from './moveIsAllowed';
+import { getHexesWithinRangeOf } from './getHexesWithinRangeOf';
 import { pickContractByRegion } from './pickContractByRegion';
 import {
   BOARD,
@@ -40,6 +40,7 @@ const createGame = (gameName: string, gameUuid: string): IGame => {
         movesLeft: 2,
         movesAvailable: ['load', 'sail', 'trade'],
         achievementsEarned: [],
+        hexesWithinRange: [],
       },
       round: 0,
       status: 'waiting',
@@ -56,6 +57,10 @@ const start = (game: IGame, firstPlayerUuid: string) => {
   game.state.round = 1;
   game.numberOfCitiesToEmpty = numberOfCitiesToEmpty[game.players.length];
   game.startTime = new Date().getTime();
+  game.state.currentRound.hexesWithinRange = getHexesWithinRangeOf({
+    row: 6,
+    column: 5,
+  }); // Lübeck
 
   dealContracts(game);
   dealAchievements(game);
@@ -166,6 +171,9 @@ const nextPlayer = (game: IGame) => {
   game.state.currentRound.playerUuid = game.players[nextPlayerIndex].user.uuid;
   game.state.currentRound.movesLeft = MAX_MOVES;
   game.state.currentRound.movesAvailable = ['load', 'sail', 'trade'];
+  game.state.currentRound.hexesWithinRange = getHexesWithinRangeOf(
+    game.players[nextPlayerIndex].position
+  );
 
   // Increment round counter
   game.state.round += 1;
@@ -220,10 +228,13 @@ const sailCurrentPlayerTo = (
     return false;
   }
 
-  const currentPosition = currentPlayer.position;
+  // const currentPosition = currentPlayer.position;
 
   // First check whether this is a valid move
-  let valid = moveIsAllowed(currentPosition, position);
+  let valid = game.state.currentRound.hexesWithinRange.find(
+    (hexInRange) =>
+      hexInRange.row === position.row && hexInRange.column === position.column
+  );
 
   if (!valid) {
     console.log('Not a valid move');

@@ -1,7 +1,5 @@
-import { IBoardHexagon, IPlayer, TBoard } from '../../../shared/types';
-// import { BOARD } from '../../../shared/constants';
+import { IBoardHexagon, IBoardPosition, TBoard } from '../../../shared/types';
 import { cityLayoutProperties } from './cityLayoutProperties';
-import { allowedMoves } from './moveIsAllowed';
 
 interface IBoardLayoutElement extends IBoardHexagon {
   north?: boolean;
@@ -15,19 +13,17 @@ export type TBoardLayout = IBoardLayoutElement[];
 
 export const createBoardLayout = (
   board: TBoard,
-  myPlayer: IPlayer,
-  canSail: boolean
+  canSail: boolean,
+  hexesWithinRange: IBoardPosition[]
 ): TBoardLayout => {
   const boardLayout: IBoardLayoutElement[] = [];
-
-  const hexesToHighlight = allowedMoves(3, myPlayer.position, board);
 
   board.forEach((hexagon) => {
     let layoutElement: IBoardLayoutElement = hexagon;
 
     if (layoutElement.city) assignCityProperties(layoutElement);
 
-    const findHex = hexesToHighlight.find(
+    const findHex = hexesWithinRange.find(
       (htl) => htl.column === hexagon.column && htl.row === hexagon.row
     );
 

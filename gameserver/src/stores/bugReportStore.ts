@@ -4,17 +4,33 @@ import { Model } from 'mongoose';
 
 export class BugReportStore {
   private debug: boolean;
+  private inMemory: boolean;
   private bugReportModel: Model<IBugReport>;
+  private bugReports?: Map<string, IBugReport>;
 
-  constructor(debug: boolean = false, bugReportModel: Model<IBugReport>) {
-    // this.chats = new Map();
-    this.debug = debug;
+  constructor(
+    bugReportModel: Model<IBugReport>,
+    options: { debug: boolean; inMemory: boolean } = {
+      debug: false,
+      inMemory: false,
+    }
+  ) {
+    this.debug = options.debug;
+    this.inMemory = options.inMemory;
+
+    this.inMemory && (this.bugReports = new Map());
     this.bugReportModel = bugReportModel;
   }
 
   public async saveBugReport(report: IBugReport) {
-    // this.chats.set(chat.gameUuid, chat);
+    console.log('Saving bug report!');
+
     this.debug && this.saveToFile(report);
+
+    if (this.inMemory) {
+      this.bugReports?.set(report.date.toString(), report);
+      return;
+    }
 
     try {
       await this.bugReportModel.create(report);
@@ -26,6 +42,10 @@ export class BugReportStore {
 
   public async getBugReports(): Promise<IBugReport[]> {
     let results: IBugReport[] = [];
+
+    if (this.inMemory) {
+      return Array.from(this.bugReports?.values() || []);
+    }
 
     try {
       results = await this.bugReportModel.find().exec();

@@ -3,21 +3,34 @@ import fs from 'fs';
 import { Model } from 'mongoose';
 
 export class GameStore {
-  // private games: Map<string, IGame>;
   private debug: boolean;
+  private inMemory: boolean;
   private gameModel: Model<IGame>;
+  private games?: Map<string, IGame>;
 
-  constructor(debug: boolean = false, gameModel: Model<IGame>) {
+  constructor(
+    gameModel: Model<IGame>,
+    options: { debug: boolean; inMemory: boolean } = {
+      debug: false,
+      inMemory: false,
+    }
+  ) {
     // this.games = new Map();
-    this.debug = debug;
+    this.debug = options.debug;
+    this.inMemory = options.inMemory;
+
+    this.inMemory && (this.games = new Map());
     this.gameModel = gameModel;
   }
 
   public async saveGame(game: IGame) {
-    // this.games.set(game.uuid, game);
     this.debug && this.saveToFile(game);
 
-    // console.log(this.gameModel.db);
+    if (this.inMemory) {
+      this.games?.set(game.uuid, game);
+      return;
+    }
+
     try {
       await this.gameModel
         .replaceOne({ uuid: game.uuid }, game, { upsert: true })
@@ -29,17 +42,23 @@ export class GameStore {
   }
 
   public async getGame(gameUuid: string): Promise<IGame | null> {
+    if (this.inMemory) {
+      return this.games?.get(gameUuid) || null;
+    }
+
     const foundGame: IGame | null = await this.gameModel
       .findOne({ uuid: gameUuid }, null, {})
       .exec();
 
     return foundGame;
-
-    // return this.games.get(gameUuid);
   }
 
   public async getGames(): Promise<IGame[]> {
     let results: IGame[] = [];
+
+    if (this.inMemory) {
+      return Array.from(this.games?.values() || []);
+    }
 
     try {
       results = await this.gameModel.find().exec();

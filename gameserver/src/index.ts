@@ -13,20 +13,33 @@ import { ChatStore } from './stores/chatStore';
 import { closeDBConnection, connectToDB } from './database';
 import { gameModel, sessionModel, chatModel, bugReportModel } from './models';
 
-// Persist whether we are in development mode or not
+// Persist whether we are in development mode or not, and whether we are starting up only an in-memory version
 const DEVELOPMENT = process.env.NODE_ENV === 'production' ? false : true;
+const IN_MEMORY = process.env.IN_MEMORY === 'true' ? true : false;
 
 console.log(
-  `Game server initializing in ${
-    DEVELOPMENT ? 'development' : 'production'
-  } mode.`
+  `Game server initializing in ${DEVELOPMENT ? 'development' : 'production'} ${
+    IN_MEMORY ? 'and in_memory ' : ''
+  }mode.`
 );
 
 // Create the global stores
-const gameStore = new GameStore(DEVELOPMENT, gameModel);
-const sessionStore = new SessionStore(DEVELOPMENT, sessionModel);
-const chatStore = new ChatStore(DEVELOPMENT, chatModel);
-const bugReportStore = new BugReportStore(DEVELOPMENT, bugReportModel);
+const gameStore = new GameStore(gameModel, {
+  debug: DEVELOPMENT,
+  inMemory: IN_MEMORY,
+});
+const sessionStore = new SessionStore(sessionModel, {
+  debug: DEVELOPMENT,
+  inMemory: IN_MEMORY,
+});
+const chatStore = new ChatStore(chatModel, {
+  debug: DEVELOPMENT,
+  inMemory: IN_MEMORY,
+});
+const bugReportStore = new BugReportStore(bugReportModel, {
+  debug: DEVELOPMENT,
+  inMemory: IN_MEMORY,
+});
 
 // Wire up the express server
 const app = express();
@@ -94,8 +107,6 @@ app.get('/gameresults/:gameUuid', async (req, res) => {
 
 // This route posts a bugreport
 app.post('/postbugreport', async (req, res) => {
-  console.log(req.body);
-
   try {
     await bugReportStore.saveBugReport(req.body);
   } catch (err) {
@@ -105,6 +116,13 @@ app.post('/postbugreport', async (req, res) => {
   }
 
   res.status(200).send({ message: 'Report posted' });
+});
+
+// This route gets all bugreports
+app.get('/bugreports', async (req, res) => {
+  const reports = await bugReportStore.getBugReports();
+
+  res.status(200).send(reports);
 });
 
 // This is merely for health checks. Probably don't even need the express package for this app hmm....
@@ -132,8 +150,10 @@ httpServer.listen(PORT, async () => {
   console.log('Current working directory is ' + process.cwd());
 
   try {
-    await connectToDB();
-    console.log('Connected to database');
+    if (!IN_MEMORY) {
+      await connectToDB();
+      console.log('Connected to database');
+    }
 
     // Add a mock game to the gameStore which we can use for testing purposes
     if (DEVELOPMENT) {
@@ -153,13 +173,13 @@ httpServer.listen(PORT, async () => {
 process.on('SIGINT', async () => {
   console.log('SIGINT received, closing down server.');
   httpServer.close();
-  await closeDBConnection();
+  if (!IN_MEMORY) await closeDBConnection();
   process.exit(0);
 });
 
 process.on('SIGTERM', async () => {
   console.log('SIGTERM received, closing down server.');
   httpServer.close();
-  await closeDBConnection();
+  if (!IN_MEMORY) await closeDBConnection();
   process.exit(0);
 });

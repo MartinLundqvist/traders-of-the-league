@@ -1,4 +1,5 @@
 import { IChat, IGame, ISession } from '../../../shared/types';
+import { getHexesWithinRangeOf } from './getHexesWithinRangeOf';
 
 export const MOCK_GAME: IGame = {
   name: 'lyndens game',
@@ -527,6 +528,7 @@ export const MOCK_GAME: IGame = {
       movesLeft: 1,
       movesAvailable: ['sail', 'load'],
       achievementsEarned: [],
+      hexesWithinRange: getHexesWithinRangeOf({ column: 6, row: 7 }),
     },
     round: 100,
     status: 'playing',

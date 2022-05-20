@@ -64,7 +64,13 @@ export const LayoutProvider = ({
 
   useEffect(() => {
     if (game && myPlayer)
-      setBoardLayout(createBoardLayout(game.board, myPlayer, canSail));
+      setBoardLayout(
+        createBoardLayout(
+          game.board,
+          canSail,
+          game.state.currentRound.hexesWithinRange
+        )
+      );
   }, [game, myPlayer, canSail]);
 
   // This hook manages the UI states programmatically based on the status of the GameServer session

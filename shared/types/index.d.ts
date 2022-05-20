@@ -119,6 +119,8 @@ export interface IGameState {
     movesLeft: number;
     // Cannot repeat moves, so we need to record them
     movesAvailable: TMoves[];
+    // We want to allow user to see which hexes they can currently reach
+    hexesWithinRange: IBoardPosition[];
     // After the moves have been done, achievements are to be picked
     achievementsEarned: IAchievement[];
   };

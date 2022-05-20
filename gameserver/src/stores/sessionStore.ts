@@ -4,10 +4,21 @@ import { Model } from 'mongoose';
 
 export class SessionStore {
   private debug: boolean;
+  private inMemory: boolean;
   private sessionModel: Model<ISession>;
+  private sessions?: Map<string, ISession>;
 
-  constructor(debug: boolean = false, sessionModel: Model<ISession>) {
-    this.debug = debug;
+  constructor(
+    sessionModel: Model<ISession>,
+    options: { debug: boolean; inMemory: boolean } = {
+      debug: false,
+      inMemory: false,
+    }
+  ) {
+    this.debug = options.debug;
+    this.inMemory = options.inMemory;
+
+    this.inMemory && (this.sessions = new Map());
     this.sessionModel = sessionModel;
   }
 
@@ -15,6 +26,11 @@ export class SessionStore {
     console.log('Saving session!');
 
     this.debug && this.saveToFile(session);
+
+    if (this.inMemory) {
+      this.sessions?.set(session.email, session);
+      return;
+    }
 
     try {
       await this.sessionModel
@@ -27,6 +43,10 @@ export class SessionStore {
   }
 
   public async getSession(email: string): Promise<ISession | null> {
+    if (this.inMemory) {
+      return this.sessions?.get(email) || null;
+    }
+
     const foundSession: ISession | null = await this.sessionModel
       .findOne({ email: email }, null, {})
       .exec();
@@ -36,6 +56,10 @@ export class SessionStore {
 
   public async getSessions(): Promise<ISession[]> {
     let results: ISession[] = [];
+
+    if (this.inMemory) {
+      return Array.from(this.sessions?.values() || []);
+    }
 
     try {
       results = await this.sessionModel.find().exec();

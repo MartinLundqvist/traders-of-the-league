@@ -3,19 +3,33 @@ import fs from 'fs';
 import { Model } from 'mongoose';
 
 export class ChatStore {
-  // private chats: Map<string, IChat>;
   private debug: boolean;
+  private inMemory: boolean;
   private chatModel: Model<IChat>;
+  private chats?: Map<string, IChat>;
 
-  constructor(debug: boolean = false, chatModel: Model<IChat>) {
+  constructor(
+    chatModel: Model<IChat>,
+    options: { debug: boolean; inMemory: boolean } = {
+      debug: false,
+      inMemory: false,
+    }
+  ) {
     // this.chats = new Map();
-    this.debug = debug;
+    this.debug = options.debug;
+    this.inMemory = options.inMemory;
+
+    this.inMemory && (this.chats = new Map());
     this.chatModel = chatModel;
   }
 
   public async saveChat(chat: IChat) {
-    // this.chats.set(chat.gameUuid, chat);
     this.debug && this.saveToFile(chat);
+
+    if (this.inMemory) {
+      this.chats?.set(chat.gameUuid, chat);
+      return;
+    }
 
     try {
       await this.chatModel
@@ -28,16 +42,23 @@ export class ChatStore {
   }
 
   public async getChat(gameUuid: string): Promise<IChat | null> {
+    if (this.inMemory) {
+      return this.chats?.get(gameUuid) || null;
+    }
+
     const foundChat: IChat | null = await this.chatModel
       .findOne({ gameUuid: gameUuid }, null, {})
       .exec();
 
     return foundChat;
-    // return this.chats.get(gameUuid);
   }
 
   public async getChats(): Promise<IChat[]> {
     let results: IChat[] = [];
+
+    if (this.inMemory) {
+      return Array.from(this.chats?.values() || []);
+    }
 
     try {
       results = await this.chatModel.find().exec();

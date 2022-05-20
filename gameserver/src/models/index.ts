@@ -74,6 +74,12 @@ const gameSchema = new mongoose.Schema<IGame>({
       playerUuid: String,
       movesLeft: Number,
       movesAvailable: [String],
+      hexesWithinRange: [
+        {
+          row: Number,
+          column: Number,
+        },
+      ],
       achievementsEarned: [
         {
           name: String,
