@@ -25,19 +25,19 @@ console.log(
 
 // Create the global stores
 const gameStore = new GameStore(gameModel, {
-  debug: DEVELOPMENT,
+  debug: false,
   inMemory: IN_MEMORY,
 });
 const sessionStore = new SessionStore(sessionModel, {
-  debug: DEVELOPMENT,
+  debug: false,
   inMemory: IN_MEMORY,
 });
 const chatStore = new ChatStore(chatModel, {
-  debug: DEVELOPMENT,
+  debug: false,
   inMemory: IN_MEMORY,
 });
 const bugReportStore = new BugReportStore(bugReportModel, {
-  debug: DEVELOPMENT,
+  debug: false,
   inMemory: IN_MEMORY,
 });
 
