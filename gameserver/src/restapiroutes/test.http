@@ -1,0 +1,127 @@
+POST http://localhost:4000/gameapi/createSession HTTP/1.1
+content-type: application/json
+
+{
+    "name": "playerOne",
+    "email": "playerOne"
+}
+
+###
+
+POST http://localhost:4000/gameapi/createSession HTTP/1.1
+content-type: application/json
+
+{
+    "name": "playerTwo",
+    "email": "playerTwo"
+}
+
+
+###
+
+POST http://localhost:4000/gameapi/createAndJoinNewGame 
+content-type: application/json
+
+{
+    "gameName": "name of game",
+    "user": {
+    "name": "playerOne",
+    "uuid": "mT-0QWhGBOycapscqFKTr",
+    "connected": true
+    }
+}
+
+###
+
+POST http://localhost:4000/gameapi/joinGame 
+content-type: application/json
+
+{
+    "gameUuid": "JG7OAlGtOIJnnIY4eMZFB",
+    "user": {
+    "name": "playerTwo",
+    "uuid": "yGtJO1skPGOzQpqmAHvqp",
+    "connected": true
+    }
+}
+
+###
+
+POST http://localhost:4000/gameapi/startGame 
+content-type: application/json
+
+{
+    "gameUuid": "JG7OAlGtOIJnnIY4eMZFB",
+    "user": {
+    "name": "playerOne",
+    "uuid": "mT-0QWhGBOycapscqFKTr",
+    "connected": true
+    }
+}
+
+###
+GET http://localhost:4000/gameapi/getgame/dDV7I0PZkSX1SdDCILTkA
+
+
+###
+
+POST http://localhost:4000/gameapi/playing/ditchCargo
+content-type: application/json
+
+{
+    "gameUuid": "JG7OAlGtOIJnnIY4eMZFB",
+    "cargo": ["yellow"]
+}
+
+
+###
+
+POST http://localhost:4000/gameapi/playing/loadCargo
+content-type: application/json
+
+{
+    "gameUuid": "JG7OAlGtOIJnnIY4eMZFB",
+    "cargo": ["yellow", "yellow"]
+
+}
+
+###
+
+POST http://localhost:4000/gameapi/playing/makeTrades
+content-type: application/json
+
+{
+    "gameUuid": "JG7OAlGtOIJnnIY4eMZFB",
+    "contracts": []
+}
+
+###
+
+POST http://localhost:4000/gameapi/playing/pickAchievement
+content-type: application/json
+
+{
+    "gameUuid": "JG7OAlGtOIJnnIY4eMZFB",
+    "achievement": {}
+
+}
+
+###
+
+POST http://localhost:4000/gameapi/playing/sailTo
+content-type: application/json
+
+{
+    "gameUuid": "JG7OAlGtOIJnnIY4eMZFB",
+    "position": { "row": 1, "column": 2}
+
+}
+
+###
+
+POST http://localhost:4000/gameapi/playing/endRound
+content-type: application/json
+
+{
+    "gameUuid": "JG7OAlGtOIJnnIY4eMZFB"
+}

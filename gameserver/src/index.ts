@@ -12,6 +12,7 @@ import { MOCK_CHAT, MOCK_GAME, MOCK_SESSIONS } from './game-engine/mockData';
 import { ChatStore } from './stores/chatStore';
 import { closeDBConnection, connectToDB } from './database';
 import { gameModel, sessionModel, chatModel, bugReportModel } from './models';
+import { createRestAPIRoutes } from './restapiroutes';
 
 // Persist whether we are in development mode or not, and whether we are starting up only an in-memory version
 const DEVELOPMENT = process.env.NODE_ENV === 'production' ? false : true;
@@ -129,6 +130,10 @@ app.get('/bugreports', async (req, res) => {
 app.get('/', (req, res) => {
   res.status(200).send({ message: 'Ok' });
 });
+
+// Configure and wire up rest API for the game server in case we are in AI mode.
+if (IN_MEMORY)
+  app.use('/gameapi', createRestAPIRoutes(sessionStore, gameStore));
 
 // Set up the HTTP Server and connect it to the express app
 const httpServer = createServer(app);
