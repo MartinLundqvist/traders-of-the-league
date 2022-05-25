@@ -1,7 +1,7 @@
 import { IBoardHexagon, IBoardPosition, TBoard } from '../../../shared/types';
 import { cityLayoutProperties } from './cityLayoutProperties';
 
-interface IBoardLayoutElement extends IBoardHexagon {
+export interface IBoardLayoutElement extends IBoardHexagon {
   north?: boolean;
   west?: boolean;
   center?: boolean;

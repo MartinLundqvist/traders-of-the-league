@@ -39,6 +39,7 @@ export interface IContract {
   cargo: TCargo[];
   region: TRegion;
   uuid: string;
+  _id?: string;
 }
 
 export interface IEmptiedCity {
@@ -67,6 +68,7 @@ export type TAchievement =
 export interface IAchievement {
   name: TAchievement;
   value: TVictoryPoint;
+  _id?: string;
 }
 
 export interface ICity {
@@ -75,11 +77,13 @@ export interface ICity {
   contracts: IContract[];
   coatOfArms: TCoatOfArms;
   region: TRegion;
+  _id?: string;
 }
 
 export interface IBoardPosition {
   column: number;
   row: number;
+  _id?: string;
 }
 
 export interface IBoardHexagon extends IBoardPosition {
@@ -98,6 +102,7 @@ export interface IPlayer {
   victoryPoints: number;
   cargo: TCargo[];
   hasMadeEndGameMove: boolean;
+  _id?: string;
 }
 
 export type TGameStatus =
@@ -137,6 +142,8 @@ export interface IGame {
   achievements: IAchievement[];
   startTime: number; // In Epoch ms
   endTime: number; // In Epoch ms
+  _id?: string;
+  __v?: number;
 }
 
 export interface IUser {

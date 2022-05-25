@@ -6,6 +6,7 @@ export class ChatStore {
   private debug: boolean;
   private inMemory: boolean;
   private chatModel: Model<IChat>;
+  private date: Date;
   private chats?: Map<string, IChat>;
 
   constructor(
@@ -18,6 +19,7 @@ export class ChatStore {
     // this.chats = new Map();
     this.debug = options.debug;
     this.inMemory = options.inMemory;
+    this.date = new Date();
 
     this.inMemory && (this.chats = new Map());
     this.chatModel = chatModel;
@@ -73,7 +75,7 @@ export class ChatStore {
 
   private saveToFile(chat: IChat) {
     const data = JSON.stringify(chat);
-    fs.writeFile(`./saves/chat_${chat.gameUuid}.json`, data, () => {
+    fs.writeFile(`./saves/${this.date.toISOString()}_chat.json`, data, () => {
       console.log('Game saved to file');
     });
   }

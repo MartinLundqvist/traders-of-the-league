@@ -29,6 +29,7 @@ import {
   TSocketConnection,
   TSocketError,
 } from '../../../shared/types';
+import { IBoardLayoutElement } from '../utils/createBoardLayout';
 import { useNotifications } from './NotificationsProvider';
 
 export type ChatSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
@@ -488,8 +489,8 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     socketRef.current?.emit('endRound');
   };
 
-  const sailTo = (position: IBoardPosition) => {
-    console.log('Sailing to ' + JSON.stringify(position));
+  const sailTo = (hex: IBoardLayoutElement) => {
+    console.log('Sailing to ' + JSON.stringify(hex));
 
     if (!canSail) {
       window.alert(
@@ -498,11 +499,25 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
       return;
     }
 
-    socketRef.current?.emit('sailTo', position, (valid) => {
-      if (!valid) {
-        window.alert('Not a valid move! Try again.');
+    // Safeguard, in case the user really didn't intend to sail into the open sea...
+    if (!hex.city) {
+      if (
+        !window.confirm(
+          'Are you sure you want to sail there? Your destination has no city.'
+        )
+      )
+        return;
+    }
+
+    socketRef.current?.emit(
+      'sailTo',
+      { column: hex.column, row: hex.row },
+      (valid) => {
+        if (!valid) {
+          window.alert('Not a valid move! Try again.');
+        }
       }
-    });
+    );
   };
 
   const loadCargo = (cargo: TCargo[]) => {

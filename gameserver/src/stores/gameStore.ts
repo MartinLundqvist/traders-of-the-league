@@ -6,6 +6,7 @@ export class GameStore {
   private debug: boolean;
   private inMemory: boolean;
   private gameModel: Model<IGame>;
+  private date: Date;
   private games?: Map<string, IGame>;
 
   constructor(
@@ -18,6 +19,7 @@ export class GameStore {
     // this.games = new Map();
     this.debug = options.debug;
     this.inMemory = options.inMemory;
+    this.date = new Date();
 
     this.inMemory && (this.games = new Map());
     this.gameModel = gameModel;
@@ -73,7 +75,7 @@ export class GameStore {
 
   private saveToFile(game: IGame) {
     const data = JSON.stringify(game);
-    fs.writeFile(`./saves/game_${game.uuid}.json`, data, () => {
+    fs.writeFile(`./saves/${this.date.toISOString()}_game.json`, data, () => {
       console.log('Game saved to file');
     });
   }

@@ -6,6 +6,7 @@ export class BugReportStore {
   private debug: boolean;
   private inMemory: boolean;
   private bugReportModel: Model<IBugReport>;
+  private date: Date;
   private bugReports?: Map<string, IBugReport>;
 
   constructor(
@@ -17,6 +18,7 @@ export class BugReportStore {
   ) {
     this.debug = options.debug;
     this.inMemory = options.inMemory;
+    this.date = new Date();
 
     this.inMemory && (this.bugReports = new Map());
     this.bugReportModel = bugReportModel;
@@ -60,8 +62,12 @@ export class BugReportStore {
 
   private saveToFile(report: IBugReport) {
     const data = JSON.stringify(report);
-    fs.writeFile(`./saves/bugReport_${report.date}.json`, data, () => {
-      console.log('Report saved to file');
-    });
+    fs.writeFile(
+      `./saves/${this.date.toISOString()}_bugReport.json`,
+      data,
+      () => {
+        console.log('Report saved to file');
+      }
+    );
   }
 }

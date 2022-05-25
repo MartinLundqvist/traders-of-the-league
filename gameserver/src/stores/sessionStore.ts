@@ -6,6 +6,7 @@ export class SessionStore {
   private debug: boolean;
   private inMemory: boolean;
   private sessionModel: Model<ISession>;
+  private date: Date;
   private sessions?: Map<string, ISession>;
 
   constructor(
@@ -17,6 +18,7 @@ export class SessionStore {
   ) {
     this.debug = options.debug;
     this.inMemory = options.inMemory;
+    this.date = new Date();
 
     this.inMemory && (this.sessions = new Map());
     this.sessionModel = sessionModel;
@@ -74,8 +76,12 @@ export class SessionStore {
 
   private saveToFile(session: ISession) {
     const data = JSON.stringify(session);
-    fs.writeFile(`./saves/session_${session.uuid}.json`, data, () => {
-      console.log('Session saved to file');
-    });
+    fs.writeFile(
+      `./saves/${this.date.toISOString()}_${session.email}_session.json`,
+      data,
+      () => {
+        console.log('Session saved to file');
+      }
+    );
   }
 }
