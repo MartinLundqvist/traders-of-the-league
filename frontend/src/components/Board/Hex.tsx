@@ -86,12 +86,12 @@ const Polygon = styled.polygon`
   stroke-miterlimit: 10;
 
   &.highlight {
-    animation: stroke 1000ms infinite;
-    /* stroke: var(--color-hex-highlight); */
+    /* animation: stroke 1000ms infinite; */
+    stroke: var(--color-hex-highlight);
     /* stroke: white; */
   }
 
-  @keyframes stroke {
+  /* @keyframes stroke {
     0% {
       stroke: var(--color-hex);
       stroke-width: 10;
@@ -103,7 +103,7 @@ const Polygon = styled.polygon`
     100% {
       stroke: var(--color-hex);
       stroke-width: 10;
-    }
+    } */
   }
 
   // This is where we want the pointer events to happen!
