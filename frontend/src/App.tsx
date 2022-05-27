@@ -1,5 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import styled from 'styled-components';
+import Achievements from './components/Achievements';
 import Chat from './components/Chat';
 import Footer from './components/Footer';
 import Header from './components/Header';
@@ -9,6 +10,7 @@ import { useLayout } from './contexts/LayoutProvider';
 import Europe from './elements/Europe';
 import { routes, actionRoutes } from './routes';
 import { FOOTER, HEADER, MARGIN } from './utils/layoutGeometry';
+// import { useAuthDev } from './utils/useAuthDev';
 
 const Wrapper = styled.div`
   display: grid;
@@ -38,11 +40,15 @@ const Wrapper = styled.div`
   .grid-area--margin-left {
     grid-area: margin-left;
   }
+  .grid-area--margin-right {
+    grid-area: margin-right;
+  }
 `;
 
 const App = (): JSX.Element => {
   const { activeRoute, activeActionRoute } = useLayout();
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, user } = useAuth0();
+  // const { isAuthenticated } = useAuthDev();
 
   if (!isAuthenticated) return <Login className='grid-area--all' />;
 
@@ -54,6 +60,7 @@ const App = (): JSX.Element => {
       {actionRoutes[activeActionRoute]}
       <Footer className='grid-area--footer' />
       <Chat className='grid-area--margin-left' />
+      <Achievements className='grid-area--margin-right' />
       <Notifications className='grid-area--game' />
     </Wrapper>
   );

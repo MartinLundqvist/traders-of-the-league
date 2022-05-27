@@ -9,7 +9,6 @@ import {
 } from '../../utils/boardGeometry';
 import { useLayout } from '../../contexts/LayoutProvider';
 import { useGameServer } from '../../contexts/GameServerProvider';
-import Achievements from './Achievements';
 import Clock from './Clock';
 import Yield from './Yield';
 
@@ -71,7 +70,6 @@ const Board = ({ className }: IBoardProps): JSX.Element => {
         <Ships />
       </div>
 
-      <Achievements />
       <Clock />
       <Yield />
     </Wrapper>
