@@ -34,15 +34,9 @@ const Achievements = ({ className }: IAchievementsProps): JSX.Element => {
   return (
     <Wrapper className={className}>
       <div className='container'>
-        {/* {achievements.map((achievement) => (
+        {achievements.map((achievement) => (
           <Achievement key={achievement.name} achievement={achievement} />
-        ))} */}
-        <Achievement key={achievements[0].name} achievement={achievements[0]} />
-        <Achievement key={achievements[0].name} achievement={achievements[0]} />
-        <Achievement key={achievements[0].name} achievement={achievements[0]} />
-        <Achievement key={achievements[0].name} achievement={achievements[0]} />
-        <Achievement key={achievements[0].name} achievement={achievements[0]} />
-        <Achievement key={achievements[0].name} achievement={achievements[0]} />
+        ))}
       </div>
     </Wrapper>
   );

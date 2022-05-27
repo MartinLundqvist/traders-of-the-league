@@ -84,7 +84,7 @@ const Wrapper = styled.div<IWrapperProps>`
 
     .container {
       display: grid;
-      grid-template-columns: 1fr 3fr;
+      grid-template-columns: minmax(auto, max-content) minmax(auto, max-content);
       grid-template-rows: 1fr 1fr;
       grid-template-areas: 'captain name' 'cargo goods';
       gap: 0.5rem;
@@ -95,6 +95,7 @@ const Wrapper = styled.div<IWrapperProps>`
 
       .name {
         grid-area: name;
+        white-space: nowrap;
       }
 
       .cargo {
