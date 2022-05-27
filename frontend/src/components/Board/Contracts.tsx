@@ -14,7 +14,7 @@ const Wrapper = styled.div<IWrapperProps>`
   ${(props) => props.north && 'top: -32px'};
   ${(props) => props.west && 'right: 0px'};
   ${(props) => props.center && 'left: 16px'};
-  ${(props) => props.farEast && 'left: -55px'};
+  ${(props) => props.farEast && 'left: -70px'};
   ${(props) => props.farEast && 'top: 0px'};
   pointer-events: auto;
 
