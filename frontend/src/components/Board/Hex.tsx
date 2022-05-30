@@ -103,8 +103,8 @@ const Polygon = styled.polygon`
     100% {
       stroke: var(--color-hex);
       stroke-width: 10;
-    } */
-  }
+    } 
+  } */
 
   // This is where we want the pointer events to happen!
   pointer-events: auto;
