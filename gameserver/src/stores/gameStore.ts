@@ -1,4 +1,4 @@
-import { IGame } from '../../../shared/types';
+import { IActiveGame, IGame } from '../../../shared/types';
 import fs from 'fs';
 import { Model } from 'mongoose';
 
@@ -66,6 +66,47 @@ export class GameStore {
       results = await this.gameModel.find().exec();
     } catch (err) {
       console.log('Error while fetching all games from mongo');
+      console.log(JSON.stringify(err));
+      results = [];
+    }
+
+    return results;
+  }
+
+  public async getActiveGames(): Promise<IActiveGame[]> {
+    let results: IActiveGame[] = [];
+
+    if (this.inMemory) {
+      const tempResults = Array.from(this.games?.values() || []);
+
+      if (tempResults.length === 0) {
+        return [];
+      }
+
+      const filteredTempResults = tempResults.filter((game) => {
+        game.state.status === 'waiting';
+      });
+
+      if (filteredTempResults.length === 0) return [];
+
+      results = filteredTempResults.map((foundGame) => {
+        return {
+          name: foundGame.name,
+          uuid: foundGame.uuid,
+          players: foundGame.players,
+        };
+      });
+
+      return results;
+    }
+
+    try {
+      results = await this.gameModel
+        .find({ 'state.status': 'waiting' }, 'name uuid players')
+        .exec();
+      // console.log(results);
+    } catch (err) {
+      console.log('Error while fetching game information from mongo');
       console.log(JSON.stringify(err));
       results = [];
     }

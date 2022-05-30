@@ -197,3 +197,9 @@ export interface IBugReport {
   };
   game: IGame;
 }
+
+export interface IActiveGame {
+  name: string;
+  uuid: string;
+  players: IPlayer[];
+}

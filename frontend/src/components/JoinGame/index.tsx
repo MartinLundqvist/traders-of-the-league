@@ -1,18 +1,27 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { IActiveGame } from '../../../../shared/types';
 import { useGameServer } from '../../contexts/GameServerProvider';
-import { Title, Input, Button } from '../../elements/Typography';
+import { Title, Input, Button, TitleSmall } from '../../elements/Typography';
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
 
   .container {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
+    li {
+      list-style: none;
+      font-size: 2rem;
+      transition: all 200ms ease-in-out;
+
+      &:hover {
+        cursor: pointer;
+        transform: translate(-3px, -3px);
+        text-shadow: 5px 5px 3px hsla(57, 145%, 30%, 0.6);
+      }
+    }
   }
 `;
 
@@ -21,27 +30,54 @@ interface IJoinGameProps {
 }
 
 const JoinGame = ({ className }: IJoinGameProps): JSX.Element => {
-  const [gameUuid, setGameUuid] = useState('');
-  const { joinGame } = useGameServer();
+  // const [gameUuid, setGameUuid] = useState('');
+  const { joinGame, getActiveGames } = useGameServer();
+  const [activeGames, setActiveGames] = useState<IActiveGame[]>([]);
 
-  const handleKeyDown = (key: string) => {
-    if (key === 'Enter') {
-      joinGame(gameUuid);
+  useEffect(() => {
+    const loadData = async () => {
+      const games = await getActiveGames();
+      if (games.length > 0) {
+        setActiveGames(games);
+      }
+    };
+
+    loadData();
+
+    const interval = setInterval(() => {
+      loadData();
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleClick = (game: IActiveGame) => {
+    if (window.confirm(`Are you sure you want to join ${game.name}?`)) {
+      joinGame(game.uuid);
     }
   };
 
   return (
     <Wrapper className={className}>
+      <TitleSmall>List updates every 2 seconds</TitleSmall>
+      <Title>Click to join a game</Title>
       <div className='container'>
-        <Title>Paste the game ID</Title>
-        <Input
-          type='text'
-          value={gameUuid}
-          onChange={(e) => setGameUuid(e.target.value)}
-          onKeyDown={(e) => handleKeyDown(e.key)}
-          autoFocus
-        />
-        <Button onClick={() => joinGame(gameUuid)}>GO</Button>
+        <ul>
+          {activeGames.map((game) => (
+            <li
+              key={game.uuid}
+              className='link'
+              onClick={() => handleClick(game)}
+            >
+              {game.name +
+                ': ' +
+                game.players[0].user.name +
+                ', ' +
+                game.players.length +
+                ' player(s) waiting'}
+            </li>
+          ))}
+        </ul>
       </div>
     </Wrapper>
   );

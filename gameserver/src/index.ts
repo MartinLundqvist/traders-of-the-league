@@ -126,6 +126,13 @@ app.get('/bugreports', async (req, res) => {
   res.status(200).send(reports);
 });
 
+// This route gets all active games
+app.get('/activegames', async (req, res) => {
+  const games = await gameStore.getActiveGames();
+
+  res.status(200).send(games);
+});
+
 // This is merely for health checks. Probably don't even need the express package for this app hmm....
 app.get('/', (req, res) => {
   res.status(200).send({ message: 'Ok' });

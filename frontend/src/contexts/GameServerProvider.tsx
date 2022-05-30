@@ -12,6 +12,7 @@ import { Socket, io } from 'socket.io-client';
 import {
   ClientToServerEvents,
   IAchievement,
+  IActiveGame,
   IBoardPosition,
   IBugReport,
   IChat,
@@ -76,6 +77,7 @@ interface IGameServerContext {
   sendMessage: (message: IMessage) => void;
   sendBugReport: (bugReport: IBugReport) => void;
   startTime: number;
+  getActiveGames: () => Promise<IActiveGame[]>;
 }
 
 const initialContext: IGameServerContext = {
@@ -132,6 +134,7 @@ const initialContext: IGameServerContext = {
   sendMessage: () => {},
   sendBugReport: () => {},
   startTime: 0,
+  getActiveGames: () => new Promise((res, rej) => {}),
 };
 
 const GameServerContext = createContext<IGameServerContext>(initialContext);
@@ -671,6 +674,29 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     }
   };
 
+  const getActiveGames = async (): Promise<IActiveGame[]> => {
+    console.log('Fetching active games from server');
+
+    try {
+      const URL = import.meta.env.VITE_URL || '';
+
+      const response = await fetch(`${URL}/activegames`);
+
+      if (!response.ok) {
+        window.alert('Error fetching active games');
+        return [];
+      }
+
+      const results = await response.json();
+
+      return results;
+    } catch (e) {
+      window.alert('Error fetching active games');
+      console.log(e);
+      return [];
+    }
+  };
+
   return (
     <GameServerContext.Provider
       value={{
@@ -711,6 +737,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         sendMessage,
         sendBugReport,
         startTime,
+        getActiveGames,
       }}
     >
       {children}
