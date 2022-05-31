@@ -45,8 +45,17 @@ interface ILayoutProviderProps {
 export const LayoutProvider = ({
   children,
 }: ILayoutProviderProps): JSX.Element => {
-  const { session, game, canAchieve, isMyTurn, isEndGame, myPlayer, canSail } =
-    useGameServer();
+  const {
+    session,
+    game,
+    canAchieve,
+    isMyTurn,
+    isInCity,
+    isEndGame,
+    myPlayer,
+    canSail,
+    gameStatus,
+  } = useGameServer();
   const [shipLayout, setShipLayout] = useState<TShipLayout>(
     initialLayoutContext.shipLayout
   );
@@ -77,6 +86,7 @@ export const LayoutProvider = ({
   useEffect(() => {
     // If there is an active game running, we check what the status is and route accordingly
     if (game) {
+      // ActiveRoutes
       game.state.status === 'playing' && setActiveRoute('board');
       game.state.status === 'waiting' && setActiveRoute('board');
       game.state.status === 'won' && setActiveRoute('won');
@@ -93,7 +103,20 @@ export const LayoutProvider = ({
         session.uuid && setActiveRoute('start');
       }
     }
-  }, [session, game, canAchieve]);
+  }, [session, game]);
+
+  // This hook manages the active action routes
+  useEffect(() => {
+    // Only do these things if the game is active
+    if (gameStatus === 'playing' || gameStatus === 'endgame') {
+      // If I have achievements to pick, just send me to that screen.
+      if (canAchieve) setActiveActionRoute('achieve');
+
+      // If I do NOT have achievements to pick, and the game is still playing, but it is my turn, and I am at sea with no more sailing to do - it is time to end the round...
+      if (isMyTurn && !isInCity && !canSail && !canAchieve)
+        setActiveActionRoute('endround');
+    }
+  }, [isMyTurn, isInCity, canSail, canAchieve, gameStatus]);
 
   // This hook manages the board and ship layouts programmatically based on the status of the GameServer game
   useEffect(() => {

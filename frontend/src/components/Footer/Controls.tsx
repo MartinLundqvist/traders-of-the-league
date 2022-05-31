@@ -67,13 +67,6 @@ export const Controls = (): JSX.Element => {
             >
               End round
             </ButtonSmall>
-            <ButtonSmall
-              disabled={!canAchieve}
-              pulse={canAchieve}
-              onClick={() => setActiveActionRoute('achieve')}
-            >
-              Pick achievements
-            </ButtonSmall>
           </div>
         </>
       )}
