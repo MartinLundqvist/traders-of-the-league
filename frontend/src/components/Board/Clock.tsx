@@ -7,14 +7,27 @@ import { timeToString } from '../../utils/timeToString';
 const Wrapper = styled.div`
   position: absolute;
   display: grid;
-  grid-auto-flow: column;
+  grid-auto-flow: row;
   top: 0;
   left: 0;
   gap: 1rem;
+
+  .flashing {
+    animation: flash 1s alternate infinite;
+
+    @keyframes flash {
+      from {
+        transform: scale(0.9);
+      }
+      to {
+        transform: scale(1.1);
+      }
+    }
+  }
 `;
 
 const Clock = (): JSX.Element => {
-  const { startTime } = useGameServer();
+  const { startTime, isMyTurn } = useGameServer();
   const [timePlayed, setTimePlayed] = useState('00:00');
 
   useEffect(() => {
@@ -32,6 +45,7 @@ const Clock = (): JSX.Element => {
   return (
     <Wrapper>
       <Title>{timePlayed}</Title>
+      {isMyTurn && <Title className='flashing'>Your turn!</Title>}
     </Wrapper>
   );
 };
