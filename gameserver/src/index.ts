@@ -166,18 +166,18 @@ httpServer.listen(PORT, async () => {
       await connectToDB();
       console.log('Connected to database');
     }
-
-    // Add a mock game to the gameStore which we can use for testing purposes
-    if (DEVELOPMENT) {
-      console.log('Restoring mock game and session');
-      await gameStore.saveGame(MOCK_GAME);
-      await sessionStore.saveSession(MOCK_SESSIONS[0]);
-      await sessionStore.saveSession(MOCK_SESSIONS[1]);
-      await chatStore.saveChat(MOCK_CHAT);
-    }
   } catch (err) {
     console.log('Error connecting to database');
     console.log(err);
+  }
+
+  // Add a mock game to the gameStore which we can use for testing purposes
+  if (DEVELOPMENT) {
+    console.log('Restoring mock game and session');
+    await gameStore.saveGame(MOCK_GAME);
+    await sessionStore.saveSession(MOCK_SESSIONS[0]);
+    await sessionStore.saveSession(MOCK_SESSIONS[1]);
+    await chatStore.saveChat(MOCK_CHAT);
   }
 });
 
