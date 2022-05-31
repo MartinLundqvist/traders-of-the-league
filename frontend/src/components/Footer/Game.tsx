@@ -17,15 +17,9 @@ const Wrapper = styled.div`
 `;
 
 export const Game = (): JSX.Element => {
-  const { activeGameUuid, endGame, isMyGame } = useGameServer();
+  const { endGame, isMyGame } = useGameServer();
   const { setActiveActionRoute } = useLayout();
   const { logout } = useAuth0();
-
-  const copyToClipBoard = async () => {
-    if (!activeGameUuid) return;
-    await navigator.clipboard.writeText(activeGameUuid);
-    window.alert('Copied code ' + activeGameUuid + ' to clipboard.');
-  };
 
   const handleClickEndGame = () => {
     if (!window.confirm('Are you sure you want to end the game?')) return;
@@ -36,17 +30,14 @@ export const Game = (): JSX.Element => {
   return (
     <Wrapper>
       <div className='row'>
-        <ButtonSmall onClick={() => copyToClipBoard()}>
-          Invite players
-        </ButtonSmall>
         <ButtonSmall onClick={() => setActiveActionRoute('about')}>
           Learn to play
         </ButtonSmall>
-      </div>
-      <div className='row'>
         <ButtonSmall disabled={!isMyGame} onClick={() => handleClickEndGame()}>
           End game
         </ButtonSmall>
+      </div>
+      <div className='row'>
         <ButtonSmall
           onClick={() => logout({ returnTo: window.location.origin })}
         >
