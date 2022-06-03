@@ -55,6 +55,7 @@ export const LayoutProvider = ({
     myPlayer,
     canSail,
     gameStatus,
+    endRound,
   } = useGameServer();
   const [shipLayout, setShipLayout] = useState<TShipLayout>(
     initialLayoutContext.shipLayout
@@ -114,7 +115,7 @@ export const LayoutProvider = ({
 
       // If I do NOT have achievements to pick, and the game is still playing, but it is my turn, and I am at sea with no more sailing to do - it is time to end the round...
       if (isMyTurn && !isInCity && !canSail && !canAchieve)
-        setActiveActionRoute('endround');
+        endRound({ confirm: false });
     }
   }, [isMyTurn, isInCity, canSail, canAchieve, gameStatus]);
 

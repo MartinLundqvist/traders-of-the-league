@@ -30,6 +30,7 @@ import {
   TSocketConnection,
   TSocketError,
 } from '../../../shared/types';
+import { Stats } from '../elements/Typography';
 import { IBoardLayoutElement } from '../utils/createBoardLayout';
 // import { useAuthDev } from '../utils/useAuthDev';
 import { useNotifications } from './NotificationsProvider';
@@ -51,7 +52,7 @@ interface IGameServerContext {
   leaveGame: () => void;
   yieldGame: () => void;
   startGame: () => void;
-  endRound: () => void;
+  endRound: (options: { confirm: boolean }) => void;
   myPlayer: IPlayer | null;
   isMyTurn: boolean;
   isMyGame: boolean;
@@ -106,7 +107,7 @@ const initialContext: IGameServerContext = {
   leaveGame: () => {},
   yieldGame: () => {},
   startGame: () => {},
-  endRound: () => {},
+  endRound: (options) => {},
   isMyTurn: false,
   isMyGame: false,
   isEndGame: false,
@@ -487,10 +488,12 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     socketRef.current?.emit('startGame');
   };
 
-  const endRound = () => {
-    let confirmed = window.confirm('Are you sure you want to end your move?');
+  const endRound = (options: { confirm: boolean }) => {
+    if (options.confirm) {
+      let confirmed = window.confirm('Are you sure you want to end your move?');
 
-    if (!confirmed) return;
+      if (!confirmed) return;
+    }
 
     console.log('Ending move');
     socketRef.current?.emit('endRound');
@@ -508,9 +511,15 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
 
     // Safeguard, in case the user really didn't intend to sail into the open sea...
     if (!hex.city) {
+      // Plus if this is the first move, then we will end the round
+      let text = '';
+      if (game!.state.currentRound.movesLeft === 2)
+        text = 'This will end your round.';
+
       if (
         !window.confirm(
-          'Are you sure you want to sail there? Your destination has no city.'
+          'Are you sure you want to sail there? Your destination has no city. ' +
+            text
         )
       )
         return;

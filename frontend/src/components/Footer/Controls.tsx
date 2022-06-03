@@ -63,7 +63,7 @@ export const Controls = (): JSX.Element => {
           <div>
             <ButtonSmall
               disabled={!isMyTurn || canAchieve}
-              onClick={() => endRound()}
+              onClick={() => endRound({ confirm: true })}
             >
               End round
             </ButtonSmall>
