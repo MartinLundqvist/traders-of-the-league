@@ -90,6 +90,15 @@ app.get('/chats', async (req, res) => {
   res.status(200).send(results);
 });
 
+// This route gets the complete list of won games
+app.get('/wongames', async (req, res) => {
+  const games = await gameStore.getGames();
+
+  const results = games.filter((game) => game.state.status === 'won');
+
+  res.status(200).send(results);
+});
+
 // This route gets game results for a gameUuid
 app.get('/gameresults/:gameUuid', async (req, res) => {
   const gameUuid = req.params.gameUuid;

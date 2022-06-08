@@ -19,8 +19,16 @@ body {
   padding: 1rem;
   gap: 1rem;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 100px auto;
-  grid-template-areas: 'header header header' 'sessions games chats';
+  grid-template-rows: 100px 40px auto;
+  grid-template-areas: 'header header header' 'actions actions actions' 'sessions games chats';
+}
+
+.actions {
+  grid-area: actions;
+  display: flex;
+  justify-content: baseline;
+  align-items: baseline;
+  gap: 1rem;
 }
 
 .header {

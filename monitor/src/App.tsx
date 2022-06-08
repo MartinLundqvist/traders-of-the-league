@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface ISession {
   uuid: string;
@@ -23,6 +23,7 @@ const App = (): JSX.Element => {
   const [sessions, setSessions] = useState<ISession[]>([]);
   const [chats, setChats] = useState<IChat[]>([]);
   const [games, setGames] = useState<IGame[]>([]);
+  const linkref = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
     const getData = async () => {
@@ -50,16 +51,50 @@ const App = (): JSX.Element => {
     getData();
   }, []);
 
+  const handleDownloadClick = () => {
+    const download = async () => {
+      const url = import.meta.env.VITE_URL;
+
+      try {
+        const response = await fetch(`${url}/wongames`);
+        if (!response.ok) {
+          console.log('Error fetching won games');
+        }
+
+        const wonblob = await response.blob();
+        const bloburl = window.URL.createObjectURL(new Blob([wonblob]));
+
+        if (linkref && linkref.current) {
+          linkref.current.href = bloburl;
+          linkref.current.setAttribute('download', 'games.json');
+          linkref.current.click();
+        }
+
+        console.log(bloburl);
+      } catch (err) {
+        console.log('Error fetching data ' + JSON.stringify(err));
+      }
+    };
+
+    download();
+  };
+
   return (
     <div className='container'>
       <div className='header'>
         <h1>Traders of the Hanseatic League - game server monitor</h1>
       </div>
+      <div className='actions'>
+        <button onClick={() => handleDownloadClick()}>
+          Fetch Won Games Stats
+        </button>
+        <a ref={linkref}></a>
+      </div>
       <div className='sessions'>
         <h2>Sessions</h2>
         <ul>
-          {sessions.map((session) => (
-            <li key={session.uuid}>
+          {sessions.map((session, index) => (
+            <li key={session.uuid + index}>
               {session.user.name} (
               {session.user.connected ? 'connected' : 'not connected'})
             </li>
@@ -69,8 +104,8 @@ const App = (): JSX.Element => {
       <div className='games'>
         <h2>Games</h2>
         <ul>
-          {games.map((game) => (
-            <li key={game.uuid}>
+          {games.map((game, index) => (
+            <li key={game.uuid + index}>
               {game.name}: {game.status}
             </li>
           ))}
@@ -79,8 +114,8 @@ const App = (): JSX.Element => {
       <div className='chats'>
         <h2>Chats</h2>
         <ul>
-          {chats.map((chat) => (
-            <li key={chat.uuid}>
+          {chats.map((chat, index) => (
+            <li key={chat.uuid + index}>
               {games.find((game) => game.uuid === chat.uuid)?.name}:{' '}
               {chat.nrMessages} messages
             </li>
