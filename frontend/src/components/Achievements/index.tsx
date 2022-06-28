@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useGameServer } from '../../contexts/GameServerProvider';
-import { Achievement } from '../Achieve/elements/Achievement';
+// import { Achievement } from '../Achieve/elements/Achievement';
+import { AchievementWithPlayerStats } from '../Achieve/elements/AchievementWithPlayerStats';
 
 const Wrapper = styled.div`
   position: relative;
@@ -10,6 +11,7 @@ const Wrapper = styled.div`
 
   .container {
     position: absolute;
+
     display: grid;
     padding: 0 1rem 0 0;
     grid-template-columns: repeat(4, auto);
@@ -35,7 +37,10 @@ const Achievements = ({ className }: IAchievementsProps): JSX.Element => {
     <Wrapper className={className}>
       <div className='container'>
         {achievements.map((achievement) => (
-          <Achievement key={achievement.name} achievement={achievement} />
+          <AchievementWithPlayerStats
+            key={achievement.name}
+            achievement={achievement}
+          />
         ))}
       </div>
     </Wrapper>

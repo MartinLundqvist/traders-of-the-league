@@ -33,7 +33,7 @@ export const MerchantA = (): JSX.Element => {
   return (
     <Wrapper>
       <div className='row'>
-        <div>7</div>
+        <div>6</div>
         <div>x</div>
         <div className='contract'>1</div>
       </div>

@@ -75,7 +75,6 @@ export const Achievement = ({
   return (
     <Wrapper onClick={onClick || (() => {})}>
       {ACHIEVEMENTS[achievement.name]}
-
       <div>{achievement.name}</div>
       <Value value={achievement.value} />
     </Wrapper>

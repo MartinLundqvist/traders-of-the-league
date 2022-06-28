@@ -11,6 +11,7 @@ import { createNewContracts } from './createNewContracts';
 import { getHexesWithinRangeOf } from './getHexesWithinRangeOf';
 import { pickContractByRegion } from './pickContractByRegion';
 import {
+  ACHIEVEMENTS_TARGETS,
   BOARD,
   MAX_MOVES,
   numberOfCitiesToEmpty,
@@ -20,7 +21,7 @@ import {
 import { loadingIsAllowed } from './loadingIsAllowed';
 import { tradeIsAllowed } from './tradeIsAllowed';
 import { ditchingIsAllowed } from './ditchingIsAllowed';
-import { findAchievementsEarned } from './findAchievementsEarned';
+import { updateAchievementsProgressAndReturnEarnedAchievements } from './findAchievementsEarned';
 import { getGameResults } from './getGameResults';
 import { pickRandomAchievements } from './pickRandomAchievements';
 
@@ -84,6 +85,7 @@ const addPlayerToGame = (user: IUser, game: IGame): IPlayer => {
     contractsFulfilled: [],
     citiesEmptied: [],
     achievements: [],
+    achievementsProgress: [],
     position: { column: 5, row: 6 },
     victoryPoints: 0,
     cargo: thisPlayerIndex === 0 ? [] : [playerInitialCargo[thisPlayerIndex]],
@@ -119,6 +121,17 @@ const dealContracts = (game: IGame) => {
 
 const dealAchievements = (game: IGame) => {
   game.achievements = pickRandomAchievements(game.players.length + 1);
+
+  // Create a fresh achievementsProgress array for each player.
+  game.players.forEach((player) => {
+    player.achievementsProgress = game.achievements.map((achievement) => {
+      return {
+        achievementName: achievement.name,
+        target: ACHIEVEMENTS_TARGETS[achievement.name],
+        progress: 0,
+      };
+    });
+  });
 };
 
 const endCurrentPlayerRound = (game: IGame) => {
@@ -181,6 +194,14 @@ const nextPlayer = (game: IGame) => {
 
 const processEndOfRoundAchievements = (game: IGame) => {
   // Reset the moves available
+
+  // Add an achievementsProgress array to each player. DONE.
+  // Declare it upon game creation - when the achievements are added
+
+  // Update the achievements progress for this player
+
+  // If the current player has earned achievements - update the currentRound status
+
   game.state.currentRound.movesAvailable = [];
 
   const currentPlayer = game.players.find(
@@ -192,7 +213,11 @@ const processEndOfRoundAchievements = (game: IGame) => {
     return;
   }
 
-  const achievements = findAchievementsEarned(currentPlayer, game);
+  // const achievements = findAchievementsEarned(currentPlayer, game);
+  const achievements = updateAchievementsProgressAndReturnEarnedAchievements(
+    currentPlayer,
+    game
+  );
 
   if (achievements.length > 0) {
     game.state.currentRound.achievementsEarned = achievements.map((a) => {

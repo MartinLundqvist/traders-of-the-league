@@ -71,6 +71,12 @@ export interface IAchievement {
   _id?: string;
 }
 
+export interface IAchievementProgress {
+  achievementName: TAchievement;
+  target: number; // This is the number of "things" that must have been completed (i.e., emptying x cities or taking one contract of each color etc.)
+  progress: number; // This is the number of such things currently completed.
+}
+
 export interface ICity {
   name: TCity;
   goods: TCargo[];
@@ -98,6 +104,7 @@ export interface IPlayer {
   contractsFulfilled: IContract[];
   citiesEmptied: IEmptiedCity[];
   achievements: IAchievement[];
+  achievementsProgress: IAchievementProgress[];
   position: IBoardPosition;
   victoryPoints: number;
   cargo: TCargo[];

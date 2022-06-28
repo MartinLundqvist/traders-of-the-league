@@ -34,6 +34,13 @@ const gameSchema = new mongoose.Schema<IGame>({
           value: Number,
         },
       ],
+      achievementsProgress: [
+        {
+          achievementName: String,
+          target: Number,
+          progress: Number,
+        },
+      ],
       position: {
         column: Number,
         row: Number,

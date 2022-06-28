@@ -1,5 +1,6 @@
 import {
   IAchievement,
+  TAchievement,
   TBoard,
   TCargo,
   TPlayerColor,
@@ -21,6 +22,11 @@ type TPlayerInitialCargoMap = {
 
 type TNumberOfCitiesToEmptyMap = {
   [key: number]: number;
+};
+
+// To track the target number of "things" that must be achieved to earn an achievement
+type TAchievementTargetMap = {
+  [key in TAchievement]: number;
 };
 
 export const playerColors: TPlayerColorMap = {
@@ -131,6 +137,25 @@ export const ACHIEVEMENTS: IAchievement[] = [
     value: 3,
   },
 ];
+
+export const ACHIEVEMENTS_TARGETS: TAchievementTargetMap = {
+  'Diversifier A': 7,
+  'Diversifier B': 6,
+  'Regional Trader A': 5,
+  'Regional Trader B': 4,
+  'Monopolist A': 7,
+  'Monopolist B': 6,
+  'Explorer A': 6,
+  'Explorer B': 3,
+  'Supplier A': 3,
+  'Supplier B': 2,
+  'Specialist A': 4,
+  'Specialist B': 4,
+  'Merchant A': 6,
+  'Merchant B': 7,
+  'Banker A': 4,
+  'Banker B': 4,
+};
 
 export const BOARD: TBoard = [
   {

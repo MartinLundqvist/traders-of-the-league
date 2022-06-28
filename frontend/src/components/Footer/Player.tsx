@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { IPlayer } from '../../../../shared/types';
-import { Stats, TitleSmall } from '../../elements/Typography';
 
 const Wrapper = styled.div`
   display: flex;
