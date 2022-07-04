@@ -56,6 +56,7 @@ export const LayoutProvider = ({
     canSail,
     gameStatus,
     endRound,
+    currentRound,
   } = useGameServer();
   const [shipLayout, setShipLayout] = useState<TShipLayout>(
     initialLayoutContext.shipLayout
@@ -155,6 +156,11 @@ export const LayoutProvider = ({
   useEffect(() => {
     isMyTurn && createNotification('Your turn');
   }, [isMyTurn]);
+
+  useEffect(() => {
+    if (isMyTurn && currentRound.movesLeft > 0)
+      createNotification(currentRound.movesLeft + ' move(s) left');
+  }, [currentRound.movesLeft]);
 
   useEffect(() => {
     canAchieve && createNotification('You have achievements');

@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IActiveGame } from '../../../../shared/types';
 import { useGameServer } from '../../contexts/GameServerProvider';
-import { Title, Input, Button, TitleSmall } from '../../elements/Typography';
+import { useLayout } from '../../contexts/LayoutProvider';
+import { Title, TitleSmall, ButtonSmall } from '../../elements/Typography';
 
 const Wrapper = styled.div`
   display: flex;
@@ -32,6 +33,7 @@ interface IJoinGameProps {
 const JoinGame = ({ className }: IJoinGameProps): JSX.Element => {
   // const [gameUuid, setGameUuid] = useState('');
   const { joinGame, getActiveGames } = useGameServer();
+  const { setActiveRoute } = useLayout();
   const [activeGames, setActiveGames] = useState<IActiveGame[]>([]);
 
   useEffect(() => {
@@ -79,6 +81,9 @@ const JoinGame = ({ className }: IJoinGameProps): JSX.Element => {
           ))}
         </ul>
       </div>
+      <ButtonSmall onClick={() => setActiveRoute('start')}>
+        Back to menu
+      </ButtonSmall>
     </Wrapper>
   );
 };

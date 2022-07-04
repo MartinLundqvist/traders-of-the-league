@@ -89,6 +89,14 @@ export interface ClientToServerEvents {
     callback: (valid: boolean) => void
   ) => void;
 
+  // Client asks to complete a sequence of trade, ditch and load. This returns a callback with a boolean true/false whether the trade could be completed.
+  tradeDitchLoad: (
+    contractsToTrade: IContract[],
+    cargoToDitch: TCargo[],
+    cargoToLoad: TCargo[],
+    callback: (valid: boolean) => void
+  ) => void;
+
   // Client asks to pick an achievement. This returns a callback with a boolean true/false whether the pick could be made. It also finally ends a round.
   pickAchievement: (
     achievement: IAchievement,

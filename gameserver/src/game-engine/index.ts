@@ -491,6 +491,41 @@ const pickAchievementForCurrentPlayer = (
   return true;
 };
 
+const tradeDitchLoadForCurrentPlayer = (
+  game: IGame,
+  contractsToTrade: IContract[],
+  cargoToDitch: TCargo[],
+  cargoToLoad: TCargo[]
+): boolean => {
+  // Are there trades to make? Then try to make them
+  if (contractsToTrade.length > 0) {
+    let success = makeTradesForCurrentPlayer(game, contractsToTrade);
+    if (!success) {
+      console.log('tradeDitchLoadForCurrentPlayer failed while trading');
+      return false;
+    }
+  }
+  // Are there cubes to ditch? Then try to ditch them
+  if (cargoToDitch.length > 0) {
+    let success = ditchCargoForCurrentPlayer(game, cargoToDitch);
+    if (!success) {
+      console.log('tradeDitchLoadForCurrentPlayer failed while ditching');
+      return false;
+    }
+  }
+
+  // Are there cubes to load? Then try to load them
+  if (cargoToLoad.length > 0) {
+    let success = loadCargoForCurrentPlayer(game, cargoToLoad);
+    if (!success) {
+      console.log('tradeDitchLoadForCurrentPlayer failed while loading');
+      return false;
+    }
+  }
+
+  return true;
+};
+
 export const GameEngine = {
   createGame,
   start,
@@ -504,4 +539,5 @@ export const GameEngine = {
   pickAchievementForCurrentPlayer,
   processEndOfRoundAchievements,
   getGameResults,
+  tradeDitchLoadForCurrentPlayer,
 };

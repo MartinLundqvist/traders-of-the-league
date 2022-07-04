@@ -4,9 +4,7 @@ import { IContract, TCargo } from '../../../../shared/types';
 import { useGameServer } from '../../contexts/GameServerProvider';
 import { useLayout } from '../../contexts/LayoutProvider';
 import { nanoid } from 'nanoid';
-// import { TCargo } from '../../../../shared/types';
-// import { useGameServer } from '../../contexts/GameServerProvider';
-// import { useLayout } from '../../contexts/LayoutProvider';
+
 import {
   Button,
   ButtonSmall,
@@ -15,8 +13,7 @@ import {
 } from '../../elements/Typography';
 import Contract from '../Board/Contract';
 import Good from '../Board/Good';
-// import { CARGO_ARRAY } from '../../utils/cargoColors';
-// import Good from '../Board/Good';
+import { DitchDialogue } from './DitchDialogue';
 
 const Wrapper = styled.div`
   position: relative;
@@ -37,8 +34,7 @@ const Wrapper = styled.div`
     align-items: start;
     gap: 1rem;
     padding: 1rem;
-    /* height: 39rem;
-    width: 30rem; */
+
     background-color: var(--color-fill-sea-opaque);
     box-shadow: 0 3px 5px var(--color-bg-shadow);
     backdrop-filter: blur(10px);
@@ -75,11 +71,6 @@ const Wrapper = styled.div`
 
       flex-direction: column;
       gap: 1rem;
-
-      /* div {
-        position: relative;
-        width: 3rem;
-      } */
     }
 
     .container-actions--trade {
@@ -149,8 +140,6 @@ const ActionButton = styled.div<IActionButtonProps>`
         transform: translateX(-20%);
     }
 
-    
-
   `}
   
 
@@ -168,7 +157,7 @@ interface ICityProps {
   className: string;
 }
 
-interface ICityState {
+export interface ICityState {
   playerCargo: TCargo[];
   cityGoods: TCargo[];
 
@@ -181,7 +170,7 @@ interface ICityState {
   movesLeft: number;
 }
 
-interface ICityGoodsLoadOptionWithUuid {
+export interface ICityGoodsLoadOptionWithUuid {
   cargo: TCargo[];
   uuid: string;
 }
@@ -199,14 +188,23 @@ const INITIAL_STATE: ICityState = {
 
 const City = ({ className }: ICityProps): JSX.Element => {
   const { setActiveActionRoute } = useLayout();
-  const { currentCity, myPlayer, canTrade, canLoad, currentRound } =
-    useGameServer();
+  const {
+    currentCity,
+    myPlayer,
+    canTrade,
+    canLoad,
+    currentRound,
+    tradeDitchLoad,
+  } = useGameServer();
   const [cityState, setCityState] = useState<ICityState>(INITIAL_STATE);
   const [cityGoodsLoadOptions, setCityGoodsLoadOptions] = useState<
     ICityGoodsLoadOptionWithUuid[]
   >([]);
-  const [loadedCityGoodsOption, setLoadedCityGoodOption] =
-    useState<ICityGoodsLoadOptionWithUuid | null>();
+  const [loadedCityGoodsOption, setLoadedCityGoodsOption] =
+    useState<ICityGoodsLoadOptionWithUuid | null>(null);
+  const [attemptedCityGoodsOption, setAttemptedCityGoodsOption] =
+    useState<ICityGoodsLoadOptionWithUuid | null>(null);
+  const [showDitchDialogue, setShowDitchDialogue] = useState(false);
 
   const resetOrders = () => {
     if (currentCity && myPlayer) {
@@ -218,7 +216,8 @@ const City = ({ className }: ICityProps): JSX.Element => {
         canTrade,
         canLoad,
       });
-      setLoadedCityGoodOption(null);
+      setLoadedCityGoodsOption(null);
+      setAttemptedCityGoodsOption(null);
     }
   };
 
@@ -321,10 +320,6 @@ const City = ({ className }: ICityProps): JSX.Element => {
     return false;
   };
 
-  const ditchCargo = (cargo: TCargo[]) => {
-    // setActions((_actions) => ({ ..._actions, ditch: cargo }));
-  };
-
   const handleTradeClick = (contract: IContract) => {
     if (!currentCity) return;
 
@@ -380,6 +375,12 @@ const City = ({ className }: ICityProps): JSX.Element => {
     let enoughSpace =
       cityState.playerCargo.length + loadOption.cargo.length <= 5;
 
+    if (!enoughSpace) {
+      setAttemptedCityGoodsOption(loadOption);
+      setShowDitchDialogue(true);
+      return;
+    }
+
     if (enoughSpace) {
       console.log(
         'Adding ' + JSON.stringify(loadOption.cargo) + ' to the local cargohold'
@@ -398,8 +399,33 @@ const City = ({ className }: ICityProps): JSX.Element => {
         cargoToLoad: loadOption.cargo,
       }));
 
-      setLoadedCityGoodOption(loadOption);
+      setLoadedCityGoodsOption(loadOption);
     }
+  };
+
+  const ditchCargoFromCargoDialogue = (cargo: TCargo[]) => {
+    if (!attemptedCityGoodsOption) return;
+
+    if (cargo.length >= attemptedCityGoodsOption.cargo.length) {
+      let newPlayerCargo: TCargo[] = [...cityState.playerCargo];
+
+      cargo.forEach((good) => {
+        let i = newPlayerCargo.findIndex((playerGood) => playerGood === good);
+        if (i > -1) newPlayerCargo.splice(i, 1);
+      });
+
+      setCityState((_prevState) => ({
+        ..._prevState,
+        playerCargo: [...newPlayerCargo, ...attemptedCityGoodsOption.cargo],
+        cargoToDitch: [...cargo],
+        cargoToLoad: attemptedCityGoodsOption.cargo,
+      }));
+
+      setLoadedCityGoodsOption(attemptedCityGoodsOption);
+      return;
+    }
+
+    window.alert('You did not ditch enough cargo!');
   };
 
   const loadOptionAlreadyPicked = (
@@ -412,6 +438,11 @@ const City = ({ className }: ICityProps): JSX.Element => {
 
   const executeOrders = () => {
     console.log('You have ' + cityState.movesLeft + ' moves left');
+    tradeDitchLoad(
+      cityState.contractsToTrade,
+      cityState.cargoToDitch,
+      cityState.cargoToLoad
+    );
 
     setActiveActionRoute('none');
   };
@@ -447,26 +478,6 @@ const City = ({ className }: ICityProps): JSX.Element => {
               ))}
             </ActionButton>
           ))}
-          {/* {currentCity?.goods.map((good, index) => (
-            <ActionButton
-              key={good + index}
-              className='with-size'
-              onClick={() => handleLoadCargoClick([good])}
-              disabled={!checkCanLoad()}
-            >
-              <Good good={good} />
-            </ActionButton>
-          ))}
-          {currentCity?.goods.length === 2 && (
-            <ActionButton
-              className='with-size'
-              onClick={() => handleLoadCargoClick(currentCity?.goods)}
-              disabled={!checkCanLoad()}
-            >
-              <Good good={currentCity?.goods[0]} />
-              <Good good={currentCity?.goods[1]} />
-            </ActionButton>
-          )} */}
         </div>
         <div className='container-actions--trade'>
           <TitleSmall>Trade</TitleSmall>
@@ -492,6 +503,13 @@ const City = ({ className }: ICityProps): JSX.Element => {
             Exit to board
           </ButtonSmall>
         </div>
+        <DitchDialogue
+          open={showDitchDialogue}
+          cityState={cityState}
+          attemptedCityGoodsOption={attemptedCityGoodsOption}
+          ditchCargo={ditchCargoFromCargoDialogue}
+          close={() => setShowDitchDialogue(false)}
+        />
       </div>
     </Wrapper>
   );

@@ -67,6 +67,11 @@ interface IGameServerContext {
   loadCargo: (cargo: TCargo[]) => void;
   ditchCargo: (cargo: TCargo[]) => void;
   makeTrades: (contracts: IContract[]) => void;
+  tradeDitchLoad: (
+    contractsToTrade: IContract[],
+    cargoToDitch: TCargo[],
+    cargoToLoad: TCargo[]
+  ) => void;
   canLoad: boolean;
   canTrade: boolean;
   canSail: boolean;
@@ -122,6 +127,7 @@ const initialContext: IGameServerContext = {
   loadCargo: () => {},
   ditchCargo: () => {},
   makeTrades: () => {},
+  tradeDitchLoad: () => {},
   canLoad: false,
   canTrade: false,
   canSail: false,
@@ -598,6 +604,64 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     });
   };
 
+  const tradeDitchLoad = (
+    contractsToTrade: IContract[],
+    cargoToDitch: TCargo[],
+    cargoToLoad: TCargo[]
+  ) => {
+    console.log(
+      'Trading ' +
+        contractsToTrade.length +
+        ' contracts from ' +
+        currentCity?.name
+    );
+    console.log(
+      'Ditching ' + cargoToDitch.length + ' contracts from ' + currentCity?.name
+    );
+    console.log(
+      'Loading ' + cargoToLoad.length + ' contracts from ' + currentCity?.name
+    );
+
+    if (!isInCity || !currentCity || !me) {
+      console.log('City or player is not defined!');
+      return;
+    }
+
+    if (!canTrade && contractsToTrade.length > 0) {
+      window.alert(
+        'You cannot trade. Not your turn or you have already traded once on your move.'
+      );
+      return;
+    }
+    if (!canLoad && cargoToLoad.length > 0) {
+      window.alert(
+        'You cannot load. Not your turn or you have already loaded once on your move.'
+      );
+      return;
+    }
+    if (cargoToLoad.length === 0 && contractsToTrade.length === 0) {
+      window.alert('You have not made any orders, captain. Nothing to execute');
+      return;
+    }
+
+    socketRef.current?.emit(
+      'tradeDitchLoad',
+      contractsToTrade,
+      cargoToDitch,
+      cargoToLoad,
+      (valid) => {
+        if (!valid) {
+          window.alert('Not a valid sequence of orders. ');
+          return;
+        }
+
+        // Check if player emptied the city
+        if (contractsToTrade.length === currentCity.contracts.length) {
+          createNotification('City emptied');
+        }
+      }
+    );
+  };
   const makeTrades = (contracts: IContract[]) => {
     console.log(
       'Trading ' + contracts.length + ' goods from ' + currentCity?.name
@@ -761,6 +825,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         startTime,
         getActiveGames,
         currentRound,
+        tradeDitchLoad,
       }}
     >
       {children}

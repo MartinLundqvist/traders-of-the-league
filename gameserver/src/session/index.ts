@@ -99,6 +99,21 @@ export class GameSession implements ISession {
         this.makeTrades(contracts, callback)
     );
     this.socket.on(
+      'tradeDitchLoad',
+      (
+        contractsToTrade: IContract[],
+        cargoToDitch: TCargo[],
+        cargoToLoad: TCargo[],
+        callback: (valid: boolean) => void
+      ) =>
+        this.tradeDitchLoad(
+          contractsToTrade,
+          cargoToDitch,
+          cargoToLoad,
+          callback
+        )
+    );
+    this.socket.on(
       'pickAchievement',
       (achievement: IAchievement, callback: (valid: boolean) => void) =>
         this.pickAchievement(achievement, callback)
@@ -414,6 +429,36 @@ export class GameSession implements ISession {
 
     // Finally, we callback with a confirmation.?????
     callback(validTrade);
+  }
+  private async tradeDitchLoad(
+    contractsToTrade: IContract[],
+    cargoToDitch: TCargo[],
+    cargoToLoad: TCargo[],
+    callback: (valid: boolean) => void
+  ) {
+    const game = await this.gameStore.getGame(this.activeGameUuid);
+
+    if (!this.activeGameUuid || !game) {
+      this.socket.emit('error', 'Game not found');
+      return;
+    }
+
+    // Have the engine figure out wether these are valid trades, and if so, execute them.
+    let validActions = GameEngine.tradeDitchLoadForCurrentPlayer(
+      game,
+      contractsToTrade,
+      cargoToDitch,
+      cargoToLoad
+    );
+
+    if (validActions) {
+      // If the move is valid, we persist and push the new game state
+      await this.gameStore.saveGame(game);
+      this.pushActiveGame();
+    }
+
+    // Finally, we callback with a confirmation.?????
+    callback(validActions);
   }
 
   private async pickAchievement(
