@@ -111,11 +111,15 @@ export const LayoutProvider = ({
     // Only do these things if the game is active
     if (gameStatus === 'playing' || gameStatus === 'endgame') {
       // If I have achievements to pick, just send me to that screen.
-      if (canAchieve) setActiveActionRoute('achieve');
+      if (canAchieve) {
+        setActiveActionRoute('achieve');
+      } else {
+        // If I am in a city, send me to the city actions screen.
+        if (isMyTurn && isInCity) setActiveActionRoute('city');
 
-      // If I do NOT have achievements to pick, and the game is still playing, but it is my turn, and I am at sea with no more sailing to do - it is time to end the round...
-      if (isMyTurn && !isInCity && !canSail && !canAchieve)
-        endRound({ confirm: false });
+        // If I do NOT have achievements to pick, and the game is still playing, but it is my turn, and I am at sea with no more sailing to do - it is time to end the round...
+        if (isMyTurn && !isInCity && !canSail) endRound({ confirm: false });
+      }
     }
   }, [isMyTurn, isInCity, canSail, canAchieve, gameStatus]);
 

@@ -11,6 +11,7 @@ import { useLayout } from '../../contexts/LayoutProvider';
 import { useGameServer } from '../../contexts/GameServerProvider';
 import Clock from './Clock';
 import Yield from './Yield';
+import { IBoardLayoutElement } from '../../utils/createBoardLayout';
 
 const Wrapper = styled.div`
   // New version
@@ -36,8 +37,21 @@ interface IBoardProps {
 }
 
 const Board = ({ className }: IBoardProps): JSX.Element => {
-  const { sailTo } = useGameServer();
-  const { boardLayout } = useLayout();
+  const { sailTo, myPlayer, isInCity } = useGameServer();
+  const { boardLayout, setActiveActionRoute } = useLayout();
+
+  const handleHexClick = (hex: IBoardLayoutElement) => {
+    if (
+      hex.column === myPlayer?.position.column &&
+      hex.row === myPlayer?.position.row
+    ) {
+      console.log('That is where you are!');
+
+      if (isInCity) setActiveActionRoute('city');
+    } else {
+      sailTo(hex);
+    }
+  };
 
   const Hexagons = useMemo(
     () =>
@@ -56,7 +70,7 @@ const Board = ({ className }: IBoardProps): JSX.Element => {
           // onClick={() => {
           //   console.log(JSON.stringify({ column: hex.column, row: hex.row }));
           // }}
-          onClick={() => sailTo(hex)}
+          onClick={() => handleHexClick(hex)}
         />
       )),
 

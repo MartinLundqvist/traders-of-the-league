@@ -6,13 +6,15 @@ import { valueClipPaths } from '../../utils/valueClipPaths';
 
 interface IWrapperProps {
   contract: IContract;
+  size: number;
 }
 
 const Wrapper = styled.div<IWrapperProps>`
+  --size: ${(props) => props.size}px;
   position: relative;
   display: inline-block;
-  width: ${CONTRACT_HEIGHT}px; // Square...
-  height: ${CONTRACT_HEIGHT}px;
+  width: var(--size);
+  height: var(--size);
   margin-right: 2px;
   border: 1.5px solid var(--color-border);
   background-color: var(--color-content);
@@ -33,7 +35,7 @@ const Wrapper = styled.div<IWrapperProps>`
       height: 100%;
       background-color: ${(props) =>
         CARGO_COLOR_STRINGS[props.contract.cargo[0]][0]};
-      font-size: 0.4rem;
+      font-size: calc(var(--size) / 4);
       color: white;
     }
     .right-color {
@@ -55,7 +57,7 @@ const Wrapper = styled.div<IWrapperProps>`
     .value {
       width: 70%;
       height: 70%;
-      font-size: 0.8rem;
+      font-size: calc(var(--size) / 2);
       text-align: center;
       clip-path: ${(props) => valueClipPaths[props.contract.value]};
 
@@ -66,11 +68,15 @@ const Wrapper = styled.div<IWrapperProps>`
 
 interface IContractProps {
   contract: IContract;
+  size?: number;
 }
 
-const Contract = ({ contract }: IContractProps): JSX.Element => {
+const Contract = ({
+  contract,
+  size = CONTRACT_HEIGHT,
+}: IContractProps): JSX.Element => {
   return (
-    <Wrapper contract={contract}>
+    <Wrapper contract={contract} size={size}>
       <div className='color-container'>
         <div className='left-color'>{contract.region[0]}</div>
         <div className='right-color'></div>

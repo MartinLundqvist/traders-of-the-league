@@ -20,6 +20,7 @@ import {
   IContract,
   IGame,
   IGameResults,
+  IGameState,
   IMessage,
   IPlayer,
   ISession,
@@ -79,6 +80,7 @@ interface IGameServerContext {
   sendBugReport: (bugReport: IBugReport) => void;
   startTime: number;
   getActiveGames: () => Promise<IActiveGame[]>;
+  currentRound: IGameState['currentRound'];
 }
 
 const initialContext: IGameServerContext = {
@@ -136,6 +138,13 @@ const initialContext: IGameServerContext = {
   sendBugReport: () => {},
   startTime: 0,
   getActiveGames: () => new Promise((res, rej) => {}),
+  currentRound: {
+    achievementsEarned: [],
+    movesAvailable: [],
+    hexesWithinRange: [],
+    movesLeft: 0,
+    playerUuid: '',
+  },
 };
 
 const GameServerContext = createContext<IGameServerContext>(initialContext);
@@ -184,6 +193,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   );
   const [chat, setChat] = useState<IChat>(initialContext.chat);
   const [startTime, setStartTime] = useState(initialContext.startTime);
+  const [currentRound, setCurrentRound] = useState(initialContext.currentRound);
   const socketRef = useRef<ChatSocket>();
 
   const onAnyListener = useCallback((event: any, args: any[]) => {
@@ -307,6 +317,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     let _availableAchievements: IAchievement[] = [];
     let _achievements: IAchievement[] = [];
     let _startTime = 0;
+    let _currentRound: IGameState['currentRound'] = initialContext.currentRound;
 
     // If there is no gameUuid active, we make sure to nullify the game object
     !activeGameUuid && setGame(null);
@@ -319,6 +330,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
 
       _isMyTurn = me.uuid === game.state.currentRound.playerUuid;
       _isEndGame = game.state.status === 'endgame';
+      _currentRound = game.state.currentRound;
 
       _currentTurnPlayer =
         game.players.find(
@@ -379,6 +391,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     setAvailableAchievements(_availableAchievements);
     setAchievements(_achievements);
     setStartTime(_startTime);
+    setCurrentRound(_currentRound);
   }, [game]);
 
   // Special hook for fetching gameresults if the game state is won
@@ -747,6 +760,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         sendBugReport,
         startTime,
         getActiveGames,
+        currentRound,
       }}
     >
       {children}
