@@ -40,7 +40,7 @@ export const Controls = (): JSX.Element => {
 
       {(gameStatus === 'playing' || gameStatus === 'endgame') && (
         <>
-          <div>
+          {/* <div>
             <ButtonSmall
               disabled={!canLoad}
               onClick={() => setActiveActionRoute('load')}
@@ -59,7 +59,7 @@ export const Controls = (): JSX.Element => {
             >
               Ditch
             </ButtonSmall>
-          </div>
+          </div> */}
           <div>
             <ButtonSmall
               disabled={!isMyTurn || canAchieve}

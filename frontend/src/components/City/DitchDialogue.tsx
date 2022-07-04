@@ -146,6 +146,11 @@ export const DitchDialogue = ({
     }
   }, [cityState.playerCargo.length]);
 
+  const handleUndoClick = () => {
+    reset();
+    close();
+  };
+
   const ditchCube = (good: IPlayerGoodWithUuid) => {
     setCargoToDitch((_prevCargo) => [..._prevCargo, good]);
   };
@@ -189,7 +194,7 @@ export const DitchDialogue = ({
         </div>
         <div className='container--actions'>
           <ButtonSmall onClick={() => executeDitch()}>Ditch</ButtonSmall>
-          <ButtonSmall warning onClick={() => reset()}>
+          <ButtonSmall warning onClick={() => handleUndoClick()}>
             Undo
           </ButtonSmall>
         </div>
