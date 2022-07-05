@@ -656,7 +656,10 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         }
 
         // Check if player emptied the city
-        if (contractsToTrade.length === currentCity.contracts.length) {
+        if (
+          contractsToTrade.length > 0 &&
+          contractsToTrade.length === currentCity.contracts.length
+        ) {
           createNotification('City emptied');
         }
       }
