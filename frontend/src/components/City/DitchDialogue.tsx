@@ -200,10 +200,10 @@ export const DitchDialogue = ({
           ))}
         </div>
         <div className='container--actions'>
-          <ButtonSmall onClick={() => executeDitch()}>Ditch</ButtonSmall>
           <ButtonSmall warning onClick={() => handleUndoClick()}>
             Undo
           </ButtonSmall>
+          <ButtonSmall onClick={() => executeDitch()}>Ditch</ButtonSmall>
         </div>
       </div>
     </Wrapper>

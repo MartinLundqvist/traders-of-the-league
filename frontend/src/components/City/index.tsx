@@ -84,11 +84,7 @@ const Wrapper = styled.div`
       grid-area: actions;
       display: flex;
       flex-direction: row;
-      gap: 1rem;
-
-      button:nth-child(3) {
-        margin-left: 2rem;
-      }
+      gap: 2rem;
     }
   }
 `;
@@ -498,11 +494,11 @@ const City = ({ className }: ICityProps): JSX.Element => {
           ))}
         </div>
         <div className='container-actions--actions'>
-          <ButtonSmall onClick={() => executeOrders()}>
-            Execute orders
-          </ButtonSmall>
           <ButtonSmall warning onClick={() => resetOrders()}>
             Undo orders
+          </ButtonSmall>
+          <ButtonSmall pulse onClick={() => executeOrders()}>
+            Execute orders
           </ButtonSmall>
           <ButtonSmall onClick={() => setActiveActionRoute('none')}>
             Exit to board
