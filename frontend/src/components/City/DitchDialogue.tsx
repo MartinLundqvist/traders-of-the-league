@@ -126,9 +126,16 @@ export const DitchDialogue = ({
     IPlayerGoodWithUuid[]
   >([]);
   const [cargoToDitch, setCargoToDitch] = useState<IPlayerGoodWithUuid[]>([]);
+  const [nrOfCubesToDitch, setNrOfCubesToDitch] = useState(0);
 
   const reset = () => {
     setCargoToDitch([]);
+    attemptedCityGoodsOption &&
+      setNrOfCubesToDitch(
+        attemptedCityGoodsOption?.cargo.length +
+          cityState.playerCargo.length -
+          5
+      );
   };
 
   useEffect(() => {
@@ -178,7 +185,7 @@ export const DitchDialogue = ({
       <div className='container'>
         <Title className='container--title'>Cargo full</Title>
         <TitleSmall className='container--instruction'>
-          Click min {attemptedCityGoodsOption?.cargo.length} cube(s) to ditch
+          Click min {nrOfCubesToDitch} cube(s) to ditch
         </TitleSmall>
         <div className='container--cubes'>
           {playerCargoWithUuid.map((good, index) => (

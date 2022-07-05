@@ -406,7 +406,12 @@ const City = ({ className }: ICityProps): JSX.Element => {
   const ditchCargoFromCargoDialogue = (cargo: TCargo[]) => {
     if (!attemptedCityGoodsOption) return;
 
-    if (cargo.length >= attemptedCityGoodsOption.cargo.length) {
+    if (
+      cityState.playerCargo.length -
+        cargo.length +
+        attemptedCityGoodsOption.cargo.length <=
+      5
+    ) {
       let newPlayerCargo: TCargo[] = [...cityState.playerCargo];
 
       cargo.forEach((good) => {
