@@ -295,6 +295,8 @@ const City = ({ className }: ICityProps): JSX.Element => {
     // Then check if player has already traded two contracts
     if (cityState.contractsToTrade.length >= 2) return false;
 
+    // TODO: Refactor to shared util function
+
     // Then check if it can be fulfilled
     const hasCargo = (cargo: TCargo): boolean => {
       return (

@@ -9,10 +9,12 @@ import { TActionRoute, TRoute } from '../routes';
 import { createBoardLayout, TBoardLayout } from '../utils/createBoardLayout';
 import { useGameServer } from './GameServerProvider';
 import { useNotifications } from './NotificationsProvider';
+import { canFulFillSomeContract } from '../utils/canFulfillContract';
 
 type TShipLayout = {
   player: IPlayer;
   isMe: boolean;
+  isMyTurn: boolean;
   isInCity: boolean;
   top: number;
   left: number;
@@ -123,7 +125,7 @@ export const LayoutProvider = ({
         // If I am in a city, and I only have one move left, check if I should be sent to the city actions screen.
         if (isMyTurn && isInCity && currentRound.movesLeft < 2) {
           // We only go into the city screen if there are contracts to trade OR the player can load.
-          if (canLoad || currentCity!.contracts.length > 0)
+          if (canLoad || canFulFillSomeContract(myPlayer, currentCity))
             // I am asserting currentCity since the isInCity is true. But this is a bit shakey.
             setActiveActionRoute('city');
         }
@@ -139,6 +141,8 @@ export const LayoutProvider = ({
     canAchieve,
     gameStatus,
     currentRound.movesLeft,
+    myPlayer,
+    currentCity,
   ]);
 
   // This hook manages the board and ship layouts programmatically based on the status of the GameServer game
@@ -168,6 +172,7 @@ export const LayoutProvider = ({
               getLeftForBoardPosition(player.position) +
               numberOfShipsInSamePosition * SHIP_DISTANCE,
             isMe: player.user.uuid === me.uuid,
+            isMyTurn: game.state.currentRound.playerUuid === me.uuid,
             isInCity: !!currentHex?.city,
           });
         });

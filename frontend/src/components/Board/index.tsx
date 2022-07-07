@@ -37,7 +37,7 @@ interface IBoardProps {
 }
 
 const Board = ({ className }: IBoardProps): JSX.Element => {
-  const { sailTo, myPlayer, isInCity } = useGameServer();
+  const { sailTo, myPlayer, isInCity, isMyTurn } = useGameServer();
   const { boardLayout, setActiveActionRoute } = useLayout();
 
   const handleHexClick = (hex: IBoardLayoutElement) => {
@@ -47,7 +47,7 @@ const Board = ({ className }: IBoardProps): JSX.Element => {
     ) {
       console.log('That is where you are!');
 
-      if (isInCity) setActiveActionRoute('city');
+      if (isInCity && isMyTurn) setActiveActionRoute('city');
     } else {
       sailTo(hex);
     }

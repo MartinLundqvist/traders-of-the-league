@@ -147,12 +147,22 @@ const Ships = (): JSX.Element => {
   const [showReminder, setShowReminder] = useState(false);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setShowReminder(true);
-    }, 5000);
+    setShowReminder(false);
 
-    return () => clearTimeout(timeout);
-  }, []);
+    let timeout: NodeJS.Timeout;
+
+    const interval = setInterval(() => {
+      setShowReminder(true);
+      timeout = setTimeout(() => {
+        setShowReminder(false);
+      }, 4000);
+    }, 10000);
+
+    return () => {
+      clearTimeout(timeout);
+      clearInterval(interval);
+    };
+  }, [shipLayout]);
 
   return (
     <>
@@ -181,7 +191,7 @@ const Ships = (): JSX.Element => {
               </div>
             </div>
           </span>
-          {ship.isMe && (
+          {ship.isMe && ship.isMyTurn && (
             <div className={'me' + (showReminder ? ' show' : '')}>
               <div>Hey captain! Time to make move!</div>
               {ship.isInCity && (
