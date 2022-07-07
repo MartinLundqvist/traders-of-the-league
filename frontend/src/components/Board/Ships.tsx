@@ -8,6 +8,7 @@ import ship_yellow from '../../assets/ship_yellow.png';
 import { useLayout } from '../../contexts/LayoutProvider';
 import { SHIP_HEIGHT, SHIP_WIDTH } from '../../utils/shipGeometry';
 import Good from './Good';
+import { useEffect, useState } from 'react';
 
 const shipElements = {
   black: ship_black,
@@ -113,10 +114,45 @@ const Wrapper = styled.div<IWrapperProps>`
       }
     }
   }
+
+  .me {
+    position: absolute;
+    opacity: 0;
+    width: max-content;
+    background-color: var(--color-fill-sea-opaque);
+    box-shadow: 0 3px 5px var(--color-bg-shadow);
+    padding: 0.5rem;
+    text-align: center;
+    font-size: 1.2rem;
+    transform: rotateZ(30deg);
+    transition: opacity 200ms ease-in-out;
+    pointer-events: none;
+
+    &.show {
+      opacity: 1;
+    }
+
+    animation: pulsing 500ms ease-in-out alternate infinite;
+
+    @keyframes pulsing {
+      to {
+        transform: rotateZ(30deg) scale(1.2);
+      }
+    }
+  }
 `;
 
 const Ships = (): JSX.Element => {
   const { shipLayout } = useLayout();
+  const [showReminder, setShowReminder] = useState(false);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setShowReminder(true);
+    }, 5000);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <>
@@ -145,6 +181,14 @@ const Ships = (): JSX.Element => {
               </div>
             </div>
           </span>
+          {ship.isMe && (
+            <div className={'me' + (showReminder ? ' show' : '')}>
+              <div>Hey captain! Time to make move!</div>
+              {ship.isInCity && (
+                <div>(Click the city hex to load or trade!)</div>
+              )}
+            </div>
+          )}
         </Wrapper>
       ))}
     </>

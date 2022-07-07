@@ -12,6 +12,8 @@ import { useNotifications } from './NotificationsProvider';
 
 type TShipLayout = {
   player: IPlayer;
+  isMe: boolean;
+  isInCity: boolean;
   top: number;
   left: number;
 }[];
@@ -47,6 +49,7 @@ export const LayoutProvider = ({
 }: ILayoutProviderProps): JSX.Element => {
   const {
     session,
+    me,
     game,
     canAchieve,
     isMyTurn,
@@ -145,6 +148,13 @@ export const LayoutProvider = ({
 
       game &&
         game.players.forEach((player) => {
+          const currentHex = game.board.find((hex) => {
+            return (
+              hex.row === player.position.row &&
+              hex.column === player.position.column
+            );
+          });
+
           const numberOfShipsInSamePosition = shipLayout.filter(
             (ship) =>
               ship.player.position.column === player.position.column &&
@@ -157,6 +167,8 @@ export const LayoutProvider = ({
             left:
               getLeftForBoardPosition(player.position) +
               numberOfShipsInSamePosition * SHIP_DISTANCE,
+            isMe: player.user.uuid === me.uuid,
+            isInCity: !!currentHex?.city,
           });
         });
 
