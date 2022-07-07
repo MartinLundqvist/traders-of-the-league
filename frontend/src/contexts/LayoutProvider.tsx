@@ -54,6 +54,8 @@ export const LayoutProvider = ({
     isEndGame,
     myPlayer,
     canSail,
+    canLoad,
+    currentCity,
     gameStatus,
     endRound,
     currentRound,
@@ -115,9 +117,13 @@ export const LayoutProvider = ({
       if (canAchieve) {
         setActiveActionRoute('achieve');
       } else {
-        // If I am in a city, send me to the city actions screen.
-        if (isMyTurn && isInCity && currentRound.movesLeft < 2)
-          setActiveActionRoute('city');
+        // If I am in a city, and I only have one move left, check if I should be sent to the city actions screen.
+        if (isMyTurn && isInCity && currentRound.movesLeft < 2) {
+          // We only go into the city screen if there are contracts to trade OR the player can load.
+          if (canLoad || currentCity!.contracts.length > 0)
+            // I am asserting currentCity since the isInCity is true. But this is a bit shakey.
+            setActiveActionRoute('city');
+        }
 
         // If I do NOT have achievements to pick, and the game is still playing, but it is my turn, and I am at sea with no more sailing to do - it is time to end the round...
         if (isMyTurn && !isInCity && !canSail) endRound({ confirm: false });
