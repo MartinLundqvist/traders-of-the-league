@@ -188,10 +188,10 @@ export const LayoutProvider = ({
     isMyTurn && createNotification('Your turn');
   }, [isMyTurn]);
 
-  useEffect(() => {
-    if (isMyTurn && currentRound.movesLeft > 0)
-      createNotification(currentRound.movesLeft + ' move(s) left');
-  }, [currentRound.movesLeft]);
+  // useEffect(() => {
+  //   if (isMyTurn && currentRound.movesLeft > 0)
+  //     createNotification(currentRound.movesLeft + ' move(s) left');
+  // }, [currentRound.movesLeft]);
 
   useEffect(() => {
     canAchieve && createNotification('You have achievements');
