@@ -80,7 +80,6 @@ interface IGameServerContext {
   chat: IChat;
   sendMessage: (message: IMessage) => void;
   sendBugReport: (bugReport: IBugReport) => void;
-  startTime: number;
   getActiveGames: () => Promise<IActiveGame[]>;
   currentRound: IGameState['currentRound'];
 }
@@ -137,7 +136,6 @@ const initialContext: IGameServerContext = {
   },
   sendMessage: () => {},
   sendBugReport: () => {},
-  startTime: 0,
   getActiveGames: () => new Promise((res, rej) => {}),
   currentRound: {
     achievementsEarned: [],
@@ -189,7 +187,6 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   const [canTrade, setCanTrade] = useState(initialContext.canTrade);
   const [canAchieve, setCanAchieve] = useState(initialContext.canAchieve);
   const [chat, setChat] = useState<IChat>(initialContext.chat);
-  const [startTime, setStartTime] = useState(initialContext.startTime);
   const [currentRound, setCurrentRound] = useState(initialContext.currentRound);
   const socketRef = useRef<ChatSocket>();
 
@@ -311,7 +308,6 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     let _canTrade = false;
     let _canLoad = false;
     let _canAchieve = false;
-    let _startTime = 0;
     let _currentRound: IGameState['currentRound'] = initialContext.currentRound;
 
     // If there is no gameUuid active, we make sure to nullify the game object
@@ -320,7 +316,6 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     if (game) {
       _gameStatus = game.state.status;
       _gameName = game.name;
-      _startTime = game.startTime;
 
       _isMyTurn = me.uuid === game.state.currentRound.playerUuid;
       _isEndGame = game.state.status === 'endgame';
@@ -380,7 +375,6 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     setCanTrade(_canTrade);
     setCanLoad(_canLoad);
     setCanAchieve(_canAchieve);
-    setStartTime(_startTime);
     setCurrentRound(_currentRound);
   }, [game]);
 
@@ -807,7 +801,6 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         chat,
         sendMessage,
         sendBugReport,
-        startTime,
         getActiveGames,
         currentRound,
         tradeDitchLoad,

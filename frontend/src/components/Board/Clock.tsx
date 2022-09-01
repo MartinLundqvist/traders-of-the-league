@@ -27,20 +27,20 @@ const Wrapper = styled.div`
 `;
 
 const Clock = (): JSX.Element => {
-  const { startTime, isMyTurn } = useGameServer();
+  const { game, isMyTurn } = useGameServer();
   const [timePlayed, setTimePlayed] = useState('00:00');
+
+  if (!game) return <></>;
 
   useEffect(() => {
     const timer = setInterval(() => {
       const currentTime = new Date().getTime();
 
-      setTimePlayed(timeToString(startTime, currentTime));
+      setTimePlayed(timeToString(game.startTime, currentTime));
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [startTime]);
-
-  if (!startTime) return <></>;
+  }, [game.startTime]);
 
   return (
     <Wrapper>
