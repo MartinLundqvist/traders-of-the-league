@@ -1,5 +1,4 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { response } from 'express';
 import {
   createContext,
   useCallback,
@@ -77,7 +76,6 @@ interface IGameServerContext {
   canSail: boolean;
   canAchieve: boolean;
   achievements: IAchievement[];
-  availableAchievements: IAchievement[];
   pickAchievement: (achievement: IAchievement) => void;
   endGame: () => void;
   chat: IChat;
@@ -132,7 +130,6 @@ const initialContext: IGameServerContext = {
   canTrade: false,
   canSail: false,
   canAchieve: false,
-  availableAchievements: [],
   achievements: [],
   pickAchievement: () => {},
   endGame: () => {},
@@ -194,9 +191,6 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   const [canTrade, setCanTrade] = useState(initialContext.canTrade);
   const [canAchieve, setCanAchieve] = useState(initialContext.canAchieve);
   const [achievements, setAchievements] = useState(initialContext.achievements);
-  const [availableAchievements, setAvailableAchievements] = useState(
-    initialContext.availableAchievements
-  );
   const [chat, setChat] = useState<IChat>(initialContext.chat);
   const [startTime, setStartTime] = useState(initialContext.startTime);
   const [currentRound, setCurrentRound] = useState(initialContext.currentRound);
@@ -320,7 +314,6 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     let _canTrade = false;
     let _canLoad = false;
     let _canAchieve = false;
-    let _availableAchievements: IAchievement[] = [];
     let _achievements: IAchievement[] = [];
     let _startTime = 0;
     let _currentRound: IGameState['currentRound'] = initialContext.currentRound;
@@ -366,8 +359,6 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
       }
 
       if (_isMyTurn) {
-        _availableAchievements = game.state.currentRound.achievementsEarned;
-
         _canAchieve =
           game.state.currentRound.movesAvailable.includes('achieve');
 
@@ -394,7 +385,6 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     setCanTrade(_canTrade);
     setCanLoad(_canLoad);
     setCanAchieve(_canAchieve);
-    setAvailableAchievements(_availableAchievements);
     setAchievements(_achievements);
     setStartTime(_startTime);
     setCurrentRound(_currentRound);
@@ -703,7 +693,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   const pickAchievement = (achievement: IAchievement) => {
     console.log('Picking ' + JSON.stringify(achievement));
 
-    if (!canAchieve || availableAchievements.length < 1) {
+    if (!canAchieve) {
       console.log('Not eligble to achieve');
       return;
     }
@@ -819,7 +809,6 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         canLoad,
         canAchieve,
         achievements,
-        availableAchievements,
         pickAchievement,
         endGame,
         chat,

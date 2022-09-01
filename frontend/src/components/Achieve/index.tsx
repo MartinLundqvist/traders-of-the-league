@@ -36,7 +36,7 @@ interface IAchieveProps {
 }
 
 const Achieve = ({ className }: IAchieveProps): JSX.Element => {
-  const { availableAchievements, pickAchievement } = useGameServer();
+  const { game, pickAchievement } = useGameServer();
 
   const { setActiveActionRoute } = useLayout();
 
@@ -49,7 +49,7 @@ const Achieve = ({ className }: IAchieveProps): JSX.Element => {
     <Wrapper className={className}>
       <Title>You earned the following achievements!</Title>
       <div className='container'>
-        {availableAchievements.map((achievement) => (
+        {game?.state.currentRound.achievementsEarned.map((achievement) => (
           <Achievement
             key={achievement.name}
             achievement={achievement}
