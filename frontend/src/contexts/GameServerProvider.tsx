@@ -75,7 +75,6 @@ interface IGameServerContext {
   canTrade: boolean;
   canSail: boolean;
   canAchieve: boolean;
-  achievements: IAchievement[];
   pickAchievement: (achievement: IAchievement) => void;
   endGame: () => void;
   chat: IChat;
@@ -130,7 +129,6 @@ const initialContext: IGameServerContext = {
   canTrade: false,
   canSail: false,
   canAchieve: false,
-  achievements: [],
   pickAchievement: () => {},
   endGame: () => {},
   chat: {
@@ -190,7 +188,6 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   const [canSail, setCanSail] = useState(initialContext.canSail);
   const [canTrade, setCanTrade] = useState(initialContext.canTrade);
   const [canAchieve, setCanAchieve] = useState(initialContext.canAchieve);
-  const [achievements, setAchievements] = useState(initialContext.achievements);
   const [chat, setChat] = useState<IChat>(initialContext.chat);
   const [startTime, setStartTime] = useState(initialContext.startTime);
   const [currentRound, setCurrentRound] = useState(initialContext.currentRound);
@@ -314,7 +311,6 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     let _canTrade = false;
     let _canLoad = false;
     let _canAchieve = false;
-    let _achievements: IAchievement[] = [];
     let _startTime = 0;
     let _currentRound: IGameState['currentRound'] = initialContext.currentRound;
 
@@ -324,7 +320,6 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     if (game) {
       _gameStatus = game.state.status;
       _gameName = game.name;
-      _achievements = game.achievements;
       _startTime = game.startTime;
 
       _isMyTurn = me.uuid === game.state.currentRound.playerUuid;
@@ -385,7 +380,6 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     setCanTrade(_canTrade);
     setCanLoad(_canLoad);
     setCanAchieve(_canAchieve);
-    setAchievements(_achievements);
     setStartTime(_startTime);
     setCurrentRound(_currentRound);
   }, [game]);
@@ -808,7 +802,6 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         canSail,
         canLoad,
         canAchieve,
-        achievements,
         pickAchievement,
         endGame,
         chat,

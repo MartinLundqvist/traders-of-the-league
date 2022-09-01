@@ -29,14 +29,16 @@ interface IAchievementsProps {
 }
 
 const Achievements = ({ className }: IAchievementsProps): JSX.Element => {
-  const { achievements } = useGameServer();
+  const { game } = useGameServer();
 
-  if (achievements.length < 1) return <></>;
+  if (!game) return <></>;
+
+  if (game.achievements.length < 1) return <></>;
 
   return (
     <Wrapper className={className}>
       <div className='container'>
-        {achievements.map((achievement) => (
+        {game.achievements.map((achievement) => (
           <AchievementWithPlayerStats
             key={achievement.name}
             achievement={achievement}
