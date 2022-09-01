@@ -5,7 +5,6 @@ import {
 } from '../../../../../shared/types';
 import { Achievement } from './Achievement';
 import { useGameServer } from '../../../contexts/GameServerProvider';
-import { Suspense, useEffect, useState } from 'react';
 
 const Wrapper = styled.div`
   position: relative;

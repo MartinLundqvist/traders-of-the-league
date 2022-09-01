@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { useLayout } from '../../contexts/LayoutProvider';
-import { Title } from '../../elements/Typography';
 import rules from '../../assets/Rules.pdf';
 
 const Wrapper = styled.div`

@@ -3,9 +3,6 @@ import JoinGame from '../components/JoinGame';
 import Register from '../components/Register';
 import NewGame from './../components/NewGame';
 import Start from './../components/Start';
-import Load from './../components/Load';
-import Trade from '../components/Trade';
-import Ditch from '../components/Ditch';
 import Won from '../components/Won';
 import Achieve from '../components/Achieve';
 import Terminated from '../components/Terminated';
@@ -22,15 +19,7 @@ export type TRoute =
   | 'won'
   | 'terminated';
 
-export type TActionRoute =
-  | 'none'
-  | 'load'
-  | 'trade'
-  | 'ditch'
-  | 'achieve'
-  | 'about'
-  | 'report'
-  | 'city';
+export type TActionRoute = 'none' | 'achieve' | 'about' | 'report' | 'city';
 
 type TRoutes = {
   [key in TRoute]: JSX.Element;
@@ -52,9 +41,6 @@ export const routes: TRoutes = {
 
 export const actionRoutes: TActionRoutes = {
   none: <></>,
-  load: <Load className='grid-area--game' />,
-  trade: <Trade className='grid-area--game' />,
-  ditch: <Ditch className='grid-area--game' />,
   achieve: <Achieve className='grid-area--all' />,
   about: <About className='grid-area--all' />,
   report: <Report className='grid-area--game' />,

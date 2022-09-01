@@ -5,12 +5,7 @@ import { useGameServer } from '../../contexts/GameServerProvider';
 import { useLayout } from '../../contexts/LayoutProvider';
 import { nanoid } from 'nanoid';
 
-import {
-  Button,
-  ButtonSmall,
-  Title,
-  TitleSmall,
-} from '../../elements/Typography';
+import { ButtonSmall, Title, TitleSmall } from '../../elements/Typography';
 import Contract from '../Board/Contract';
 import Good from '../Board/Good';
 import { DitchDialogue } from './DitchDialogue';
