@@ -62,8 +62,8 @@ export const LayoutProvider = ({
     canLoad,
     currentCity,
     gameStatus,
-    endRound,
     currentRound,
+    endRound,
   } = useGameServer();
   const [shipLayout, setShipLayout] = useState<TShipLayout>(
     initialLayoutContext.shipLayout
@@ -83,11 +83,7 @@ export const LayoutProvider = ({
   useEffect(() => {
     if (game && myPlayer)
       setBoardLayout(
-        createBoardLayout(
-          game.board,
-          canSail,
-          game.state.currentRound.hexesWithinRange
-        )
+        createBoardLayout(game.board, canSail, currentRound.hexesWithinRange)
       );
   }, [game, myPlayer, canSail]);
 
@@ -188,11 +184,6 @@ export const LayoutProvider = ({
     isMyTurn && createNotification('Your turn');
   }, [isMyTurn]);
 
-  // useEffect(() => {
-  //   if (isMyTurn && currentRound.movesLeft > 0)
-  //     createNotification(currentRound.movesLeft + ' move(s) left');
-  // }, [currentRound.movesLeft]);
-
   useEffect(() => {
     canAchieve && createNotification('You have achievements');
   }, [canAchieve]);
@@ -204,11 +195,8 @@ export const LayoutProvider = ({
   return (
     <LayoutContext.Provider
       value={{
-        // movePlayerUUIDTo,
-        // players,
         shipLayout,
         boardLayout,
-        // dealContracts,
         activeRoute,
         setActiveRoute,
         activeActionRoute,
