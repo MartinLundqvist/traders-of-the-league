@@ -30,7 +30,6 @@ import {
   TSocketConnection,
   TSocketError,
 } from '../../../shared/types';
-import { Stats } from '../elements/Typography';
 import { IBoardLayoutElement } from '../utils/createBoardLayout';
 // import { useAuthDev } from '../utils/useAuthDev';
 import { useNotifications } from './NotificationsProvider';
@@ -63,9 +62,6 @@ interface IGameServerContext {
   isInCity: boolean;
   currentCity: ICity | null;
   currentTurnPlayer: IPlayer | null;
-  loadCargo: (cargo: TCargo[]) => void;
-  ditchCargo: (cargo: TCargo[]) => void;
-  makeTrades: (contracts: IContract[]) => void;
   tradeDitchLoad: (
     contractsToTrade: IContract[],
     cargoToDitch: TCargo[],
@@ -120,9 +116,6 @@ const initialContext: IGameServerContext = {
   isInCity: false,
   currentCity: null,
   currentTurnPlayer: null,
-  loadCargo: () => {},
-  ditchCargo: () => {},
-  makeTrades: () => {},
   tradeDitchLoad: () => {},
   canLoad: false,
   canTrade: false,
@@ -533,54 +526,54 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     );
   };
 
-  const loadCargo = (cargo: TCargo[]) => {
-    console.log('Loading ' + cargo.length + ' goods from ' + currentCity?.name);
+  // const loadCargo = (cargo: TCargo[]) => {
+  //   console.log('Loading ' + cargo.length + ' goods from ' + currentCity?.name);
 
-    if (!isInCity || !currentCity || !me) {
-      console.log('City or player is not defined!');
-      return;
-    }
+  //   if (!isInCity || !currentCity || !me) {
+  //     console.log('City or player is not defined!');
+  //     return;
+  //   }
 
-    if (!canLoad) {
-      window.alert(
-        'You cannot load. Not your turn or you have already loaded once on your move.'
-      );
-      return;
-    }
+  //   if (!canLoad) {
+  //     window.alert(
+  //       'You cannot load. Not your turn or you have already loaded once on your move.'
+  //     );
+  //     return;
+  //   }
 
-    if (cargo.length < 1) {
-      console.log('No cargo to load');
-      return;
-    }
+  //   if (cargo.length < 1) {
+  //     console.log('No cargo to load');
+  //     return;
+  //   }
 
-    socketRef.current?.emit('loadCargo', cargo, (valid) => {
-      if (!valid) {
-        window.alert(
-          'Not a valid loading condition. Your cargo hold might be full!'
-        );
-      }
-    });
-  };
+  //   socketRef.current?.emit('loadCargo', cargo, (valid) => {
+  //     if (!valid) {
+  //       window.alert(
+  //         'Not a valid loading condition. Your cargo hold might be full!'
+  //       );
+  //     }
+  //   });
+  // };
 
-  const ditchCargo = (cargo: TCargo[]) => {
-    console.log('Ditching ' + cargo.length + ' goods');
+  // const ditchCargo = (cargo: TCargo[]) => {
+  //   console.log('Ditching ' + cargo.length + ' goods');
 
-    if (!me) {
-      console.log('Player is not defined!');
-      return;
-    }
+  //   if (!me) {
+  //     console.log('Player is not defined!');
+  //     return;
+  //   }
 
-    if (cargo.length < 1) {
-      console.log('No cargo to ditch');
-      return;
-    }
+  //   if (cargo.length < 1) {
+  //     console.log('No cargo to ditch');
+  //     return;
+  //   }
 
-    socketRef.current?.emit('ditchCargo', cargo, (valid) => {
-      if (!valid) {
-        window.alert('Failed to ditch cargo!');
-      }
-    });
-  };
+  //   socketRef.current?.emit('ditchCargo', cargo, (valid) => {
+  //     if (!valid) {
+  //       window.alert('Failed to ditch cargo!');
+  //     }
+  //   });
+  // };
 
   const tradeDitchLoad = (
     contractsToTrade: IContract[],
@@ -643,40 +636,41 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
       }
     );
   };
-  const makeTrades = (contracts: IContract[]) => {
-    console.log(
-      'Trading ' + contracts.length + ' goods from ' + currentCity?.name
-    );
 
-    if (!isInCity || !currentCity || !me) {
-      console.log('City or player is not defined!');
-      return;
-    }
+  // const makeTrades = (contracts: IContract[]) => {
+  //   console.log(
+  //     'Trading ' + contracts.length + ' goods from ' + currentCity?.name
+  //   );
 
-    if (!canTrade) {
-      window.alert(
-        'You cannot trade. Not your turn or you have already traded once on your move.'
-      );
-      return;
-    }
+  //   if (!isInCity || !currentCity || !me) {
+  //     console.log('City or player is not defined!');
+  //     return;
+  //   }
 
-    if (contracts.length < 1) {
-      console.log('No contracts to trade!');
-      return;
-    }
+  //   if (!canTrade) {
+  //     window.alert(
+  //       'You cannot trade. Not your turn or you have already traded once on your move.'
+  //     );
+  //     return;
+  //   }
 
-    socketRef.current?.emit('makeTrades', contracts, (valid) => {
-      if (!valid) {
-        window.alert('Not a valid trade. ');
-        return;
-      }
+  //   if (contracts.length < 1) {
+  //     console.log('No contracts to trade!');
+  //     return;
+  //   }
 
-      // Check if player emptied the city
-      if (contracts.length === currentCity.contracts.length) {
-        createNotification('City emptied');
-      }
-    });
-  };
+  //   socketRef.current?.emit('makeTrades', contracts, (valid) => {
+  //     if (!valid) {
+  //       window.alert('Not a valid trade. ');
+  //       return;
+  //     }
+
+  //     // Check if player emptied the city
+  //     if (contracts.length === currentCity.contracts.length) {
+  //       createNotification('City emptied');
+  //     }
+  //   });
+  // };
 
   const pickAchievement = (achievement: IAchievement) => {
     console.log('Picking ' + JSON.stringify(achievement));
@@ -789,9 +783,6 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         currentCity,
         currentTurnPlayer,
         myPlayer,
-        loadCargo,
-        ditchCargo,
-        makeTrades,
         canTrade,
         canSail,
         canLoad,
