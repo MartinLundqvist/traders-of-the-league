@@ -36,6 +36,14 @@ export const createBoardLayout = (
     boardLayout.push(layoutElement);
   });
 
+  boardLayout.sort((a, b) => {
+    if (a.city && b.city) return 0;
+    if (!a.city && b.city) return -1;
+    if (a.city && !b.city) return 1;
+    return 0;
+  });
+
+  // console.log(boardLayout);
   return boardLayout as TBoardLayout;
 };
 

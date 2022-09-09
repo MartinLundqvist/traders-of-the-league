@@ -163,7 +163,9 @@ export const LayoutProvider = ({
 
           shipLayout.push({
             player,
-            top: getTopForBoardPosition(player.position),
+            top:
+              getTopForBoardPosition(player.position) -
+              numberOfShipsInSamePosition * SHIP_DISTANCE,
             left:
               getLeftForBoardPosition(player.position) +
               numberOfShipsInSamePosition * SHIP_DISTANCE,

@@ -1,16 +1,22 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useGameServer } from '../../contexts/GameServerProvider';
-import { Title, Input, Button, TitleSmall } from '../../elements/Typography';
+import Scroll from '../../elements/Scroll';
+import {
+  Title,
+  Input,
+  TitleSmall,
+  ButtonSmall,
+} from '../../elements/Typography';
 
-const Wrapper = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
   .form-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     gap: 1rem;
@@ -32,20 +38,24 @@ const Register = ({ className }: IRegisterProps): JSX.Element => {
   };
 
   return (
-    <Wrapper className={className}>
-      <TitleSmall>This appears to be your first time here!</TitleSmall>
-      <div className='form-container'>
-        <Title>Choose a trader name</Title>
-        <Input
-          type='text'
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          onKeyDown={(e) => handleKeyDown(e.key)}
-          autoFocus
-        />
-        <Button onClick={() => createSession(name)}>Register</Button>
-      </div>
-    </Wrapper>
+    <Scroll className={className}>
+      <Container>
+        <TitleSmall>This appears to be your first time here!</TitleSmall>
+        <div className='form-container'>
+          <Title>Choose a trader name</Title>
+          <Input
+            type='text'
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            onKeyDown={(e) => handleKeyDown(e.key)}
+            autoFocus
+          />
+          <ButtonSmall onClick={() => createSession(name)}>
+            Register
+          </ButtonSmall>
+        </div>
+      </Container>
+    </Scroll>
   );
 };
 

@@ -1,11 +1,18 @@
 import styled from 'styled-components';
 import { useGameServer } from '../../contexts/GameServerProvider';
 import { useLayout } from '../../contexts/LayoutProvider';
-import { ButtonSmall, TitleSmall } from '../../elements/Typography';
+import {
+  ButtonImage,
+  ButtonSmall,
+  TitleSmall,
+} from '../../elements/Typography';
+import url_endRound from '../../assets/ui/gui_button_end_turn.png';
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 0.25rem;
 `;
 
@@ -21,19 +28,19 @@ export const Controls = (): JSX.Element => {
     canAchieve,
   } = useGameServer();
 
-  const { setActiveActionRoute } = useLayout();
+  // const { setActiveActionRoute } = useLayout();
 
   if (gameStatus === 'won' || gameStatus === 'terminated') return <div></div>;
 
   return (
     <Wrapper>
-      <TitleSmall>
+      {/* <TitleSmall>
         {gameStatus === 'playing' || gameStatus === 'endgame'
           ? isMyTurn
             ? 'Make a move'
             : 'Wait for your turn'
           : 'Not started'}
-      </TitleSmall>
+      </TitleSmall> */}
       {isMyGame && gameStatus === 'waiting' && (
         <ButtonSmall onClick={() => startGame()}>Start game</ButtonSmall>
       )}
@@ -60,14 +67,12 @@ export const Controls = (): JSX.Element => {
               Ditch
             </ButtonSmall>
           </div> */}
-          <div>
-            <ButtonSmall
-              disabled={!isMyTurn || canAchieve}
-              onClick={() => endRound({ confirm: true })}
-            >
-              End round
-            </ButtonSmall>
-          </div>
+          <ButtonImage
+            image_url={url_endRound}
+            disabled={!isMyTurn || canAchieve}
+            onClick={() => endRound({ confirm: true })}
+            tooltip='End round'
+          />
         </>
       )}
     </Wrapper>

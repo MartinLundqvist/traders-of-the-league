@@ -5,19 +5,26 @@ import {
   IEmptiedCity,
 } from '../../../../shared/types';
 import { useGameServer } from '../../contexts/GameServerProvider';
+import ScrollFull from '../../elements/ScrollFull';
 import { ButtonSmall, Title } from '../../elements/Typography';
 import { timeToString } from '../../utils/timeToString';
 import Contract from '../Board/Contract';
+import url_gameover from '../../assets/ui/gui_game_over.png';
+import Scroll from '../../elements/Scroll';
 
-const Wrapper = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   gap: 1rem;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   overflow: hidden;
   padding-bottom: 1rem;
+
+  img.image {
+    width: 30%;
+  }
 
   .scrollable {
     overflow: scroll;
@@ -93,63 +100,66 @@ const Won = ({ className }: IStartProps): JSX.Element => {
   if (!gameResults) return <></>;
 
   return (
-    <Wrapper className={className}>
-      <Title>
-        GAME OVER after{' '}
-        {timeToString(gameResults.game.startTime, gameResults.game.endTime)}
-      </Title>
+    <Scroll landscape className={className}>
+      <Container>
+        <img className='image' src={url_gameover} />
+        <Title>
+          GAME OVER after{' '}
+          {timeToString(gameResults.game.startTime, gameResults.game.endTime)}
+        </Title>
 
-      <Title>Player ranking</Title>
-      <div className='scrollable'>
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Player</th>
-              <th>Contracts fulfilled</th>
-              <th>Cities Emptied</th>
-              <th>Achievements</th>
-              <th>VPs</th>
-            </tr>
-          </thead>
-          <tbody>
-            {gameResults.playerStats.map((player) => (
-              <tr key={player.uuid}>
-                <td>{player.rank}</td>
-                <td>{player.name}</td>
-                <td>
-                  <div className='container'>
-                    {getContracts(player.uuid).map((contract) => (
-                      <Contract key={contract.uuid} contract={contract} />
-                    ))}
-                  </div>
-                </td>
-                <td>
-                  <div className='container'>
-                    {getCities(player.uuid).map((city) => (
-                      <div key={city.name} className='city'>
-                        {city.name}
-                      </div>
-                    ))}
-                  </div>
-                </td>
-                <td>
-                  <div className='container achievements'>
-                    {getAchievements(player.uuid).map((achievement) => (
-                      <div key={achievement.name} className='city'>
-                        {achievement.name}
-                      </div>
-                    ))}
-                  </div>
-                </td>
-                <td>{player.victoryPoints}</td>
+        {/* <Title>Player ranking</Title> */}
+        <div className='scrollable'>
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Player</th>
+                <th>Contracts fulfilled</th>
+                <th>Cities Emptied</th>
+                <th>Achievements</th>
+                <th>VPs</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <ButtonSmall onClick={() => leaveGame()}>Start over</ButtonSmall>
-    </Wrapper>
+            </thead>
+            <tbody>
+              {gameResults.playerStats.map((player) => (
+                <tr key={player.uuid}>
+                  <td>{player.rank}</td>
+                  <td>{player.name}</td>
+                  <td>
+                    <div className='container'>
+                      {getContracts(player.uuid).map((contract) => (
+                        <Contract key={contract.uuid} contract={contract} />
+                      ))}
+                    </div>
+                  </td>
+                  <td>
+                    <div className='container'>
+                      {getCities(player.uuid).map((city) => (
+                        <div key={city.name} className='city'>
+                          {city.name}
+                        </div>
+                      ))}
+                    </div>
+                  </td>
+                  <td>
+                    <div className='container achievements'>
+                      {getAchievements(player.uuid).map((achievement) => (
+                        <div key={achievement.name} className='city'>
+                          {achievement.name}
+                        </div>
+                      ))}
+                    </div>
+                  </td>
+                  <td>{player.victoryPoints}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <ButtonSmall onClick={() => leaveGame()}>Start over</ButtonSmall>
+      </Container>
+    </Scroll>
   );
 };
 

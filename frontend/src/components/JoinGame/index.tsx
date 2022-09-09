@@ -3,28 +3,27 @@ import styled from 'styled-components';
 import { IActiveGame } from '../../../../shared/types';
 import { useGameServer } from '../../contexts/GameServerProvider';
 import { useLayout } from '../../contexts/LayoutProvider';
-import { Title, TitleSmall, ButtonSmall } from '../../elements/Typography';
+import Scroll from '../../elements/Scroll';
+import {
+  Title,
+  TitleSmall,
+  ButtonSmall,
+  TitleButton,
+} from '../../elements/Typography';
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+// const Container = styled.div`
+//   li {
+//     list-style: none;
+//     font-size: 2rem;
+//     transition: all 200ms ease-in-out;
 
-  .container {
-    li {
-      list-style: none;
-      font-size: 2rem;
-      transition: all 200ms ease-in-out;
-
-      &:hover {
-        cursor: pointer;
-        transform: translate(-3px, -3px);
-        text-shadow: 5px 5px 3px hsla(57, 145%, 30%, 0.6);
-      }
-    }
-  }
-`;
+//     &:hover {
+//       cursor: pointer;
+//       transform: translate(-3px, -3px);
+//       text-shadow: 5px 5px 3px hsla(57, 145%, 30%, 0.6);
+//     }
+//   }
+// `;
 
 interface IJoinGameProps {
   className: string;
@@ -60,31 +59,29 @@ const JoinGame = ({ className }: IJoinGameProps): JSX.Element => {
   };
 
   return (
-    <Wrapper className={className}>
+    <Scroll className={className}>
       <TitleSmall>List updates every 2 seconds</TitleSmall>
       <Title>Click to join a game</Title>
-      <div className='container'>
-        <ul>
-          {activeGames.map((game) => (
-            <li
-              key={game.uuid}
-              className='link'
-              onClick={() => handleClick(game)}
-            >
-              {game.name +
-                ': ' +
-                game.players[0].user.name +
-                ', ' +
-                game.players.length +
-                ' player(s) waiting'}
-            </li>
-          ))}
-        </ul>
-      </div>
+
+      {activeGames.map((game) => (
+        <TitleButton
+          key={game.uuid}
+          className='link'
+          onClick={() => handleClick(game)}
+        >
+          {game.name +
+            ': ' +
+            game.players[0].user.name +
+            ', ' +
+            game.players.length +
+            ' player(s) waiting'}
+        </TitleButton>
+      ))}
+
       <ButtonSmall onClick={() => setActiveRoute('start')}>
         Back to menu
       </ButtonSmall>
-    </Wrapper>
+    </Scroll>
   );
 };
 

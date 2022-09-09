@@ -9,23 +9,22 @@ const Wrapper = styled.div`
   grid-template-rows: 1fr;
   grid-template-areas: 'left right';
 
-  div:nth-child(1) {
+  img:nth-child(1) {
     grid-area: left;
-    justify-self: end;
-    align-self: center;
+    padding-left: 50%;
   }
 
-  div:nth-child(2) {
+  img:nth-child(2) {
     grid-area: right;
-    justify-self: start;
-    align-self: center;
+    padding-right: 50%;
   }
 
   /* justify-content: center; */
-  align-items: center;
+  align-items: end;
   top: 0;
   height: 100%;
   width: 100%;
+  padding: 0 1rem 1rem 1rem;
   pointer-events: none;
 `;
 

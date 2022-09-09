@@ -4,9 +4,25 @@ export const Title = styled.h1`
   display: inline-block;
   margin: 0;
   padding: 0;
-  font-size: 3rem;
-  font-weight: bold;
+  font-size: 2rem;
+  font-weight: normal;
   text-shadow: 3px 3px 3px var(--color-bg-shadow);
+`;
+
+export const TitleButton = styled.h1`
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  font-size: 2rem;
+  font-weight: normal;
+  text-shadow: 3px 3px 3px var(--color-bg-shadow);
+
+  transition: all 200ms ease-in-out;
+  &:hover {
+    cursor: pointer;
+    transform: translate(-5px, -5px);
+    text-shadow: 8px 8px 3px var(--color-bg-shadow);
+  }
 `;
 
 export const TitleSmall = styled.h3`
@@ -105,6 +121,7 @@ export const ButtonSmall = styled.button<IButtonSmallProps>`
 
   &:hover {
     background-color: var(--color-bg-highlight);
+    cursor: pointer;
   }
 
   @keyframes pulse {
@@ -113,6 +130,68 @@ export const ButtonSmall = styled.button<IButtonSmallProps>`
     }
   }
 `;
+
+interface IButtonWithImageProps {
+  image_url: string;
+}
+
+const ButtonWithImage = styled.button<IButtonWithImageProps>`
+  border: none;
+  background-color: transparent;
+  background-image: url('${(props) => props.image_url}');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 5rem;
+  height: 4rem;
+  transition: transform 200ms ease-in-out;
+  font: inherit;
+
+  &:disabled {
+    filter: grayscale(100%);
+  }
+
+  .tooltip-text {
+    width: max-content;
+    visibility: hidden;
+    position: relative;
+    top: -2.5rem;
+    text-shadow: 3px 3px 3px var(--color-bg-shadow);
+  }
+
+  &:hover:enabled {
+    transform: scale(1.1);
+    cursor: pointer;
+
+    .tooltip-text {
+      visibility: visible;
+    }
+  }
+`;
+
+interface IButtonImageProps {
+  image_url: string;
+  tooltip?: string;
+  onClick?: () => void;
+  disabled?: boolean;
+}
+
+export const ButtonImage = ({
+  image_url,
+  tooltip = '',
+  onClick = () => {},
+  disabled = false,
+}: IButtonImageProps): JSX.Element => {
+  return (
+    <ButtonWithImage
+      image_url={image_url}
+      onClick={onClick}
+      disabled={disabled}
+    >
+      <div className='tooltip-text'>{tooltip}</div>
+    </ButtonWithImage>
+  );
+};
 
 export const SelectSmall = styled.select`
   font: inherit;

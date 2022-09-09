@@ -31,6 +31,8 @@ const Wrapper = styled.div`
 
   .grid-area--game {
     grid-area: game;
+    overflow-y: clip;
+    overflow-x: visible;
   }
 
   .grid-area--footer {

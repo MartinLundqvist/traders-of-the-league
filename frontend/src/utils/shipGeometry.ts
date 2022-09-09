@@ -1,3 +1,3 @@
-export const SHIP_WIDTH = 20;
-export const SHIP_HEIGHT = 100;
-export const SHIP_DISTANCE = 30;
+export const SHIP_WIDTH = 60;
+export const SHIP_HEIGHT = 60;
+export const SHIP_DISTANCE = 15;

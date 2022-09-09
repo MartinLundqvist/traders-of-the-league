@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { useGameServer } from '../../contexts/GameServerProvider';
 import { useLayout } from '../../contexts/LayoutProvider';
+import Scroll from '../../elements/Scroll';
+import ScrollFull from '../../elements/ScrollFull';
 import { Button, ButtonSmall, Title } from '../../elements/Typography';
 
 const Wrapper = styled.div`
@@ -28,10 +30,10 @@ const Terminated = ({ className }: IStartProps): JSX.Element => {
   const { leaveGame } = useGameServer();
 
   return (
-    <Wrapper className={className}>
+    <ScrollFull className={className}>
       <Title>GAME TERMINATED</Title>
       <ButtonSmall onClick={() => leaveGame()}>Start over</ButtonSmall>
-    </Wrapper>
+    </ScrollFull>
   );
 };
 

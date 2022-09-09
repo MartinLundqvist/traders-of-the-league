@@ -9,79 +9,83 @@ import { ButtonSmall, Title, TitleSmall } from '../../elements/Typography';
 import Contract from '../Board/Contract';
 import Good from '../Board/Good';
 import { DitchDialogue } from './DitchDialogue';
+import Scroll from '../../elements/Scroll';
+import ScrollFull from '../../elements/ScrollFull';
 
-const Wrapper = styled.div`
-  position: relative;
+const Container = styled.div`
+  /* position: relative;
   background-color: transparent;
   width: 100%;
   height: 100%;
   z-index: 10;
   display: grid;
 
-  .container-main {
-    place-self: center;
-    position: relative;
+  .container-main { */
+  display: grid;
+  /* place-self: center; */
+  place-content: center;
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr 1fr 0.5fr auto 1fr;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: 'cityheading cityheading' 'cargo cargo' 'orders orders' 'load trade' 'actions actions';
+  justify-items: center;
+  align-items: start;
+  gap: 1rem;
+  padding: 1rem;
+
+  /* background-color: var(--color-fill-sea-opaque);
+  box-shadow: 0 3px 5px var(--color-bg-shadow);
+  backdrop-filter: blur(10px); */
+  /* z-index: 10; */
+
+  .container-main--cityheading {
+    grid-area: cityheading;
+  }
+
+  .container-main--orders {
+    grid-area: orders;
+    display: flex;
+    gap: 2rem;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .container-main--cargo {
+    grid-area: cargo;
     display: grid;
-    grid-template-rows: 1fr 1fr 0.5fr auto 1fr;
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas: 'cityheading cityheading' 'cargo cargo' 'orders orders' 'load trade' 'actions actions';
-    justify-items: center;
-    align-items: start;
-    gap: 1rem;
-    padding: 1rem;
+    grid-template-rows: 1fr;
+    grid-template-columns: repeat(6, 1fr);
+    align-items: center;
 
-    background-color: var(--color-fill-sea-opaque);
-    box-shadow: 0 3px 5px var(--color-bg-shadow);
-    backdrop-filter: blur(10px);
-    z-index: 10;
-
-    .container-main--cityheading {
-      grid-area: cityheading;
-    }
-
-    .container-main--orders {
-      grid-area: orders;
-      display: flex;
-      gap: 2rem;
-      flex-direction: row;
-      justify-content: space-between;
-    }
-
-    .container-main--cargo {
-      grid-area: cargo;
-      display: grid;
-      grid-template-rows: 1fr;
-      grid-template-columns: repeat(6, 1fr);
-      align-items: center;
-
-      > * {
-        position: relative;
-        width: 3rem;
-      }
-    }
-
-    .container-actions--load {
-      grid-area: load;
-      display: flex;
-
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .container-actions--trade {
-      grid-area: trade;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .container-actions--actions {
-      grid-area: actions;
-      display: flex;
-      flex-direction: row;
-      gap: 2rem;
+    > * {
+      position: relative;
+      width: 3rem;
     }
   }
+
+  .container-actions--load {
+    grid-area: load;
+    display: flex;
+
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .container-actions--trade {
+    grid-area: trade;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .container-actions--actions {
+    grid-area: actions;
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+  }
+  /* } */
 `;
 
 interface IActionButtonProps {
@@ -446,8 +450,8 @@ const City = ({ className }: ICityProps): JSX.Element => {
   };
 
   return (
-    <Wrapper className={className}>
-      <div className='container-main'>
+    <ScrollFull className={className}>
+      <Container>
         <Title className='container-main--cityheading'>
           Welcome to {currentCity?.name}
         </Title>
@@ -508,8 +512,8 @@ const City = ({ className }: ICityProps): JSX.Element => {
           ditchCargo={ditchCargoFromCargoDialogue}
           close={() => setShowDitchDialogue(false)}
         />
-      </div>
-    </Wrapper>
+      </Container>
+    </ScrollFull>
   );
 };
 

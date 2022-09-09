@@ -10,7 +10,6 @@ import {
 import { useLayout } from '../../contexts/LayoutProvider';
 import { useGameServer } from '../../contexts/GameServerProvider';
 import Clock from './Clock';
-import Yield from './Yield';
 import { IBoardLayoutElement } from '../../utils/createBoardLayout';
 
 const Wrapper = styled.div`
@@ -85,7 +84,6 @@ const Board = ({ className }: IBoardProps): JSX.Element => {
       </div>
 
       <Clock />
-      <Yield />
     </Wrapper>
   );
 };

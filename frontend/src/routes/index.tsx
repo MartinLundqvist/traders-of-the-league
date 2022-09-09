@@ -36,7 +36,7 @@ export const routes: TRoutes = {
   joingame: <JoinGame className='grid-area--game' />,
   board: <Board className='grid-area--game' />,
   won: <Won className='grid-area--game' />,
-  terminated: <Terminated className='grid-area--game' />,
+  terminated: <Terminated className='grid-area--all' />,
 };
 
 export const actionRoutes: TActionRoutes = {

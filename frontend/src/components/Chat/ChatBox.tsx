@@ -17,7 +17,7 @@ const Wrapper = styled.div`
     flex-direction: column;
     gap: 0.5rem;
     height: 85%;
-    width: calc(100% - 2rem);
+    width: calc(100% - 3.5rem);
     overflow-y: scroll;
   }
 
@@ -25,7 +25,7 @@ const Wrapper = styled.div`
     position: absolute;
     top: 90%;
     /* padding: 0.25rem; */
-    width: calc(100% - 2rem);
+    width: calc(100% - 3.5rem);
     height: 10%;
 
     input {
