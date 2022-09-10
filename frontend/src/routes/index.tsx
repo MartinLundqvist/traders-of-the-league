@@ -43,6 +43,6 @@ export const actionRoutes: TActionRoutes = {
   none: <></>,
   achieve: <Achieve className='grid-area--all' />,
   about: <About className='grid-area--all' />,
-  report: <Report className='grid-area--game' />,
+  report: <Report className='grid-area--all' />,
   city: <City className='grid-area--all' />,
 };

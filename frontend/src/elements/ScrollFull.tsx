@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import url_scroll from '../assets/ui/gui_scroll.png';
 import url_scroll_landscape from '../assets/ui/gui_long_scroll.png';
+import url_scroll_bug from '../assets/ui/gui_bug_report.png';
 import { HEADER, FOOTER } from '../utils/layoutGeometry';
 
 const Wrapper = styled.div`
@@ -23,6 +24,10 @@ const Wrapper = styled.div`
       padding: 0 2rem 0 2rem;
     }
 
+    &.bug-report {
+      background-image: url('${url_scroll_bug}');
+    }
+
     background-position: center;
     background-repeat: no-repeat;
 
@@ -38,16 +43,24 @@ interface IScrollProps {
   children: React.ReactNode;
   className: string;
   landscape?: boolean;
+  bugreport?: boolean;
 }
 
 const ScrollFull = ({
   children,
   className,
   landscape = false,
+  bugreport = false,
 }: IScrollProps): JSX.Element => {
   return (
     <Wrapper className={className}>
-      <div className={'scroll-container' + (landscape ? ' landscape' : '')}>
+      <div
+        className={
+          'scroll-container' +
+          (landscape ? ' landscape' : '') +
+          (bugreport ? ' bug-report' : '')
+        }
+      >
         {children}
       </div>
     </Wrapper>

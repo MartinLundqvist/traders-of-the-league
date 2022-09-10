@@ -28,7 +28,7 @@ export type TCity =
   | 'Riga'
   | 'Reval';
 
-export type TVictoryPoint = 0 | 1 | 2 | 3 | 4 | 5;
+export type TVictoryPoint = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 export type TCoatOfArms = string;
 

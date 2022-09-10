@@ -12,9 +12,24 @@ export const BOARD_HEIGHT = 5 * HEX_MIN_DIAMETER;
 export const BOARD_TOP_BOTTOM_PADDING = CONTRACT_HEIGHT;
 
 export const getLeftForBoardPosition = (position: IBoardPosition): number => {
-  return position.column * HEX_LEFT_OFFSET;
+  const dataId = position.column.toString() + ':' + position.row.toString();
+  const hexElem = document.getElementById(dataId);
+
+  console.log('In the board position thingy and returning ');
+  console.log(hexElem);
+
+  return hexElem?.offsetLeft ?? 0;
+
+  // Only need to keep the below if responsive does not work
+  // return position.column * HEX_LEFT_OFFSET;
 };
 
 export const getTopForBoardPosition = (position: IBoardPosition): number => {
-  return (position.row * HEX_TOP_OFFSET) / 2;
+  const dataId = position.column.toString() + ':' + position.row.toString();
+  const hexElem = document.getElementById(dataId);
+
+  return hexElem?.offsetTop ?? 0;
+
+  // Only need to keep the below if responsive does not work
+  // return (position.row * HEX_TOP_OFFSET) / 2;
 };

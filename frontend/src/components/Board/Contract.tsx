@@ -5,7 +5,7 @@ import { CONTRACT_HEIGHT } from '../../utils/boardGeometry';
 import C_blu_bla_1 from '../../assets/contracts/C_blu_bla_1.png';
 import C_blu_bro_2 from '../../assets/contracts/C_blu_bro_2.png';
 import C_bro_bla_2 from '../../assets/contracts/C_bro_bla_2.png';
-import C_gre_blu_1 from '../../assets/contracts/C_gre_blu_1.png';
+import C_grn_blu_1 from '../../assets/contracts/C_grn_blu_1.png';
 import C_grn_bla_1 from '../../assets/contracts/C_grn_bla_1.png';
 import C_grn_bro_2 from '../../assets/contracts/C_grn_bro_2.png';
 import C_gry_bla_2 from '../../assets/contracts/C_gry_bla_2.png';
@@ -62,8 +62,8 @@ import W_yel_grn_2 from '../../assets/contracts/W_yel_grn_2.png';
 import W_yel_gry_5 from '../../assets/contracts/W_yel_gry_5.png';
 
 const IMG = styled.img`
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
   filter: drop-shadow(3px 3px 3px var(--color-bg-shadow));
 `;
 
@@ -75,7 +75,7 @@ const CONTRACTS: TContractMap = {
   C_blu_bla_1: <IMG src={C_blu_bla_1} />,
   C_blu_bro_2: <IMG src={C_blu_bro_2} />,
   C_bro_bla_2: <IMG src={C_bro_bla_2} />,
-  C_gre_blu_1: <IMG src={C_gre_blu_1} />,
+  C_grn_blu_1: <IMG src={C_grn_blu_1} />,
   C_grn_bla_1: <IMG src={C_grn_bla_1} />,
   C_grn_bro_2: <IMG src={C_grn_bro_2} />,
   C_gry_bla_2: <IMG src={C_gry_bla_2} />,
@@ -137,8 +137,15 @@ interface IWrapperProps {
 
 const Wrapper = styled.div<IWrapperProps>`
   display: inline-block;
-  height: ${(props) => props.size}px;
-  width: ${(props) => props.size}px;
+  // This is legacy, remove if responsive works
+  /* height: ${(props) => props.size}px;
+  width: ${(props) => props.size}px; */
+
+  max-height: 100%;
+  max-width: 100%;
+  /* 
+  height: calc(var(--R) / 2);
+  width: calc(var(--R) / 2); */
 `;
 
 interface IContractProps {
@@ -150,7 +157,8 @@ const Contract = ({
   contract,
   size = CONTRACT_HEIGHT,
 }: IContractProps): JSX.Element => {
-  return <Wrapper size={size}>{CONTRACTS[contract.uuid]}</Wrapper>;
+  // return <Wrapper size={size}>{CONTRACTS[contract.uuid]}</Wrapper>;
+  return <>{CONTRACTS[contract.uuid]}</>;
 };
 
 export default Contract;

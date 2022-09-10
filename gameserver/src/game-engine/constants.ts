@@ -371,10 +371,10 @@ export const CONTRACTS: IContract[] = [
     uuid: 'W_red_gry_3',
   },
   {
-    value: 5,
+    value: 7,
     cargo: ['red', 'gray'],
     region: 'Central',
-    uuid: 'C_red_gry_5',
+    uuid: 'C_red_gry_7',
   },
   {
     value: 3,

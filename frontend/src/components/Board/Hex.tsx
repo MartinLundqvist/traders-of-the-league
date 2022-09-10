@@ -15,8 +15,10 @@ import hex_city_west from '../../assets/map/hex_tile_city_west.png';
 import hex_city_east from '../../assets/map/hex_tile_city_east.png';
 
 interface IWrapperProps {
-  top: number;
-  left: number;
+  top: number; // Remove this if responsive works
+  left: number; // Remove this if responsive works
+  row: number; // New for responsive
+  column: number; // New for responsive
   hex_url: string;
   north?: boolean;
 }
@@ -25,11 +27,21 @@ const Wrapper = styled.div<IWrapperProps>`
   background-image: ${(props) => `url('${props.hex_url}')`};
   background-size: cover;
   background-position: center;
-  position: absolute;
+
+  // The below is legacy - remove if responsive works
+  /* position: absolute;
   height: ${HEX_MIN_DIAMETER}px;
   width: ${HEX_MAX_DIAMETER}px;
   top: ${(props) => props.top}px;
-  left: ${(props) => props.left}px;
+  left: ${(props) => props.left}px; */
+
+  // The below is new for responsive only
+  position: relative;
+  /* border: 1px solid black; */
+  grid-row-start: ${(props) => props.row + 1};
+  grid-column-start: ${(props) => props.column + 1};
+  grid-row-end: span 2;
+  width: calc(2 * var(--R));
 
   &.highlight {
     /* filter: contrast(150%); */
@@ -102,9 +114,9 @@ const SVG = styled.svg<ISVGProps>`
 `;
 
 const Polygon = styled.polygon`
-  /* stroke: var(--color-hex); */
-  /* stroke-width: 10;
-  stroke-miterlimit: 10; */
+  stroke: grey;
+  stroke-width: 2;
+  stroke-miterlimit: 2;
 
   &.highlight {
     /* animation: stroke 1000ms infinite; */
@@ -136,7 +148,7 @@ const Polygon = styled.polygon`
 `;
 
 interface IHexProps {
-  id: number;
+  id: string;
   row: number;
   column: number;
   city?: null | ICity;
@@ -182,10 +194,14 @@ const Hex = ({
 
   return (
     <Wrapper
-      data-id={id}
-      top={getTopForBoardPosition({ row, column })}
-      left={getLeftForBoardPosition({ row, column })}
+      id={id}
+      // top={getTopForBoardPosition({ row, column })} // Remove if responsive works
+      // left={getLeftForBoardPosition({ row, column })} // Remove if responsive works
+      top={0} // Remove if responsive works
+      left={0} // Remove if responsive works
       north={north}
+      column={column}
+      row={row}
       hex_url={getImageUrl(city)}
       className={highlight ? 'highlight' : ''}
       // onClick={onClick}

@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import { IPlayer } from '../../../shared/types';
 import {
   getLeftForBoardPosition,
@@ -11,14 +17,19 @@ import { useGameServer } from './GameServerProvider';
 import { useNotifications } from './NotificationsProvider';
 import { canFulFillSomeContract } from '../utils/canFulfillContract';
 
-type TShipLayout = {
+type TShipLayout = TShip[];
+
+type TShip = {
   player: IPlayer;
   isMe: boolean;
   isMyTurn: boolean;
   isInCity: boolean;
   top: number;
   left: number;
-}[];
+  row: number;
+  column: number;
+  offset: number;
+};
 
 interface ILayoutContext {
   boardLayout: TBoardLayout;
@@ -80,6 +91,7 @@ export const LayoutProvider = ({
 
   const { createNotification } = useNotifications();
 
+  // This hook manages the board layout
   useEffect(() => {
     if (game && myPlayer)
       setBoardLayout(
@@ -141,8 +153,8 @@ export const LayoutProvider = ({
     currentCity,
   ]);
 
-  // This hook manages the board and ship layouts programmatically based on the status of the GameServer game
-  useEffect(() => {
+  // This hook manages ship layouts programmatically based on the status of the GameServer game
+  useLayoutEffect(() => {
     const getShipLayout = (): TShipLayout => {
       let shipLayout: TShipLayout = [];
 
@@ -163,15 +175,20 @@ export const LayoutProvider = ({
 
           shipLayout.push({
             player,
-            top:
-              getTopForBoardPosition(player.position) -
-              numberOfShipsInSamePosition * SHIP_DISTANCE,
-            left:
-              getLeftForBoardPosition(player.position) +
-              numberOfShipsInSamePosition * SHIP_DISTANCE,
+            top: 0,
+            left: 0,
+            // top:
+            //   getTopForBoardPosition(player.position) -
+            //   numberOfShipsInSamePosition * SHIP_DISTANCE,
+            // left:
+            //   getLeftForBoardPosition(player.position) +
+            //   numberOfShipsInSamePosition * SHIP_DISTANCE,
             isMe: player.user.uuid === me.uuid,
             isMyTurn: game.state.currentRound.playerUuid === me.uuid,
             isInCity: !!currentHex?.city,
+            row: player.position.row,
+            column: player.position.column,
+            offset: numberOfShipsInSamePosition * SHIP_DISTANCE,
           });
         });
 

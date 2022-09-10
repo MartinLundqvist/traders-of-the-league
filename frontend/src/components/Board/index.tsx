@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Hex from './Hex';
 import Ships from './Ships';
-import { useMemo } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import {
   BOARD_WIDTH,
   BOARD_HEIGHT,
@@ -12,6 +12,27 @@ import { useGameServer } from '../../contexts/GameServerProvider';
 import Clock from './Clock';
 import { IBoardLayoutElement } from '../../utils/createBoardLayout';
 
+// const Wrapper = styled.div`
+//   // New version
+//   position: relative;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+//   width: 100%;
+//   height: 100%;
+
+//   .hexagons {
+//     position: relative;
+//     width: ${BOARD_WIDTH}px;
+//     height: ${BOARD_HEIGHT}px;
+//     /* margin-top: ${BOARD_TOP_BOTTOM_PADDING}px;
+//     margin-bottom: ${BOARD_TOP_BOTTOM_PADDING}px; */
+//   }
+// `;
+
+// TODO: This is for responsiveness
+
 const Wrapper = styled.div`
   // New version
   position: relative;
@@ -19,15 +40,14 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
+  /* height: 100%; */
 
   .hexagons {
     position: relative;
-    width: ${BOARD_WIDTH}px;
-    height: ${BOARD_HEIGHT}px;
-    /* margin-top: ${BOARD_TOP_BOTTOM_PADDING}px;
-    margin-bottom: ${BOARD_TOP_BOTTOM_PADDING}px; */
+    display: grid;
+    place-content: center;
+    grid-template-columns: repeat(12, var(--width));
+    grid-template-rows: repeat(10, var(--height));
   }
 `;
 
@@ -52,11 +72,15 @@ const Board = ({ className }: IBoardProps): JSX.Element => {
     }
   };
 
+  const createHexId = (hex: IBoardLayoutElement): string => {
+    return hex.column.toString() + ':' + hex.row.toString();
+  };
+
   const Hexagons = useMemo(
     () =>
       boardLayout.map((hex, index) => (
         <Hex
-          id={index}
+          id={createHexId(hex)}
           row={hex.row}
           column={hex.column}
           city={hex.city}

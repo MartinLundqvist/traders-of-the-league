@@ -19,6 +19,12 @@
   --color-background-dark: hsl(26, 40%, 47%);
   --color-background-medium: hsl(31, 49%, 57%);
   --color-background-light: hsl(36, 65%, 74%);
+
+  /* FOR RESPONSIVE */
+  --margin: 60vw;
+  --R: calc((100vw - var(--margin)) / 12);
+  --width: calc(1.5 * var(--R));
+  --height: calc(0.8660254 * var(--R));
 }
 
 @font-face {
