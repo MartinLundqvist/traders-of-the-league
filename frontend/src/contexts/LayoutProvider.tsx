@@ -6,10 +6,6 @@ import {
   useState,
 } from 'react';
 import { IPlayer } from '../../../shared/types';
-import {
-  getLeftForBoardPosition,
-  getTopForBoardPosition,
-} from '../utils/boardGeometry';
 import { SHIP_DISTANCE } from '../utils/shipGeometry';
 import { TActionRoute, TRoute } from '../routes';
 import { createBoardLayout, TBoardLayout } from '../utils/createBoardLayout';
@@ -203,9 +199,9 @@ export const LayoutProvider = ({
     isMyTurn && createNotification('Your turn');
   }, [isMyTurn]);
 
-  useEffect(() => {
-    canAchieve && createNotification('You have achievements');
-  }, [canAchieve]);
+  // useEffect(() => {
+  //   canAchieve && createNotification('You have achievements');
+  // }, [canAchieve]);
 
   useEffect(() => {
     isEndGame && createNotification('End game');

@@ -26,8 +26,8 @@ const Wrapper = styled.div<IWrapperProps>`
   ${(props) =>
     props.zoom &&
     `
-    transform: translateY(-25%) scale(1.1);
-    filter: contrast(110%);
+    transform: translateY(-25%) scale(1.2);
+    filter: contrast(130%);
     `}
 
   /* 
