@@ -24,8 +24,8 @@ const CARGO: TCargoMap = {
   black: <IMG src={blackCube} />,
   blue: <IMG src={blueCube} />,
   brown: <IMG src={brownCube} />,
-  gray: <IMG src={greenCube} />,
-  green: <IMG src={greyCube} />,
+  gray: <IMG src={greyCube} />,
+  green: <IMG src={greenCube} />,
   red: <IMG src={redCube} />,
   yellow: <IMG src={yellowCube} />,
 };

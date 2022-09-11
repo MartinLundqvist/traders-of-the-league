@@ -5,6 +5,7 @@ import {
 } from '../../../../../shared/types';
 import { Achievement } from './Achievement';
 import { useGameServer } from '../../../contexts/GameServerProvider';
+import url_scroll from '../../../assets/ui/gui_player_status.png';
 
 const Wrapper = styled.div`
   position: relative;
@@ -17,9 +18,13 @@ const Wrapper = styled.div`
   }
 
   .playerstats {
+    background-image: url('${url_scroll}');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
     z-index: 2;
     position: absolute;
-    padding: 0.25rem;
+    padding: 0.5rem 2rem 0.5rem 2rem;
     height: auto;
     width: max-content;
     display: flex;
@@ -28,8 +33,8 @@ const Wrapper = styled.div`
     align-items: center;
     gap: 0.25rem;
     font-size: 1.2rem;
-    background-color: var(--color-bg);
-    box-shadow: 3px 3px 3px var(--color-bg-shadow);
+    /* background-color: var(--color-bg);
+    box-shadow: 3px 3px 3px var(--color-bg-shadow); */
     opacity: 0;
     left: 50%;
     top: 50%;

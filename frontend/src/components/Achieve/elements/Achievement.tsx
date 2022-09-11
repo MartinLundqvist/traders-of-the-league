@@ -18,8 +18,8 @@ import supplierA from '../../../assets/achievements/Supplier_A_2-3_4P.png';
 import supplierB from '../../../assets/achievements/Supplier_B_4-5_3P.png';
 
 const IMG = styled.img`
-  height: 100%;
-  width: 100%;
+  max-height: 100%;
+  max-width: 100%;
   /* filter: drop-shadow(3px 3px 4px var(--color-bg-shadow)); */
   filter: drop-shadow(0px 0px 10px white);
 `;
@@ -49,8 +49,8 @@ const ACHIEVEMENTS: TAchievementMap = {
 
 const Wrapper = styled.div`
   position: relative;
-  height: 8rem;
-  width: 7rem;
+  /* height: 8rem;
+  width: 7rem; */
   /* padding: 0.25rem;
   display: flex;
   flex-direction: column;

@@ -2,40 +2,63 @@ import styled from 'styled-components';
 import { IPlayer } from '../../../../shared/types';
 import url_scroll from '../../assets/ui/gui_player_status.png';
 import Good from '../Board/Good';
+import url_achievement from '../../assets/ui/gui_player_status_achievements.png';
+import url_city from '../../assets/ui/gui_player_status_cities_emptied.png';
+import url_status from '../../assets/ui/gui_player_status_pointer.png';
 
-interface IWrapperProps {
-  zoom: boolean;
-}
+const AchImg = styled.img`
+  content: url('${url_achievement}');
+  max-width: 100%;
+  max-height: 100%;
+`;
 
-const Wrapper = styled.div<IWrapperProps>`
+const CityImg = styled.img`
+  content: url('${url_city}');
+  max-width: 100%;
+  max-height: 100%;
+`;
+
+const Wrapper = styled.div`
   background-image: url('${url_scroll}');
   background-size: 100% 100%;
   background-position: center;
   background-origin: border-box;
   background-repeat: no-repeat;
   max-width: 10rem;
-  height: 125%;
+  height: 130%;
+
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  justify-content: space-evenly;
+  /* gap: 0.3rem; */
   padding: 0.5rem 2rem 0.25rem 1.5rem;
   font-size: 1.2rem;
   border-radius: 0.25rem;
   transform: translateY(-25%);
 
-  ${(props) =>
-    props.zoom &&
-    `
-    transform: translateY(-25%) scale(1.2);
-    filter: contrast(130%);
-    `}
+  &.me {
+    height: 140%;
+    transform: translateY(-30%);
+  }
 
-  /* 
-  background-color: var(--color-bg);
-  box-shadow: 3px 3px 3px var(--color-bg-shadow); */
-
-  .content {
+  .points {
     font-size: 0.8rem;
+  }
+
+  &.turn {
+    filter: contrast(120%);
+    &::after {
+      position: absolute;
+      content: '';
+      width: 100%;
+      height: 100%;
+      top: -5%;
+      left: 0;
+      background-image: url('${url_status}');
+      background-size: 40%;
+      background-position: top center;
+      background-repeat: no-repeat;
+    }
   }
 
   .cargo {
@@ -43,64 +66,140 @@ const Wrapper = styled.div<IWrapperProps>`
     grid-template-columns: repeat(5, 1fr);
   }
 
-  .black {
+  .achievements {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .cities-emptied {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+
+    img {
+      grid-row: 1;
+    }
+
+    img:nth-child(1) {
+      grid-column: 1;
+    }
+    img:nth-child(2) {
+      grid-column: 2;
+    }
+    img:nth-child(3) {
+      grid-column: 3;
+    }
+    img:nth-child(4) {
+      grid-column: 4;
+    }
+    img:nth-child(5) {
+      grid-column: 5;
+    }
+    img:nth-child(6) {
+      grid-column: 6;
+    }
+
+    img:nth-child(7) {
+      grid-column: 1;
+      transform: translate(2px, 2px);
+      z-index: -1;
+    }
+    img:nth-child(8) {
+      grid-column: 2;
+      transform: translate(2px, 2px);
+      z-index: -1;
+    }
+    img:nth-child(9) {
+      grid-column: 3;
+      transform: translate(2px, 2px);
+      z-index: -1;
+    }
+    img:nth-child(10) {
+      grid-column: 4;
+      transform: translate(2px, 2px);
+      z-index: -1;
+    }
+    img:nth-child(11) {
+      grid-column: 5;
+      transform: translate(2px, 2px);
+      z-index: -1;
+    }
+    img:nth-child(11) {
+      grid-column: 6;
+      transform: translate(2px, 2px);
+      z-index: -1;
+    }
+  }
+
+  .player-color {
     display: inline-block;
     margin-right: 0.5rem;
     height: 0.7rem;
     aspect-ratio: 1 / 1;
-    background-color: black;
     opacity: 0.9;
-  }
-  .red {
-    display: inline-block;
-    margin-right: 0.5rem;
-    height: 0.7rem;
-    aspect-ratio: 1 / 1;
-    background-color: red;
-    opacity: 0.9;
-  }
-  .blue {
-    display: inline-block;
-    margin-right: 0.5rem;
-    height: 0.7rem;
-    aspect-ratio: 1 / 1;
-    background-color: blue;
-    opacity: 0.9;
-  }
-  .green {
-    display: inline-block;
-    margin-right: 0.5rem;
-    height: 0.7rem;
-    aspect-ratio: 1 / 1;
-    background-color: green;
-    opacity: 0.9;
-  }
-  .yellow {
-    display: inline-block;
-    margin-right: 0.7rem;
-    height: 0.8rem;
-    aspect-ratio: 1 / 1;
-    background-color: yellow;
-    opacity: 0.9;
+
+    &.black {
+      background-color: black;
+    }
+    &.red {
+      background-color: red;
+    }
+    &.blue {
+      background-color: blue;
+    }
+    &.green {
+      background-color: green;
+    }
+    &.yellow {
+      background-color: yellow;
+    }
   }
 `;
 
 interface IPlayerProps {
   player: IPlayer;
-  zoom?: boolean;
+  me?: boolean;
+  turn?: boolean;
 }
-export const Player = ({ player, zoom = false }: IPlayerProps): JSX.Element => {
+export const Player = ({
+  player,
+  me = false,
+  turn = false,
+}: IPlayerProps): JSX.Element => {
+  const getAchievements = (): JSX.Element[] | JSX.Element => {
+    let result: JSX.Element[] = [];
+
+    if (player.achievements.length === 0)
+      return <span style={{ fontSize: '1rem' }}>-</span>;
+
+    for (let i = 0; i < player.achievements.length; i++) {
+      result.push(<AchImg key={'ach' + i} />);
+    }
+
+    return result;
+  };
+
+  const getCitiesEmptied = (): JSX.Element[] | JSX.Element => {
+    let result: JSX.Element[] = [];
+
+    if (player.citiesEmptied.length === 0)
+      return <span style={{ fontSize: '1rem' }}>-</span>;
+
+    for (let i = 0; i < player.citiesEmptied.length; i++) {
+      result.push(<CityImg key={'city' + i} />);
+    }
+
+    return result;
+  };
+
   return (
-    <Wrapper zoom={zoom}>
+    <Wrapper className={(turn ? 'turn ' : '') + (me ? 'me ' : '')}>
       <div className='player'>
-        <div className={player.color}></div>
+        <div className={'player-color ' + player.color}></div>
         {player.user.name}
       </div>
-      <div className='content'>VPs: {player.victoryPoints}</div>
-      <div className='content'>Achievements: {player.achievements.length}</div>
-      <div className='content'>
-        Cities emptied: {player.citiesEmptied.length}
-      </div>
+      <div className='points'>VPs: {player.victoryPoints}</div>
+      <div className='achievements'>{getAchievements()}</div>
+      <div className='cities-emptied'>{getCitiesEmptied()}</div>
       <div className='cargo'>
         {player.cargo.map((good, index) => (
           <Good good={good} key={good + index} />

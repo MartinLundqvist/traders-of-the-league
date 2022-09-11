@@ -13,26 +13,17 @@ import Scroll from '../../elements/Scroll';
 import ScrollFull from '../../elements/ScrollFull';
 
 const Container = styled.div`
-  /* position: relative;
-  background-color: transparent;
-  width: 100%;
-  height: 100%;
-  z-index: 10;
   display: grid;
-
-  .container-main { */
-  display: grid;
-  /* place-self: center; */
   place-content: center;
   position: relative;
-  display: grid;
   grid-template-rows: 1fr 1fr 0.5fr auto 1fr;
   grid-template-columns: 1fr 1fr;
   grid-template-areas: 'cityheading cityheading' 'cargo cargo' 'orders orders' 'load trade' 'actions actions';
   justify-items: center;
   align-items: start;
   gap: 1rem;
-  padding: 1rem;
+  width: 50%;
+  /* padding: 5rem 7rem 5rem 7rem; */
 
   /* background-color: var(--color-fill-sea-opaque);
   box-shadow: 0 3px 5px var(--color-bg-shadow);
@@ -69,6 +60,7 @@ const Container = styled.div`
     display: flex;
 
     flex-direction: column;
+    align-items: center;
     gap: 1rem;
   }
 
@@ -76,6 +68,7 @@ const Container = styled.div`
     grid-area: trade;
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 1rem;
   }
 

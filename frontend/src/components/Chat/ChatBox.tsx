@@ -8,7 +8,7 @@ const Wrapper = styled.div`
   position: relative;
   height: 100%;
   width: 100%;
-  padding: 1rem;
+  padding: 1rem 1rem 1rem 0rem;
   overflow: hidden;
 
   .chat-container {
@@ -17,7 +17,7 @@ const Wrapper = styled.div`
     flex-direction: column;
     gap: 0.5rem;
     height: 85%;
-    width: calc(100% - 3.5rem);
+    width: calc(100% - 2rem);
     overflow-y: scroll;
   }
 
@@ -25,7 +25,7 @@ const Wrapper = styled.div`
     position: absolute;
     top: 90%;
     /* padding: 0.25rem; */
-    width: calc(100% - 3.5rem);
+    width: calc(100% - 2rem);
     height: 10%;
 
     input {

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { useGameServer } from '../../contexts/GameServerProvider';
 import Scroll from '../../elements/Scroll';
+import ScrollFull from '../../elements/ScrollFull';
 import {
   Title,
   Input,
@@ -38,7 +39,7 @@ const Register = ({ className }: IRegisterProps): JSX.Element => {
   };
 
   return (
-    <Scroll className={className}>
+    <ScrollFull className={className}>
       <Container>
         <TitleSmall>This appears to be your first time here!</TitleSmall>
         <div className='form-container'>
@@ -55,7 +56,7 @@ const Register = ({ className }: IRegisterProps): JSX.Element => {
           </ButtonSmall>
         </div>
       </Container>
-    </Scroll>
+    </ScrollFull>
   );
 };
 

@@ -30,12 +30,12 @@ type TActionRoutes = {
 };
 
 export const routes: TRoutes = {
-  register: <Register className='grid-area--game' />,
-  start: <Start className='grid-area--game' />,
-  newgame: <NewGame className='grid-area--game' />,
-  joingame: <JoinGame className='grid-area--game' />,
+  register: <Register className='grid-area--all' />,
+  start: <Start className='grid-area--all' />,
+  newgame: <NewGame className='grid-area--all' />,
+  joingame: <JoinGame className='grid-area--all' />,
   board: <Board className='grid-area--game' />,
-  won: <Won className='grid-area--game' />,
+  won: <Won className='grid-area--all' />,
   terminated: <Terminated className='grid-area--all' />,
 };
 

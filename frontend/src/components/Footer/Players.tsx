@@ -5,6 +5,7 @@ import { Player } from './Player';
 const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
 `;
 
 export const Players = (): JSX.Element => {
@@ -16,13 +17,18 @@ export const Players = (): JSX.Element => {
     return uuid === me.uuid;
   };
 
+  const isPlayerTurn = (uuid: string): boolean => {
+    return uuid === game.state.currentRound.playerUuid;
+  };
+
   return (
     <Wrapper>
       {game.players.map((player) => (
         <Player
           player={player}
           key={player.user.uuid}
-          zoom={isMe(player.user.uuid)}
+          me={isMe(player.user.uuid)}
+          turn={isPlayerTurn(player.user.uuid)}
         />
       ))}
     </Wrapper>

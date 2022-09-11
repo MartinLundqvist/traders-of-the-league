@@ -5,7 +5,6 @@ import { useLayout } from '../../contexts/LayoutProvider';
 import ScrollFull from '../../elements/ScrollFull';
 import { Title, TitleSmall } from '../../elements/Typography';
 import { Achievement } from './elements/Achievement';
-import url_triumph from '../../assets/ui/triumph.png';
 // import { ACHIEVEMENTS } from './tests';
 
 // const Wrapper = styled.div`
@@ -34,17 +33,21 @@ import url_triumph from '../../assets/ui/triumph.png';
 // `;
 
 const Container = styled.div`
-  width: 50%;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-`;
+  position: relative;
+  display: grid;
+  place-content: center;
+  place-items: center;
+  padding: 10rem 0 2rem 0;
+  grid-template-rows: 1fr 4fr 1fr;
+  gap: 0.5rem;
 
-const IMG = styled.img`
-  width: 20%;
+  .achievements-container {
+    display: grid;
+    place-content: center;
+    place-items: center;
+
+    grid-template-columns: repeat(3, 6rem);
+  }
 `;
 
 interface IAchieveProps {
@@ -62,26 +65,20 @@ const Achieve = ({ className }: IAchieveProps): JSX.Element => {
   };
 
   return (
-    <ScrollFull className={className}>
-      <IMG src={url_triumph} />
-      <Title>You earned the following achievements!</Title>
+    <ScrollFull achievement className={className}>
       <Container>
-        {game?.state.currentRound.achievementsEarned.map((achievement) => (
-          <Achievement
-            key={achievement.name}
-            achievement={achievement}
-            onClick={() => handlePickAchievementClick(achievement)}
-          />
-        ))}
-        {/* {ACHIEVEMENTS.map((achievement) => (
-          <Achievement
-            key={achievement.name}
-            achievement={achievement}
-            onClick={() => handlePickAchievementClick(achievement)}
-          />
-        ))} */}
+        <Title>You earned the following achievements!</Title>
+        <div className='achievements-container'>
+          {game?.state.currentRound.achievementsEarned.map((achievement) => (
+            <Achievement
+              key={achievement.name}
+              achievement={achievement}
+              onClick={() => handlePickAchievementClick(achievement)}
+            />
+          ))}
+        </div>
+        <TitleSmall>Pick one</TitleSmall>
       </Container>
-      <TitleSmall>Pick one</TitleSmall>
     </ScrollFull>
   );
 };

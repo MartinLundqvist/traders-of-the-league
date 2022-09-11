@@ -10,7 +10,7 @@ import { ButtonSmall, Title } from '../../elements/Typography';
 import { timeToString } from '../../utils/timeToString';
 import Contract from '../Board/Contract';
 import url_gameover from '../../assets/ui/gui_game_over.png';
-import Scroll from '../../elements/Scroll';
+import { Achievement } from '../Achieve/elements/Achievement';
 
 const Container = styled.div`
   display: flex;
@@ -19,38 +19,53 @@ const Container = styled.div`
   justify-content: flex-start;
   gap: 1rem;
   font-size: 1.2rem;
-  overflow: hidden;
   padding-bottom: 1rem;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+
+  .scrollable {
+    overflow-y: scroll;
+  }
 
   img.image {
     width: 30%;
   }
 
-  .scrollable {
-    overflow: scroll;
-  }
-
   table {
-    border-spacing: 2rem;
-    width: 100%;
+    border-spacing: 1rem;
 
     th,
     td {
       text-align: left;
+      vertical-align: top;
+
+      .points {
+        font-size: 2rem;
+      }
     }
   }
 
-  .container {
-    display: flex;
+  .container-contracts {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+  }
+  .container-achievements {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
+  .container-text {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(auto, 1fr);
+    gap: 1rem;
+    /* display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
     flex-wrap: wrap;
-    gap: 0.1rem;
-  }
-
-  .city {
-    padding-right: 1rem;
+    gap: 0.1rem; */
   }
 `;
 
@@ -100,7 +115,7 @@ const Won = ({ className }: IStartProps): JSX.Element => {
   if (!gameResults) return <></>;
 
   return (
-    <Scroll landscape className={className}>
+    <ScrollFull landscape className={className}>
       <Container>
         <img className='image' src={url_gameover} />
         <Title>
@@ -127,31 +142,33 @@ const Won = ({ className }: IStartProps): JSX.Element => {
                   <td>{player.rank}</td>
                   <td>{player.name}</td>
                   <td>
-                    <div className='container'>
+                    <div className='container-contracts'>
                       {getContracts(player.uuid).map((contract) => (
                         <Contract key={contract.uuid} contract={contract} />
                       ))}
                     </div>
                   </td>
                   <td>
-                    <div className='container'>
+                    <div className='container-text'>
                       {getCities(player.uuid).map((city) => (
-                        <div key={city.name} className='city'>
-                          {city.name}
-                        </div>
+                        <div key={city.name}>{city.name}</div>
                       ))}
                     </div>
                   </td>
                   <td>
-                    <div className='container achievements'>
+                    <div className='container-achievements'>
                       {getAchievements(player.uuid).map((achievement) => (
-                        <div key={achievement.name} className='city'>
-                          {achievement.name}
-                        </div>
+                        <Achievement
+                          key={achievement.name}
+                          achievement={achievement}
+                        />
+                        // <div key={achievement.name}>{achievement.name}</div>
                       ))}
                     </div>
                   </td>
-                  <td>{player.victoryPoints}</td>
+                  <td>
+                    <div className='points'>{player.victoryPoints}</div>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -159,7 +176,7 @@ const Won = ({ className }: IStartProps): JSX.Element => {
         </div>
         <ButtonSmall onClick={() => leaveGame()}>Start over</ButtonSmall>
       </Container>
-    </Scroll>
+    </ScrollFull>
   );
 };
 

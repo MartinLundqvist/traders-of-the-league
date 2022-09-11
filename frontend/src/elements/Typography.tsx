@@ -117,16 +117,17 @@ export const ButtonSmall = styled.button<IButtonSmallProps>`
   max-height: 2rem;
 
   ${(props) =>
-    props.pulse && 'animation: pulse 500ms ease-in-out alternate infinite;'};
+    props.pulse &&
+    'animation: button_pulse 500ms ease-in-out alternate infinite;'};
 
   &:hover {
     background-color: var(--color-bg-highlight);
     cursor: pointer;
   }
 
-  @keyframes pulse {
+  @keyframes button_pulse {
     to {
-      transform: scale(1.1);
+      transform: scale(1.2);
     }
   }
 `;

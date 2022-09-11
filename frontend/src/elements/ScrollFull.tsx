@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import url_scroll from '../assets/ui/gui_scroll.png';
 import url_scroll_landscape from '../assets/ui/gui_long_scroll.png';
 import url_scroll_bug from '../assets/ui/gui_bug_report.png';
+import url_scroll_achievement from '../assets/ui/gui_achievement.png';
 import { HEADER, FOOTER } from '../utils/layoutGeometry';
 
 const Wrapper = styled.div`
@@ -11,31 +12,49 @@ const Wrapper = styled.div`
   height: 100%;
   z-index: 10;
   display: grid;
-  padding: ${HEADER / 2}px 0 ${FOOTER / 2}px 0;
+  /* place-content: center; */
+  place-items: center;
+  /* display: grid;
+  place-items: center; */
   backdrop-filter: blur(3px);
 
   .scroll-container {
+    height: 80%;
+    width: 80%;
     background-image: url('${url_scroll}');
     background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+
+    // This works for achievements and for Won
+    /* width: 80%;
+    height: 80%; */
+
+    // This works for city (i.e., nothing)
+
+    /* display: grid; */
+
+    /* flex-direction: column;
+    align-items: center;
+    justify-content: center; */
+    /* gap: 1.5rem; */
 
     &.landscape {
       background-image: url('${url_scroll_landscape}');
       background-size: 100% 100%;
-      padding: 0 2rem 0 2rem;
+      padding: 1rem 2rem 1rem 2rem;
     }
 
     &.bug-report {
       background-image: url('${url_scroll_bug}');
     }
 
-    background-position: center;
-    background-repeat: no-repeat;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1.5rem;
+    &.achievement {
+      background-image: url('${url_scroll_achievement}');
+    }
   }
 `;
 
@@ -44,6 +63,7 @@ interface IScrollProps {
   className: string;
   landscape?: boolean;
   bugreport?: boolean;
+  achievement?: boolean;
 }
 
 const ScrollFull = ({
@@ -51,6 +71,7 @@ const ScrollFull = ({
   className,
   landscape = false,
   bugreport = false,
+  achievement = false,
 }: IScrollProps): JSX.Element => {
   return (
     <Wrapper className={className}>
@@ -58,7 +79,8 @@ const ScrollFull = ({
         className={
           'scroll-container' +
           (landscape ? ' landscape' : '') +
-          (bugreport ? ' bug-report' : '')
+          (bugreport ? ' bug-report' : '') +
+          (achievement ? ' achievement' : '')
         }
       >
         {children}

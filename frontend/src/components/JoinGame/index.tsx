@@ -4,6 +4,7 @@ import { IActiveGame } from '../../../../shared/types';
 import { useGameServer } from '../../contexts/GameServerProvider';
 import { useLayout } from '../../contexts/LayoutProvider';
 import Scroll from '../../elements/Scroll';
+import ScrollFull from '../../elements/ScrollFull';
 import {
   Title,
   TitleSmall,
@@ -11,19 +12,13 @@ import {
   TitleButton,
 } from '../../elements/Typography';
 
-// const Container = styled.div`
-//   li {
-//     list-style: none;
-//     font-size: 2rem;
-//     transition: all 200ms ease-in-out;
-
-//     &:hover {
-//       cursor: pointer;
-//       transform: translate(-3px, -3px);
-//       text-shadow: 5px 5px 3px hsla(57, 145%, 30%, 0.6);
-//     }
-//   }
-// `;
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+`;
 
 interface IJoinGameProps {
   className: string;
@@ -59,29 +54,31 @@ const JoinGame = ({ className }: IJoinGameProps): JSX.Element => {
   };
 
   return (
-    <Scroll className={className}>
-      <TitleSmall>List updates every 2 seconds</TitleSmall>
-      <Title>Click to join a game</Title>
+    <ScrollFull className={className}>
+      <Container>
+        <TitleSmall>List updates every 2 seconds</TitleSmall>
+        <Title>Click to join a game</Title>
 
-      {activeGames.map((game) => (
-        <TitleButton
-          key={game.uuid}
-          className='link'
-          onClick={() => handleClick(game)}
-        >
-          {game.name +
-            ': ' +
-            game.players[0].user.name +
-            ', ' +
-            game.players.length +
-            ' player(s) waiting'}
-        </TitleButton>
-      ))}
+        {activeGames.map((game) => (
+          <TitleButton
+            key={game.uuid}
+            className='link'
+            onClick={() => handleClick(game)}
+          >
+            {game.name +
+              ': ' +
+              game.players[0].user.name +
+              ', ' +
+              game.players.length +
+              ' player(s) waiting'}
+          </TitleButton>
+        ))}
 
-      <ButtonSmall onClick={() => setActiveRoute('start')}>
-        Back to menu
-      </ButtonSmall>
-    </Scroll>
+        <ButtonSmall onClick={() => setActiveRoute('start')}>
+          Back to menu
+        </ButtonSmall>
+      </Container>
+    </ScrollFull>
   );
 };
 

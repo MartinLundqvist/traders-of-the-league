@@ -1337,7 +1337,7 @@ export const MOCK_SESSIONS_5: ISession[] = [
 export const MOCK_GAME: IGame = {
   name: 'lyndens game',
   uuid: 'dDV7I0PZkSX1SdDCILTkA',
-  numberOfCitiesToEmpty: 10,
+  numberOfCitiesToEmpty: 8,
   achievements: [
     { name: 'Diversifier A', value: 4 },
     { name: 'Merchant A', value: 5 },
@@ -1376,12 +1376,6 @@ export const MOCK_GAME: IGame = {
           cargo: ['gray', 'brown'],
           region: 'East',
           uuid: 'E_gry_bro_1',
-        },
-        {
-          value: 2,
-          cargo: ['brown', 'black'],
-          region: 'Central',
-          uuid: 'C_bro_bla_2',
         },
         {
           value: 2,
@@ -1502,12 +1496,6 @@ export const MOCK_GAME: IGame = {
           cargo: ['blue', 'brown'],
           region: 'Central',
           uuid: 'C_blu_bro_2',
-        },
-        {
-          value: 2,
-          cargo: ['green', 'blue'],
-          region: 'West',
-          uuid: 'W_grn_blu_2',
         },
         {
           value: 1,
@@ -1684,7 +1672,14 @@ export const MOCK_GAME: IGame = {
       row: 6,
       city: {
         name: 'Hamburg',
-        contracts: [],
+        contracts: [
+          {
+            value: 2,
+            cargo: ['green', 'blue'],
+            region: 'West',
+            uuid: 'W_grn_blu_2',
+          },
+        ],
         coatOfArms: '',
         goods: ['green', 'brown'],
         region: 'West',
@@ -1716,6 +1711,12 @@ export const MOCK_GAME: IGame = {
             region: 'Central',
             uuid: 'C_red_blu_2',
           },
+          {
+            value: 2,
+            cargo: ['brown', 'black'],
+            region: 'Central',
+            uuid: 'C_bro_bla_2',
+          },
         ],
         coatOfArms: '',
         goods: ['yellow', 'yellow'],
@@ -1734,12 +1735,6 @@ export const MOCK_GAME: IGame = {
             region: 'Central',
             uuid: 'C_red_gry_5',
           },
-          {
-            value: 1,
-            cargo: ['green', 'blue'],
-            region: 'Central',
-            uuid: 'C_grn_blu_1',
-          },
         ],
         coatOfArms: '',
         goods: ['black'],
@@ -1751,7 +1746,14 @@ export const MOCK_GAME: IGame = {
       row: 7,
       city: {
         name: 'Stettin',
-        contracts: [],
+        contracts: [
+          {
+            value: 1,
+            cargo: ['green', 'blue'],
+            region: 'Central',
+            uuid: 'C_grn_blu_1',
+          },
+        ],
         coatOfArms: '',
         goods: ['green', 'yellow'],
         region: 'Central',
@@ -1890,6 +1892,6 @@ export const MOCK_GAME: IGame = {
     },
     round: 100,
     status: 'playing',
-    numberOfCitiesEmptied: 9,
+    numberOfCitiesEmptied: 7,
   },
 };

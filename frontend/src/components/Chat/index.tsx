@@ -12,9 +12,9 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   height: calc(100% - 2rem - ${FOOTER + HEADER}px);
-  width: 2rem;
+  width: 4rem;
   /* background-color: var(--color-fill-sea-opaque); */
   /* box-shadow: 0 3px 5px var(--color-bg-shadow); */
   margin: 1rem 0 1rem 0;
@@ -26,11 +26,18 @@ const Wrapper = styled.div`
   background-image: url('${url_scroll}');
   background-size: cover;
   background-position: right center;
-
   
   .actionarea {
     position: relative;
     cursor: pointer;
+    text-shadow: 3px 3px 3px var(--color-bg-shadow);
+    transition: all 200ms ease-in-out;
+
+    &:hover {
+      text-shadow: 6px 6px 5px var(--color-bg-shadow);
+      transform: translate(3px, -3px);
+
+    }
 
     span {
       position: absolute;
@@ -50,12 +57,8 @@ const Wrapper = styled.div`
     }
   }
 
-  &:hover {
-    /* background-color: var(--color-fill-sea); */
-  }
-
   &.open {
-    width: 20rem;
+    width: 30%;
 
     justify-content: flex-start;
     writing-mode: horizontal-tb;
