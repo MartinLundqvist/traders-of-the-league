@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import { useLayout } from '../../contexts/LayoutProvider';
-import Scroll from '../../elements/Scroll';
 import ScrollFull from '../../elements/ScrollFull';
-import { Title, TitleButton } from '../../elements/Typography';
+import { TitleButton } from '../../elements/Typography';
 
 const Container = styled.div`
   display: flex;

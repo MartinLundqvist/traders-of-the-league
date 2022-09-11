@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { IBugReport, TPriority } from '../../../../shared/types';
 import { useGameServer } from '../../contexts/GameServerProvider';
 import { useLayout } from '../../contexts/LayoutProvider';
-import Scroll from '../../elements/Scroll';
 import ScrollFull from '../../elements/ScrollFull';
 import {
   ButtonSmall,

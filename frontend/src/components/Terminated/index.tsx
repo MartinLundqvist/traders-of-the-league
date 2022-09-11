@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 import { useGameServer } from '../../contexts/GameServerProvider';
-import { useLayout } from '../../contexts/LayoutProvider';
-import Scroll from '../../elements/Scroll';
 import ScrollFull from '../../elements/ScrollFull';
-import { Button, ButtonSmall, Title } from '../../elements/Typography';
+import { ButtonSmall, Title } from '../../elements/Typography';
 
 const Container = styled.div`
   display: flex;

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useGameServer } from '../../contexts/GameServerProvider';
-import Scroll from '../../elements/Scroll';
 import ScrollFull from '../../elements/ScrollFull';
 import {
   Title,

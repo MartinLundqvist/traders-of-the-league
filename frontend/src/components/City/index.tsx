@@ -9,7 +9,6 @@ import { ButtonSmall, Title, TitleSmall } from '../../elements/Typography';
 import Contract from '../Board/Contract';
 import Good from '../Board/Good';
 import { DitchDialogue } from './DitchDialogue';
-import Scroll from '../../elements/Scroll';
 import ScrollFull from '../../elements/ScrollFull';
 
 const Container = styled.div`
