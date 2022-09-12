@@ -8,19 +8,21 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  margin-right: 2rem;
+  margin-bottom: 2rem;
 
   .container {
     position: absolute;
 
     display: grid;
     padding: 0 1rem 0 0;
-    grid-template-columns: repeat(4, auto);
+    grid-template-columns: repeat(3, auto);
     grid-template-rows: repeat(2, auto);
     grid-auto-flow: row;
     bottom: 0;
     right: 0;
-    gap: 1rem;
-    transform: scale(0.8);
+    gap: 0.5rem;
+    /* transform: scale(0.8); */
   }
 `;
 

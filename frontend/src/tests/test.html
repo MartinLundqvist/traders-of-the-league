@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="flex">
+      <div class="text">Tjena</div>
+      <div class="text">Tjena</div>
+      <div class="flex-image"><img /><img /></div>
+      <div class="text">Tjena</div>
+      <div class="grid">
+        <img />
+        <img />
+        <img />
+        <img />
+      </div>
+      <div class="text">Tjena</div>
+    </div>
+  </body>
+
+  <style>
+    body {
+      height: 100vh;
+      width: 100vw;
+    }
+
+    .flex {
+      width: 100%;
+      height: 30%;
+      display: flex;
+      border: 1px solid black;
+    }
+
+    .flex-image {
+      display: flex;
+    }
+
+    .flex > div:nth-child(4) {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      border: 1px solid red;
+      flex-grow: 0;
+      flex-shrink: 1;
+      flex-basis: auto;
+    }
+
+    .image {
+      position: relative;
+      background-image: url('../assets/ui/gui_button_moves_left.png');
+      background-size: cover;
+      width: 100px;
+      height: 100%;
+      border: 1px solid blue;
+    }
+
+    .grid .grid-item {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    img {
+      content: url('../assets/ui/gui_button_moves_left.png');
+      border: 1px solid blue;
+    }
+  </style>
+</html>

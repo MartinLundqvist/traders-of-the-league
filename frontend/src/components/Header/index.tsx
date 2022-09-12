@@ -5,21 +5,27 @@ import url_city_not_emptied from '../../assets/ui/gui_button_city_not_emptied.pn
 import url_moveLeft from '../../assets/ui/gui_button_moves_left.png';
 import url_game_scroll from '../../assets/ui/gui_game_name_scroll.png';
 import url_ship from '../../assets/ui/gui_button_your_turn.png';
+import url_waiting from '../../assets/ui/gui_button_waiting.png';
 import styled from 'styled-components';
+import { useEffect, useState } from 'react';
+import { timeToString } from '../../utils/timeToString';
+import { useTimePlayed } from '../../hooks/useTimePlayed';
+import { useReminder } from '../../hooks/useReminder';
 // import Card from '../../elements/Card';
 
 const IMG = styled.img`
+  min-height: 0;
   max-height: 100%;
   max-width: 100%;
 `;
 
 const Wrapper = styled.div`
-  /* position: relative; */
+  position: relative;
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
   gap: 5rem;
   padding: 0.5rem 1rem 0.5rem 1rem;
@@ -41,11 +47,6 @@ const Wrapper = styled.div`
     z-index: -1;
   }
 
-  .logo {
-    height: 100%;
-    min-width: max-content;
-  }
-
   /* background-color: var(--color-fill-sea-opaque);
   box-shadow: 0 3px 5px var(--color-bg-shadow); */
 
@@ -56,6 +57,7 @@ const Wrapper = styled.div`
     width: 100%;
     height: 100%;
     justify-content: center;
+    margin-left: auto;
 
     .cities-emptied {
       display: flex;
@@ -137,7 +139,6 @@ const Wrapper = styled.div`
         }
       }
     }
-
     .game-name {
       display: flex;
       align-items: center;
@@ -194,6 +195,17 @@ const Wrapper = styled.div`
 
     .game-state--text {
       font-size: 1.2rem;
+      min-width: 5rem;
+
+      .remind {
+        animation: zoom-in 500ms linear alternate infinite;
+      }
+
+      @keyframes zoom-in {
+        to {
+          transform: scale(2) translate(-50%, 50%);
+        }
+      }
     }
   }
 `;
@@ -203,7 +215,9 @@ interface IHeaderProps {
 }
 
 const Header = ({ className }: IHeaderProps) => {
-  const { me, game, currentTurnPlayer } = useGameServer();
+  const { isMyTurn, game, currentTurnPlayer } = useGameServer();
+  const timePlayed = useTimePlayed();
+  const showReminder = useReminder();
 
   const getMovesLeft = (): JSX.Element[] => {
     let result: JSX.Element[] = [];
@@ -239,12 +253,7 @@ const Header = ({ className }: IHeaderProps) => {
 
   return (
     <Wrapper className={className}>
-      <div className='logo'>
-        <IMG src={url_logo} />
-      </div>
-      {/* <img className='logo' src={url_logo}></img> */}
-      {/* <div className='logo'></div> */}
-      {/* <Card title='You are' content={me.name ? me.name : 'Not registered'} /> */}
+      <IMG src={url_logo} />
       {game && (
         <>
           <div className='game-container'>
@@ -261,8 +270,13 @@ const Header = ({ className }: IHeaderProps) => {
             </div>
           </div>
           <div className='game-state'>
-            <div className='game-state--text'>{game?.state.status}</div>
-            <IMG src={url_ship} />
+            <div className='game-state--text'>
+              <div>{timePlayed}</div>
+              <div className={isMyTurn && showReminder ? 'remind' : ''}>
+                {isMyTurn ? 'Your turn!' : 'Waiting'}
+              </div>
+            </div>
+            {isMyTurn ? <IMG src={url_ship} /> : <IMG src={url_waiting} />}
           </div>
         </>
       )}

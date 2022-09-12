@@ -9,6 +9,7 @@ import url_scroll from '../../../assets/ui/gui_player_status.png';
 
 const Wrapper = styled.div`
   position: relative;
+  width: 5rem;
 
   &:hover {
     .playerstats {
@@ -24,7 +25,7 @@ const Wrapper = styled.div`
     background-repeat: no-repeat;
     z-index: 2;
     position: absolute;
-    padding: 0.5rem 2rem 0.5rem 2rem;
+    padding: 0.5rem 1.2rem 0.5rem 1.2rem;
     height: auto;
     width: max-content;
     display: flex;
@@ -32,7 +33,7 @@ const Wrapper = styled.div`
     justify-content: flex-start;
     align-items: center;
     gap: 0.25rem;
-    font-size: 1.2rem;
+    font-size: 0.8rem;
     /* background-color: var(--color-bg);
     box-shadow: 3px 3px 3px var(--color-bg-shadow); */
     opacity: 0;
@@ -51,7 +52,7 @@ const Wrapper = styled.div`
     }
 
     .title {
-      font-size: 1.5rem;
+      font-size: 1rem;
     }
   }
 `;

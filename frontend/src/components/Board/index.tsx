@@ -1,15 +1,9 @@
 import styled from 'styled-components';
 import Hex from './Hex';
 import Ships from './Ships';
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import {
-  BOARD_WIDTH,
-  BOARD_HEIGHT,
-  BOARD_TOP_BOTTOM_PADDING,
-} from '../../utils/boardGeometry';
+import { useMemo } from 'react';
 import { useLayout } from '../../contexts/LayoutProvider';
 import { useGameServer } from '../../contexts/GameServerProvider';
-import Clock from './Clock';
 import { IBoardLayoutElement } from '../../utils/createBoardLayout';
 
 // const Wrapper = styled.div`
@@ -106,8 +100,6 @@ const Board = ({ className }: IBoardProps): JSX.Element => {
         {Hexagons}
         <Ships />
       </div>
-
-      <Clock />
     </Wrapper>
   );
 };
