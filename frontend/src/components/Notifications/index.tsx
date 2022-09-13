@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import styled from 'styled-components';
 import { useNotifications } from '../../contexts/NotificationsProvider';
 import CustomNotification from './Notification';

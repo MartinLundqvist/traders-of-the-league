@@ -15,8 +15,6 @@ const Wrapper = styled.div`
   justify-content: flex-start;
   height: calc(100% - 2rem - ${FOOTER + HEADER}px);
   width: 4rem;
-  /* background-color: var(--color-fill-sea-opaque); */
-  /* box-shadow: 0 3px 5px var(--color-bg-shadow); */
   margin: 1rem 0 1rem 0;
   font-size: 1.2rem;
   writing-mode: vertical-lr;

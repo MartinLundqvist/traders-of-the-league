@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { IContract } from '../../../../shared/types';
-import { CONTRACT_HEIGHT } from '../../utils/boardGeometry';
 
 import C_blu_bla_1 from '../../assets/contracts/C_blu_bla_1.png';
 import C_blu_bro_2 from '../../assets/contracts/C_blu_bro_2.png';
@@ -131,33 +130,11 @@ const CONTRACTS: TContractMap = {
   W_yel_gry_5: <IMG src={W_yel_gry_5} />,
 };
 
-interface IWrapperProps {
-  size: number;
-}
-
-const Wrapper = styled.div<IWrapperProps>`
-  display: inline-block;
-  // This is legacy, remove if responsive works
-  /* height: ${(props) => props.size}px;
-  width: ${(props) => props.size}px; */
-
-  max-height: 100%;
-  max-width: 100%;
-  /* 
-  height: calc(var(--R) / 2);
-  width: calc(var(--R) / 2); */
-`;
-
 interface IContractProps {
   contract: IContract;
-  size?: number;
 }
 
-const Contract = ({
-  contract,
-  size = CONTRACT_HEIGHT,
-}: IContractProps): JSX.Element => {
-  // return <Wrapper size={size}>{CONTRACTS[contract.uuid]}</Wrapper>;
+const Contract = ({ contract }: IContractProps): JSX.Element => {
   return <>{CONTRACTS[contract.uuid]}</>;
 };
 

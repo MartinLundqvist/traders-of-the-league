@@ -20,7 +20,6 @@ import supplierB from '../../../assets/achievements/Supplier_B_4-5_3P.png';
 const IMG = styled.img`
   max-height: 100%;
   max-width: 100%;
-  /* filter: drop-shadow(3px 3px 4px var(--color-bg-shadow)); */
   filter: drop-shadow(0px 0px 10px white);
 `;
 
@@ -49,19 +48,7 @@ const ACHIEVEMENTS: TAchievementMap = {
 
 const Wrapper = styled.div`
   position: relative;
-  /* height: 8rem;
-  width: 7rem; */
-  /* padding: 0.25rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 0.25rem;
-  border-radius: 0 0 50% 50%;
-  background-color: var(--color-bg);
-  box-shadow: 3px 3px 3px var(--color-bg-shadow); */
   transition: transform 100ms ease-in-out;
-  /* overflow: hidden; */
 
   &:hover {
     cursor: pointer;
@@ -81,8 +68,6 @@ export const Achievement = ({
   return (
     <Wrapper onClick={onClick || (() => {})}>
       {ACHIEVEMENTS[achievement.name]}
-      {/* <div>{achievement.name}</div> */}
-      {/* <Value value={achievement.value} /> */}
     </Wrapper>
   );
 };

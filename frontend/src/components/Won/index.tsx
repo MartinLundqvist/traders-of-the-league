@@ -60,12 +60,6 @@ const Container = styled.div`
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(auto, 1fr);
     gap: 1rem;
-    /* display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.1rem; */
   }
 `;
 
@@ -123,7 +117,6 @@ const Won = ({ className }: IStartProps): JSX.Element => {
           {timeToString(gameResults.game.startTime, gameResults.game.endTime)}
         </Title>
 
-        {/* <Title>Player ranking</Title> */}
         <div className='scrollable'>
           <table>
             <thead>
@@ -162,7 +155,6 @@ const Won = ({ className }: IStartProps): JSX.Element => {
                           key={achievement.name}
                           achievement={achievement}
                         />
-                        // <div key={achievement.name}>{achievement.name}</div>
                       ))}
                     </div>
                   </td>

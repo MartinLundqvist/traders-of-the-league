@@ -22,12 +22,6 @@ const Container = styled.div`
   align-items: start;
   gap: 1rem;
   width: 50%;
-  /* padding: 5rem 7rem 5rem 7rem; */
-
-  /* background-color: var(--color-fill-sea-opaque);
-  box-shadow: 0 3px 5px var(--color-bg-shadow);
-  backdrop-filter: blur(10px); */
-  /* z-index: 10; */
 
   .container-main--cityheading {
     grid-area: cityheading;
@@ -77,7 +71,6 @@ const Container = styled.div`
     flex-direction: row;
     gap: 2rem;
   }
-  /* } */
 `;
 
 interface IActionButtonProps {
@@ -482,7 +475,7 @@ const City = ({ className }: ICityProps): JSX.Element => {
               disabled={!canFulfillContract(contract)}
               checked={contractAlreadyTraded(contract)}
             >
-              <Contract contract={contract} size={40} />
+              <Contract contract={contract} />
             </ActionButton>
           ))}
         </div>

@@ -34,8 +34,6 @@ const Wrapper = styled.div`
     align-items: center;
     gap: 0.25rem;
     font-size: 0.8rem;
-    /* background-color: var(--color-bg);
-    box-shadow: 3px 3px 3px var(--color-bg-shadow); */
     opacity: 0;
     left: 50%;
     top: 50%;

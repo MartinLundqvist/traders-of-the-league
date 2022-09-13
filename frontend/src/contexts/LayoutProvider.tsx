@@ -173,12 +173,6 @@ export const LayoutProvider = ({
             player,
             top: 0,
             left: 0,
-            // top:
-            //   getTopForBoardPosition(player.position) -
-            //   numberOfShipsInSamePosition * SHIP_DISTANCE,
-            // left:
-            //   getLeftForBoardPosition(player.position) +
-            //   numberOfShipsInSamePosition * SHIP_DISTANCE,
             isMe: player.user.uuid === me.uuid,
             isMyTurn: game.state.currentRound.playerUuid === me.uuid,
             isInCity: !!currentHex?.city,
@@ -198,10 +192,6 @@ export const LayoutProvider = ({
   useEffect(() => {
     isMyTurn && createNotification('Your turn');
   }, [isMyTurn]);
-
-  // useEffect(() => {
-  //   canAchieve && createNotification('You have achievements');
-  // }, [canAchieve]);
 
   useEffect(() => {
     isEndGame && createNotification('End game');

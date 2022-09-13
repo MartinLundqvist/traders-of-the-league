@@ -6,27 +6,6 @@ import { useLayout } from '../../contexts/LayoutProvider';
 import { useGameServer } from '../../contexts/GameServerProvider';
 import { IBoardLayoutElement } from '../../utils/createBoardLayout';
 
-// const Wrapper = styled.div`
-//   // New version
-//   position: relative;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   justify-content: center;
-//   width: 100%;
-//   height: 100%;
-
-//   .hexagons {
-//     position: relative;
-//     width: ${BOARD_WIDTH}px;
-//     height: ${BOARD_HEIGHT}px;
-//     /* margin-top: ${BOARD_TOP_BOTTOM_PADDING}px;
-//     margin-bottom: ${BOARD_TOP_BOTTOM_PADDING}px; */
-//   }
-// `;
-
-// TODO: This is for responsiveness
-
 const Wrapper = styled.div`
   // New version
   position: relative;
@@ -34,7 +13,6 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* height: 100%; */
 
   .hexagons {
     position: relative;
@@ -84,9 +62,6 @@ const Board = ({ className }: IBoardProps): JSX.Element => {
           center={hex.center}
           farEast={hex.farEast}
           highlight={hex.highlight}
-          // onClick={() => {
-          //   console.log(JSON.stringify({ column: hex.column, row: hex.row }));
-          // }}
           onClick={() => handleHexClick(hex)}
         />
       )),

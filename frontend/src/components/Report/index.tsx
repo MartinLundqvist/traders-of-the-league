@@ -22,9 +22,6 @@ const Container = styled.div`
   height: 100%;
   width: 50ch;
   text-align: center;
-  /* z-index: 10; */
-  /* background-color: var(--color-fill-sea-opaque);
-  backdrop-filter: blur(10px); */
 
   .form {
     text-align: left;

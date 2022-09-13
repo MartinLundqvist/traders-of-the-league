@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useGameServer } from '../../contexts/GameServerProvider';
 import { useLayout } from '../../contexts/LayoutProvider';
 import ScrollFull from '../../elements/ScrollFull';
-import { Title, Input, Button, ButtonSmall } from '../../elements/Typography';
+import { Title, Input, ButtonSmall } from '../../elements/Typography';
 
 const Container = styled.div`
   display: flex;

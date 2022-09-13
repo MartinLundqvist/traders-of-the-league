@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { useGameServer } from '../../contexts/GameServerProvider';
-// import { Achievement } from '../Achieve/elements/Achievement';
 import { AchievementWithPlayerStats } from '../Achieve/elements/AchievementWithPlayerStats';
 
 const Wrapper = styled.div`
@@ -22,7 +21,6 @@ const Wrapper = styled.div`
     bottom: 0;
     right: 0;
     gap: 0.5rem;
-    /* transform: scale(0.8); */
   }
 `;
 

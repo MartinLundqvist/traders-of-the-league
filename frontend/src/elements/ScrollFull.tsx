@@ -3,7 +3,6 @@ import url_scroll from '../assets/ui/gui_scroll.png';
 import url_scroll_landscape from '../assets/ui/gui_long_scroll.png';
 import url_scroll_bug from '../assets/ui/gui_bug_report.png';
 import url_scroll_achievement from '../assets/ui/gui_achievement.png';
-import { HEADER, FOOTER } from '../utils/layoutGeometry';
 
 const Wrapper = styled.div`
   position: relative;
@@ -12,10 +11,8 @@ const Wrapper = styled.div`
   height: 100%;
   z-index: 10;
   display: grid;
-  /* place-content: center; */
   place-items: center;
-  /* display: grid;
-  place-items: center; */
+
   backdrop-filter: blur(3px);
 
   .scroll-container {
@@ -28,19 +25,6 @@ const Wrapper = styled.div`
     display: grid;
     place-items: center;
     overflow: hidden;
-
-    // This works for achievements and for Won
-    /* width: 80%;
-    height: 80%; */
-
-    // This works for city (i.e., nothing)
-
-    /* display: grid; */
-
-    /* flex-direction: column;
-    align-items: center;
-    justify-content: center; */
-    /* gap: 1.5rem; */
 
     &.landscape {
       background-image: url('${url_scroll_landscape}');

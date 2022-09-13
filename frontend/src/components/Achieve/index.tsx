@@ -5,32 +5,6 @@ import { useLayout } from '../../contexts/LayoutProvider';
 import ScrollFull from '../../elements/ScrollFull';
 import { Title, TitleSmall } from '../../elements/Typography';
 import { Achievement } from './elements/Achievement';
-// import { ACHIEVEMENTS } from './tests';
-
-// const Wrapper = styled.div`
-//   position: relative;
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: flex-start;
-//   align-items: center;
-//   gap: 2rem;
-//   padding: 1rem;
-//   height: 100%;
-//   width: 100%;
-//   background-color: var(--color-fill-sea-opaque);
-//   backdrop-filter: blur(10px);
-//   z-index: 10;
-
-//   .container {
-//     width: 50%;
-//     display: flex;
-//     flex-direction: row;
-//     flex-wrap: wrap;
-//     justify-content: center;
-//     align-items: center;
-//     gap: 1rem;
-//   }
-// `;
 
 const Container = styled.div`
   position: relative;

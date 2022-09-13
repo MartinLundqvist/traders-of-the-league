@@ -8,9 +8,6 @@ const Wrapper = styled.div`
   align-self: end;
   display: flex;
   justify-content: space-between;
-  /*   
-  background-color: var(--color-fill-sea-opaque);
-  box-shadow: 0 -3px 5px var(--color-bg-shadow); */
 
   width: 100%;
   height: 100%;

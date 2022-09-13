@@ -163,7 +163,6 @@ export const DitchDialogue = ({
   };
 
   const hasDitched = (good: IPlayerGoodWithUuid): boolean => {
-    // console.log(cargoToDitch);
     if (cargoToDitch.length === 0) return false;
     if (cargoToDitch.find((ditchedGood) => good.uuid === ditchedGood.uuid))
       return true;

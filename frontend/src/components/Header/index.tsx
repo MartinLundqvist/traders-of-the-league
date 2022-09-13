@@ -7,11 +7,8 @@ import url_game_scroll from '../../assets/ui/gui_game_name_scroll.png';
 import url_ship from '../../assets/ui/gui_button_your_turn.png';
 import url_waiting from '../../assets/ui/gui_button_waiting.png';
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
-import { timeToString } from '../../utils/timeToString';
 import { useTimePlayed } from '../../hooks/useTimePlayed';
 import { useReminder } from '../../hooks/useReminder';
-// import Card from '../../elements/Card';
 
 const IMG = styled.img`
   min-height: 0;
@@ -46,9 +43,6 @@ const Wrapper = styled.div`
     border-bottom: 2px solid black;
     z-index: -1;
   }
-
-  /* background-color: var(--color-fill-sea-opaque);
-  box-shadow: 0 3px 5px var(--color-bg-shadow); */
 
   .game-container {
     display: flex;
@@ -254,6 +248,7 @@ const Header = ({ className }: IHeaderProps) => {
   return (
     <Wrapper className={className}>
       <IMG src={url_logo} />
+
       {game && (
         <>
           <div className='game-container'>

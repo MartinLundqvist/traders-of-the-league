@@ -24,7 +24,6 @@ interface IJoinGameProps {
 }
 
 const JoinGame = ({ className }: IJoinGameProps): JSX.Element => {
-  // const [gameUuid, setGameUuid] = useState('');
   const { joinGame, getActiveGames } = useGameServer();
   const { setActiveRoute } = useLayout();
   const [activeGames, setActiveGames] = useState<IActiveGame[]>([]);

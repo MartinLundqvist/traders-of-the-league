@@ -1,11 +1,6 @@
 import styled from 'styled-components';
 import { ICity } from '../../../../shared/types';
-import {
-  getLeftForBoardPosition,
-  getTopForBoardPosition,
-  HEX_MAX_DIAMETER,
-  HEX_MIN_DIAMETER,
-} from '../../utils/boardGeometry';
+import { HEX_MAX_DIAMETER, HEX_MIN_DIAMETER } from '../../utils/boardGeometry';
 import Cargo from './Cargo';
 import Contracts from './Contracts';
 
@@ -15,8 +10,6 @@ import hex_city_west from '../../assets/map/hex_tile_city_west.png';
 import hex_city_east from '../../assets/map/hex_tile_city_east.png';
 
 interface IWrapperProps {
-  top: number; // Remove this if responsive works
-  left: number; // Remove this if responsive works
   row: number; // New for responsive
   column: number; // New for responsive
   hex_url: string;
@@ -28,24 +21,12 @@ const Wrapper = styled.div<IWrapperProps>`
   background-size: cover;
   background-position: center;
 
-  // The below is legacy - remove if responsive works
-  /* position: absolute;
-  height: ${HEX_MIN_DIAMETER}px;
-  width: ${HEX_MAX_DIAMETER}px;
-  top: ${(props) => props.top}px;
-  left: ${(props) => props.left}px; */
-
   // The below is new for responsive only
   position: relative;
-  /* border: 1px solid black; */
   grid-row-start: ${(props) => props.row + 1};
   grid-column-start: ${(props) => props.column + 1};
   grid-row-end: span 2;
   width: calc(2 * var(--R));
-
-  &.highlight {
-    /* filter: contrast(150%); */
-  }
 
   &:hover {
     filter: contrast(200%);
@@ -63,14 +44,10 @@ const Wrapper = styled.div<IWrapperProps>`
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     align-items: center;
-    /* ${(props) => props.north && 'align-items: flex-start;'}; */
     display: flex;
     justify-content: center;
     font-size: 1rem;
-    /* text-transform: uppercase; */
-    /* color: var(--color-hex); */
     color: black;
-    /* font-weight: bold; */
     pointer-events: none;
     z-index: 2;
   }
@@ -95,22 +72,7 @@ interface ISVGProps {
 }
 
 const SVG = styled.svg<ISVGProps>`
-  /* opacity: 1; */
-  /* fill: var(--color-fill-sea); */
   fill: transparent;
-
-  /* ${(props) => props.city && 'fill: var(--color-fill);'} */
-
-  &.highlight {
-    /* filter: drop-shadow(0 0 15px var(--color-bg-shadow)); */
-    /* filter: drop-shadow(0 0 15px white); */
-  }
-
-  // This still works since events "bubble up" from the Polygon to the parent
-  &:hover {
-    /* opacity: 1; */
-    /* filter: grayscale(80%); */
-  }
 `;
 
 const Polygon = styled.polygon`
@@ -119,29 +81,10 @@ const Polygon = styled.polygon`
   stroke-miterlimit: 2;
 
   &.highlight {
-    /* animation: stroke 1000ms infinite; */
-    /* stroke: var(--color-hex-highlight); */
-    /* stroke: white; */
-
     stroke: var(--color-hex-highlight);
     stroke-width: 10;
     stroke-miterlimit: 10;
   }
-
-  /* @keyframes stroke {
-    0% {
-      stroke: var(--color-hex);
-      stroke-width: 10;
-    }
-    50% {
-      stroke: var(--color-hex-highlight);
-      stroke-width: 10;
-    }
-    100% {
-      stroke: var(--color-hex);
-      stroke-width: 10;
-    } 
-  } */
 
   // This is where we want the pointer events to happen!
   pointer-events: auto;
@@ -195,16 +138,11 @@ const Hex = ({
   return (
     <Wrapper
       id={id}
-      // top={getTopForBoardPosition({ row, column })} // Remove if responsive works
-      // left={getLeftForBoardPosition({ row, column })} // Remove if responsive works
-      top={0} // Remove if responsive works
-      left={0} // Remove if responsive works
       north={north}
       column={column}
       row={row}
       hex_url={getImageUrl(city)}
       className={highlight ? 'highlight' : ''}
-      // onClick={onClick}
     >
       <SVG
         city={city}
@@ -222,7 +160,6 @@ const Hex = ({
       {city && (
         <>
           <span className='city'>{city.name}</span>
-          {/* <img className='coa' src={city.coatOfArms} /> */}
           <Cargo cargo={city.goods} />
           <Contracts
             contracts={city.contracts}

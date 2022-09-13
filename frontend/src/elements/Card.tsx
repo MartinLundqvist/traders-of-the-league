@@ -15,10 +15,6 @@ const Wrapper = styled.div`
   gap: 0.25rem;
   padding: 0.5rem 1rem 0.25rem 1rem;
   font-size: 1.2rem;
-  /* border-radius: 0.25rem; */
-
-  /* background-color: var(--color-bg);
-  box-shadow: 3px 3px 3px var(--color-bg-shadow); */
 
   &.pulse {
     animation: pulse 500ms ease-in-out alternate infinite;

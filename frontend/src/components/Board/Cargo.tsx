@@ -19,7 +19,6 @@ const Wrapper = styled.div`
     padding-right: 50%;
   }
 
-  /* justify-content: center; */
   align-items: end;
   top: 0;
   height: 100%;
