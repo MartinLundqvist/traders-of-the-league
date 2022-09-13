@@ -4,4 +4,4 @@
 
 echo "Deploying $1"
 
-fly deploy --dockerfile ./$1/Dockerfile --config ./$1/fly.toml
+fly deploy --dockerfile ./$1/Dockerfile --config ./$1/fly.toml --local-only
