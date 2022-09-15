@@ -10,6 +10,9 @@ import { useLayout } from './contexts/LayoutProvider';
 import Europe from './elements/Europe';
 import { routes, actionRoutes } from './routes';
 import { FOOTER, HEADER, MARGIN } from './utils/layoutGeometry';
+import { IMAGE_ARRAY } from './elements/Images';
+import { useImagePreloader } from './hooks/useImagePreloader';
+import Loading from './components/Loading';
 // import { useAuthDev } from './utils/useAuthDev';
 
 const Wrapper = styled.div`
@@ -49,10 +52,13 @@ const Wrapper = styled.div`
 
 const App = (): JSX.Element => {
   const { activeRoute, activeActionRoute } = useLayout();
-  const { isAuthenticated, user } = useAuth0();
+  const { isAuthenticated } = useAuth0();
+  const { imagesPreloaded } = useImagePreloader(IMAGE_ARRAY);
   // const { isAuthenticated } = useAuthDev();
 
   if (!isAuthenticated) return <Login className='grid-area--all' />;
+
+  if (!imagesPreloaded) return <Loading className='grid-area--all' />;
 
   return (
     <Wrapper>

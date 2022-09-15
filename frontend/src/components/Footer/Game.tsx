@@ -2,12 +2,8 @@ import { useAuth0 } from '@auth0/auth0-react';
 import styled from 'styled-components';
 import { useGameServer } from '../../contexts/GameServerProvider';
 import { useLayout } from '../../contexts/LayoutProvider';
+import { IMAGES } from '../../elements/Images';
 import { ButtonImage } from '../../elements/Typography';
-import url_help from '../../assets/ui/gui_button_howtoplay.png';
-import url_bugReport from '../../assets/ui/gui_button_bugreport.png';
-import url_endGame from '../../assets/ui/gui_button_end_game.png';
-import url_logout from '../../assets/ui/gui_button_log_out.png';
-import url_yield from '../../assets/ui/gui_button_forfeit_game.png';
 
 const Wrapper = styled.div`
   display: flex;
@@ -36,27 +32,27 @@ export const Game = (): JSX.Element => {
   return (
     <Wrapper>
       <ButtonImage
-        image_url={url_help}
+        image_url={IMAGES.UI.BUTTONS.help}
         onClick={() => setActiveActionRoute('about')}
         tooltip='Learn the game'
       />
       <ButtonImage
-        image_url={url_logout}
+        image_url={IMAGES.UI.BUTTONS.logout}
         onClick={() => logout({ returnTo: window.location.origin })}
         tooltip='Logout'
       />
       <ButtonImage
-        image_url={url_bugReport}
+        image_url={IMAGES.UI.BUTTONS.bugReport}
         onClick={() => setActiveActionRoute('report')}
         tooltip='Report a bug'
       />
       <ButtonImage
-        image_url={url_yield}
+        image_url={IMAGES.UI.BUTTONS.forfeit}
         onClick={() => yieldGame()}
         tooltip='Leave this game'
       />
       <ButtonImage
-        image_url={url_endGame}
+        image_url={IMAGES.UI.BUTTONS.endGame}
         disabled={!isMyGame}
         onClick={() => handleClickEndGame()}
         tooltip='End this game'

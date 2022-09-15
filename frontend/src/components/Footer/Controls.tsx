@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useGameServer } from '../../contexts/GameServerProvider';
 import { ButtonImage, ButtonSmall } from '../../elements/Typography';
-import url_endRound from '../../assets/ui/gui_button_end_turn.png';
+import { IMAGES } from '../../elements/Images';
 
 const Wrapper = styled.div`
   display: flex;
@@ -25,7 +25,7 @@ export const Controls = (): JSX.Element => {
 
       {(gameStatus === 'playing' || gameStatus === 'endgame') && (
         <ButtonImage
-          image_url={url_endRound}
+          image_url={IMAGES.UI.BUTTONS.endRound}
           disabled={!isMyTurn || canAchieve}
           onClick={() => endRound({ confirm: true })}
           tooltip='End round'

@@ -1,25 +1,22 @@
 import styled from 'styled-components';
 import { IPlayer } from '../../../../shared/types';
-import url_scroll from '../../assets/ui/gui_player_status.png';
+import { IMAGES } from '../../elements/Images';
 import Good from '../Board/Good';
-import url_achievement from '../../assets/ui/gui_player_status_achievements.png';
-import url_city from '../../assets/ui/gui_player_status_cities_emptied.png';
-import url_status from '../../assets/ui/gui_player_status_pointer.png';
 
 const AchImg = styled.img`
-  content: url('${url_achievement}');
+  content: url('${IMAGES.UI.PLAYER_STATUS.achievement}');
   max-width: 100%;
   max-height: 100%;
 `;
 
 const CityImg = styled.img`
-  content: url('${url_city}');
+  content: url('${IMAGES.UI.PLAYER_STATUS.city}');
   max-width: 100%;
   max-height: 100%;
 `;
 
 const Wrapper = styled.div`
-  background-image: url('${url_scroll}');
+  background-image: url('${IMAGES.UI.SCROLLS.player_scroll}');
   background-size: 100% 100%;
   background-position: center;
   background-origin: border-box;
@@ -54,7 +51,7 @@ const Wrapper = styled.div`
       height: 100%;
       top: -5%;
       left: 0;
-      background-image: url('${url_status}');
+      background-image: url('${IMAGES.UI.PLAYER_STATUS.status}');
       background-size: 40%;
       background-position: top center;
       background-repeat: no-repeat;

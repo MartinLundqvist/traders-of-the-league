@@ -9,7 +9,7 @@ import ScrollFull from '../../elements/ScrollFull';
 import { ButtonSmall, Title } from '../../elements/Typography';
 import { timeToString } from '../../utils/timeToString';
 import Contract from '../Board/Contract';
-import url_gameover from '../../assets/ui/gui_game_over.png';
+import { IMAGES } from '../../elements/Images';
 import { Achievement } from '../Achieve/elements/Achievement';
 
 const Container = styled.div`
@@ -111,7 +111,7 @@ const Won = ({ className }: IStartProps): JSX.Element => {
   return (
     <ScrollFull landscape className={className}>
       <Container>
-        <img className='image' src={url_gameover} />
+        <img className='image' src={IMAGES.UI.SCROLLS.gameover} />
         <Title>
           GAME OVER after{' '}
           {timeToString(gameResults.game.startTime, gameResults.game.endTime)}

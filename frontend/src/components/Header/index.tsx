@@ -1,11 +1,5 @@
 import { useGameServer } from '../../contexts/GameServerProvider';
-import url_logo from '../../assets/ui/traders_of_the_league_logo.png';
-import url_city_emptied from '../../assets/ui/gui_button_city_emptied.png';
-import url_city_not_emptied from '../../assets/ui/gui_button_city_not_emptied.png';
-import url_moveLeft from '../../assets/ui/gui_button_moves_left.png';
-import url_game_scroll from '../../assets/ui/gui_game_name_scroll.png';
-import url_ship from '../../assets/ui/gui_button_your_turn.png';
-import url_waiting from '../../assets/ui/gui_button_waiting.png';
+import { IMAGES } from '../../elements/Images';
 import styled from 'styled-components';
 import { useTimePlayed } from '../../hooks/useTimePlayed';
 import { useReminder } from '../../hooks/useReminder';
@@ -144,7 +138,7 @@ const Wrapper = styled.div`
 
       &::after {
         content: '';
-        background-image: url('${url_game_scroll}');
+        background-image: url('${IMAGES.UI.MAIN.game_name_banner}');
         background-size: 30% 100%;
         background-position: center;
         background-repeat: no-repeat;
@@ -219,7 +213,7 @@ const Header = ({ className }: IHeaderProps) => {
     if (!game) return result;
 
     for (let i = 0; i < game.state.currentRound.movesLeft; i++) {
-      result.push(<IMG src={url_moveLeft} key={i} />);
+      result.push(<IMG src={IMAGES.UI.BUTTONS.moveLeft} key={i} />);
     }
 
     return result;
@@ -231,7 +225,7 @@ const Header = ({ className }: IHeaderProps) => {
     if (!game) return result;
 
     for (let i = 0; i < game.state.numberOfCitiesEmptied; i++) {
-      result.push(<IMG src={url_city_emptied} key={'ec' + i} />);
+      result.push(<IMG src={IMAGES.UI.BUTTONS.city_emptied} key={'ec' + i} />);
     }
 
     for (
@@ -239,7 +233,9 @@ const Header = ({ className }: IHeaderProps) => {
       i < game.numberOfCitiesToEmpty - game.state.numberOfCitiesEmptied;
       i++
     ) {
-      result.push(<IMG src={url_city_not_emptied} key={'nec' + i} />);
+      result.push(
+        <IMG src={IMAGES.UI.BUTTONS.city_not_emptied} key={'nec' + i} />
+      );
     }
 
     return result;
@@ -247,7 +243,7 @@ const Header = ({ className }: IHeaderProps) => {
 
   return (
     <Wrapper className={className}>
-      <IMG src={url_logo} />
+      <IMG src={IMAGES.UI.MAIN.logo} />
 
       {game && (
         <>
@@ -271,7 +267,11 @@ const Header = ({ className }: IHeaderProps) => {
                 {isMyTurn ? 'Your turn!' : 'Waiting'}
               </div>
             </div>
-            {isMyTurn ? <IMG src={url_ship} /> : <IMG src={url_waiting} />}
+            {isMyTurn ? (
+              <IMG src={IMAGES.UI.MAIN.ship} />
+            ) : (
+              <IMG src={IMAGES.UI.MAIN.waiting} />
+            )}
           </div>
         </>
       )}

@@ -2,10 +2,7 @@ import styled from 'styled-components';
 import { ICity } from '../../../../shared/types';
 import Cargo from './Cargo';
 import Contracts from './Contracts';
-import hex_sea from '../../assets/map/hex_tile_sea.png';
-import hex_city_center from '../../assets/map/hex_tile_city_center.png';
-import hex_city_west from '../../assets/map/hex_tile_city_west.png';
-import hex_city_east from '../../assets/map/hex_tile_city_east.png';
+import { IMAGES } from '../../elements/Images';
 
 interface IWrapperProps {
   row: number; // New for responsive
@@ -114,18 +111,18 @@ const Hex = ({
   highlight,
 }: IHexProps): JSX.Element => {
   const getImageUrl = (city: ICity | null): string => {
-    let result = hex_sea;
+    let result = IMAGES.HEXES.sea;
 
     if (city) {
       switch (city.region) {
         case 'Central':
-          result = hex_city_center;
+          result = IMAGES.HEXES.city_center;
           break;
         case 'East':
-          result = hex_city_east;
+          result = IMAGES.HEXES.city_east;
           break;
         case 'West':
-          result = hex_city_west;
+          result = IMAGES.HEXES.city_west;
           break;
       }
     }

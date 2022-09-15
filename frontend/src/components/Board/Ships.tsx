@@ -1,18 +1,14 @@
 import styled from 'styled-components';
-import ship_black from '../../assets/ships/Ship_black.png';
-import ship_blue from '../../assets/ships/Ship_blue.png';
-import ship_red from '../../assets/ships/Ship_red.png';
-import ship_green from '../../assets/ships/Ship_green.png';
-import ship_yellow from '../../assets/ships/Ship_yellow.png';
+import { IMAGES } from '../../elements/Images';
 import { useLayout } from '../../contexts/LayoutProvider';
 import { Ship } from './Ship';
 
 const shipElements = {
-  black: ship_black,
-  blue: ship_blue,
-  red: ship_red,
-  green: ship_green,
-  yellow: ship_yellow,
+  black: IMAGES.UI.SHIPS.ship_black,
+  blue: IMAGES.UI.SHIPS.ship_blue,
+  red: IMAGES.UI.SHIPS.ship_red,
+  green: IMAGES.UI.SHIPS.ship_green,
+  yellow: IMAGES.UI.SHIPS.ship_yellow,
 };
 
 const Isolate = styled.div`

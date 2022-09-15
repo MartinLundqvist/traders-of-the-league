@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useGameServer } from '../../contexts/GameServerProvider';
 import { FOOTER, HEADER } from '../../utils/layoutGeometry';
 import ChatBox from './ChatBox';
-import url_scroll from '../../assets/ui/gui_long_scroll.png';
+import { IMAGES } from '../../elements/Images';
 
 const Wrapper = styled.div`
 
@@ -21,7 +21,7 @@ const Wrapper = styled.div`
   z-index: 20;
   transition: width 200ms ease-in-out;
 
-  background-image: url('${url_scroll}');
+  background-image: url('${IMAGES.UI.SCROLLS.scroll_landscape}');
   background-size: cover;
   background-position: right center;
   

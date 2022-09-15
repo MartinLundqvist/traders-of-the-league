@@ -1,13 +1,7 @@
 import styled from 'styled-components';
 import { TCargo } from '../../../../shared/types';
 
-import blackCube from '../../assets/cubes/Black_Cube.png';
-import blueCube from '../../assets/cubes/Blue_Cube.png';
-import brownCube from '../../assets/cubes/Brown_Cube.png';
-import greenCube from '../../assets/cubes/Green_Cube.png';
-import greyCube from '../../assets/cubes/Grey_Cube.png';
-import redCube from '../../assets/cubes/Red_Cube.png';
-import yellowCube from '../../assets/cubes/Yellow_Cube.png';
+import { IMAGES } from '../../elements/Images';
 
 const IMG = styled.img`
   max-height: 100%;
@@ -21,13 +15,13 @@ type TCargoMap = {
 };
 
 const CARGO: TCargoMap = {
-  black: <IMG src={blackCube} />,
-  blue: <IMG src={blueCube} />,
-  brown: <IMG src={brownCube} />,
-  gray: <IMG src={greyCube} />,
-  green: <IMG src={greenCube} />,
-  red: <IMG src={redCube} />,
-  yellow: <IMG src={yellowCube} />,
+  black: <IMG src={IMAGES.GOODS.blackCube} />,
+  blue: <IMG src={IMAGES.GOODS.blueCube} />,
+  brown: <IMG src={IMAGES.GOODS.brownCube} />,
+  gray: <IMG src={IMAGES.GOODS.greyCube} />,
+  green: <IMG src={IMAGES.GOODS.greenCube} />,
+  red: <IMG src={IMAGES.GOODS.redCube} />,
+  yellow: <IMG src={IMAGES.GOODS.yellowCube} />,
 };
 
 interface IGoodProps {

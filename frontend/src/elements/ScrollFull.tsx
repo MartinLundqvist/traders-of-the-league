@@ -1,8 +1,5 @@
 import styled from 'styled-components';
-import url_scroll from '../assets/ui/gui_scroll.png';
-import url_scroll_landscape from '../assets/ui/gui_long_scroll.png';
-import url_scroll_bug from '../assets/ui/gui_bug_report.png';
-import url_scroll_achievement from '../assets/ui/gui_achievement.png';
+import { IMAGES } from '../elements/Images';
 
 const Wrapper = styled.div`
   position: relative;
@@ -18,7 +15,7 @@ const Wrapper = styled.div`
   .scroll-container {
     height: 80%;
     width: 80%;
-    background-image: url('${url_scroll}');
+    background-image: url('${IMAGES.UI.SCROLLS.scroll}');
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
@@ -27,17 +24,17 @@ const Wrapper = styled.div`
     overflow: hidden;
 
     &.landscape {
-      background-image: url('${url_scroll_landscape}');
+      background-image: url('${IMAGES.UI.SCROLLS.scroll_landscape}');
       background-size: 100% 100%;
       padding: 1rem 2rem 1rem 2rem;
     }
 
     &.bug-report {
-      background-image: url('${url_scroll_bug}');
+      background-image: url('${IMAGES.UI.SCROLLS.scroll_bug}');
     }
 
     &.achievement {
-      background-image: url('${url_scroll_achievement}');
+      background-image: url('${IMAGES.UI.SCROLLS.scroll_achievement}');
     }
   }
 `;

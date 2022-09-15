@@ -5,7 +5,7 @@ import {
 } from '../../../../../shared/types';
 import { Achievement } from './Achievement';
 import { useGameServer } from '../../../contexts/GameServerProvider';
-import url_scroll from '../../../assets/ui/gui_player_status.png';
+import { IMAGES } from '../../../elements/Images';
 
 const Wrapper = styled.div`
   position: relative;
@@ -19,7 +19,7 @@ const Wrapper = styled.div`
   }
 
   .playerstats {
-    background-image: url('${url_scroll}');
+    background-image: url('${IMAGES.UI.SCROLLS.player_scroll}');
     background-size: 100% 100%;
     background-position: center;
     background-repeat: no-repeat;
