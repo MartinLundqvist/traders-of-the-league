@@ -15,7 +15,9 @@ const Wrapper = styled.div`
   justify-content: center;
 
   .hexagons {
+    isolation: isolate;
     position: relative;
+    z-index: 1;
     display: grid;
     place-content: center;
     grid-template-columns: repeat(12, var(--width));

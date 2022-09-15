@@ -15,6 +15,7 @@ const Wrapper = styled.div<IWrapperProps>`
   background-image: ${(props) => `url('${props.hex_url}')`};
   background-size: cover;
   background-position: center;
+  z-index: 1;
 
   // The below is new for responsive only
   position: relative;
@@ -26,6 +27,14 @@ const Wrapper = styled.div<IWrapperProps>`
   &:hover {
     filter: contrast(200%);
     cursor: pointer;
+    z-index: 2;
+
+    span.city {
+      /* border: 1px solid black; */
+      > * {
+        transform: translateY(-45%);
+      }
+    }
   }
 
   // This is in order to make sure the Polygon restricts the pointer event surface!
@@ -45,6 +54,9 @@ const Wrapper = styled.div<IWrapperProps>`
     color: black;
     pointer-events: none;
     z-index: 2;
+    > * {
+      transition: transform 350ms ease-in-out;
+    }
   }
 
   img.coa {
@@ -154,8 +166,10 @@ const Hex = ({
       </SVG>
       {city && (
         <>
-          <span className='city'>{city.name}</span>
-          <Cargo cargo={city.goods} />
+          <span className='city'>
+            {city.name}
+            <Cargo cargo={city.goods} />
+          </span>
           <Contracts
             contracts={city.contracts}
             north={north}
