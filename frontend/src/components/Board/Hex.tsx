@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 import { ICity } from '../../../../shared/types';
-import { HEX_MAX_DIAMETER, HEX_MIN_DIAMETER } from '../../utils/boardGeometry';
 import Cargo from './Cargo';
 import Contracts from './Contracts';
-
 import hex_sea from '../../assets/map/hex_tile_sea.png';
 import hex_city_center from '../../assets/map/hex_tile_city_center.png';
 import hex_city_west from '../../assets/map/hex_tile_city_west.png';

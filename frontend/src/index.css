@@ -29,7 +29,7 @@
 
 @font-face {
   font-family: 'Washington';
-  src: url('@/assets/fonts/WashingtonText.ttf');
+  src: url('/WashingtonText.ttf');
 }
 
 body {

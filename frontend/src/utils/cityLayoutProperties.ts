@@ -1,19 +1,23 @@
 import { TCity } from '../../../shared/types';
-import newcastle from '../assets/newcastle.png';
-import abo from '../assets/abo.png';
-import bergen from '../assets/bergen.png';
-import brugge from '../assets/brugge.png';
-import danzig from '../assets/danzig.png';
-import falsterbo from '../assets/falsterbo.png';
-import hamburg from '../assets/hamburg.png';
-import london from '../assets/london.png';
-import lubeck from '../assets/lubeck.png';
-import reval from '../assets/reval.png';
-import riga from '../assets/riga.png';
-import stettin from '../assets/stettin.png';
-import stockholm from '../assets/stockholm.png';
-import tonsberg from '../assets/tonsberg.png';
-import visby from '../assets/visby.png';
+// import newcastle from '../assets/newcastle.png';
+// import abo from '../assets/abo.png';
+// import bergen from '../assets/bergen.png';
+// import brugge from '../assets/brugge.png';
+// import danzig from '../assets/danzig.png';
+// import falsterbo from '../assets/falsterbo.png';
+// import hamburg from '../assets/hamburg.png';
+// import london from '../assets/london.png';
+// import lubeck from '../assets/lubeck.png';
+// import reval from '../assets/reval.png';
+// import riga from '../assets/riga.png';
+// import stettin from '../assets/stettin.png';
+// import stockholm from '../assets/stockholm.png';
+// import tonsberg from '../assets/tonsberg.png';
+// import visby from '../assets/visby.png';
+
+// TODO: Once decided, we can remove the Coat of Arms completely
+
+const urlFake = 'fake';
 
 export interface ICityLayoutProperty {
   north?: boolean;
@@ -30,61 +34,61 @@ type ICityLayoutPropertyMap = {
 export const cityLayoutProperties: ICityLayoutPropertyMap = {
   Newcastle: {
     north: true,
-    coatOfArms: newcastle,
+    coatOfArms: urlFake,
   },
   London: {
-    coatOfArms: london,
+    coatOfArms: urlFake,
   },
   Brügge: {
     west: true,
-    coatOfArms: brugge,
+    coatOfArms: urlFake,
   },
   Bergen: {
     north: true,
-    coatOfArms: bergen,
+    coatOfArms: urlFake,
   },
   Hamburg: {
     west: true,
-    coatOfArms: hamburg,
+    coatOfArms: urlFake,
   },
   Tønsberg: {
     north: true,
-    coatOfArms: tonsberg,
+    coatOfArms: urlFake,
   },
   Lübeck: {
-    coatOfArms: lubeck,
+    coatOfArms: urlFake,
   },
   Falsterbo: {
     north: true,
     center: true,
-    coatOfArms: falsterbo,
+    coatOfArms: urlFake,
   },
   Stettin: {
-    coatOfArms: stettin,
+    coatOfArms: urlFake,
   },
   Stockholm: {
     north: true,
-    coatOfArms: stockholm,
+    coatOfArms: urlFake,
   },
   Visby: {
     farEast: true,
     north: true,
-    coatOfArms: visby,
+    coatOfArms: urlFake,
   },
   Danzig: {
     west: true,
-    coatOfArms: danzig,
+    coatOfArms: urlFake,
   },
   Åbo: {
     north: true,
-    coatOfArms: abo,
+    coatOfArms: urlFake,
   },
   Riga: {
     west: true,
-    coatOfArms: riga,
+    coatOfArms: urlFake,
   },
   Reval: {
     north: true,
-    coatOfArms: reval,
+    coatOfArms: urlFake,
   },
 };

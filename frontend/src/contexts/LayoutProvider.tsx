@@ -6,12 +6,13 @@ import {
   useState,
 } from 'react';
 import { IPlayer } from '../../../shared/types';
-import { SHIP_DISTANCE } from '../utils/shipGeometry';
 import { TActionRoute, TRoute } from '../routes';
 import { createBoardLayout, TBoardLayout } from '../utils/createBoardLayout';
 import { useGameServer } from './GameServerProvider';
 import { useNotifications } from './NotificationsProvider';
 import { canFulFillSomeContract } from '../utils/canFulfillContract';
+
+const SHIP_DISTANCE = 10;
 
 type TShipLayout = TShip[];
 
