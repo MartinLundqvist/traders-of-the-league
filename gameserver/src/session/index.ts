@@ -83,21 +83,7 @@ export class GameSession implements ISession {
       (position: IBoardPosition, callback: (valid: boolean) => void) =>
         this.sailTo(position, callback)
     );
-    this.socket.on(
-      'loadCargo',
-      (cargo: TCargo[], callback: (valid: boolean) => void) =>
-        this.loadCargo(cargo, callback)
-    );
-    this.socket.on(
-      'ditchCargo',
-      (cargo: TCargo[], callback: (valid: boolean) => void) =>
-        this.ditchCargo(cargo, callback)
-    );
-    this.socket.on(
-      'makeTrades',
-      (contracts: IContract[], callback: (valid: boolean) => void) =>
-        this.makeTrades(contracts, callback)
-    );
+
     this.socket.on(
       'tradeDitchLoad',
       (
@@ -362,74 +348,6 @@ export class GameSession implements ISession {
     callback(validMove);
   }
 
-  private async loadCargo(cargo: TCargo[], callback: (valid: boolean) => void) {
-    const game = await this.gameStore.getGame(this.activeGameUuid);
-
-    if (!this.activeGameUuid || !game) {
-      this.socket.emit('error', 'Game not found');
-      return;
-    }
-
-    // Have the engine figure out wether it is a valid move, and if so, execute it.
-    let validMove = GameEngine.loadCargoForCurrentPlayer(game, cargo);
-
-    if (validMove) {
-      // If the move is valid, we persist and push the new game state
-      await this.gameStore.saveGame(game);
-      this.pushActiveGame();
-    }
-
-    // Finally, we callback with a confirmation.?????
-    callback(validMove);
-  }
-
-  private async ditchCargo(
-    cargo: TCargo[],
-    callback: (valid: boolean) => void
-  ) {
-    const game = await this.gameStore.getGame(this.activeGameUuid);
-
-    if (!this.activeGameUuid || !game) {
-      this.socket.emit('error', 'Game not found');
-      return;
-    }
-
-    // Have the engine figure out wether it is a valid move, and if so, execute it.
-    let validMove = GameEngine.ditchCargoForCurrentPlayer(game, cargo);
-
-    if (validMove) {
-      // If the move is valid, we persist and push the new game state
-      await this.gameStore.saveGame(game);
-      this.pushActiveGame();
-    }
-
-    // Finally, we callback with a confirmation.?????
-    callback(validMove);
-  }
-
-  private async makeTrades(
-    contracts: IContract[],
-    callback: (valid: boolean) => void
-  ) {
-    const game = await this.gameStore.getGame(this.activeGameUuid);
-
-    if (!this.activeGameUuid || !game) {
-      this.socket.emit('error', 'Game not found');
-      return;
-    }
-
-    // Have the engine figure out wether these are valid trades, and if so, execute them.
-    let validTrade = GameEngine.makeTradesForCurrentPlayer(game, contracts);
-
-    if (validTrade) {
-      // If the move is valid, we persist and push the new game state
-      await this.gameStore.saveGame(game);
-      this.pushActiveGame();
-    }
-
-    // Finally, we callback with a confirmation.?????
-    callback(validTrade);
-  }
   private async tradeDitchLoad(
     contractsToTrade: IContract[],
     cargoToDitch: TCargo[],
