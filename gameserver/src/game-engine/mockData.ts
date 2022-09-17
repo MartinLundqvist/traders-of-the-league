@@ -1367,12 +1367,6 @@ export const MOCK_GAME: IGame = {
         },
         {
           value: 1,
-          cargo: ['blue', 'black'],
-          region: 'East',
-          uuid: 'E_blu_bla_1',
-        },
-        {
-          value: 1,
           cargo: ['gray', 'brown'],
           region: 'East',
           uuid: 'E_gry_bro_1',

@@ -1,4 +1,3 @@
-import { random } from 'nanoid';
 import { IAchievement } from '../../../shared/types';
 import { ACHIEVEMENTS } from './constants';
 
