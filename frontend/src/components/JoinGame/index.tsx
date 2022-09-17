@@ -56,7 +56,6 @@ const JoinGame = ({ className }: IJoinGameProps): JSX.Element => {
       <Container>
         <TitleSmall>List updates every 2 seconds</TitleSmall>
         <Title>Click to join a game</Title>
-
         {activeGames.map((game) => (
           <TitleButton
             key={game.uuid}

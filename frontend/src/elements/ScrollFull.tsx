@@ -13,10 +13,12 @@ const Wrapper = styled.div`
   backdrop-filter: blur(3px);
 
   .scroll-container {
-    height: 80%;
-    width: 80%;
+    height: 90%;
+    width: 70%;
     background-image: url('${IMAGES.UI.SCROLLS.scroll}');
-    background-size: contain;
+    /* background-size: contain; */
+    padding: 0 5% 0 5%;
+    background-size: 100% 100%;
     background-position: center;
     background-repeat: no-repeat;
     display: grid;

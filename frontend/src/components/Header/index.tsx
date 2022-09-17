@@ -132,7 +132,8 @@ const Wrapper = styled.div`
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      font-size: 2rem;
+      /* font-size: 3ch; */
+      text-align: center;
       width: 100%;
       height: 100%;
 
@@ -207,6 +208,13 @@ const Header = ({ className }: IHeaderProps) => {
   const timePlayed = useTimePlayed();
   const showReminder = useReminder();
 
+  const getNameFontSize = (length: number): string => {
+    if (!game) return '4ch';
+    if (length < 15) return '4ch';
+    const fraction = 4 * (15 / length);
+    return fraction.toString() + 'ch';
+  };
+
   const getMovesLeft = (): JSX.Element[] => {
     let result: JSX.Element[] = [];
 
@@ -253,7 +261,12 @@ const Header = ({ className }: IHeaderProps) => {
               <div className='cities-emptied--grid'>{getCitiesEmptied()}</div>
             </div>
             <div className='game-name'>
-              <div className='game-name--title'>{game.name}</div>
+              <div
+                className='game-name--title'
+                style={{ fontSize: getNameFontSize(game.name.length) }}
+              >
+                {game.name}
+              </div>
             </div>
             <div className='moves-left'>
               <div>Moves left</div>

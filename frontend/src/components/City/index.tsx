@@ -20,8 +20,9 @@ const Container = styled.div`
   grid-template-areas: 'cityheading cityheading' 'cargo cargo' 'orders orders' 'load trade' 'actions actions';
   justify-items: center;
   align-items: start;
-  gap: 1rem;
-  width: 50%;
+  gap: 2rem;
+  /* width: 100%; */
+  /* width: 50%; */
 
   .container-main--cityheading {
     grid-area: cityheading;
@@ -38,6 +39,7 @@ const Container = styled.div`
   .container-main--cargo {
     grid-area: cargo;
     display: grid;
+    gap: 0.5rem;
     grid-template-rows: 1fr;
     grid-template-columns: repeat(6, 1fr);
     align-items: center;
