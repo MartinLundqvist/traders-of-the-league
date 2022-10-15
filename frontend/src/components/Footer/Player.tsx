@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { IPlayer } from '../../../../shared/types';
 import { IMAGES } from '../../elements/Images';
+import { truncatePlayerName } from '../../utils/truncatePlayerName';
 import Good from '../Board/Good';
 
 const AchImg = styled.img`
@@ -21,7 +22,8 @@ const Wrapper = styled.div`
   background-position: center;
   background-origin: border-box;
   background-repeat: no-repeat;
-  max-width: 10rem;
+  width: 15ch;
+  /* max-width: 10rem; */
   height: 130%;
 
   display: flex;
@@ -192,7 +194,7 @@ export const Player = ({
     <Wrapper className={(turn ? 'turn ' : '') + (me ? 'me ' : '')}>
       <div className='player'>
         <div className={'player-color ' + player.color}></div>
-        {player.user.name}
+        {truncatePlayerName(player.user.name, 10)}
       </div>
       <div className='points'>VPs: {player.victoryPoints}</div>
       <div className='achievements'>{getAchievements()}</div>

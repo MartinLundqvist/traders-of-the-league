@@ -152,8 +152,8 @@ export const ACHIEVEMENTS_TARGETS: TAchievementTargetMap = {
   'Supplier B': 2,
   'Specialist A': 4,
   'Specialist B': 4,
-  'Merchant A': 6,
-  'Merchant B': 7,
+  'Merchant A': 5,
+  'Merchant B': 6,
   'Banker A': 4,
   'Banker B': 4,
 };

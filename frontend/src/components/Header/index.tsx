@@ -192,7 +192,7 @@ const Wrapper = styled.div`
 
       @keyframes zoom-in {
         to {
-          transform: scale(2) translate(-50%, 50%);
+          transform: scale(2);
         }
       }
     }

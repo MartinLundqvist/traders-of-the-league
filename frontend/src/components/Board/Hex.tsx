@@ -25,7 +25,7 @@ const Wrapper = styled.div<IWrapperProps>`
   width: calc(2 * var(--R));
 
   &:hover {
-    filter: contrast(200%);
+    filter: contrast(130%);
     cursor: pointer;
     z-index: 2;
 

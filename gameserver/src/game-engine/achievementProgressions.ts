@@ -1,5 +1,5 @@
 import { IPlayer, TCargo } from '../../../shared/types';
-import { cargoColors, CARGO_COLORS, regions } from './constants';
+import { cargoColors } from './constants';
 
 /**
  * Contracts of each color. Does not need to be 7 different contracts
