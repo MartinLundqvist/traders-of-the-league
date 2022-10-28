@@ -90,7 +90,7 @@ export const AchievementWithPlayerStats = ({
         <div className='title'>Players' progress</div>
         {game?.players.map((player) => (
           <div key={player.user.uuid} className='player-container'>
-            <div>{truncatePlayerName(player.user.name, 15)}</div>
+            <div>{truncatePlayerName(player.user.name, 10)}</div>
             <div>
               {getAchievementStats(player.user.uuid)?.progress} /{' '}
               {getAchievementStats(player.user.uuid)?.target}{' '}

@@ -499,6 +499,11 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
       return;
     }
 
+    if (!hex.highlight) {
+      window.alert('You cannot reach this position.');
+      return;
+    }
+
     // Safeguard, in case the user really didn't intend to sail into the open sea...
     if (!hex.city) {
       // Plus if this is the first move, then we will end the round

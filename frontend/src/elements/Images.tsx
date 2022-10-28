@@ -1,12 +1,12 @@
 // Achievements
-import bankerA from '../assets/achievements/Banker_A_2-5_3P.png';
-import bankerB from '../assets/achievements/Banker_B_2-5_4P.png';
+import bankerA from '../assets/achievements/Banker_A_2-5_4P.png';
+import bankerB from '../assets/achievements/Banker_B_2-5_3P.png';
 import diversifierA from '../assets/achievements/Diversifier_A_2-5_4P.png';
 import diversifierB from '../assets/achievements/Diversifier_B_2-5_4P.png';
 import explorerA from '../assets/achievements/Explorer_A_2-5_4P.png';
 import explorerB from '../assets/achievements/Explorer_B_2-5_3P.png';
-import merchantA from '../assets/achievements/Merchant_A_2-3_5P.png';
-import merchantB from '../assets/achievements/Merchant_B_2-3_4P.png';
+import merchantA from '../assets/achievements/Merchant_A_4-5_5P.png';
+import merchantB from '../assets/achievements/Merchant_B_4-5_4P.png';
 import monopolistA from '../assets/achievements/Monopolist_A_2-3_4P.png';
 import monopolistB from '../assets/achievements/Monopolist_B_4-5_3P.png';
 import regionalTraderA from '../assets/achievements/Regional_A_2-5_5P.png';

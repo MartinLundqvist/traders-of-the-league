@@ -177,6 +177,7 @@ const City = ({ className }: ICityProps): JSX.Element => {
     canLoad,
     currentRound,
     tradeDitchLoad,
+    endRound,
   } = useGameServer();
   const [cityState, setCityState] = useState<ICityState>(INITIAL_STATE);
   const [cityGoodsLoadOptions, setCityGoodsLoadOptions] = useState<
@@ -482,14 +483,17 @@ const City = ({ className }: ICityProps): JSX.Element => {
           ))}
         </div>
         <div className='container-actions--actions'>
+          <ButtonSmall warning onClick={() => endRound({ confirm: true })}>
+            ! End round
+          </ButtonSmall>
           <ButtonSmall warning onClick={() => resetOrders()}>
             Undo orders
           </ButtonSmall>
-          <ButtonSmall pulse onClick={() => executeOrders()}>
-            Execute orders
-          </ButtonSmall>
           <ButtonSmall onClick={() => setActiveActionRoute('none')}>
             Exit to board
+          </ButtonSmall>
+          <ButtonSmall pulse onClick={() => executeOrders()}>
+            Execute orders
           </ButtonSmall>
         </div>
         <DitchDialogue
