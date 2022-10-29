@@ -8,11 +8,11 @@ import { nanoid } from 'nanoid';
 
 const Wrapper = styled.div`
   position: absolute;
-  top: 0;
-  left: 0;
+  top: -5%;
+  left: -5%;
   background-color: transparent;
-  width: 100%;
-  height: 100%;
+  width: 110%;
+  height: 110%;
   display: grid;
 
   backdrop-filter: blur(10px);
@@ -26,9 +26,11 @@ const Wrapper = styled.div`
 
     display: grid;
     grid-template-columns: repeat(5, auto);
-    grid-template-rows: repeat(4, auto);
+    grid-template-rows: repeat(6, auto);
     grid-template-areas:
       'title title title title title'
+      'subtitle subtitle subtitle subtitle subtitle'
+      'cubesnew cubesnew cubesnew cubesnew cubesnew'
       'instruction instruction instruction instruction instruction'
       'cubes cubes cubes cubes cubes'
       'actions actions actions actions actions';
@@ -42,6 +44,17 @@ const Wrapper = styled.div`
     .container--instruction {
       place-self: center;
       grid-area: instruction;
+    }
+    .container--subtitle {
+      place-self: center;
+      grid-area: subtitle;
+    }
+    .container--cubesnew {
+      place-self: center;
+      grid-area: cubesnew;
+      display: flex;
+      flex-direction: row;
+      gap: 0.2rem;
     }
     .container--cubes {
       grid-area: cubes;
@@ -183,6 +196,12 @@ export const DitchDialogue = ({
     <Wrapper>
       <div className='container'>
         <Title className='container--title'>Cargo full</Title>
+        <TitleSmall className='container--subtitle'>Trying to load</TitleSmall>
+        <div className='container--cubesnew'>
+          {attemptedCityGoodsOption?.cargo.map((good) => (
+            <Good good={good} />
+          ))}
+        </div>
         <TitleSmall className='container--instruction'>
           Click min {nrOfCubesToDitch} cube(s) to ditch
         </TitleSmall>
