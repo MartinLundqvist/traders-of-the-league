@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import { IAchievement } from '../../../../shared/types';
 import { useGameServer } from '../../contexts/GameServerProvider';
@@ -16,11 +17,12 @@ const Container = styled.div`
   gap: 0.5rem;
 
   .achievements-container {
-    display: grid;
-    place-content: center;
-    place-items: center;
+    display: flex;
+    gap: 1rem;
 
-    grid-template-columns: repeat(3, 6rem);
+    > * {
+      width: 6rem;
+    }
   }
 `;
 
@@ -38,6 +40,23 @@ const Achieve = ({ className }: IAchieveProps): JSX.Element => {
     setActiveActionRoute('none');
   };
 
+  useEffect(() => {
+    let timeout: NodeJS.Timeout | null = null;
+    if (game?.state.currentRound.achievementsEarned.length === 1) {
+      timeout = setTimeout(
+        () =>
+          handlePickAchievementClick(
+            game?.state.currentRound.achievementsEarned[0]
+          ),
+        3000
+      );
+    }
+
+    return () => {
+      timeout && clearTimeout(timeout);
+    };
+  }, [game]);
+
   return (
     <ScrollFull achievement className={className}>
       <Container>
@@ -51,7 +70,9 @@ const Achieve = ({ className }: IAchieveProps): JSX.Element => {
             />
           ))}
         </div>
-        <TitleSmall>Pick one</TitleSmall>
+        {game && game.state.currentRound.achievementsEarned.length > 1 && (
+          <TitleSmall>Pick one</TitleSmall>
+        )}
       </Container>
     </ScrollFull>
   );

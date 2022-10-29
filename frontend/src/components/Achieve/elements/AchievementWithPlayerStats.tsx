@@ -26,9 +26,9 @@ const Wrapper = styled.div`
     background-repeat: no-repeat;
     z-index: 2;
     position: absolute;
-    padding: 0.5rem 1.2rem 0.5rem 1.2rem;
+    padding: 0.5rem 1.5rem 0.5rem 1.5rem;
     height: auto;
-    width: max-content;
+    width: 25ch;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -52,6 +52,11 @@ const Wrapper = styled.div`
 
     .title {
       font-size: 1rem;
+      text-align: center;
+    }
+    .description {
+      font-size: 0.8rem;
+      text-align: center;
     }
   }
 `;
@@ -87,6 +92,7 @@ export const AchievementWithPlayerStats = ({
     <Wrapper>
       <Achievement achievement={achievement} />
       <div className='playerstats'>
+        <div className='description'>{achievement.description}</div>
         <div className='title'>Players' progress</div>
         {game?.players.map((player) => (
           <div key={player.user.uuid} className='player-container'>

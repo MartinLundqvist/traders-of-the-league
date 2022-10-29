@@ -7,7 +7,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  margin-right: 2rem;
+  margin-right: 4rem;
   margin-bottom: 2rem;
 
   .container {

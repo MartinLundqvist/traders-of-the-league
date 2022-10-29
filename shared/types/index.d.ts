@@ -67,6 +67,7 @@ export type TAchievement =
 
 export interface IAchievement {
   name: TAchievement;
+  description: string;
   value: TVictoryPoint;
   _id?: string;
 }

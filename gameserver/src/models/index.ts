@@ -90,6 +90,7 @@ const gameSchema = new mongoose.Schema<IGame>({
       achievementsEarned: [
         {
           name: String,
+          description: String,
           value: Number,
         },
       ],
@@ -99,6 +100,7 @@ const gameSchema = new mongoose.Schema<IGame>({
   achievements: [
     {
       name: String,
+      description: String,
       value: Number,
     },
   ],
