@@ -125,7 +125,7 @@ export const ACHIEVEMENTS: IAchievement[] = [
   },
   {
     name: 'Specialist A',
-    description: 'Four blue contracts',
+    description: 'Three blue contracts',
     value: 3,
   },
   {
@@ -166,7 +166,7 @@ export const ACHIEVEMENTS_TARGETS: TAchievementTargetMap = {
   'Explorer B': 3,
   'Supplier A': 3,
   'Supplier B': 2,
-  'Specialist A': 4,
+  'Specialist A': 3,
   'Specialist B': 4,
   'Merchant A': 5,
   'Merchant B': 6,
