@@ -214,3 +214,13 @@ export interface IActiveGame {
   uuid: string;
   players: IPlayer[];
 }
+
+export interface IRankingHistory {
+  gameUuid: string;
+  newRanking: string;
+}
+export interface IRanking {
+  user: Omit<IUser, 'connected'>;
+  currentRanking: number;
+  rankingHistory: IRankingHistory[];
+}
