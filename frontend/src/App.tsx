@@ -58,6 +58,8 @@ const App = (): JSX.Element => {
 
   if (!isAuthenticated) return <Login className='grid-area--all' />;
 
+  // if (user && !user.email_verified) return <div>Please verify your email</div>;
+
   if (!imagesPreloaded) return <Loading className='grid-area--all' />;
 
   return (
