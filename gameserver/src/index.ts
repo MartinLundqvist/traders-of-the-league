@@ -13,6 +13,7 @@ import { ChatStore } from './stores/chatStore';
 import { closeDBConnection, connectToDB } from './database';
 import { gameModel, sessionModel, chatModel, bugReportModel } from './models';
 import { createRestAPIRoutes } from './restapiroutes';
+import { resendVerificationEmail } from './auth-controllers/resendVerificationEmail';
 
 // Persist whether we are in development mode or not, and whether we are starting up only an in-memory version
 const DEVELOPMENT = process.env.NODE_ENV === 'production' ? false : true;
@@ -140,6 +141,17 @@ app.get('/activegames', async (req, res) => {
   const games = await gameStore.getActiveGames();
 
   res.status(200).send(games);
+});
+
+// This route asks Auth0 to resend a verification email
+app.get('/resendemail/:user_id', async (req, res) => {
+  const user_id = req.params.user_id;
+
+  const result = await resendVerificationEmail(user_id);
+
+  res
+    .status(200)
+    .send({ message: 'Verification email sent: ', success: result });
 });
 
 // This is merely for health checks. Probably don't even need the express package for this app hmm....

@@ -13,6 +13,7 @@ import { FOOTER, HEADER, MARGIN } from './utils/layoutGeometry';
 import { IMAGE_ARRAY } from './elements/Images';
 import { useImagePreloader } from './hooks/useImagePreloader';
 import Loading from './components/Loading';
+import VerifyEmail from './components/VerifyEmail';
 // import { useAuthDev } from './utils/useAuthDev';
 
 const Wrapper = styled.div`
@@ -52,13 +53,14 @@ const Wrapper = styled.div`
 
 const App = (): JSX.Element => {
   const { activeRoute, activeActionRoute } = useLayout();
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, user } = useAuth0();
   const { imagesPreloaded } = useImagePreloader(IMAGE_ARRAY);
   // const { isAuthenticated } = useAuthDev();
 
   if (!isAuthenticated) return <Login className='grid-area--all' />;
 
-  // if (user && !user.email_verified) return <div>Please verify your email</div>;
+  if (user && !user.email_verified)
+    return <VerifyEmail className='grid-area--all' />;
 
   if (!imagesPreloaded) return <Loading className='grid-area--all' />;
 

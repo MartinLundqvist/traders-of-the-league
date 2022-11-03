@@ -5,3 +5,4 @@ build
 .env*
 saves
 trader-mongodb-data
+auth0Tests.http
