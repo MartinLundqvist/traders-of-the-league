@@ -335,6 +335,7 @@ export const BOARD: TBoard = [
     row: 3,
     city: {
       name: 'Newcastle',
+      nrContracts: 3,
       contracts: [],
       coatOfArms: '',
       goods: ['black', 'red'],
@@ -349,6 +350,7 @@ export const BOARD: TBoard = [
     row: 8,
     city: {
       name: 'London',
+      nrContracts: 3,
       contracts: [],
       coatOfArms: '',
       goods: ['red', 'red'],
@@ -366,6 +368,7 @@ export const BOARD: TBoard = [
     row: 7,
     city: {
       name: 'Brügge',
+      nrContracts: 3,
       contracts: [],
       coatOfArms: '',
       goods: ['brown', 'brown'],
@@ -377,6 +380,7 @@ export const BOARD: TBoard = [
     row: 0,
     city: {
       name: 'Bergen',
+      nrContracts: 3,
       contracts: [],
       coatOfArms: '',
       goods: ['green', 'green'],
@@ -390,6 +394,7 @@ export const BOARD: TBoard = [
     row: 6,
     city: {
       name: 'Hamburg',
+      nrContracts: 3,
       contracts: [],
       coatOfArms: '',
       goods: ['green', 'brown'],
@@ -402,6 +407,7 @@ export const BOARD: TBoard = [
     row: 0,
     city: {
       name: 'Tønsberg',
+      nrContracts: 3,
       contracts: [],
       coatOfArms: '',
       goods: ['blue'],
@@ -415,6 +421,7 @@ export const BOARD: TBoard = [
     row: 6,
     city: {
       name: 'Lübeck',
+      nrContracts: 3,
       contracts: [],
       coatOfArms: '',
       goods: ['yellow', 'yellow'],
@@ -426,6 +433,7 @@ export const BOARD: TBoard = [
     row: 5,
     city: {
       name: 'Falsterbo',
+      nrContracts: 3,
       contracts: [],
       coatOfArms: '',
       goods: ['black'],
@@ -437,6 +445,7 @@ export const BOARD: TBoard = [
     row: 7,
     city: {
       name: 'Stettin',
+      nrContracts: 3,
       contracts: [],
       coatOfArms: '',
       goods: ['green', 'yellow'],
@@ -450,6 +459,7 @@ export const BOARD: TBoard = [
     row: 1,
     city: {
       name: 'Stockholm',
+      nrContracts: 3,
       contracts: [],
       coatOfArms: '',
       goods: ['blue', 'brown'],
@@ -461,6 +471,7 @@ export const BOARD: TBoard = [
     row: 3,
     city: {
       name: 'Visby',
+      nrContracts: 3,
       contracts: [],
       coatOfArms: '',
       goods: ['gray', 'black'],
@@ -472,6 +483,7 @@ export const BOARD: TBoard = [
     row: 5,
     city: {
       name: 'Danzig',
+      nrContracts: 3,
       contracts: [],
       coatOfArms: '',
       goods: ['black', 'brown'],
@@ -483,6 +495,7 @@ export const BOARD: TBoard = [
     row: 0,
     city: {
       name: 'Åbo',
+      nrContracts: 3,
       contracts: [],
       coatOfArms: '',
       goods: ['black', 'black'],
@@ -497,6 +510,7 @@ export const BOARD: TBoard = [
     row: 3,
     city: {
       name: 'Riga',
+      nrContracts: 3,
       contracts: [],
       coatOfArms: '',
       goods: ['blue', 'blue'],
@@ -508,6 +522,7 @@ export const BOARD: TBoard = [
     row: 0,
     city: {
       name: 'Reval',
+      nrContracts: 3,
       contracts: [],
       coatOfArms: '',
       goods: ['gray', 'gray'],

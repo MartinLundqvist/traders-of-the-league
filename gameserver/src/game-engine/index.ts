@@ -104,15 +104,11 @@ const dealContracts = (game: IGame) => {
   board.forEach((element) => {
     if (element.city) {
       let pickedContracts = [];
-      pickedContracts.push(
-        pickContractByRegion(newContracts, element.city.region)
-      );
-      pickedContracts.push(
-        pickContractByRegion(newContracts, element.city.region)
-      );
-      pickedContracts.push(
-        pickContractByRegion(newContracts, element.city.region)
-      );
+      for (let i = 0; i < element.city.nrContracts; i++) {
+        pickedContracts.push(
+          pickContractByRegion(newContracts, element.city.region)
+        );
+      }
       element.city.contracts = pickedContracts;
     }
   });

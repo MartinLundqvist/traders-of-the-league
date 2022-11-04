@@ -66,6 +66,7 @@ const gameSchema = new mongoose.Schema<IGame>({
         type: {
           name: String,
           goods: [String],
+          nrContracts: Number,
           contracts: [
             {
               value: Number,

@@ -1644,6 +1644,7 @@ export const MOCK_GAME: IGame = {
       row: 3,
       city: {
         name: 'Newcastle',
+        nrContracts: 3,
         contracts: [],
         coatOfArms: '',
         goods: ['black', 'red'],
@@ -1658,6 +1659,7 @@ export const MOCK_GAME: IGame = {
       row: 8,
       city: {
         name: 'London',
+        nrContracts: 3,
         contracts: [],
         coatOfArms: '',
         goods: ['red', 'red'],
@@ -1672,6 +1674,7 @@ export const MOCK_GAME: IGame = {
       row: 7,
       city: {
         name: 'Brügge',
+        nrContracts: 3,
         contracts: [],
         coatOfArms: '',
         goods: ['brown', 'brown'],
@@ -1683,6 +1686,7 @@ export const MOCK_GAME: IGame = {
       row: 0,
       city: {
         name: 'Bergen',
+        nrContracts: 3,
         contracts: [],
         coatOfArms: '',
         goods: ['green', 'green'],
@@ -1696,6 +1700,7 @@ export const MOCK_GAME: IGame = {
       row: 6,
       city: {
         name: 'Hamburg',
+        nrContracts: 3,
         contracts: [
           {
             value: 2,
@@ -1715,6 +1720,7 @@ export const MOCK_GAME: IGame = {
       row: 0,
       city: {
         name: 'Tønsberg',
+        nrContracts: 3,
         contracts: [],
         coatOfArms: '',
         goods: ['blue'],
@@ -1728,6 +1734,7 @@ export const MOCK_GAME: IGame = {
       row: 6,
       city: {
         name: 'Lübeck',
+        nrContracts: 3,
         contracts: [
           {
             value: 2,
@@ -1752,6 +1759,7 @@ export const MOCK_GAME: IGame = {
       row: 5,
       city: {
         name: 'Falsterbo',
+        nrContracts: 3,
         contracts: [
           {
             value: 5,
@@ -1770,6 +1778,7 @@ export const MOCK_GAME: IGame = {
       row: 7,
       city: {
         name: 'Stettin',
+        nrContracts: 3,
         contracts: [
           {
             value: 1,
@@ -1790,6 +1799,7 @@ export const MOCK_GAME: IGame = {
       row: 1,
       city: {
         name: 'Stockholm',
+        nrContracts: 3,
         contracts: [
           {
             value: 2,
@@ -1808,6 +1818,7 @@ export const MOCK_GAME: IGame = {
       row: 3,
       city: {
         name: 'Visby',
+        nrContracts: 4,
         contracts: [
           {
             value: 2,
@@ -1826,6 +1837,7 @@ export const MOCK_GAME: IGame = {
       row: 5,
       city: {
         name: 'Danzig',
+        nrContracts: 3,
         contracts: [
           {
             value: 1,
@@ -1856,6 +1868,7 @@ export const MOCK_GAME: IGame = {
       row: 0,
       city: {
         name: 'Åbo',
+        nrContracts: 3,
         contracts: [],
         coatOfArms: '',
         goods: ['black', 'black'],
@@ -1870,6 +1883,7 @@ export const MOCK_GAME: IGame = {
       row: 3,
       city: {
         name: 'Riga',
+        nrContracts: 3,
         contracts: [],
         coatOfArms: '',
         goods: ['blue', 'blue'],
@@ -1881,6 +1895,7 @@ export const MOCK_GAME: IGame = {
       row: 0,
       city: {
         name: 'Reval',
+        nrContracts: 3,
         contracts: [
           {
             value: 3,

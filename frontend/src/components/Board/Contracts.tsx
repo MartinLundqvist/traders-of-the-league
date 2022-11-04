@@ -7,13 +7,16 @@ interface IWrapperProps {
   west?: boolean;
   center?: boolean;
   farEast?: boolean;
+  nrContracts: number;
 }
 
 const Wrapper = styled.div<IWrapperProps>`
   position: absolute;
   display: grid;
+  --columns: ${(props) => (props.nrContracts > 3 ? 4 : 3)};
+  /* --columns: 4; */
   width: calc(2 * var(--R));
-  grid-template-columns: repeat(3, calc(var(--R) / 2));
+  grid-template-columns: repeat(var(--columns), calc(var(--R) / 2));
   grid-template-rows: calc(var(--R) / 2);
   ${(props) => props.north && 'justify-content: center; top: -30%'};
   ${(props) => props.west && 'justify-content: flex-end'};
@@ -45,7 +48,13 @@ const Contracts = ({
   farEast,
 }: IContractProps): JSX.Element => {
   return (
-    <Wrapper north={north} west={west} center={center} farEast={farEast}>
+    <Wrapper
+      north={north}
+      west={west}
+      center={center}
+      farEast={farEast}
+      nrContracts={contracts.length}
+    >
       {contracts.map((contract, index) => (
         <Contract contract={contract} key={index} />
       ))}

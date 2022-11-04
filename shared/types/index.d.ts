@@ -83,6 +83,7 @@ export interface IAchievementProgress {
 export interface ICity {
   name: TCity;
   goods: TCargo[];
+  nrContracts: number; // The number of contracts the city should hold at start.
   contracts: IContract[];
   coatOfArms: TCoatOfArms;
   region: TRegion;
