@@ -14,6 +14,11 @@ const Wrapper = styled.div`
   padding: 25% 25%;
   gap: 2rem;
   text-align: center;
+
+  .button-container {
+    display: flex;
+    gap: 2rem;
+  }
 `;
 
 interface ILoginProps {
@@ -21,10 +26,10 @@ interface ILoginProps {
 }
 
 const VerifyEmail = ({ className }: ILoginProps): JSX.Element => {
-  const { user } = useAuth0();
+  const { user, logout } = useAuth0();
   const [resent, setResent] = useState(false);
 
-  const handleClick = async () => {
+  const handleResendClick = async () => {
     console.log(`Requesting new email for ${user?.sub}`);
 
     if (!user) {
@@ -58,9 +63,14 @@ const VerifyEmail = ({ className }: ILoginProps): JSX.Element => {
         If you can't find the email invitation, click the resend button and wait
         for it.
       </Title>
-      <ButtonSmall onClick={() => handleClick()} disabled={resent}>
-        Resend verification email
-      </ButtonSmall>
+      <div className='button-container'>
+        <ButtonSmall onClick={() => handleResendClick()} disabled={resent}>
+          Resend verification email
+        </ButtonSmall>
+        <ButtonSmall onClick={() => logout()}>
+          Login with different user
+        </ButtonSmall>
+      </div>
       {resent && (
         <Title>
           Mail sent. Once you have verified your email, reload this page.
