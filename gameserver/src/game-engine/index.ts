@@ -11,7 +11,6 @@ import { createNewContracts } from './createNewContracts';
 import { getHexesWithinRangeOf } from './getHexesWithinRangeOf';
 import { pickContractByRegion } from './pickContractByRegion';
 import {
-  ACHIEVEMENTS_TARGETS,
   BOARD,
   MAX_MOVES,
   numberOfCitiesToEmpty,
@@ -120,14 +119,14 @@ const dealContracts = (game: IGame) => {
 };
 
 const dealAchievements = (game: IGame) => {
-  game.achievements = pickRandomAchievements(game.players.length + 1);
+  game.achievements = pickRandomAchievements(game.players.length);
 
   // Create a fresh achievementsProgress array for each player.
   game.players.forEach((player) => {
     player.achievementsProgress = game.achievements.map((achievement) => {
       return {
-        achievementName: achievement.name,
-        target: ACHIEVEMENTS_TARGETS[achievement.name],
+        uuid: achievement.uuid,
+        target: achievement.target,
         progress: 0,
       };
     });

@@ -437,6 +437,11 @@ const City = ({ className }: ICityProps): JSX.Element => {
     setActiveActionRoute('none');
   };
 
+  const handleEndRound = () => {
+    endRound({ confirm: true });
+    setActiveActionRoute('none');
+  };
+
   return (
     <ScrollFull className={className}>
       <Container>
@@ -483,7 +488,7 @@ const City = ({ className }: ICityProps): JSX.Element => {
           ))}
         </div>
         <div className='container-actions--actions'>
-          <ButtonSmall warning onClick={() => endRound({ confirm: true })}>
+          <ButtonSmall warning onClick={() => handleEndRound()}>
             ! End round
           </ButtonSmall>
           <ButtonSmall warning onClick={() => resetOrders()}>

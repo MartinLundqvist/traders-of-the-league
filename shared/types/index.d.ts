@@ -47,33 +47,35 @@ export interface IEmptiedCity {
   value: TVictoryPoint;
 }
 
-export type TAchievement =
-  | 'Diversifier A'
-  | 'Diversifier B'
-  | 'Regional Trader A'
-  | 'Regional Trader B'
-  | 'Monopolist A'
-  | 'Monopolist B'
-  | 'Explorer A'
-  | 'Explorer B'
-  | 'Supplier A'
-  | 'Supplier B'
-  | 'Specialist A'
-  | 'Specialist B'
-  | 'Merchant A'
-  | 'Merchant B'
-  | 'Banker A'
-  | 'Banker B';
+// export type TAchievement =
+//   | 'Diversifier A'
+//   | 'Diversifier B'
+//   | 'Regional Trader A'
+//   | 'Regional Trader B'
+//   | 'Monopolist A'
+//   | 'Monopolist B'
+//   | 'Explorer A'
+//   | 'Explorer B'
+//   | 'Supplier A'
+//   | 'Supplier B'
+//   | 'Specialist A'
+//   | 'Specialist B'
+//   | 'Merchant A'
+//   | 'Merchant B'
+//   | 'Banker A'
+//   | 'Banker B';
 
 export interface IAchievement {
-  name: TAchievement;
+  name: string;
   description: string;
   value: TVictoryPoint;
+  target: number;
+  uuid: string;
   _id?: string;
 }
 
 export interface IAchievementProgress {
-  achievementName: TAchievement;
+  uuid: string; // the unique identifier of the Achievement
   target: number; // This is the number of "things" that must have been completed (i.e., emptying x cities or taking one contract of each color etc.)
   progress: number; // This is the number of such things currently completed.
 }

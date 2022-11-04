@@ -80,7 +80,7 @@ export const AchievementWithPlayerStats = ({
     if (!player) return null;
 
     const achievementProgress = player?.achievementsProgress.find(
-      (ap) => ap.achievementName === achievement.name
+      (ap) => ap.uuid === achievement.uuid
     );
 
     if (!achievementProgress) return null;

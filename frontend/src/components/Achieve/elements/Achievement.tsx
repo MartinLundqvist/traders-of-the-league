@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { IAchievement, TAchievement } from '../../../../../shared/types';
+import { IAchievement } from '../../../../../shared/types';
 import { IMAGES } from '../../../elements/Images';
 
 const IMG = styled.img`
@@ -9,26 +9,28 @@ const IMG = styled.img`
 `;
 
 type TAchievementMap = {
-  [key in TAchievement]: JSX.Element;
+  [key: string]: JSX.Element;
 };
 
 const ACHIEVEMENTS: TAchievementMap = {
-  'Diversifier A': <IMG src={IMAGES.ACHIEVEMENTS.diversifierA} />,
-  'Diversifier B': <IMG src={IMAGES.ACHIEVEMENTS.diversifierB} />,
-  'Regional Trader A': <IMG src={IMAGES.ACHIEVEMENTS.regionalTraderA} />,
-  'Regional Trader B': <IMG src={IMAGES.ACHIEVEMENTS.regionalTraderB} />,
-  'Monopolist A': <IMG src={IMAGES.ACHIEVEMENTS.monopolistA} />,
-  'Monopolist B': <IMG src={IMAGES.ACHIEVEMENTS.monopolistB} />,
-  'Explorer A': <IMG src={IMAGES.ACHIEVEMENTS.explorerA} />,
-  'Explorer B': <IMG src={IMAGES.ACHIEVEMENTS.explorerB} />,
-  'Supplier A': <IMG src={IMAGES.ACHIEVEMENTS.supplierA} />,
-  'Supplier B': <IMG src={IMAGES.ACHIEVEMENTS.supplierB} />,
-  'Specialist A': <IMG src={IMAGES.ACHIEVEMENTS.specialistA} />,
-  'Specialist B': <IMG src={IMAGES.ACHIEVEMENTS.specialistB} />,
-  'Merchant A': <IMG src={IMAGES.ACHIEVEMENTS.merchantA} />,
-  'Merchant B': <IMG src={IMAGES.ACHIEVEMENTS.merchantB} />,
-  'Banker A': <IMG src={IMAGES.ACHIEVEMENTS.bankerA} />,
-  'Banker B': <IMG src={IMAGES.ACHIEVEMENTS.bankerB} />,
+  'Banker_A_2-5_4P': <IMG src={IMAGES.ACHIEVEMENTS.bankerA} />,
+  'Banker_B_2-5_3P': <IMG src={IMAGES.ACHIEVEMENTS.bankerB} />,
+  'Diversifier_A_2-5_4P': <IMG src={IMAGES.ACHIEVEMENTS.diversifierA} />,
+  'Diversifier_B_2-5_4P': <IMG src={IMAGES.ACHIEVEMENTS.diversifierB} />,
+  'Explorer_A_2-5_4P': <IMG src={IMAGES.ACHIEVEMENTS.explorerA} />,
+  'Explorer_B_2-5_3P': <IMG src={IMAGES.ACHIEVEMENTS.explorerB} />,
+  'Merchant_A_4-5_5P': <IMG src={IMAGES.ACHIEVEMENTS.merchantA} />,
+  'Merchant_A_2-3_5P': <IMG src={IMAGES.ACHIEVEMENTS.merchantA2} />,
+  'Merchant_B_4-5_4P': <IMG src={IMAGES.ACHIEVEMENTS.merchantB} />,
+  'Merchant_B_2-3_4P': <IMG src={IMAGES.ACHIEVEMENTS.merchantB2} />,
+  'Monopolist_A_2-3_4P': <IMG src={IMAGES.ACHIEVEMENTS.monopolistA} />,
+  'Monopolist_B_4-5_3P': <IMG src={IMAGES.ACHIEVEMENTS.monopolistB} />,
+  'Regional_A_2-5_5P': <IMG src={IMAGES.ACHIEVEMENTS.regionalTraderA} />,
+  'Regional_B_2-5_3P': <IMG src={IMAGES.ACHIEVEMENTS.regionalTraderB} />,
+  'Specialist_A_2-5_3P': <IMG src={IMAGES.ACHIEVEMENTS.specialistA} />,
+  'Specialist_B_2-5_4P': <IMG src={IMAGES.ACHIEVEMENTS.specialistB} />,
+  'Supplier_A_2-3_4P': <IMG src={IMAGES.ACHIEVEMENTS.supplierA} />,
+  'Supplier_B_4-5_3P': <IMG src={IMAGES.ACHIEVEMENTS.supplierB} />,
 };
 
 const Wrapper = styled.div`
@@ -52,7 +54,7 @@ export const Achievement = ({
 }: IAchievementProps): JSX.Element => {
   return (
     <Wrapper onClick={onClick || (() => {})}>
-      {ACHIEVEMENTS[achievement.name]}
+      {ACHIEVEMENTS[achievement.uuid]}
     </Wrapper>
   );
 };

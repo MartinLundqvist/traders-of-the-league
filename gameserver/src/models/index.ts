@@ -1,5 +1,19 @@
 import mongoose from 'mongoose';
-import { IBugReport, IChat, IGame, ISession } from '../../../shared/types';
+import {
+  IAchievement,
+  IBugReport,
+  IChat,
+  IGame,
+  ISession,
+} from '../../../shared/types';
+
+const achievementSchema = new mongoose.Schema<IAchievement>({
+  name: String,
+  description: String,
+  value: Number,
+  target: Number,
+  uuid: String,
+});
 
 const gameSchema = new mongoose.Schema<IGame>({
   name: String,
@@ -28,15 +42,10 @@ const gameSchema = new mongoose.Schema<IGame>({
           value: Number,
         },
       ],
-      achievements: [
-        {
-          name: String,
-          value: Number,
-        },
-      ],
+      achievements: [achievementSchema],
       achievementsProgress: [
         {
-          achievementName: String,
+          uuid: String,
           target: Number,
           progress: Number,
         },
@@ -87,23 +96,11 @@ const gameSchema = new mongoose.Schema<IGame>({
           column: Number,
         },
       ],
-      achievementsEarned: [
-        {
-          name: String,
-          description: String,
-          value: Number,
-        },
-      ],
+      achievementsEarned: [achievementSchema],
     },
     numberOfCitiesEmptied: Number,
   },
-  achievements: [
-    {
-      name: String,
-      description: String,
-      value: Number,
-    },
-  ],
+  achievements: [achievementSchema],
 });
 
 const sessionSchema = new mongoose.Schema<ISession>({

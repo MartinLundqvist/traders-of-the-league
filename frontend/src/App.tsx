@@ -48,6 +48,7 @@ const Wrapper = styled.div`
   }
   .grid-area--margin-right {
     grid-area: margin-right;
+    z-index: 1;
   }
 `;
 
