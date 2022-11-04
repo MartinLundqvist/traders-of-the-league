@@ -22,7 +22,7 @@ const Wrapper = styled.div`
   background-position: center;
   background-origin: border-box;
   background-repeat: no-repeat;
-  width: 15ch;
+  width: 17ch;
   /* max-width: 10rem; */
   height: 130%;
 
@@ -31,7 +31,7 @@ const Wrapper = styled.div`
   justify-content: space-evenly;
   /* gap: 0.3rem; */
   padding: 0.5rem 2rem 0.25rem 1.5rem;
-  font-size: 1.2rem;
+  font-size: 1rem;
   border-radius: 0.25rem;
   transform: translateY(-25%);
 
@@ -194,7 +194,7 @@ export const Player = ({
     <Wrapper className={(turn ? 'turn ' : '') + (me ? 'me ' : '')}>
       <div className='player'>
         <div className={'player-color ' + player.color}></div>
-        {truncatePlayerName(player.user.name, 10)}
+        {truncatePlayerName(player.user.name, 12)}
       </div>
       <div className='points'>VPs: {player.victoryPoints}</div>
       <div className='achievements'>{getAchievements()}</div>
