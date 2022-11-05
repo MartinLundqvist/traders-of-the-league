@@ -24,7 +24,11 @@ import { updateAchievementsProgressAndReturnEarnedAchievements } from './findAch
 import { getGameResults } from './getGameResults';
 import { pickRandomAchievements } from './pickRandomAchievements';
 
-const createGame = (gameName: string, gameUuid: string): IGame => {
+const createGame = (
+  gameName: string,
+  gameUuid: string,
+  tempo = 10 * 60 * 1000
+): IGame => {
   const newGame: IGame = {
     name: gameName,
     uuid: gameUuid,
@@ -34,6 +38,7 @@ const createGame = (gameName: string, gameUuid: string): IGame => {
     board: BOARD,
     startTime: 0,
     endTime: 0,
+    tempo: tempo,
     state: {
       currentRound: {
         playerUuid: '',
@@ -89,6 +94,9 @@ const addPlayerToGame = (user: IUser, game: IGame): IPlayer => {
     victoryPoints: 0,
     cargo: thisPlayerIndex === 0 ? [] : [playerInitialCargo[thisPlayerIndex]],
     hasMadeEndGameMove: false,
+    hasTimedOut: false,
+    timeLeft: game.tempo,
+    timedOutTurn: 0,
   };
 
   return newPlayer;

@@ -1338,6 +1338,7 @@ export const MOCK_GAME: IGame = {
   name: 'lyndens game',
   uuid: 'dDV7I0PZkSX1SdDCILTkA',
   numberOfCitiesToEmpty: 8,
+  tempo: 10 * 60 * 1000,
   achievements: [
     {
       name: 'Banker',
@@ -1375,7 +1376,7 @@ export const MOCK_GAME: IGame = {
       target: 4,
     },
   ],
-  startTime: 1662726642215,
+  startTime: new Date().getTime(),
   endTime: 0,
   players: [
     {
@@ -1497,6 +1498,9 @@ export const MOCK_GAME: IGame = {
       position: { column: 8, row: 5 },
       victoryPoints: 47,
       cargo: ['black', 'blue', 'yellow', 'black', 'black'],
+      hasTimedOut: false,
+      timeLeft: 5 * 60 * 1000,
+      timedOutTurn: 0,
     },
     {
       color: 'blue',
@@ -1636,6 +1640,9 @@ export const MOCK_GAME: IGame = {
       position: { column: 6, row: 7 },
       victoryPoints: 59,
       cargo: ['green', 'red', 'yellow', 'blue'],
+      hasTimedOut: false,
+      timeLeft: 5 * 60 * 1000,
+      timedOutTurn: 0,
     },
   ],
   board: [

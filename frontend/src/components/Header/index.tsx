@@ -3,6 +3,8 @@ import { IMAGES } from '../../elements/Images';
 import styled from 'styled-components';
 import { useTimePlayed } from '../../hooks/useTimePlayed';
 import { useReminder } from '../../hooks/useReminder';
+import { useEffect, useMemo, useState } from 'react';
+import { timeToString } from '../../utils/timeToString';
 
 const IMG = styled.img`
   min-height: 0;
@@ -183,8 +185,8 @@ const Wrapper = styled.div`
     min-width: max-content;
 
     .game-state--text {
-      font-size: 1.2rem;
-      min-width: 5rem;
+      font-size: 1rem;
+      width: 9rem;
 
       .remind {
         animation: zoom-in 500ms linear alternate infinite;
@@ -203,9 +205,34 @@ interface IHeaderProps {
   className: string;
 }
 
+const usePlayerTimer = () => {
+  const { myPlayer, isMyTurn } = useGameServer();
+  const [localTimeLeft, setLocalTimeLeft] = useState(1000);
+  const [timedOut, setTimedOut] = useState(false);
+
+  useEffect(() => {
+    console.log('usePLayerTimer hoook, firing the useEffect');
+    setTimedOut(false);
+    myPlayer && setLocalTimeLeft(myPlayer.timeLeft);
+
+    let timer: NodeJS.Timer;
+    if (isMyTurn) {
+      timer = setInterval(() => {
+        if (localTimeLeft <= 999) setTimedOut(true);
+        setLocalTimeLeft((_prevState) => _prevState - 1000);
+      }, 1000);
+    }
+
+    return () => clearInterval(timer);
+  }, [myPlayer?.timeLeft, isMyTurn]);
+
+  return { timeLeft: timeToString(localTimeLeft), timedOut };
+};
+
 const Header = ({ className }: IHeaderProps) => {
-  const { isMyTurn, game, currentTurnPlayer } = useGameServer();
+  const { isMyTurn, game, myPlayer } = useGameServer();
   const timePlayed = useTimePlayed();
+  const { timeLeft, timedOut } = usePlayerTimer();
   const showReminder = useReminder();
 
   const getNameFontSize = (length: number): string => {
@@ -275,7 +302,12 @@ const Header = ({ className }: IHeaderProps) => {
           </div>
           <div className='game-state'>
             <div className='game-state--text'>
-              <div>{timePlayed}</div>
+              {timedOut ? (
+                <div>You timed out!</div>
+              ) : (
+                <div>Your timer: {timeLeft}</div>
+              )}
+              <div>Game time: {timePlayed}</div>
               <div className={isMyTurn && showReminder ? 'remind' : ''}>
                 {isMyTurn ? 'Your turn!' : 'Waiting'}
               </div>

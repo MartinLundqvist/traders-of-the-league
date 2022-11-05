@@ -113,6 +113,9 @@ export interface IPlayer {
   victoryPoints: number;
   cargo: TCargo[];
   hasMadeEndGameMove: boolean;
+  hasTimedOut: boolean;
+  timeLeft: number; // Gametime left in milliseconds
+  timedOutTurn: number; // The game turn in which player timed out
   _id?: string;
 }
 
@@ -153,6 +156,7 @@ export interface IGame {
   achievements: IAchievement[];
   startTime: number; // In Epoch ms
   endTime: number; // In Epoch ms
+  tempo: number; // The game type in ms - i.e., the total time available to each player.
   _id?: string;
   __v?: number;
 }
