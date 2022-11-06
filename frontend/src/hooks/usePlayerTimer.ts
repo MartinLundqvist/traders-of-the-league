@@ -3,7 +3,7 @@ import { useGameServer } from '../contexts/GameServerProvider';
 import { timeToString } from '../utils/timeToString';
 
 export const usePlayerTimer = () => {
-  const { myPlayer, isMyTurn } = useGameServer();
+  const { myPlayer, isMyTurn, gameStatus } = useGameServer();
   const [localTimeLeft, setLocalTimeLeft] = useState(0);
   const [timedOut, setTimedOut] = useState(false);
 
@@ -22,6 +22,7 @@ export const usePlayerTimer = () => {
   // We also synchronize everytime the turn changes, just to be safe...
   useEffect(() => {
     myPlayer && setLocalTimeLeft(myPlayer.timeLeft);
+    // console.log('Received new timeLeft from server ' + myPlayer?.timeLeft);
   }, [myPlayer?.timeLeft, isMyTurn]);
 
   // If we run out of time (locally) we set the timedOut boolean to true.

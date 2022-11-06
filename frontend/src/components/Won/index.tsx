@@ -130,6 +130,7 @@ const Won = ({ className }: IStartProps): JSX.Element => {
                 <th>Cities Emptied</th>
                 <th>Achievements</th>
                 <th>VPs</th>
+                <th>Timed out?</th>
               </tr>
             </thead>
             <tbody>
@@ -163,6 +164,11 @@ const Won = ({ className }: IStartProps): JSX.Element => {
                   </td>
                   <td>
                     <div className='points'>{player.victoryPoints}</div>
+                  </td>
+                  <td>
+                    <div>
+                      {player.timedOut ? `${player.timedOutRound}` : ''}
+                    </div>
                   </td>
                 </tr>
               ))}

@@ -115,7 +115,7 @@ export interface IPlayer {
   hasMadeEndGameMove: boolean;
   hasTimedOut: boolean;
   timeLeft: number; // Gametime left in milliseconds
-  timedOutTurn: number; // The game turn in which player timed out
+  timedOutRound: number; // The game round in which player timed out
   _id?: string;
 }
 
@@ -142,6 +142,8 @@ export interface IGameState {
     hexesWithinRange: IBoardPosition[];
     // After the moves have been done, achievements are to be picked
     achievementsEarned: IAchievement[];
+    // Indicates the starttime of the round in epoch ms
+    startTime: number;
   };
   numberOfCitiesEmptied: number;
 }
@@ -180,6 +182,8 @@ export interface IPlayerStats {
   rank: number;
   victoryPoints: number;
   nrContractsFulfilled: number;
+  timedOut: boolean;
+  timedOutRound: number;
 }
 
 export interface IGameResults {

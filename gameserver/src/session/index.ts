@@ -67,8 +67,10 @@ export class GameSession implements ISession {
       (email: string, callback: (session: ISession | null) => void) =>
         this.fetchSession(email, callback)
     );
-    this.socket.on('createAndJoinNewGame', (gameName: string) =>
-      this.createAndJoinNewGame(gameName)
+    this.socket.on(
+      'createAndJoinNewGame',
+      (gameName: string, gameTempo: number) =>
+        this.createAndJoinNewGame(gameName, gameTempo)
     );
     this.socket.on('fetchActiveGame', (callback: (success: boolean) => void) =>
       this.fetchActiveGame(callback)
@@ -203,10 +205,10 @@ export class GameSession implements ISession {
     callback(fetchedSession);
   }
 
-  private async createAndJoinNewGame(gameName: string) {
+  private async createAndJoinNewGame(gameName: string, gameTempo: number) {
     // Create a new game object with initial values
 
-    const newGame = GameEngine.createGame(gameName, nanoid());
+    const newGame = GameEngine.createGame(gameName, gameTempo, nanoid());
 
     // Persist the game in the game store
     await this.gameStore.saveGame(newGame);
@@ -238,6 +240,9 @@ export class GameSession implements ISession {
       this.socket.emit('error', 'Game not found');
       return;
     }
+
+    // Update all gameTimers
+    GameEngine.updatePlayerTimers(game);
 
     // Emit the new game state to all user sockets in the game rooom
     this.io.to(this.activeGameUuid).emit('pushActiveGame', game);

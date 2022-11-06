@@ -3,8 +3,6 @@ import { IMAGES } from '../../elements/Images';
 import styled from 'styled-components';
 import { useTimePlayed } from '../../hooks/useTimePlayed';
 import { useReminder } from '../../hooks/useReminder';
-import { useEffect, useMemo, useState } from 'react';
-import { timeToString } from '../../utils/timeToString';
 import { usePlayerTimer } from '../../hooks/usePlayerTimer';
 
 const IMG = styled.img`

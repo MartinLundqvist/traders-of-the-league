@@ -19,16 +19,16 @@ PlayerClock notes:
 - The Win algorithm will place timedout players last, when the first to time out at the end of the ranking. For the ones who didn't time out, the VP score counts as per usual.
 
 Technical flow:
-- Datamodel: Add timedOut: boolean, timedOutTurn: number, timeLeft: number (ms) to the IPlayer interface.
+- Datamodel: Add timedOut: boolean, timedOutRound: number, timeLeft: number (ms) to the IPlayer interface.
 - Datamodel: Add a tempo: 5min | 15min | 60min | 5days to IGame interface
 - These are reset upon GameEngine.start(). 
 - Somewhere in the GameEngine.ProcessEndOfRound -> we reduce the timeleft clock, and check if the player has reached timedOut.
-- The frontend updates the timeLeft and counts down locally. If it hits "0", it will automatically trigger an endRound event with no confirmation. 
+- The frontend updates the timeLeft and counts down locally. If it hits "0", it will automatically trigger an endRound event with no confirmation. (Done)
 - 
 
 Question: Where and how does the time count...
 - Server side: Will only update every time a player ends a round. This is where the "ground truth" lives.
-- Frontend: Will only update as long as a browser run-time is active. 
+- Frontend: Will only update as long as a browser run-time is active.  (Done)
 
 
 Edge cases:

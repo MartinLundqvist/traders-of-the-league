@@ -26,8 +26,8 @@ import { pickRandomAchievements } from './pickRandomAchievements';
 
 const createGame = (
   gameName: string,
-  gameUuid: string,
-  tempo = 10 * 60 * 1000
+  gameTempo: number,
+  gameUuid: string
 ): IGame => {
   const newGame: IGame = {
     name: gameName,
@@ -38,7 +38,7 @@ const createGame = (
     board: BOARD,
     startTime: 0,
     endTime: 0,
-    tempo: tempo,
+    tempo: gameTempo,
     state: {
       currentRound: {
         playerUuid: '',
@@ -46,12 +46,15 @@ const createGame = (
         movesAvailable: ['load', 'sail', 'trade'],
         achievementsEarned: [],
         hexesWithinRange: [],
+        startTime: 0,
       },
       round: 0,
       status: 'waiting',
       numberOfCitiesEmptied: 0,
     },
   };
+
+  console.log('Creating new game with tempo ' + newGame.tempo);
 
   return newGame;
 };
@@ -66,6 +69,8 @@ const start = (game: IGame, firstPlayerUuid: string) => {
     row: 6,
     column: 5,
   }); // Lübeck
+
+  game.state.currentRound.startTime = game.startTime;
 
   dealContracts(game);
   dealAchievements(game);
@@ -96,7 +101,7 @@ const addPlayerToGame = (user: IUser, game: IGame): IPlayer => {
     hasMadeEndGameMove: false,
     hasTimedOut: false,
     timeLeft: game.tempo,
-    timedOutTurn: 0,
+    timedOutRound: 0,
   };
 
   return newPlayer;
@@ -138,6 +143,9 @@ const dealAchievements = (game: IGame) => {
 };
 
 const endCurrentPlayerRound = (game: IGame) => {
+  // Update the timers
+  updatePlayerTimers(game);
+
   // Get a reference to the current player for convenience
   const currentPlayer = game.players.find(
     (player) => player.user.uuid === game.state.currentRound.playerUuid
@@ -162,8 +170,14 @@ const endCurrentPlayerRound = (game: IGame) => {
     currentPlayer.hasMadeEndGameMove = true;
   }
 
-  // Check whether the game is over. This happens when all the player's endgame moves have been made.
-  if (game.players.every((player) => player.hasMadeEndGameMove === true)) {
+  // Check whether the game is over. This happens when all the player's endgame moves have been made,
+  // OR when there is only one player (or none...) left that has not timed out.
+  const allEndGameMovesDone = game.players.every(
+    (player) => player.hasMadeEndGameMove === true
+  );
+  const onlyOnePlayerLeft =
+    game.players.filter((player) => player.hasTimedOut === false).length < 2;
+  if (allEndGameMovesDone || onlyOnePlayerLeft) {
     console.log('Game won');
     game.state.status = 'won';
     game.endTime = new Date().getTime();
@@ -176,24 +190,46 @@ const endCurrentPlayerRound = (game: IGame) => {
 };
 
 const nextPlayer = (game: IGame) => {
-  // Set to the next player
-  const currentPlayerIndex = game.players.findIndex(
-    (player) => player.user.uuid === game.state.currentRound.playerUuid
-  );
-  const lastPlayerIndex = game.players.length - 1;
-  const nextPlayerIndex =
-    currentPlayerIndex === lastPlayerIndex ? 0 : currentPlayerIndex + 1;
+  const cycleToNextPlayer = (uuid: string): IPlayer => {
+    const currentPlayerIndex = game.players.findIndex(
+      (player) => player.user.uuid === uuid
+    );
+    const lastPlayerIndex = game.players.length - 1;
+    const nextPlayerIndex =
+      currentPlayerIndex === lastPlayerIndex ? 0 : currentPlayerIndex + 1;
 
-  game.state.currentRound.playerUuid = game.players[nextPlayerIndex].user.uuid;
+    return game.players[nextPlayerIndex];
+  };
+
+  // cycle to the next player
+  let nextPlayer = cycleToNextPlayer(game.state.currentRound.playerUuid);
+
+  // We've got to continue cycling if the player has timed out,
+  // the edge case of only being ONE player left that has not timedOut
+  // is dealt with later...
+  while (nextPlayer.hasTimedOut) {
+    console.log(nextPlayer.user.name + ': Has timed out. Cycling');
+    nextPlayer = cycleToNextPlayer(nextPlayer.user.uuid);
+  }
+
+  game.state.currentRound.playerUuid = nextPlayer.user.uuid;
   game.state.currentRound.movesLeft = MAX_MOVES;
   game.state.currentRound.movesAvailable = ['load', 'sail', 'trade'];
   game.state.currentRound.hexesWithinRange = getHexesWithinRangeOf(
-    game.players[nextPlayerIndex].position
+    nextPlayer.position
   );
+  game.state.currentRound.startTime = new Date().getTime();
 
   // Increment round counter
   game.state.round += 1;
 };
+
+/**
+ * This is the first part of a three step process for ending a player round.
+ * Step 1: Checks for achievements. If there are, it updates the state, returns the game state and stops the process.
+ * Step 2: Checks whether we are in the 'end game' or if the game is 'won'. If the game is won, it will return the game state and stop the process.
+ * Step 3: Cycle to the next player. It finds the next player not timed out, and return the game state and end the proces.
+ */
 
 const processEndOfRoundAchievements = (game: IGame) => {
   // Reset the moves available
@@ -529,6 +565,33 @@ const tradeDitchLoadForCurrentPlayer = (
   return true;
 };
 
+const updatePlayerTimers = (game: IGame) => {
+  // Get a reference to the current player for convenience
+  const currentPlayer = game.players.find(
+    (player) => player.user.uuid === game.state.currentRound.playerUuid
+  );
+
+  if (!currentPlayer) {
+    console.log(
+      'Something went wrong when fetching current player in the endCurrentPlayerRound function'
+    );
+    return;
+  }
+
+  // How long did the round last?
+  const currentTime = new Date().getTime();
+  const timeSpentInRound = currentTime - game.state.currentRound.startTime;
+
+  // Update player time, and set the timedOut flag it necessary
+  currentPlayer.timeLeft -= timeSpentInRound;
+  if (currentPlayer.timeLeft < 0) {
+    currentPlayer.hasTimedOut = true;
+    currentPlayer.timedOutRound = game.state.round;
+  }
+
+  console.log('Updating the timers for ' + currentPlayer.user.name);
+};
+
 export const GameEngine = {
   createGame,
   start,
@@ -543,4 +606,5 @@ export const GameEngine = {
   processEndOfRoundAchievements,
   getGameResults,
   tradeDitchLoadForCurrentPlayer,
+  updatePlayerTimers,
 };
