@@ -1499,7 +1499,7 @@ export const MOCK_GAME: IGame = {
       victoryPoints: 47,
       cargo: ['black', 'blue', 'yellow', 'black', 'black'],
       hasTimedOut: false,
-      timeLeft: 5 * 60 * 1000,
+      timeLeft: 30 * 1000,
       timedOutTurn: 0,
     },
     {
@@ -1641,7 +1641,7 @@ export const MOCK_GAME: IGame = {
       victoryPoints: 59,
       cargo: ['green', 'red', 'yellow', 'blue'],
       hasTimedOut: false,
-      timeLeft: 5 * 60 * 1000,
+      timeLeft: 30 * 1000,
       timedOutTurn: 0,
     },
   ],

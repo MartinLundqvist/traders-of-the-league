@@ -5,6 +5,7 @@ import { useTimePlayed } from '../../hooks/useTimePlayed';
 import { useReminder } from '../../hooks/useReminder';
 import { useEffect, useMemo, useState } from 'react';
 import { timeToString } from '../../utils/timeToString';
+import { usePlayerTimer } from '../../hooks/usePlayerTimer';
 
 const IMG = styled.img`
   min-height: 0;
@@ -204,30 +205,6 @@ const Wrapper = styled.div`
 interface IHeaderProps {
   className: string;
 }
-
-const usePlayerTimer = () => {
-  const { myPlayer, isMyTurn } = useGameServer();
-  const [localTimeLeft, setLocalTimeLeft] = useState(1000);
-  const [timedOut, setTimedOut] = useState(false);
-
-  useEffect(() => {
-    console.log('usePLayerTimer hoook, firing the useEffect');
-    setTimedOut(false);
-    myPlayer && setLocalTimeLeft(myPlayer.timeLeft);
-
-    let timer: NodeJS.Timer;
-    if (isMyTurn) {
-      timer = setInterval(() => {
-        if (localTimeLeft <= 999) setTimedOut(true);
-        setLocalTimeLeft((_prevState) => _prevState - 1000);
-      }, 1000);
-    }
-
-    return () => clearInterval(timer);
-  }, [myPlayer?.timeLeft, isMyTurn]);
-
-  return { timeLeft: timeToString(localTimeLeft), timedOut };
-};
 
 const Header = ({ className }: IHeaderProps) => {
   const { isMyTurn, game, myPlayer } = useGameServer();
