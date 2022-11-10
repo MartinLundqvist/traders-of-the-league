@@ -43,6 +43,15 @@ const Container = styled.div`
       .points {
         font-size: 2rem;
       }
+
+      &.timedout {
+        /* text-align: center; */
+        font-size: 1.5rem;
+
+      }
+    }
+
+
     }
   }
 
@@ -130,7 +139,6 @@ const Won = ({ className }: IStartProps): JSX.Element => {
                 <th>Cities Emptied</th>
                 <th>Achievements</th>
                 <th>VPs</th>
-                <th>Timed out?</th>
               </tr>
             </thead>
             <tbody>
@@ -138,38 +146,43 @@ const Won = ({ className }: IStartProps): JSX.Element => {
                 <tr key={player.uuid}>
                   <td>{player.rank}</td>
                   <td>{player.name}</td>
-                  <td>
-                    <div className='container-contracts'>
-                      {getContracts(player.uuid).map((contract) => (
-                        <Contract key={contract.uuid} contract={contract} />
-                      ))}
-                    </div>
-                  </td>
-                  <td>
-                    <div className='container-text'>
-                      {getCities(player.uuid).map((city) => (
-                        <div key={city.name}>{city.name}</div>
-                      ))}
-                    </div>
-                  </td>
-                  <td>
-                    <div className='container-achievements'>
-                      {getAchievements(player.uuid).map((achievement) => (
-                        <Achievement
-                          key={achievement.name}
-                          achievement={achievement}
-                        />
-                      ))}
-                    </div>
-                  </td>
-                  <td>
-                    <div className='points'>{player.victoryPoints}</div>
-                  </td>
-                  <td>
-                    <div>
-                      {player.timedOut ? `${player.timedOutRound}` : ''}
-                    </div>
-                  </td>
+                  {player.timedOut ? (
+                    <>
+                      <td className='timedout' colSpan={4}>
+                        {`Timed out in round ${player.timedOutRound}!`}
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      <td>
+                        <div className='container-contracts'>
+                          {getContracts(player.uuid).map((contract) => (
+                            <Contract key={contract.uuid} contract={contract} />
+                          ))}
+                        </div>
+                      </td>
+                      <td>
+                        <div className='container-text'>
+                          {getCities(player.uuid).map((city) => (
+                            <div key={city.name}>{city.name}</div>
+                          ))}
+                        </div>
+                      </td>
+                      <td>
+                        <div className='container-achievements'>
+                          {getAchievements(player.uuid).map((achievement) => (
+                            <Achievement
+                              key={achievement.name}
+                              achievement={achievement}
+                            />
+                          ))}
+                        </div>
+                      </td>
+                      <td>
+                        <div className='points'>{player.victoryPoints}</div>
+                      </td>
+                    </>
+                  )}
                 </tr>
               ))}
             </tbody>

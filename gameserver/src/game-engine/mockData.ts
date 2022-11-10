@@ -553,15 +553,17 @@ import { getHexesWithinRangeOf } from './getHexesWithinRangeOf';
 export const MOCK_SESSIONS: ISession[] = [
   {
     user: { name: 'lynden', uuid: '1UiCjICtBFvRPSVb2cTAP', connected: true },
-    // activeGameUuid: 'dDV7I0PZkSX1SdDCILTkA',
-    activeGameUuid: 'VJHXkcSEtfpT01yhgNxB0',
+    activeGameUuid: 'dDV7I0PZkSX1SdDCILTkA',
+    // activeGameUuid: 'VJHXkcSEtfpT01yhgNxB0',
+    // activeGameUuid: 'T37rB8x5iolLlYmReFZix',
     uuid: 'Tl-3NLoZNVOGGZMNInRz8',
     email: 'iphonelynden@gmail.com',
   },
   {
     user: { name: 'person1', uuid: '4s1zxMT_G5DsCnP5GRk7l', connected: true },
-    // activeGameUuid: 'dDV7I0PZkSX1SdDCILTkA',
-    activeGameUuid: 'VJHXkcSEtfpT01yhgNxB0',
+    activeGameUuid: 'dDV7I0PZkSX1SdDCILTkA',
+    // activeGameUuid: 'VJHXkcSEtfpT01yhgNxB0',
+    // activeGameUuid: 'T37rB8x5iolLlYmReFZix',
     uuid: 'ul0BTmoadsDeBo1yKysKb',
     email: 'person1@mock.now',
   },

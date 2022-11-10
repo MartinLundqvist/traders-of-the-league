@@ -7,6 +7,10 @@ export const usePlayerTimer = () => {
   const [localTimeLeft, setLocalTimeLeft] = useState(0);
   const [timedOut, setTimedOut] = useState(false);
 
+  // useEffect(() => {
+  //   console.log('Creating a usePlayTimer');
+  // }, []);
+
   // We initiate a timer that counts down if it is our turn, and we have not already timedOut locally.
   useEffect(() => {
     let timer: NodeJS.Timer;
