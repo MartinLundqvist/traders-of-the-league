@@ -556,6 +556,7 @@ export const CONTRACTS: IContract[] = [
     region: 'West',
     uuid: 'W_red_gry_3',
   },
+  //TODO: Add a 'red', 'gray' in East with value 5
   {
     value: 7,
     cargo: ['red', 'gray'],
@@ -625,6 +626,12 @@ export const CONTRACTS: IContract[] = [
   {
     value: 2,
     cargo: ['red', 'black'],
+    region: 'West',
+    uuid: 'W_red_bla_2',
+  },
+  {
+    value: 2,
+    cargo: ['red', 'black'],
     region: 'Central',
     uuid: 'C_red_bla_2',
   },
@@ -657,6 +664,12 @@ export const CONTRACTS: IContract[] = [
     cargo: ['yellow', 'green'],
     region: 'West',
     uuid: 'W_yel_grn_2',
+  },
+  {
+    value: 2,
+    cargo: ['yellow', 'green'],
+    region: 'Central',
+    uuid: 'C_yel_grn_2',
   },
   {
     value: 3,
@@ -700,6 +713,7 @@ export const CONTRACTS: IContract[] = [
     region: 'East',
     uuid: 'E_yel_bro_2',
   },
+  //TODO: Add a 'yellow', 'brown' in East with value 1
   {
     value: 2,
     cargo: ['yellow', 'black'],
@@ -717,6 +731,12 @@ export const CONTRACTS: IContract[] = [
     cargo: ['yellow', 'black'],
     region: 'East',
     uuid: 'E_yel_bla_2',
+  },
+  {
+    value: 1,
+    cargo: ['yellow', 'black'],
+    region: 'East',
+    uuid: 'E_yel_bla_1',
   },
   {
     value: 3,
@@ -786,6 +806,12 @@ export const CONTRACTS: IContract[] = [
   },
   {
     value: 2,
+    cargo: ['gray', 'black'],
+    region: 'East',
+    uuid: 'E_gry_bla_2',
+  },
+  {
+    value: 2,
     cargo: ['green', 'blue'],
     region: 'West',
     uuid: 'W_grn_blu_2',
@@ -801,6 +827,13 @@ export const CONTRACTS: IContract[] = [
     cargo: ['green', 'blue'],
     region: 'East',
     uuid: 'E_grn_blu_2',
+  },
+  //TODO: Add a 'green', 'blue' in West with value 3
+  {
+    value: 2,
+    cargo: ['green', 'brown'],
+    region: 'West',
+    uuid: 'W_grn_bro_2',
   },
   {
     value: 2,
@@ -846,6 +879,12 @@ export const CONTRACTS: IContract[] = [
   },
   {
     value: 2,
+    cargo: ['blue', 'brown'],
+    region: 'East',
+    uuid: 'E_blu_bro_2',
+  },
+  {
+    value: 2,
     cargo: ['blue', 'black'],
     region: 'West',
     uuid: 'W_blu_bla_2',
@@ -871,7 +910,19 @@ export const CONTRACTS: IContract[] = [
   {
     value: 2,
     cargo: ['brown', 'black'],
+    region: 'West',
+    uuid: 'W_bro_bla_2',
+  },
+  {
+    value: 2,
+    cargo: ['brown', 'black'],
     region: 'Central',
     uuid: 'C_bro_bla_2',
+  },
+  {
+    value: 2,
+    cargo: ['brown', 'black'],
+    region: 'East',
+    uuid: 'E_bro_bla_2',
   },
 ];
