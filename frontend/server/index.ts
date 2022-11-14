@@ -17,6 +17,8 @@ app.get('/healthz', (req, res) => {
   res.status(200).send({ message: 'OK' });
 });
 
+app.use('/', express.static(path.join(cwd, 'dist/')));
+
 app.get('*', (req, res) => res.sendFile(path.join(cwd, 'dist/index.html')));
 
 const server = app.listen(PORT, () => {
