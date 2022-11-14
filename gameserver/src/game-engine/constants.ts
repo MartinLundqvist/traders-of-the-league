@@ -471,7 +471,7 @@ export const BOARD: TBoard = [
     row: 3,
     city: {
       name: 'Visby',
-      nrContracts: 3,
+      nrContracts: 4,
       contracts: [],
       coatOfArms: '',
       goods: ['gray', 'black'],
