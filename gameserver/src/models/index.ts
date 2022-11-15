@@ -1,11 +1,26 @@
 import mongoose from 'mongoose';
 import {
-  IAchievement,
   IBugReport,
   IChat,
   IGame,
   ISession,
+  IRanking,
+  IAchievement,
 } from '../../../shared/types';
+
+const rankingSchema = new mongoose.Schema<IRanking>({
+  user: {
+    name: String,
+    uuid: String,
+  },
+  currentRanking: Number,
+  rankingHistory: [
+    {
+      gameUuid: String,
+      newRanking: Number,
+    },
+  ],
+});
 
 const achievementSchema = new mongoose.Schema<IAchievement>({
   name: String,
@@ -20,6 +35,7 @@ const gameSchema = new mongoose.Schema<IGame>({
   uuid: String,
   startTime: Number,
   endTime: Number,
+  isRanked: Boolean,
   players: [
     {
       color: String,
@@ -151,3 +167,4 @@ export const gameModel = mongoose.model('Game', gameSchema);
 export const sessionModel = mongoose.model('Session', sessionSchema);
 export const chatModel = mongoose.model('Chat', chatSchema);
 export const bugReportModel = mongoose.model('BugReport', bugReportSchema);
+export const rankingModel = mongoose.model('Ranking', rankingSchema);

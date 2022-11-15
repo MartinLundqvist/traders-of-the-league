@@ -1342,6 +1342,7 @@ export const MOCK_GAME: IGame = {
   name: 'lyndens game',
   uuid: 'dDV7I0PZkSX1SdDCILTkA',
   numberOfCitiesToEmpty: 8,
+  isRanked: true,
   tempo: 10 * 60 * 1000,
   achievements: [
     {

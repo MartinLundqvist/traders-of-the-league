@@ -158,6 +158,7 @@ export interface IGame {
   achievements: IAchievement[];
   startTime: number; // In Epoch ms
   endTime: number; // In Epoch ms
+  isRanked: boolean;
   tempo: number; // The game type in ms - i.e., the total time available to each player.
   _id?: string;
   __v?: number;
@@ -221,4 +222,14 @@ export interface IActiveGame {
   name: string;
   uuid: string;
   players: IPlayer[];
+}
+
+export interface IRankingHistory {
+  gameUuid: string;
+  newRanking: number;
+}
+export interface IRanking {
+  user: Omit<IUser, 'connected'>;
+  currentRanking: number;
+  rankingHistory: IRankingHistory[];
 }
