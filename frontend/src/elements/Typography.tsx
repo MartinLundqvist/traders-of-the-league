@@ -205,3 +205,14 @@ export const SelectSmall = styled.select`
   max-height: 2rem;
   outline: none;
 `;
+
+export const Select = styled.select`
+  font: inherit;
+  font-size: 3rem;
+  border-radius: 0.5rem;
+  border-style: none;
+  box-shadow: 3px 3px 3px var(--color-bg-shadow);
+  background-color: var(--color-bg);
+  padding: 0.25rem 1rem 0.25rem 1rem;
+  outline: none;
+`;

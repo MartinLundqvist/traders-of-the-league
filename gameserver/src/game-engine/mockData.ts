@@ -554,12 +554,16 @@ export const MOCK_SESSIONS: ISession[] = [
   {
     user: { name: 'lynden', uuid: '1UiCjICtBFvRPSVb2cTAP', connected: true },
     activeGameUuid: 'dDV7I0PZkSX1SdDCILTkA',
+    // activeGameUuid: 'VJHXkcSEtfpT01yhgNxB0',
+    // activeGameUuid: 'T37rB8x5iolLlYmReFZix',
     uuid: 'Tl-3NLoZNVOGGZMNInRz8',
     email: 'iphonelynden@gmail.com',
   },
   {
     user: { name: 'person1', uuid: '4s1zxMT_G5DsCnP5GRk7l', connected: true },
     activeGameUuid: 'dDV7I0PZkSX1SdDCILTkA',
+    // activeGameUuid: 'VJHXkcSEtfpT01yhgNxB0',
+    // activeGameUuid: 'T37rB8x5iolLlYmReFZix',
     uuid: 'ul0BTmoadsDeBo1yKysKb',
     email: 'person1@mock.now',
   },
@@ -1338,6 +1342,7 @@ export const MOCK_GAME: IGame = {
   name: 'lyndens game',
   uuid: 'dDV7I0PZkSX1SdDCILTkA',
   numberOfCitiesToEmpty: 8,
+  tempo: 10 * 60 * 1000,
   achievements: [
     {
       name: 'Banker',
@@ -1375,7 +1380,7 @@ export const MOCK_GAME: IGame = {
       target: 4,
     },
   ],
-  startTime: 1662726642215,
+  startTime: new Date().getTime(),
   endTime: 0,
   players: [
     {
@@ -1497,6 +1502,9 @@ export const MOCK_GAME: IGame = {
       position: { column: 8, row: 5 },
       victoryPoints: 47,
       cargo: ['black', 'blue', 'yellow', 'black', 'black'],
+      hasTimedOut: false,
+      timeLeft: 3 * 60 * 1000,
+      timedOutRound: 0,
     },
     {
       color: 'blue',
@@ -1636,6 +1644,9 @@ export const MOCK_GAME: IGame = {
       position: { column: 6, row: 7 },
       victoryPoints: 59,
       cargo: ['green', 'red', 'yellow', 'blue'],
+      hasTimedOut: false,
+      timeLeft: 3 * 60 * 1000,
+      timedOutRound: 0,
     },
   ],
   board: [
@@ -1928,6 +1939,7 @@ export const MOCK_GAME: IGame = {
         { row: 3, column: 8 },
         { row: 4, column: 9 },
       ],
+      startTime: new Date().getTime(),
     },
     round: 100,
     status: 'playing',

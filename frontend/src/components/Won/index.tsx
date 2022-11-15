@@ -7,7 +7,7 @@ import {
 import { useGameServer } from '../../contexts/GameServerProvider';
 import ScrollFull from '../../elements/ScrollFull';
 import { ButtonSmall, Title } from '../../elements/Typography';
-import { timeToString } from '../../utils/timeToString';
+import { timeDifferenceToString } from '../../utils/timeToString';
 import Contract from '../Board/Contract';
 import { IMAGES } from '../../elements/Images';
 import { Achievement } from '../Achieve/elements/Achievement';
@@ -43,6 +43,15 @@ const Container = styled.div`
       .points {
         font-size: 2rem;
       }
+
+      &.timedout {
+        /* text-align: center; */
+        font-size: 1.5rem;
+
+      }
+    }
+
+
     }
   }
 
@@ -114,7 +123,10 @@ const Won = ({ className }: IStartProps): JSX.Element => {
         <img className='image' src={IMAGES.UI.SCROLLS.gameover} />
         <Title>
           GAME OVER after{' '}
-          {timeToString(gameResults.game.startTime, gameResults.game.endTime)}
+          {timeDifferenceToString(
+            gameResults.game.startTime,
+            gameResults.game.endTime
+          )}
         </Title>
 
         <div className='scrollable'>
@@ -134,33 +146,43 @@ const Won = ({ className }: IStartProps): JSX.Element => {
                 <tr key={player.uuid}>
                   <td>{player.rank}</td>
                   <td>{player.name}</td>
-                  <td>
-                    <div className='container-contracts'>
-                      {getContracts(player.uuid).map((contract) => (
-                        <Contract key={contract.uuid} contract={contract} />
-                      ))}
-                    </div>
-                  </td>
-                  <td>
-                    <div className='container-text'>
-                      {getCities(player.uuid).map((city) => (
-                        <div key={city.name}>{city.name}</div>
-                      ))}
-                    </div>
-                  </td>
-                  <td>
-                    <div className='container-achievements'>
-                      {getAchievements(player.uuid).map((achievement) => (
-                        <Achievement
-                          key={achievement.name}
-                          achievement={achievement}
-                        />
-                      ))}
-                    </div>
-                  </td>
-                  <td>
-                    <div className='points'>{player.victoryPoints}</div>
-                  </td>
+                  {player.timedOut ? (
+                    <>
+                      <td className='timedout' colSpan={4}>
+                        {`Timed out in round ${player.timedOutRound}!`}
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      <td>
+                        <div className='container-contracts'>
+                          {getContracts(player.uuid).map((contract) => (
+                            <Contract key={contract.uuid} contract={contract} />
+                          ))}
+                        </div>
+                      </td>
+                      <td>
+                        <div className='container-text'>
+                          {getCities(player.uuid).map((city) => (
+                            <div key={city.name}>{city.name}</div>
+                          ))}
+                        </div>
+                      </td>
+                      <td>
+                        <div className='container-achievements'>
+                          {getAchievements(player.uuid).map((achievement) => (
+                            <Achievement
+                              key={achievement.name}
+                              achievement={achievement}
+                            />
+                          ))}
+                        </div>
+                      </td>
+                      <td>
+                        <div className='points'>{player.victoryPoints}</div>
+                      </td>
+                    </>
+                  )}
                 </tr>
               ))}
             </tbody>

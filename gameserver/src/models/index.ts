@@ -57,6 +57,9 @@ const gameSchema = new mongoose.Schema<IGame>({
       victoryPoints: Number,
       cargo: [String],
       hasMadeEndGameMove: Boolean,
+      hasTimedOut: Boolean,
+      timeLeft: Number,
+      timedOutRound: Number,
     },
   ],
   numberOfCitiesToEmpty: Number,
@@ -98,10 +101,12 @@ const gameSchema = new mongoose.Schema<IGame>({
         },
       ],
       achievementsEarned: [achievementSchema],
+      startTime: Number,
     },
     numberOfCitiesEmptied: Number,
   },
   achievements: [achievementSchema],
+  tempo: Number,
 });
 
 const sessionSchema = new mongoose.Schema<ISession>({

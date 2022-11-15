@@ -11,6 +11,7 @@ import { createBoardLayout, TBoardLayout } from '../utils/createBoardLayout';
 import { useGameServer } from './GameServerProvider';
 import { useNotifications } from './NotificationsProvider';
 import { canFulFillSomeContract } from '../utils/canFulfillContract';
+import { usePlayerTimer } from '../hooks/usePlayerTimer';
 
 const SHIP_DISTANCE = 10;
 
@@ -87,6 +88,7 @@ export const LayoutProvider = ({
   );
 
   const { createNotification } = useNotifications();
+  const { timedOut } = usePlayerTimer();
 
   // This hook manages the board layout
   useEffect(() => {
@@ -197,6 +199,15 @@ export const LayoutProvider = ({
   useEffect(() => {
     isEndGame && createNotification('End game');
   }, [isEndGame]);
+
+  // This is a special hook for managing player running out of game time
+  useEffect(() => {
+    if (timedOut) {
+      createNotification('You are out of time!');
+      endRound({ confirm: false });
+      setActiveActionRoute('none');
+    }
+  }, [timedOut]);
 
   return (
     <LayoutContext.Provider

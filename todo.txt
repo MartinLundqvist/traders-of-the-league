@@ -11,3 +11,29 @@ Notes:
 - Use email to search for a session in the database. 
 - If there is a session in the database, then find it and push it to the browser.
 - If there is no session in the database, 
+
+PlayerClock notes:
+- Upon game creation, I can choose the total time each user has
+- As long as it is "my" turn, the clock ticks. Hence, picking achievements counts against my time (it is the same for everyone).
+- If my time runs out, my player enters into a "timedout" state, and records which turn the user timed out on.  I can then see the game continue, but it is never "my turn". 
+- The Win algorithm will place timedout players last, when the first to time out at the end of the ranking. For the ones who didn't time out, the VP score counts as per usual.
+
+Technical flow:
+- Datamodel: Add timedOut: boolean, timedOutRound: number, timeLeft: number (ms) to the IPlayer interface.
+- Datamodel: Add a tempo: 5min | 15min | 60min | 5days to IGame interface
+- These are reset upon GameEngine.start(). 
+- Somewhere in the GameEngine.ProcessEndOfRound -> we reduce the timeleft clock, and check if the player has reached timedOut.
+- The frontend updates the timeLeft and counts down locally. If it hits "0", it will automatically trigger an endRound event with no confirmation. (Done)
+- 
+
+Question: Where and how does the time count...
+- Server side: Will only update every time a player ends a round. This is where the "ground truth" lives.
+- Frontend: Will only update as long as a browser run-time is active.  (Done)
+
+
+Edge cases:
+- Player disconnects without the round ending. => The game will "hang" on that player (there is no browser runtime counting down). 
+  . Should the server automatically "clean up" games every once in a while? => Yes. Every time the server is asked to refresh a game - it should update all the player clocks.
+  . Yes: Should there be a button to "Check offline timeouts?" => This would trigger the GameEngine to see if current player has timed out, and if Yes, to update that players state.
+- All players timed out, except 1. That will then be the winner. We need to check in GameEngine.processEndRound if there is only one player left.
+- All players timed out. This should be covered by the above case...
