@@ -4,6 +4,7 @@ import {
   IContract,
   IGame,
   IPlayer,
+  IRanking,
   IUser,
   TCargo,
 } from '../../../shared/types';
@@ -23,8 +24,21 @@ import { ditchingIsAllowed } from './ditchingIsAllowed';
 import { updateAchievementsProgressAndReturnEarnedAchievements } from './findAchievementsEarned';
 import { getGameResults } from './getGameResults';
 import { pickRandomAchievements } from './pickRandomAchievements';
+import {
+  getCurrentEloRatings,
+  getCurrentRankings,
+  parseGameResults,
+} from './utils/rankingFunctions';
+import { createRatedGame } from './multiplayer-elo';
 
-const createGame = (gameName: string, gameUuid: string): IGame => {
+const ELO_ALFA = 2;
+const ELO_INITIAL_RANKING = 1500;
+
+const createGame = (
+  gameName: string,
+  gameUuid: string,
+  isRanked = true
+): IGame => {
   const newGame: IGame = {
     name: gameName,
     uuid: gameUuid,
@@ -34,6 +48,7 @@ const createGame = (gameName: string, gameUuid: string): IGame => {
     board: BOARD,
     startTime: 0,
     endTime: 0,
+    isRanked: isRanked,
     state: {
       currentRound: {
         playerUuid: '',
@@ -521,6 +536,64 @@ const tradeDitchLoadForCurrentPlayer = (
   return true;
 };
 
+export const getUpdatedRankings = (
+  game: IGame,
+  currentRankings: IRanking[]
+): IRanking[] => {
+  let results: IRanking[] = [];
+
+  const gameResults = getGameResults(game);
+
+  const { players, playerPositions } = parseGameResults(gameResults);
+  const currentRatingsNoEmpty = getCurrentRankings(
+    currentRankings,
+    players,
+    ELO_INITIAL_RANKING
+  );
+  const currentEloRatings = getCurrentEloRatings(
+    currentRatingsNoEmpty,
+    players
+  );
+
+  console.log('Players:');
+  console.log(players);
+
+  console.log('Ingoing player ratings:');
+  console.log(currentEloRatings);
+
+  const ratedGame = createRatedGame(currentEloRatings, ELO_ALFA);
+  const newRatings = ratedGame.getUpdatedRatings(playerPositions);
+
+  console.log('Outoing ratings: ');
+  console.log(newRatings);
+
+  for (let i = 0; i < players.length; i++) {
+    let oldRanking = currentRatingsNoEmpty.find(
+      (ranking) => ranking.user.uuid === players[i].uuid
+    );
+
+    if (!oldRanking) {
+      console.log('No old ranking found for user ' + players[i].name);
+      return [];
+    }
+
+    const newRanking: IRanking = {
+      user: players[i],
+      currentRanking: newRatings[i],
+      rankingHistory: [
+        ...oldRanking.rankingHistory,
+        {
+          gameUuid: game.uuid,
+          newRanking: newRatings[i],
+        },
+      ],
+    };
+    results.push(newRanking);
+  }
+
+  return results;
+};
+
 export const GameEngine = {
   createGame,
   start,
@@ -535,4 +608,5 @@ export const GameEngine = {
   processEndOfRoundAchievements,
   getGameResults,
   tradeDitchLoadForCurrentPlayer,
+  getUpdatedRankings,
 };

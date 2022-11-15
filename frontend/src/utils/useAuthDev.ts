@@ -3,7 +3,8 @@ import { useMemo } from 'react';
 export const useAuthDev = () => {
   const user = useMemo(
     () => ({
-      email: 'person2@mock.now',
+      email: window.localStorage.getItem('traders_test_email'),
+      email_verified: true,
     }),
     []
   );

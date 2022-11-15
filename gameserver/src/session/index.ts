@@ -4,6 +4,7 @@ import {
   IChat,
   IContract,
   IMessage,
+  IRanking,
   ISession,
   IUser,
   TCargo,
@@ -14,6 +15,7 @@ import { TGameServer, TGameSocket } from '../types';
 import { nanoid } from 'nanoid';
 import { GameEngine } from '../game-engine';
 import { ChatStore } from 'src/stores/chatStore';
+import { RankingStore } from 'src/stores/rankingStore';
 
 export class GameSession implements ISession {
   // Core ISession properties
@@ -30,13 +32,15 @@ export class GameSession implements ISession {
   private gameStore: GameStore;
   private sessionStore: SessionStore;
   private chatStore: ChatStore;
+  private rankingStore: RankingStore;
 
   constructor(
     io: TGameServer,
     socket: TGameSocket,
     sessionStore: SessionStore,
     gameStore: GameStore,
-    chatStore: ChatStore
+    chatStore: ChatStore,
+    rankingStore: RankingStore
   ) {
     this.io = io;
     this.socket = socket;
@@ -44,6 +48,7 @@ export class GameSession implements ISession {
     this.gameStore = gameStore;
     this.sessionStore = sessionStore;
     this.chatStore = chatStore;
+    this.rankingStore = rankingStore;
 
     // Initialize the properties with empty values for now.
     this.uuid = '';
@@ -239,11 +244,41 @@ export class GameSession implements ISession {
       return;
     }
 
+    //TODO: Refactor
+
+    if (game.state.status === 'won' && game.isRanked) {
+      this.updateRankings(game.uuid);
+    }
+
     // Emit the new game state to all user sockets in the game rooom
     this.io.to(this.activeGameUuid).emit('pushActiveGame', game);
 
     // Also, emit the current chat object in case a user had to reconnect
     this.pushActiveChat();
+  }
+
+  private async updateRankings(gameUuid: string) {
+    console.log('Ranking users for game ' + gameUuid);
+    const game = await this.gameStore.getGame(this.activeGameUuid);
+
+    if (!game) {
+      console.log('Game not found - skipping ranking');
+      return;
+    }
+
+    const playerUuids = game.players.map((player) => player.user.uuid);
+
+    const existingRankings = await this.rankingStore.getNamedRankings(
+      playerUuids
+    );
+    const updatedRankings: IRanking[] = GameEngine.getUpdatedRankings(
+      game,
+      existingRankings
+    );
+
+    for (const ranking of updatedRankings) {
+      await this.rankingStore.saveRanking(ranking);
+    }
   }
 
   private async joinGame(gameUuid: string) {

@@ -153,6 +153,7 @@ export interface IGame {
   achievements: IAchievement[];
   startTime: number; // In Epoch ms
   endTime: number; // In Epoch ms
+  isRanked: boolean;
   _id?: string;
   __v?: number;
 }
@@ -217,7 +218,7 @@ export interface IActiveGame {
 
 export interface IRankingHistory {
   gameUuid: string;
-  newRanking: string;
+  newRanking: number;
 }
 export interface IRanking {
   user: Omit<IUser, 'connected'>;

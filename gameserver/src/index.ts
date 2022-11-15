@@ -11,9 +11,16 @@ import { GameEngine } from './game-engine/';
 import { MOCK_CHAT, MOCK_GAME, MOCK_SESSIONS } from './game-engine/mockData';
 import { ChatStore } from './stores/chatStore';
 import { closeDBConnection, connectToDB } from './database';
-import { gameModel, sessionModel, chatModel, bugReportModel } from './models';
+import {
+  gameModel,
+  sessionModel,
+  chatModel,
+  bugReportModel,
+  rankingModel,
+} from './models';
 import { createRestAPIRoutes } from './restapiroutes';
 import { resendVerificationEmail } from './auth-controllers/resendVerificationEmail';
+import { RankingStore } from './stores/rankingStore';
 
 // Persist whether we are in development mode or not, and whether we are starting up only an in-memory version
 const DEVELOPMENT = process.env.NODE_ENV === 'production' ? false : true;
@@ -39,6 +46,10 @@ const chatStore = new ChatStore(chatModel, {
   inMemory: IN_MEMORY,
 });
 const bugReportStore = new BugReportStore(bugReportModel, {
+  debug: false,
+  inMemory: IN_MEMORY,
+});
+const rankingStore = new RankingStore(rankingModel, {
   debug: false,
   inMemory: IN_MEMORY,
 });
@@ -173,7 +184,7 @@ const io = new Server<TGameServer>(httpServer, {
 
 // Listen for connections to the socket, and create an GameSession object for each connection
 io.on('connection', (socket) => {
-  new GameSession(io, socket, sessionStore, gameStore, chatStore);
+  new GameSession(io, socket, sessionStore, gameStore, chatStore, rankingStore);
 });
 
 // Start the server

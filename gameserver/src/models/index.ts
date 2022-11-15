@@ -35,6 +35,7 @@ const gameSchema = new mongoose.Schema<IGame>({
   uuid: String,
   startTime: Number,
   endTime: Number,
+  isRanked: Boolean,
   players: [
     {
       color: String,
@@ -161,4 +162,4 @@ export const gameModel = mongoose.model('Game', gameSchema);
 export const sessionModel = mongoose.model('Session', sessionSchema);
 export const chatModel = mongoose.model('Chat', chatSchema);
 export const bugReportModel = mongoose.model('BugReport', bugReportSchema);
-export const rankgingModel = mongoose.model('Ranking', rankingSchema);
+export const rankingModel = mongoose.model('Ranking', rankingSchema);

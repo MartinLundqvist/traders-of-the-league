@@ -31,7 +31,7 @@ import {
   TSocketError,
 } from '../../../shared/types';
 import { IBoardLayoutElement } from '../utils/createBoardLayout';
-// import { useAuthDev } from '../utils/useAuthDev';
+import { useAuthDev } from '../utils/useAuthDev';
 import { useNotifications } from './NotificationsProvider';
 
 export type ChatSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
@@ -148,8 +148,8 @@ interface IGameServerProviderProps {
 }
 
 export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
-  const { isAuthenticated, user } = useAuth0();
-  // const { isAuthenticated, user } = useAuthDev();
+  // const { isAuthenticated, user } = useAuth0();
+  const { isAuthenticated, user } = useAuthDev();
   const { createNotification } = useNotifications();
   const [session, setSession] = useState<ISession>(initialContext.session);
   const [me, setMe] = useState<IUser>(initialContext.me);

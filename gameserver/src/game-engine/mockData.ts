@@ -1338,6 +1338,7 @@ export const MOCK_GAME: IGame = {
   name: 'lyndens game',
   uuid: 'dDV7I0PZkSX1SdDCILTkA',
   numberOfCitiesToEmpty: 8,
+  isRanked: true,
   achievements: [
     {
       name: 'Banker',
