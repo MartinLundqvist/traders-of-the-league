@@ -14,7 +14,7 @@ import { IMAGE_ARRAY } from './elements/Images';
 import { useImagePreloader } from './hooks/useImagePreloader';
 import Loading from './components/Loading';
 import VerifyEmail from './components/VerifyEmail';
-import { useAuthDev } from './utils/useAuthDev';
+// import { useAuthDev } from './utils/useAuthDev';
 
 const Wrapper = styled.div`
   display: grid;
@@ -54,9 +54,9 @@ const Wrapper = styled.div`
 
 const App = (): JSX.Element => {
   const { activeRoute, activeActionRoute } = useLayout();
-  // const { isAuthenticated, user } = useAuth0();
+  const { isAuthenticated, user } = useAuth0();
   const { imagesPreloaded } = useImagePreloader(IMAGE_ARRAY);
-  const { isAuthenticated, user } = useAuthDev();
+  // const { isAuthenticated, user } = useAuthDev();
 
   if (!isAuthenticated) return <Login className='grid-area--all' />;
 

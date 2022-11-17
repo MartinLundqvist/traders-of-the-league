@@ -56,7 +56,7 @@ const Container = styled.div`
 
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
   }
 
   .container-actions--trade {
@@ -64,7 +64,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
   }
 
   .container-actions--actions {
@@ -86,8 +86,8 @@ const ActionButton = styled.div<IActionButtonProps>`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 8rem;
-  height: 4rem;
+  width: 7rem;
+  height: 3.5rem;
   background-color: var(--color-fill-sea-opaque);
   box-shadow: 0 5px 8px var(--color-bg-shadow);
   border-radius: 10%;

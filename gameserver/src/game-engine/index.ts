@@ -66,7 +66,14 @@ const createGame = (
     },
   };
 
-  console.log('Creating new game with tempo ' + newGame.tempo);
+  console.log(
+    'Creating new game with tempo ' +
+      newGame.tempo +
+      ' which is ' +
+      newGame.isRanked
+      ? 'ranked.'
+      : ' not ranked.'
+  );
 
   return newGame;
 };
@@ -601,7 +608,7 @@ const updatePlayerTimers = (game: IGame) => {
     currentPlayer.timedOutRound = game.state.round;
   }
 
-  console.log('Updating the timers for ' + currentPlayer.user.name);
+  // console.log('Updating the timers for ' + currentPlayer.user.name);
 };
 
 export const getUpdatedRankings = (
@@ -609,6 +616,17 @@ export const getUpdatedRankings = (
   currentRankings: IRanking[]
 ): IRanking[] => {
   let results: IRanking[] = [];
+
+  // Check that this game has not already been ranked. We test on the first ranking instance for simplicity.
+  const gameAlreadyRanked =
+    currentRankings.length > 0 &&
+    currentRankings[0].rankingHistory.find(
+      (rank) => rank.gameUuid === game.uuid
+    );
+  if (gameAlreadyRanked) {
+    console.log('Game ' + game.uuid + ' has already been ranked');
+    return [];
+  }
 
   const gameResults = getGameResults(game);
 

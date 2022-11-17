@@ -74,8 +74,8 @@ export class GameSession implements ISession {
     );
     this.socket.on(
       'createAndJoinNewGame',
-      (gameName: string, gameTempo: number) =>
-        this.createAndJoinNewGame(gameName, gameTempo)
+      (gameName: string, gameTempo: number, ranked: boolean) =>
+        this.createAndJoinNewGame(gameName, gameTempo, ranked)
     );
     this.socket.on('fetchActiveGame', (callback: (success: boolean) => void) =>
       this.fetchActiveGame(callback)
@@ -210,10 +210,19 @@ export class GameSession implements ISession {
     callback(fetchedSession);
   }
 
-  private async createAndJoinNewGame(gameName: string, gameTempo: number) {
+  private async createAndJoinNewGame(
+    gameName: string,
+    gameTempo: number,
+    ranked: boolean
+  ) {
     // Create a new game object with initial values
 
-    const newGame = GameEngine.createGame(gameName, gameTempo, true, nanoid());
+    const newGame = GameEngine.createGame(
+      gameName,
+      gameTempo,
+      ranked,
+      nanoid()
+    );
 
     // Persist the game in the game store
     await this.gameStore.saveGame(newGame);
@@ -246,14 +255,13 @@ export class GameSession implements ISession {
       return;
     }
 
-    //TODO: Refactor
+    // Update all gameTimers if we are still playing
+    if (game.state.status !== 'won' && game.state.status !== 'terminated')
+      GameEngine.updatePlayerTimers(game);
 
     if (game.state.status === 'won' && game.isRanked) {
       this.updateRankings(game.uuid);
     }
-
-    // Update all gameTimers
-    GameEngine.updatePlayerTimers(game);
 
     // Emit the new game state to all user sockets in the game rooom
     this.io.to(this.activeGameUuid).emit('pushActiveGame', game);
@@ -280,6 +288,8 @@ export class GameSession implements ISession {
       game,
       existingRankings
     );
+
+    if (updatedRankings.length === 0) return;
 
     for (const ranking of updatedRankings) {
       await this.rankingStore.saveRanking(ranking);
@@ -423,7 +433,7 @@ export class GameSession implements ISession {
     achievement: IAchievement,
     callback: (valid: boolean) => void
   ) {
-    console.log('Picking achievement!');
+    // console.log('Picking achievement!');
     const game = await this.gameStore.getGame(this.activeGameUuid);
 
     if (!this.activeGameUuid || !game) {

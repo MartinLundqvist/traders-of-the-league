@@ -204,6 +204,11 @@ export const SelectSmall = styled.select`
   padding: 0.25rem 1rem 0.25rem 1rem;
   max-height: 2rem;
   outline: none;
+
+  &:hover {
+    background-color: var(--color-bg-highlight);
+    cursor: pointer;
+  }
 `;
 
 export const Select = styled.select`
@@ -215,4 +220,76 @@ export const Select = styled.select`
   background-color: var(--color-bg);
   padding: 0.25rem 1rem 0.25rem 1rem;
   outline: none;
+
+  &:hover {
+    background-color: var(--color-bg-highlight);
+    cursor: pointer;
+  }
 `;
+
+interface ICheckBoxProps {
+  id: string;
+  label: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const CheckBoxWrapper = styled.div`
+  label {
+    position: relative;
+    display: block;
+    padding-left: 1.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+
+    input {
+      appearance: none;
+      position: absolute;
+      margin: 0;
+      display: grid;
+      place-content: center;
+      top: 0;
+      left: 0;
+      height: 1rem;
+      width: 1rem;
+      border-radius: 3px;
+      box-shadow: 3px 3px 3px var(--color-bg-shadow);
+      background-color: var(--color-bg);
+
+      &:hover {
+        background-color: var(--color-bg-highlight);
+        cursor: pointer;
+      }
+
+      &:checked::before {
+        transform: scale(1);
+      }
+
+      &::before {
+        content: '';
+        width: 1em;
+        height: 1.1em;
+        transform: scale(0);
+        transition: 120ms transform ease-in-out;
+        transform-origin: bottom left;
+        background-color: black;
+        clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+      }
+    }
+  }
+`;
+
+export const CheckBox = ({
+  id,
+  onChange,
+  label,
+}: ICheckBoxProps): JSX.Element => {
+  return (
+    <CheckBoxWrapper>
+      <label htmlFor={id}>
+        {label}
+        <input type='checkbox' id={id} onChange={onChange}></input>
+        {/* <span className='checkmark' /> */}
+      </label>
+    </CheckBoxWrapper>
+  );
+};

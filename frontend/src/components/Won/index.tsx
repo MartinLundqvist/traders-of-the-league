@@ -188,7 +188,7 @@ const Won = ({ className }: IStartProps): JSX.Element => {
             </tbody>
           </table>
         </div>
-        <ButtonSmall onClick={() => leaveGame()}>Start over</ButtonSmall>
+        <ButtonSmall onClick={() => leaveGame()}>Back to menu</ButtonSmall>
       </Container>
     </ScrollFull>
   );

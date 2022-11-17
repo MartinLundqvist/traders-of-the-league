@@ -31,7 +31,7 @@ import {
   TSocketError,
 } from '../../../shared/types';
 import { IBoardLayoutElement } from '../utils/createBoardLayout';
-import { useAuthDev } from '../utils/useAuthDev';
+// import { useAuthDev } from '../utils/useAuthDev';
 import { useNotifications } from './NotificationsProvider';
 
 export type ChatSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
@@ -42,7 +42,11 @@ interface IGameServerContext {
   me: IUser;
   activeGameUuid: string;
   createSession: (playerName: string) => void;
-  createAndJoinNewGame: (gameName: string, gameTempo: number) => void;
+  createAndJoinNewGame: (
+    gameName: string,
+    gameTempo: number,
+    ranked: boolean
+  ) => void;
 
   // Game specific. Only changes if game state is updated.
   game: IGame | null;
@@ -149,8 +153,8 @@ interface IGameServerProviderProps {
 }
 
 export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
-  // const { isAuthenticated, user } = useAuth0();
-  const { isAuthenticated, user } = useAuthDev();
+  const { isAuthenticated, user } = useAuth0();
+  // const { isAuthenticated, user } = useAuthDev();
   const { createNotification } = useNotifications();
   const [session, setSession] = useState<ISession>(initialContext.session);
   const [me, setMe] = useState<IUser>(initialContext.me);
@@ -439,7 +443,11 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
       );
   };
 
-  const createAndJoinNewGame = (gameName: string, gameTempo: number) => {
+  const createAndJoinNewGame = (
+    gameName: string,
+    gameTempo: number,
+    ranked: boolean
+  ) => {
     if (gameName.length < 3) {
       window.alert('Name needs to be at least 2 characters long.');
       return;
@@ -452,7 +460,12 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         gameTempo / 1000 +
         ' seconds'
     );
-    socketRef.current?.emit('createAndJoinNewGame', gameName, gameTempo);
+    socketRef.current?.emit(
+      'createAndJoinNewGame',
+      gameName,
+      gameTempo,
+      ranked
+    );
   };
 
   const joinGame = (gameUuid: string) => {
