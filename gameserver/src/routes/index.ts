@@ -34,9 +34,14 @@ export const createGameAPIRoutes = (
   });
 
   router.post('/createAndJoinNewGame', async (req, res, next) => {
-    const { gameName, gameTempo, user } = req.body;
+    const { gameName, gameTempo, ranked, user } = req.body;
 
-    const newGame = GameEngine.createGame(gameName, gameTempo, true, nanoid());
+    const newGame = GameEngine.createGame(
+      gameName,
+      gameTempo,
+      ranked,
+      nanoid()
+    );
 
     const newPlayer = GameEngine.addPlayerToGame(user, newGame);
     newGame.players.push(newPlayer);

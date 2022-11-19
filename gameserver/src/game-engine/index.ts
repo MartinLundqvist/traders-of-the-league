@@ -641,17 +641,17 @@ export const getUpdatedRankings = (
     players
   );
 
-  console.log('Players:');
-  console.log(players);
+  // console.log('Players:');
+  // console.log(players);
 
-  console.log('Ingoing player ratings:');
-  console.log(currentEloRatings);
+  // console.log('Ingoing player ratings:');
+  // console.log(currentEloRatings);
 
   const ratedGame = createRatedGame(currentEloRatings, ELO_ALFA);
   const newRatings = ratedGame.getUpdatedRatings(playerPositions);
 
-  console.log('Outoing ratings: ');
-  console.log(newRatings);
+  // console.log('Outoing ratings: ');
+  // console.log(newRatings);
 
   for (let i = 0; i < players.length; i++) {
     let oldRanking = currentRatingsNoEmpty.find(
@@ -659,7 +659,11 @@ export const getUpdatedRankings = (
     );
 
     if (!oldRanking) {
-      console.log('No old ranking found for user ' + players[i].name);
+      console.log(
+        'No old ranking found for user ' +
+          players[i].name +
+          '. Will not rank the game.'
+      );
       return [];
     }
 
