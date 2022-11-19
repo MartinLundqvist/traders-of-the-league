@@ -3,7 +3,9 @@ import { IMAGES } from '../../elements/Images';
 import styled from 'styled-components';
 import { useTimePlayed } from '../../hooks/useTimePlayed';
 import { useReminder } from '../../hooks/useReminder';
-import { usePlayerTimer } from '../../hooks/usePlayerTimer';
+import { usePlayerTimer } from '../../contexts/TimerProvider';
+import { timeToString } from '../../utils/timeToString';
+// import { usePlayerTimer } from '../../hooks/usePlayerTimer';
 
 const IMG = styled.img`
   min-height: 0;
@@ -280,7 +282,7 @@ const Header = ({ className }: IHeaderProps) => {
               {timedOut ? (
                 <div>You timed out!</div>
               ) : (
-                <div>Your timer: {timeLeft}</div>
+                <div>Your timer: {timeToString(timeLeft)}</div>
               )}
               <div>Game time: {timePlayed}</div>
               <div className={isMyTurn && showReminder ? 'remind' : ''}>

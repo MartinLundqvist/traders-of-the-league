@@ -238,6 +238,9 @@ const TEST_PLAYER: IPlayer = {
   color: 'black',
   user: { name: 'lynden', uuid: '1UiCjICtBFvRPSVb2cTAP', connected: true },
   hasMadeEndGameMove: false,
+  hasTimedOut: false,
+  timedOutRound: 0,
+  timeLeft: 60 * 60 * 1000,
   contractsFulfilled: [
     {
       value: 2,

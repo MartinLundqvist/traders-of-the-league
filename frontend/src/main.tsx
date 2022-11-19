@@ -6,6 +6,7 @@ import { LayoutProvider } from './contexts/LayoutProvider';
 import { GameServerProvider } from './contexts/GameServerProvider';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { NotificationsProvider } from './contexts/NotificationsProvider';
+import { TimerProvider } from './contexts/TimerProvider';
 
 const DOMAIN = import.meta.env.VITE_AUTH_DOMAIN;
 const CLIENT_ID = import.meta.env.VITE_AUTH_CLIENT_ID;
@@ -20,7 +21,9 @@ ReactDOM.render(
       <NotificationsProvider>
         <GameServerProvider>
           <LayoutProvider>
-            <App />
+            <TimerProvider>
+              <App />
+            </TimerProvider>
           </LayoutProvider>
         </GameServerProvider>
       </NotificationsProvider>

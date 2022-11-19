@@ -7,7 +7,6 @@ import {
   Title,
   Input,
   ButtonSmall,
-  Select,
   SelectSmall,
   CheckBox,
 } from '../../elements/Typography';
