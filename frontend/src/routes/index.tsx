@@ -9,6 +9,7 @@ import Terminated from '../components/Terminated';
 import About from '../components/About';
 import Report from '../components/Report';
 import City from '../components/City';
+import Rankings from '../components/Rankings';
 
 export type TRoute =
   | 'register'
@@ -17,7 +18,8 @@ export type TRoute =
   | 'joingame'
   | 'board'
   | 'won'
-  | 'terminated';
+  | 'terminated'
+  | 'rankings';
 
 export type TActionRoute = 'none' | 'achieve' | 'about' | 'report' | 'city';
 
@@ -37,6 +39,7 @@ export const routes: TRoutes = {
   board: <Board className='grid-area--game' />,
   won: <Won className='grid-area--all' />,
   terminated: <Terminated className='grid-area--all' />,
+  rankings: <Rankings className='grid-area--all' />,
 };
 
 export const actionRoutes: TActionRoutes = {

@@ -4,6 +4,7 @@ import {
   IChat,
   IContract,
   IMessage,
+  IRanking,
   ISession,
   IUser,
   TCargo,
@@ -14,6 +15,7 @@ import { TGameServer, TGameSocket } from '../types';
 import { nanoid } from 'nanoid';
 import { GameEngine } from '../game-engine';
 import { ChatStore } from 'src/stores/chatStore';
+import { RankingStore } from 'src/stores/rankingStore';
 
 export class GameSession implements ISession {
   // Core ISession properties
@@ -30,13 +32,15 @@ export class GameSession implements ISession {
   private gameStore: GameStore;
   private sessionStore: SessionStore;
   private chatStore: ChatStore;
+  private rankingStore: RankingStore;
 
   constructor(
     io: TGameServer,
     socket: TGameSocket,
     sessionStore: SessionStore,
     gameStore: GameStore,
-    chatStore: ChatStore
+    chatStore: ChatStore,
+    rankingStore: RankingStore
   ) {
     this.io = io;
     this.socket = socket;
@@ -44,6 +48,7 @@ export class GameSession implements ISession {
     this.gameStore = gameStore;
     this.sessionStore = sessionStore;
     this.chatStore = chatStore;
+    this.rankingStore = rankingStore;
 
     // Initialize the properties with empty values for now.
     this.uuid = '';
@@ -67,8 +72,10 @@ export class GameSession implements ISession {
       (email: string, callback: (session: ISession | null) => void) =>
         this.fetchSession(email, callback)
     );
-    this.socket.on('createAndJoinNewGame', (gameName: string) =>
-      this.createAndJoinNewGame(gameName)
+    this.socket.on(
+      'createAndJoinNewGame',
+      (gameName: string, gameTempo: number, ranked: boolean) =>
+        this.createAndJoinNewGame(gameName, gameTempo, ranked)
     );
     this.socket.on('fetchActiveGame', (callback: (success: boolean) => void) =>
       this.fetchActiveGame(callback)
@@ -203,10 +210,19 @@ export class GameSession implements ISession {
     callback(fetchedSession);
   }
 
-  private async createAndJoinNewGame(gameName: string) {
+  private async createAndJoinNewGame(
+    gameName: string,
+    gameTempo: number,
+    ranked: boolean
+  ) {
     // Create a new game object with initial values
 
-    const newGame = GameEngine.createGame(gameName, nanoid());
+    const newGame = GameEngine.createGame(
+      gameName,
+      gameTempo,
+      ranked,
+      nanoid()
+    );
 
     // Persist the game in the game store
     await this.gameStore.saveGame(newGame);
@@ -239,11 +255,45 @@ export class GameSession implements ISession {
       return;
     }
 
+    // Update all gameTimers if we are still playing
+    if (game.state.status !== 'won' && game.state.status !== 'terminated')
+      GameEngine.updatePlayerTimers(game);
+
+    if (game.state.status === 'won' && game.isRanked) {
+      this.updateRankings(game.uuid);
+    }
+
     // Emit the new game state to all user sockets in the game rooom
     this.io.to(this.activeGameUuid).emit('pushActiveGame', game);
 
     // Also, emit the current chat object in case a user had to reconnect
     this.pushActiveChat();
+  }
+
+  private async updateRankings(gameUuid: string) {
+    console.log('Ranking users for game ' + gameUuid);
+    const game = await this.gameStore.getGame(this.activeGameUuid);
+
+    if (!game) {
+      console.log('Game not found - skipping ranking');
+      return;
+    }
+
+    const playerUuids = game.players.map((player) => player.user.uuid);
+
+    const existingRankings = await this.rankingStore.getNamedRankings(
+      playerUuids
+    );
+    const updatedRankings: IRanking[] = GameEngine.getUpdatedRankings(
+      game,
+      existingRankings
+    );
+
+    if (updatedRankings.length === 0) return;
+
+    for (const ranking of updatedRankings) {
+      await this.rankingStore.saveRanking(ranking);
+    }
   }
 
   private async joinGame(gameUuid: string) {
@@ -383,7 +433,7 @@ export class GameSession implements ISession {
     achievement: IAchievement,
     callback: (valid: boolean) => void
   ) {
-    console.log('Picking achievement!');
+    // console.log('Picking achievement!');
     const game = await this.gameStore.getGame(this.activeGameUuid);
 
     if (!this.activeGameUuid || !game) {

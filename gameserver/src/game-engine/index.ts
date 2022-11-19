@@ -4,6 +4,7 @@ import {
   IContract,
   IGame,
   IPlayer,
+  IRanking,
   IUser,
   TCargo,
 } from '../../../shared/types';
@@ -23,8 +24,22 @@ import { ditchingIsAllowed } from './ditchingIsAllowed';
 import { updateAchievementsProgressAndReturnEarnedAchievements } from './findAchievementsEarned';
 import { getGameResults } from './getGameResults';
 import { pickRandomAchievements } from './pickRandomAchievements';
+import {
+  getCurrentEloRatings,
+  getCurrentRankings,
+  parseGameResults,
+} from './utils/rankingFunctions';
+import { createRatedGame } from './multiplayer-elo';
 
-const createGame = (gameName: string, gameUuid: string): IGame => {
+const ELO_ALFA = 2;
+const ELO_INITIAL_RANKING = 1500;
+
+const createGame = (
+  gameName: string,
+  gameTempo: number,
+  isRanked = true,
+  gameUuid: string
+): IGame => {
   const newGame: IGame = {
     name: gameName,
     uuid: gameUuid,
@@ -34,6 +49,8 @@ const createGame = (gameName: string, gameUuid: string): IGame => {
     board: BOARD,
     startTime: 0,
     endTime: 0,
+    isRanked: isRanked,
+    tempo: gameTempo,
     state: {
       currentRound: {
         playerUuid: '',
@@ -41,12 +58,22 @@ const createGame = (gameName: string, gameUuid: string): IGame => {
         movesAvailable: ['load', 'sail', 'trade'],
         achievementsEarned: [],
         hexesWithinRange: [],
+        startTime: 0,
       },
       round: 0,
       status: 'waiting',
       numberOfCitiesEmptied: 0,
     },
   };
+
+  console.log(
+    'Creating new game with tempo ' +
+      newGame.tempo +
+      ' which is ' +
+      newGame.isRanked
+      ? 'ranked.'
+      : ' not ranked.'
+  );
 
   return newGame;
 };
@@ -61,6 +88,8 @@ const start = (game: IGame, firstPlayerUuid: string) => {
     row: 6,
     column: 5,
   }); // Lübeck
+
+  game.state.currentRound.startTime = game.startTime;
 
   dealContracts(game);
   dealAchievements(game);
@@ -89,6 +118,9 @@ const addPlayerToGame = (user: IUser, game: IGame): IPlayer => {
     victoryPoints: 0,
     cargo: thisPlayerIndex === 0 ? [] : [playerInitialCargo[thisPlayerIndex]],
     hasMadeEndGameMove: false,
+    hasTimedOut: false,
+    timeLeft: game.tempo,
+    timedOutRound: 0,
   };
 
   return newPlayer;
@@ -130,6 +162,9 @@ const dealAchievements = (game: IGame) => {
 };
 
 const endCurrentPlayerRound = (game: IGame) => {
+  // Update the timers
+  updatePlayerTimers(game);
+
   // Get a reference to the current player for convenience
   const currentPlayer = game.players.find(
     (player) => player.user.uuid === game.state.currentRound.playerUuid
@@ -154,8 +189,14 @@ const endCurrentPlayerRound = (game: IGame) => {
     currentPlayer.hasMadeEndGameMove = true;
   }
 
-  // Check whether the game is over. This happens when all the player's endgame moves have been made.
-  if (game.players.every((player) => player.hasMadeEndGameMove === true)) {
+  // Check whether the game is over. This happens when all the player's endgame moves have been made,
+  // OR when there is only one player (or none...) left that has not timed out.
+  const allEndGameMovesDone = game.players.every(
+    (player) => player.hasMadeEndGameMove === true
+  );
+  const onlyOnePlayerLeft =
+    game.players.filter((player) => player.hasTimedOut === false).length < 2;
+  if (allEndGameMovesDone || onlyOnePlayerLeft) {
     console.log('Game won');
     game.state.status = 'won';
     game.endTime = new Date().getTime();
@@ -168,24 +209,46 @@ const endCurrentPlayerRound = (game: IGame) => {
 };
 
 const nextPlayer = (game: IGame) => {
-  // Set to the next player
-  const currentPlayerIndex = game.players.findIndex(
-    (player) => player.user.uuid === game.state.currentRound.playerUuid
-  );
-  const lastPlayerIndex = game.players.length - 1;
-  const nextPlayerIndex =
-    currentPlayerIndex === lastPlayerIndex ? 0 : currentPlayerIndex + 1;
+  const cycleToNextPlayer = (uuid: string): IPlayer => {
+    const currentPlayerIndex = game.players.findIndex(
+      (player) => player.user.uuid === uuid
+    );
+    const lastPlayerIndex = game.players.length - 1;
+    const nextPlayerIndex =
+      currentPlayerIndex === lastPlayerIndex ? 0 : currentPlayerIndex + 1;
 
-  game.state.currentRound.playerUuid = game.players[nextPlayerIndex].user.uuid;
+    return game.players[nextPlayerIndex];
+  };
+
+  // cycle to the next player
+  let nextPlayer = cycleToNextPlayer(game.state.currentRound.playerUuid);
+
+  // We've got to continue cycling if the player has timed out,
+  // the edge case of only being ONE player left that has not timedOut
+  // is dealt with later...
+  while (nextPlayer.hasTimedOut) {
+    console.log(nextPlayer.user.name + ': Has timed out. Cycling');
+    nextPlayer = cycleToNextPlayer(nextPlayer.user.uuid);
+  }
+
+  game.state.currentRound.playerUuid = nextPlayer.user.uuid;
   game.state.currentRound.movesLeft = MAX_MOVES;
   game.state.currentRound.movesAvailable = ['load', 'sail', 'trade'];
   game.state.currentRound.hexesWithinRange = getHexesWithinRangeOf(
-    game.players[nextPlayerIndex].position
+    nextPlayer.position
   );
+  game.state.currentRound.startTime = new Date().getTime();
 
   // Increment round counter
   game.state.round += 1;
 };
+
+/**
+ * This is the first part of a three step process for ending a player round.
+ * Step 1: Checks for achievements. If there are, it updates the state, returns the game state and stops the process.
+ * Step 2: Checks whether we are in the 'end game' or if the game is 'won'. If the game is won, it will return the game state and stop the process.
+ * Step 3: Cycle to the next player. It finds the next player not timed out, and return the game state and end the proces.
+ */
 
 const processEndOfRoundAchievements = (game: IGame) => {
   // Reset the moves available
@@ -521,6 +584,102 @@ const tradeDitchLoadForCurrentPlayer = (
   return true;
 };
 
+const updatePlayerTimers = (game: IGame) => {
+  // Get a reference to the current player for convenience
+  const currentPlayer = game.players.find(
+    (player) => player.user.uuid === game.state.currentRound.playerUuid
+  );
+
+  if (!currentPlayer) {
+    console.log(
+      'Something went wrong when fetching current player in the endCurrentPlayerRound function'
+    );
+    return;
+  }
+
+  // How long did the round last?
+  const currentTime = new Date().getTime();
+  const timeSpentInRound = currentTime - game.state.currentRound.startTime;
+
+  // Update player time, and set the timedOut flag it necessary
+  currentPlayer.timeLeft -= timeSpentInRound;
+  if (currentPlayer.timeLeft < 0) {
+    currentPlayer.hasTimedOut = true;
+    currentPlayer.timedOutRound = game.state.round;
+  }
+
+  // console.log('Updating the timers for ' + currentPlayer.user.name);
+};
+
+export const getUpdatedRankings = (
+  game: IGame,
+  currentRankings: IRanking[]
+): IRanking[] => {
+  let results: IRanking[] = [];
+
+  // Check that this game has not already been ranked. We test on the first ranking instance for simplicity.
+  const gameAlreadyRanked =
+    currentRankings.length > 0 &&
+    currentRankings[0].rankingHistory.find(
+      (rank) => rank.gameUuid === game.uuid
+    );
+  if (gameAlreadyRanked) {
+    console.log('Game ' + game.uuid + ' has already been ranked');
+    return [];
+  }
+
+  const gameResults = getGameResults(game);
+
+  const { players, playerPositions } = parseGameResults(gameResults);
+  const currentRatingsNoEmpty = getCurrentRankings(
+    currentRankings,
+    players,
+    ELO_INITIAL_RANKING
+  );
+  const currentEloRatings = getCurrentEloRatings(
+    currentRatingsNoEmpty,
+    players
+  );
+
+  console.log('Players:');
+  console.log(players);
+
+  console.log('Ingoing player ratings:');
+  console.log(currentEloRatings);
+
+  const ratedGame = createRatedGame(currentEloRatings, ELO_ALFA);
+  const newRatings = ratedGame.getUpdatedRatings(playerPositions);
+
+  console.log('Outoing ratings: ');
+  console.log(newRatings);
+
+  for (let i = 0; i < players.length; i++) {
+    let oldRanking = currentRatingsNoEmpty.find(
+      (ranking) => ranking.user.uuid === players[i].uuid
+    );
+
+    if (!oldRanking) {
+      console.log('No old ranking found for user ' + players[i].name);
+      return [];
+    }
+
+    const newRanking: IRanking = {
+      user: players[i],
+      currentRanking: newRatings[i],
+      rankingHistory: [
+        ...oldRanking.rankingHistory,
+        {
+          gameUuid: game.uuid,
+          newRanking: newRatings[i],
+        },
+      ],
+    };
+    results.push(newRanking);
+  }
+
+  return results;
+};
+
 export const GameEngine = {
   createGame,
   start,
@@ -535,4 +694,6 @@ export const GameEngine = {
   processEndOfRoundAchievements,
   getGameResults,
   tradeDitchLoadForCurrentPlayer,
+  getUpdatedRankings,
+  updatePlayerTimers,
 };

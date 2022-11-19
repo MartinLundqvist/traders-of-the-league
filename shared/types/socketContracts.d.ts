@@ -51,7 +51,11 @@ export interface ClientToServerEvents {
   ) => void;
 
   //  Client asks to create and join a new game
-  createAndJoinNewGame: (gameName: string) => void;
+  createAndJoinNewGame: (
+    gameName: string,
+    gameTempo: number,
+    ranked: boolean
+  ) => void;
 
   // Client asks for the active game state. This time we do not use the callback pattern, but emit a push of the game state instead.
   fetchActiveGame: (callback: (success: boolean) => void) => void;

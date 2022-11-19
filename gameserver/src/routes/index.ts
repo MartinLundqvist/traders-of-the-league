@@ -4,8 +4,12 @@ import { GameEngine } from '../game-engine';
 import { ISession } from '../../../shared/types';
 import { GameStore } from '../stores/gameStore';
 import { SessionStore } from '../stores/sessionStore';
+import { ChatStore } from '../stores/chatStore';
+import { BugReportStore } from '../stores/bugReportStore';
+import { resendVerificationEmail } from '../auth-controllers/resendVerificationEmail';
+import { RankingStore } from '../stores/rankingStore';
 
-export const createRestAPIRoutes = (
+export const createGameAPIRoutes = (
   sessionStore: SessionStore,
   gameStore: GameStore
 ): Router => {
@@ -30,9 +34,9 @@ export const createRestAPIRoutes = (
   });
 
   router.post('/createAndJoinNewGame', async (req, res, next) => {
-    const { gameName, user } = req.body;
+    const { gameName, gameTempo, user } = req.body;
 
-    const newGame = GameEngine.createGame(gameName, nanoid());
+    const newGame = GameEngine.createGame(gameName, gameTempo, true, nanoid());
 
     const newPlayer = GameEngine.addPlayerToGame(user, newGame);
     newGame.players.push(newPlayer);
@@ -210,6 +214,136 @@ export const createRestAPIRoutes = (
       await gameStore.saveGame(game);
       res.status(200).send(game);
     }
+  });
+
+  return router;
+};
+
+export const createRoutes = (
+  gameStore: GameStore,
+  sessionStore: SessionStore,
+  chatStore: ChatStore,
+  bugReportStore: BugReportStore,
+  rankingStore: RankingStore
+): Router => {
+  const router = Router();
+
+  // This route gets information about all games
+  router.get('/games', async (req, res) => {
+    const games = await gameStore.getGames();
+
+    const results = games.map((game) => {
+      return {
+        name: game.name,
+        uuid: game.uuid,
+        status: game.state.status,
+      };
+    });
+
+    res.status(200).send(results);
+  });
+
+  // This route gets information about all sessions
+  router.get('/sessions', async (req, res) => {
+    const sessions = await sessionStore.getSessions();
+
+    const results = sessions.map((session) => {
+      return {
+        user: session.user,
+        uuid: session.user.uuid,
+      };
+    });
+
+    res.status(200).send(results);
+  });
+
+  // This route gets information about all chats
+  router.get('/chats', async (req, res) => {
+    const chats = await chatStore.getChats();
+
+    const results = chats.map((chat) => {
+      return {
+        uuid: chat.gameUuid,
+        nrMessages: chat.messages.length,
+      };
+    });
+
+    res.status(200).send(results);
+  });
+
+  // This route gets the complete list of won games
+  router.get('/wongames', async (req, res) => {
+    const games = await gameStore.getGames();
+
+    const results = games.filter((game) => game.state.status === 'won');
+
+    res.status(200).send(results);
+  });
+
+  // This route gets game results for a gameUuid
+  router.get('/gameresults/:gameUuid', async (req, res) => {
+    const gameUuid = req.params.gameUuid;
+
+    const game = await gameStore.getGame(gameUuid);
+
+    if (!game) {
+      res.status(500).send({ message: 'Game not found' });
+      return;
+    }
+
+    const results = GameEngine.getGameResults(game);
+
+    res.status(200).send({ message: 'Game found', results });
+  });
+
+  // This route posts a bugreport
+  router.post('/postbugreport', async (req, res) => {
+    try {
+      await bugReportStore.saveBugReport(req.body);
+    } catch (err) {
+      console.log('Error saving bugreport');
+      console.log(err);
+      res.status(500).send({ message: 'Error saving bugreport' });
+    }
+
+    res.status(200).send({ message: 'Report posted' });
+  });
+
+  // This route gets all bugreports
+  router.get('/bugreports', async (req, res) => {
+    const reports = await bugReportStore.getBugReports();
+
+    res.status(200).send(reports);
+  });
+
+  // This route gets all active games
+  router.get('/activegames', async (req, res) => {
+    const games = await gameStore.getActiveGames();
+
+    res.status(200).send(games);
+  });
+
+  // This route gets all player rankings
+  router.get('/playerrankings', async (req, res) => {
+    const rankings = await rankingStore.getAllRankings();
+
+    res.status(200).send(rankings);
+  });
+
+  // This route asks Auth0 to resend a verification email
+  router.get('/resendemail/:user_id', async (req, res) => {
+    const user_id = req.params.user_id;
+
+    const result = await resendVerificationEmail(user_id);
+
+    res
+      .status(200)
+      .send({ message: 'Verification email sent: ', success: result });
+  });
+
+  // This is merely for health checks. Probably don't even need the express package for this app hmm....
+  router.get('/', (req, res) => {
+    res.status(200).send({ message: 'Ok' });
   });
 
   return router;

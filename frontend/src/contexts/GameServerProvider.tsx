@@ -42,7 +42,11 @@ interface IGameServerContext {
   me: IUser;
   activeGameUuid: string;
   createSession: (playerName: string) => void;
-  createAndJoinNewGame: (gameName: string) => void;
+  createAndJoinNewGame: (
+    gameName: string,
+    gameTempo: number,
+    ranked: boolean
+  ) => void;
 
   // Game specific. Only changes if game state is updated.
   game: IGame | null;
@@ -136,6 +140,7 @@ const initialContext: IGameServerContext = {
     hexesWithinRange: [],
     movesLeft: 0,
     playerUuid: '',
+    startTime: 0,
   },
 };
 
@@ -381,6 +386,8 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
         return;
       }
 
+      // TestGameUUID: VJHXkcSEtfpT01yhgNxB0
+
       try {
         const raw = await fetch(`${URL}/gameResults/${activeGameUuid}`);
 
@@ -436,13 +443,29 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
       );
   };
 
-  const createAndJoinNewGame = (gameName: string) => {
+  const createAndJoinNewGame = (
+    gameName: string,
+    gameTempo: number,
+    ranked: boolean
+  ) => {
     if (gameName.length < 3) {
       window.alert('Name needs to be at least 2 characters long.');
       return;
     }
-    console.log('Creating a new game with name ' + gameName);
-    socketRef.current?.emit('createAndJoinNewGame', gameName);
+
+    console.log(
+      'Creating a new game with name ' +
+        gameName +
+        ' at tempo ' +
+        gameTempo / 1000 +
+        ' seconds'
+    );
+    socketRef.current?.emit(
+      'createAndJoinNewGame',
+      gameName,
+      gameTempo,
+      ranked
+    );
   };
 
   const joinGame = (gameUuid: string) => {

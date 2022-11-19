@@ -3,6 +3,7 @@ import { IMAGES } from '../../elements/Images';
 import styled from 'styled-components';
 import { useTimePlayed } from '../../hooks/useTimePlayed';
 import { useReminder } from '../../hooks/useReminder';
+import { usePlayerTimer } from '../../hooks/usePlayerTimer';
 
 const IMG = styled.img`
   min-height: 0;
@@ -183,8 +184,8 @@ const Wrapper = styled.div`
     min-width: max-content;
 
     .game-state--text {
-      font-size: 1.2rem;
-      min-width: 5rem;
+      font-size: 1rem;
+      width: 9rem;
 
       .remind {
         animation: zoom-in 500ms linear alternate infinite;
@@ -204,8 +205,9 @@ interface IHeaderProps {
 }
 
 const Header = ({ className }: IHeaderProps) => {
-  const { isMyTurn, game, currentTurnPlayer } = useGameServer();
+  const { isMyTurn, game, myPlayer } = useGameServer();
   const timePlayed = useTimePlayed();
+  const { timeLeft, timedOut } = usePlayerTimer();
   const showReminder = useReminder();
 
   const getNameFontSize = (length: number): string => {
@@ -275,7 +277,12 @@ const Header = ({ className }: IHeaderProps) => {
           </div>
           <div className='game-state'>
             <div className='game-state--text'>
-              <div>{timePlayed}</div>
+              {timedOut ? (
+                <div>You timed out!</div>
+              ) : (
+                <div>Your timer: {timeLeft}</div>
+              )}
+              <div>Game time: {timePlayed}</div>
               <div className={isMyTurn && showReminder ? 'remind' : ''}>
                 {isMyTurn ? 'Your turn!' : 'Waiting'}
               </div>

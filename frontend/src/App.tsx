@@ -56,7 +56,7 @@ const App = (): JSX.Element => {
   const { activeRoute, activeActionRoute } = useLayout();
   const { isAuthenticated, user } = useAuth0();
   const { imagesPreloaded } = useImagePreloader(IMAGE_ARRAY);
-  // const { isAuthenticated } = useAuthDev();
+  // const { isAuthenticated, user } = useAuthDev();
 
   if (!isAuthenticated) return <Login className='grid-area--all' />;
 
