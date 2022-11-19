@@ -100,6 +100,7 @@ import W_blu_bro_2 from '../assets/contracts/W_blu_bro_2.png';
 import W_bro_bla_1 from '../assets/contracts/W_bro_bla_1.png';
 import W_bro_bla_2 from '../assets/contracts/W_bro_bla_2.png';
 import W_grn_blu_2 from '../assets/contracts/W_grn_blu_2.png';
+import W_grn_blu_3 from '../assets/contracts/W_grn_blu_3.png';
 import W_grn_bla_1 from '../assets/contracts/W_grn_bla_1.png';
 import W_grn_bro_2 from '../assets/contracts/W_grn_bro_2.png';
 import W_gry_bla_3 from '../assets/contracts/W_gry_bla_3.png';
@@ -223,6 +224,7 @@ export const IMAGES: IImages = {
     W_bro_bla_1,
     W_bro_bla_2,
     W_grn_blu_2,
+    W_grn_blu_3,
     W_grn_bla_1,
     W_grn_bro_2,
     W_gry_bla_3,
@@ -248,24 +250,24 @@ export const IMAGES: IImages = {
     city_east,
   },
   ACHIEVEMENTS: {
-    bankerA,
-    bankerB,
-    diversifierA,
-    diversifierB,
-    explorerA,
-    explorerB,
-    merchantA,
-    merchantA2,
-    merchantB,
-    merchantB2,
-    monopolistA,
-    monopolistB,
-    regionalTraderA,
-    regionalTraderB,
-    specialistA,
-    specialistB,
-    supplierA,
-    supplierB,
+    'Banker_A_2-5_4P': bankerA,
+    'Banker_B_2-5_3P': bankerB,
+    'Diversifier_A_2-5_4P': diversifierA,
+    'Diversifier_B_2-5_4P': diversifierB,
+    'Explorer_A_2-5_4P': explorerA,
+    'Explorer_B_2-5_3P': explorerB,
+    'Merchant_A_4-5_5P': merchantA,
+    'Merchant_A_2-3_5P': merchantA2,
+    'Merchant_B_4-5_4P': merchantB,
+    'Merchant_B_2-3_4P': merchantB2,
+    'Monopolist_A_2-3_4P': monopolistA,
+    'Monopolist_B_4-5_3P': monopolistB,
+    'Regional_A_2-5_5P': regionalTraderA,
+    'Regional_B_2-5_3P': regionalTraderB,
+    'Specialist_A_2-5_3P': specialistA,
+    'Specialist_B_2-5_4P': specialistB,
+    'Supplier_A_2-3_4P': supplierA,
+    'Supplier_B_4-5_3P': supplierB,
   },
   UI: {
     SCROLLS: {

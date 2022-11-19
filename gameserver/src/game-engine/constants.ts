@@ -836,6 +836,12 @@ export const CONTRACTS: IContract[] = [
     uuid: 'W_grn_blu_2',
   },
   {
+    value: 3,
+    cargo: ['green', 'blue'],
+    region: 'West',
+    uuid: 'W_grn_blu_3',
+  },
+  {
     value: 1,
     cargo: ['green', 'blue'],
     region: 'Central',
