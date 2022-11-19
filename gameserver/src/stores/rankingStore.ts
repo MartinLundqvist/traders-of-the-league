@@ -54,7 +54,10 @@ export class RankingStore {
     }
 
     try {
-      results = await this.rankingModel.find().exec();
+      results = await this.rankingModel
+        .find()
+        .sort({ currentRanking: -1 })
+        .exec();
     } catch (err) {
       console.log('Error while fetching all rankings from mongo');
       console.log(JSON.stringify(err));

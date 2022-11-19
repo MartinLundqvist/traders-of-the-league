@@ -26,6 +26,9 @@ const Start = ({ className }: IStartProps): JSX.Element => {
         <TitleButton onClick={() => setActiveRoute('joingame')}>
           Join Existing Game
         </TitleButton>
+        <TitleButton onClick={() => setActiveRoute('rankings')}>
+          Check player rankings
+        </TitleButton>
       </Container>
     </ScrollFull>
   );
