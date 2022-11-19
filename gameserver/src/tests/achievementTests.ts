@@ -234,6 +234,73 @@ import { updateAchievementsProgressAndReturnEarnedAchievements } from '../game-e
 //   },
 // ];
 
+const TEST_PLAYER: IPlayer = {
+  color: 'black',
+  user: { name: 'lynden', uuid: '1UiCjICtBFvRPSVb2cTAP', connected: true },
+  hasMadeEndGameMove: false,
+  contractsFulfilled: [
+    {
+      value: 2,
+      cargo: ['yellow', 'brown'],
+      region: 'East',
+      uuid: 'E_yel_bro_2',
+    },
+    {
+      value: 2,
+      cargo: ['yellow', 'brown'],
+      region: 'East',
+      uuid: 'E_yel_bro_2',
+    },
+    {
+      value: 1,
+      cargo: ['gray', 'blue'],
+      region: 'East',
+      uuid: 'E_gry_blu_1',
+    },
+    {
+      value: 1,
+      cargo: ['gray', 'brown'],
+      region: 'East',
+      uuid: 'E_gry_bro_1',
+    },
+    {
+      value: 3,
+      cargo: ['red', 'gray'],
+      region: 'East',
+      uuid: 'E_red_gry_3',
+    },
+    {
+      value: 3,
+      cargo: ['red', 'gray'],
+      region: 'West',
+      uuid: 'W_red_gry_3',
+    },
+    {
+      value: 3,
+      cargo: ['black', 'gray'],
+      region: 'West',
+      uuid: 'W_red_gry_3',
+    },
+  ],
+  citiesEmptied: [
+    { name: 'Riga', value: 2 },
+    { name: 'Tønsberg', value: 2 },
+    { name: 'Brügge', value: 2 },
+    { name: 'Bergen', value: 2 },
+  ],
+  achievements: [],
+  achievementsProgress: [
+    { uuid: 'Banker_A_2-5_4P', target: 4, progress: 0 },
+    { uuid: 'Merchant_A_2-3_5P', target: 6, progress: 0 },
+    { uuid: 'Diversifier_B_2-5_4P', target: 6, progress: 0 },
+    { uuid: 'Supplier_A_2-3_4P', target: 3, progress: 0 },
+    { uuid: 'Specialist_B_2-5_4P', target: 4, progress: 0 },
+  ],
+  position: { column: 8, row: 5 },
+  victoryPoints: 47,
+  cargo: ['black', 'blue', 'yellow', 'black', 'black'],
+};
+
 const test1 = () => {
   const player = MOCK_GAME.players[1];
 
@@ -253,10 +320,21 @@ const test1 = () => {
 };
 
 const test = () => {
-  const nrPlayers = 5;
+  const innerAchievement = ACHIEVEMENTS.find(
+    (a) => a.uuid === 'Diversifier_A_2-5_4P'
+    // (a) => a.uuid === 'Diversifier_B_2-5_4P'
+  )!;
 
-  const achievements = pickRandomAchievements(nrPlayers);
-  console.log(achievements);
+  const { progressionFn, progressionArg, targetFn } = innerAchievement;
+  const progress = targetFn(progressionFn(TEST_PLAYER, progressionArg));
+
+  console.log(TEST_PLAYER.contractsFulfilled);
+  console.log(progress);
+
+  // const nrPlayers = 5;
+
+  // const achievements = pickRandomAchievements(nrPlayers);
+  // console.log(achievements);
 
   // const newAchievements = updateAchievementsProgressAndReturnEarnedAchievements(
   //   MOCK_GAME.players[0],

@@ -15,6 +15,7 @@ import {
   sumItemsMoreThan,
   countNrCitiesEmptied,
   maxItem,
+  countNrCargoColor,
 } from './utils/achievementFunctions';
 
 export const MAX_MOVES = 2;
@@ -157,7 +158,8 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     uuid: 'Diversifier_A_2-5_4P',
     description: 'One contract of each color',
     value: 4,
-    progressionFn: countNrContractsColor,
+    progressionFn: countNrCargoColor,
+    // progressionFn: countNrContractsColor,
     progressionArg: cargoColors,
     targetFn: sumItemsMoreThan[1],
     target: cargoColors.length,
@@ -169,7 +171,8 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     uuid: 'Diversifier_B_2-5_4P',
     description: 'Two red, yellow, gray contracts',
     value: 4,
-    progressionFn: countNrContractsColor,
+    progressionFn: countNrCargoColor,
+    // progressionFn: countNrContractsColor,
     progressionArg: ['red', 'yellow', 'gray'] as TCargo[],
     targetFn: sumItemsMoreThan[2],
     target: 6,
@@ -556,7 +559,12 @@ export const CONTRACTS: IContract[] = [
     region: 'West',
     uuid: 'W_red_gry_3',
   },
-  //TODO: Add a 'red', 'gray' in East with value 5
+  {
+    value: 4,
+    cargo: ['red', 'gray'],
+    region: 'East',
+    uuid: 'E_red_gry_4',
+  },
   {
     value: 7,
     cargo: ['red', 'gray'],
@@ -713,7 +721,12 @@ export const CONTRACTS: IContract[] = [
     region: 'East',
     uuid: 'E_yel_bro_2',
   },
-  //TODO: Add a 'yellow', 'brown' in East with value 1
+  {
+    value: 1,
+    cargo: ['yellow', 'brown'],
+    region: 'East',
+    uuid: 'E_yel_bro_1',
+  },
   {
     value: 2,
     cargo: ['yellow', 'black'],
@@ -767,6 +780,12 @@ export const CONTRACTS: IContract[] = [
     cargo: ['gray', 'blue'],
     region: 'Central',
     uuid: 'C_gry_blu_2',
+  },
+  {
+    value: 3,
+    cargo: ['gray', 'blue'],
+    region: 'Central',
+    uuid: 'C_gry_blu_3',
   },
   {
     value: 1,
@@ -828,6 +847,12 @@ export const CONTRACTS: IContract[] = [
     region: 'East',
     uuid: 'E_grn_blu_2',
   },
+  {
+    value: 3,
+    cargo: ['green', 'blue'],
+    region: 'East',
+    uuid: 'E_grn_blu_3',
+  },
   //TODO: Add a 'green', 'blue' in West with value 3
   {
     value: 2,
@@ -876,6 +901,12 @@ export const CONTRACTS: IContract[] = [
     cargo: ['blue', 'brown'],
     region: 'Central',
     uuid: 'C_blu_bro_2',
+  },
+  {
+    value: 3,
+    cargo: ['blue', 'brown'],
+    region: 'Central',
+    uuid: 'C_blu_bro_3',
   },
   {
     value: 2,

@@ -47,12 +47,14 @@ import gameover from '../assets/ui/gui_game_over.png';
 // Contracts
 import C_blu_bla_1 from '../assets/contracts/C_blu_bla_1.png';
 import C_blu_bro_2 from '../assets/contracts/C_blu_bro_2.png';
+import C_blu_bro_3 from '../assets/contracts/C_blu_bro_3.png';
 import C_bro_bla_2 from '../assets/contracts/C_bro_bla_2.png';
 import C_grn_blu_1 from '../assets/contracts/C_grn_blu_1.png';
 import C_grn_bla_1 from '../assets/contracts/C_grn_bla_1.png';
 import C_grn_bro_2 from '../assets/contracts/C_grn_bro_2.png';
 import C_gry_bla_2 from '../assets/contracts/C_gry_bla_2.png';
 import C_gry_blu_2 from '../assets/contracts/C_gry_blu_2.png';
+import C_gry_blu_3 from '../assets/contracts/C_gry_blu_3.png';
 import C_gry_bro_3 from '../assets/contracts/C_gry_bro_3.png';
 import C_gry_grn_2 from '../assets/contracts/C_gry_grn_2.png';
 import C_red_bla_2 from '../assets/contracts/C_red_bla_2.png';
@@ -72,6 +74,7 @@ import E_blu_bro_2 from '../assets/contracts/E_blu_bro_2.png';
 import E_bro_bla_2 from '../assets/contracts/E_bro_bla_2.png';
 import E_grn_bla_2 from '../assets/contracts/E_grn_bla_2.png';
 import E_grn_blu_2 from '../assets/contracts/E_grn_blu_2.png';
+import E_grn_blu_3 from '../assets/contracts/E_grn_blu_3.png';
 import E_grn_bro_2 from '../assets/contracts/E_grn_bro_2.png';
 import E_gry_bla_2 from '../assets/contracts/E_gry_bla_2.png';
 import E_gry_blu_1 from '../assets/contracts/E_gry_blu_1.png';
@@ -82,10 +85,12 @@ import E_red_blu_3 from '../assets/contracts/E_red_blu_3.png';
 import E_red_bro_3 from '../assets/contracts/E_red_bro_3.png';
 import E_red_grn_5 from '../assets/contracts/E_red_grn_5.png';
 import E_red_gry_3 from '../assets/contracts/E_red_gry_3.png';
+import E_red_gry_4 from '../assets/contracts/E_red_gry_4.png';
 import E_red_yel_5 from '../assets/contracts/E_red_yel_5.png';
 import E_yel_bla_1 from '../assets/contracts/E_yel_bla_1.png';
 import E_yel_bla_2 from '../assets/contracts/E_yel_bla_2.png';
 import E_yel_blu_2 from '../assets/contracts/E_yel_blu_2.png';
+import E_yel_bro_1 from '../assets/contracts/E_yel_bro_1.png';
 import E_yel_bro_2 from '../assets/contracts/E_yel_bro_2.png';
 import E_yel_grn_3 from '../assets/contracts/E_yel_grn_3.png';
 import E_yel_gry_2 from '../assets/contracts/E_yel_gry_2.png';
@@ -167,12 +172,14 @@ export const IMAGES: IImages = {
   CONTRACTS: {
     C_blu_bla_1,
     C_blu_bro_2,
+    C_blu_bro_3,
     C_bro_bla_2,
     C_grn_blu_1,
     C_grn_bla_1,
     C_grn_bro_2,
     C_gry_bla_2,
     C_gry_blu_2,
+    C_gry_blu_3,
     C_gry_bro_3,
     C_gry_grn_2,
     C_red_bla_2,
@@ -191,6 +198,7 @@ export const IMAGES: IImages = {
     E_bro_bla_2,
     E_grn_bla_2,
     E_grn_blu_2,
+    E_grn_blu_3,
     E_grn_bro_2,
     E_gry_bla_2,
     E_gry_blu_1,
@@ -201,10 +209,12 @@ export const IMAGES: IImages = {
     E_red_bro_3,
     E_red_grn_5,
     E_red_gry_3,
+    E_red_gry_4,
     E_red_yel_5,
     E_yel_bla_1,
     E_yel_bla_2,
     E_yel_blu_2,
+    E_yel_bro_1,
     E_yel_bro_2,
     E_yel_grn_3,
     E_yel_gry_2,

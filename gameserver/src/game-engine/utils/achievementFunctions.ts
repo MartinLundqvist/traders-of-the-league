@@ -34,12 +34,34 @@ export const countNrContractsVP = (
   return result;
 };
 
+export const countNrCargoColor = (
+  player: IPlayer,
+  values: TProgressionValues[]
+): number[] => {
+  const result = new Array<number>(values.length);
+  result.fill(0);
+
+  const playerCargo: TCargo[] = [];
+  for (const contract of player.contractsFulfilled) {
+    playerCargo.push(contract.cargo[0]);
+    playerCargo.push(contract.cargo[1]);
+  }
+
+  values.forEach((value, index) => {
+    const filtered = playerCargo.find((cargo) => cargo === value) || [];
+    result[index] = filtered.length;
+  });
+
+  return result;
+};
+
 export const countNrContractsColor = (
   player: IPlayer,
   values: TProgressionValues[]
 ): number[] => {
   const result = new Array<number>(values.length);
   result.fill(0);
+
   player.contractsFulfilled.forEach((contract) => {
     // Does the contract contain one cargo of the values we are looking for?
     let foundIndex = values.findIndex(
@@ -47,6 +69,12 @@ export const countNrContractsColor = (
     );
 
     if (foundIndex > -1) {
+      console.log(
+        'Found a contract with color ' +
+          values[foundIndex] +
+          ' in contract ' +
+          contract.uuid
+      );
       result[foundIndex] += 1;
     }
   });
