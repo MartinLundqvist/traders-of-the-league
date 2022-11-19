@@ -156,7 +156,7 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     name: 'Diversifier',
     side: 'A',
     uuid: 'Diversifier_A_2-5_4P',
-    description: 'One contract of each color',
+    description: 'Cargo in every color',
     value: 4,
     progressionFn: countNrCargoColor,
     // progressionFn: countNrContractsColor,
@@ -169,7 +169,7 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     name: 'Diversifier',
     side: 'B',
     uuid: 'Diversifier_B_2-5_4P',
-    description: 'Two red, yellow, gray contracts',
+    description: 'Two red, yellow and gray cargo',
     value: 4,
     progressionFn: countNrCargoColor,
     // progressionFn: countNrContractsColor,
@@ -859,7 +859,6 @@ export const CONTRACTS: IContract[] = [
     region: 'East',
     uuid: 'E_grn_blu_3',
   },
-  //TODO: Add a 'green', 'blue' in West with value 3
   {
     value: 2,
     cargo: ['green', 'brown'],
