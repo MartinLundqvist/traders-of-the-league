@@ -237,43 +237,43 @@ export const createRoutes = (
   router.get('/games', async (req, res) => {
     const games = await gameStore.getGames();
 
-    const results = games.map((game) => {
-      return {
-        name: game.name,
-        uuid: game.uuid,
-        status: game.state.status,
-      };
-    });
+    // const results = games.map((game) => {
+    //   return {
+    //     name: game.name,
+    //     uuid: game.uuid,
+    //     status: game.state.status,
+    //   };
+    // });
 
-    res.status(200).send(results);
+    res.status(200).send(games);
   });
 
   // This route gets information about all sessions
   router.get('/sessions', async (req, res) => {
     const sessions = await sessionStore.getSessions();
 
-    const results = sessions.map((session) => {
-      return {
-        user: session.user,
-        uuid: session.user.uuid,
-      };
-    });
+    // const results = sessions.map((session) => {
+    //   return {
+    //     user: session.user,
+    //     uuid: session.user.uuid,
+    //   };
+    // });
 
-    res.status(200).send(results);
+    res.status(200).send(sessions);
   });
 
   // This route gets information about all chats
   router.get('/chats', async (req, res) => {
     const chats = await chatStore.getChats();
 
-    const results = chats.map((chat) => {
-      return {
-        uuid: chat.gameUuid,
-        nrMessages: chat.messages.length,
-      };
-    });
+    // const results = chats.map((chat) => {
+    //   return {
+    //     uuid: chat.gameUuid,
+    //     nrMessages: chat.messages.length,
+    //   };
+    // });
 
-    res.status(200).send(results);
+    res.status(200).send(chats);
   });
 
   // This route gets the complete list of won games

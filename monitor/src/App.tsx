@@ -1,128 +1,61 @@
-import { useEffect, useRef, useState } from 'react';
+import { Container } from 'react-bootstrap';
+import styled from 'styled-components';
+import Header from './components/Header';
+import Navigation from './components/Navigation';
+import { useNavigation } from './contexts/NavigationProvider';
+import { ROUTES } from './pages';
 
-interface ISession {
-  uuid: string;
-  user: {
-    name: string;
-    connected: boolean;
-  };
-}
+const Wrapper = styled.div`
+  display: grid;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--bs-light);
+  grid-template-columns: minmax(8rem, 1fr) 5fr;
+  grid-template-rows: 5rem auto;
+  grid-template-areas:
+    'header header'
+    'navigation content';
 
-interface IGame {
-  uuid: string;
-  name: string;
-  status: string;
-}
+  > div {
+    /* padding: 0.5rem; */
+    border: 1px solid var(--bs-dark);
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
 
-interface IChat {
-  uuid: string;
-  nrMessages: number;
-}
+  .header {
+    grid-area: header;
+  }
+
+  .navigation {
+    grid-area: navigation;
+  }
+
+  .content {
+    padding-top: 0.5rem;
+    grid-area: content;
+  }
+`;
 
 const App = (): JSX.Element => {
-  const [sessions, setSessions] = useState<ISession[]>([]);
-  const [chats, setChats] = useState<IChat[]>([]);
-  const [games, setGames] = useState<IGame[]>([]);
-  const linkref = useRef<HTMLAnchorElement>(null);
-
-  useEffect(() => {
-    const getData = async () => {
-      const url = import.meta.env.VITE_URL;
-      console.log(url);
-
-      try {
-        const sessionsResults = await fetch(`${url}/sessions`);
-        const gamesResults = await fetch(`${url}/games`);
-        const chatsResults = await fetch(`${url}/chats`);
-
-        const _sessions = await sessionsResults.json();
-        const _chats = await chatsResults.json();
-        const _games = await gamesResults.json();
-
-        setSessions(_sessions);
-        setGames(_games);
-        setChats(_chats);
-      } catch (e) {
-        console.log('Error');
-        console.log(e);
-      }
-    };
-
-    getData();
-  }, []);
-
-  const handleDownloadClick = () => {
-    const download = async () => {
-      const url = import.meta.env.VITE_URL;
-
-      try {
-        const response = await fetch(`${url}/wongames`);
-        if (!response.ok) {
-          console.log('Error fetching won games');
-        }
-
-        const wonblob = await response.blob();
-        const bloburl = window.URL.createObjectURL(new Blob([wonblob]));
-
-        if (linkref && linkref.current) {
-          linkref.current.href = bloburl;
-          linkref.current.setAttribute('download', 'games.json');
-          linkref.current.click();
-        }
-
-        console.log(bloburl);
-      } catch (err) {
-        console.log('Error fetching data ' + JSON.stringify(err));
-      }
-    };
-
-    download();
-  };
+  const { activeRoute } = useNavigation();
 
   return (
-    <div className='container'>
+    <Wrapper>
       <div className='header'>
-        <h1>Traders of the Hanseatic League - game server monitor</h1>
+        <Container>
+          <Header />
+        </Container>
       </div>
-      <div className='actions'>
-        <button onClick={() => handleDownloadClick()}>
-          Fetch Won Games Stats
-        </button>
-        <a ref={linkref}></a>
+      <div className='navigation'>
+        <Container>
+          <Navigation />
+        </Container>
       </div>
-      <div className='sessions'>
-        <h2>Sessions</h2>
-        <ul>
-          {sessions.map((session, index) => (
-            <li key={session.uuid + index}>
-              {session.user.name} (
-              {session.user.connected ? 'connected' : 'not connected'})
-            </li>
-          ))}
-        </ul>
+      <div className='content'>
+        <Container>{ROUTES[activeRoute]}</Container>
       </div>
-      <div className='games'>
-        <h2>Games</h2>
-        <ul>
-          {games.map((game, index) => (
-            <li key={game.uuid + index}>
-              {game.name}: {game.status}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className='chats'>
-        <h2>Chats</h2>
-        <ul>
-          {chats.map((chat, index) => (
-            <li key={chat.uuid + index}>
-              {games.find((game) => game.uuid === chat.uuid)?.name}:{' '}
-              {chat.nrMessages} messages
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+    </Wrapper>
   );
 };
 
