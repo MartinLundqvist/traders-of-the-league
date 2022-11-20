@@ -6,7 +6,7 @@ import { GameStore } from '../stores/gameStore';
 import { SessionStore } from '../stores/sessionStore';
 import { ChatStore } from '../stores/chatStore';
 import { BugReportStore } from '../stores/bugReportStore';
-import { resendVerificationEmail } from '../auth-controllers/resendVerificationEmail';
+import { getAllUsers, resendVerificationEmail } from '../auth-controllers';
 import { RankingStore } from '../stores/rankingStore';
 
 export const createGameAPIRoutes = (
@@ -344,6 +344,12 @@ export const createRoutes = (
     res
       .status(200)
       .send({ message: 'Verification email sent: ', success: result });
+  });
+
+  router.get('/allusers', async (req, res) => {
+    const result = await getAllUsers();
+
+    res.status(200).send(result);
   });
 
   // This is merely for health checks. Probably don't even need the express package for this app hmm....

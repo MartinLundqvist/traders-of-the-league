@@ -233,3 +233,32 @@ export interface IRanking {
   currentRanking: number;
   rankingHistory: IRankingHistory[];
 }
+
+export interface IAuth0User {
+  user_id: string;
+  email: string;
+  email_verified: boolean;
+  username: string;
+  phone_number: string;
+  phone_verified: boolean;
+  created_at: string;
+  updated_at: string;
+  identities: {
+    connection: string;
+    user_id: string;
+    provider: string;
+    isSocial: boolean;
+  }[];
+  app_metadata: any;
+  user_metadata: any;
+  picture: string;
+  name: string;
+  nickname: string;
+  multifactor: string[];
+  last_ip: string;
+  last_login: string;
+  logins_count: number;
+  blocked: boolean;
+  given_name: string;
+  family_name: string;
+}

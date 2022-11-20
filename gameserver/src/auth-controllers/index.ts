@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import axios, { AxiosRequestConfig } from 'axios';
+import { IAuth0User } from '../../../shared/types';
 
 const CLIENT_ID = process.env.AUTH_CLIENT_ID;
 const CLIENT_SECRET = process.env.AUTH_CLIENT_SECRET;
@@ -61,5 +62,31 @@ export const resendVerificationEmail = async (
   } catch (err) {
     console.log(err);
     return false;
+  }
+};
+
+export const getAllUsers = async (): Promise<IAuth0User[]> => {
+  const token = await getAuthToken();
+
+  if (!token) return [];
+
+  const options: AxiosRequestConfig = {
+    baseURL: DOMAIN,
+    url: '/api/v2/users',
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    },
+  };
+
+  try {
+    const response = await axios<IAuth0User[]>(options);
+
+    if (response.status !== 200) return [];
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    return [];
   }
 };
