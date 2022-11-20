@@ -32,12 +32,6 @@ const Navigation = (): JSX.Element => {
         Chats
       </Nav.Link>
       <Nav.Link
-        active={activeRoute === 'stats'}
-        onClick={() => setActiveRoute('stats')}
-      >
-        Statistics
-      </Nav.Link>
-      <Nav.Link
         active={activeRoute === 'players'}
         onClick={() => setActiveRoute('players')}
       >
@@ -48,6 +42,12 @@ const Navigation = (): JSX.Element => {
         onClick={() => setActiveRoute('rankings')}
       >
         Rankings
+      </Nav.Link>
+      <Nav.Link
+        active={activeRoute === 'stats'}
+        onClick={() => setActiveRoute('stats')}
+      >
+        Statistics
       </Nav.Link>
       <Button onClick={() => refreshData()}>Refresh data</Button>
     </Nav>
