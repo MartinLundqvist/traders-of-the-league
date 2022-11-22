@@ -1,10 +1,19 @@
 import { Badge, Spinner, Table } from 'react-bootstrap';
-import { useData } from '../contexts/DataProvider';
+import { useChats, useGames } from '../hooks';
 
 const Chats = (): JSX.Element => {
-  const { chats, games, hasLoaded } = useData();
+  const {
+    isLoading: isLoadingGames,
+    error: errorGames,
+    data: games,
+  } = useGames();
+  const {
+    isLoading: isLoadingChats,
+    error: errorChats,
+    data: chats,
+  } = useChats();
 
-  if (!hasLoaded) {
+  if (isLoadingGames || isLoadingChats) {
     return <Spinner animation='border' role='status'></Spinner>;
   }
 
@@ -18,9 +27,11 @@ const Chats = (): JSX.Element => {
           </tr>
         </thead>
         <tbody>
-          {chats.map((chat, index) => (
+          {chats?.map((chat, index) => (
             <tr key={chat.gameUuid + index}>
-              <td>{games.find((game) => game.uuid === chat.gameUuid)?.name}</td>
+              <td>
+                {games?.find((game) => game.uuid === chat.gameUuid)?.name}
+              </td>
               <td>
                 <Badge>{chat.messages.length}</Badge>
               </td>

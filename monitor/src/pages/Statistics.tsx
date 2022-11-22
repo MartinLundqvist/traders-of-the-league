@@ -1,18 +1,22 @@
 import { useEffect, useMemo, useRef } from 'react';
-import { Badge, Button, Card, Col, Row, Table } from 'react-bootstrap';
-import { useData } from '../contexts/DataProvider';
+import { Badge, Button, Card, Col, Row, Spinner, Table } from 'react-bootstrap';
+import { useGames } from '../hooks';
 import { citiesEmptied, contractsFulFilled } from '../utils/gameStatistics';
 
 const Statistics = (): JSX.Element => {
-  const { games } = useData();
+  const { isLoading, error, data: games } = useGames();
   const linkref = useRef<HTMLAnchorElement>(null);
 
+  if (isLoading) {
+    return <Spinner animation='border' role='status'></Spinner>;
+  }
+
   const cityStats = useMemo(() => {
-    return citiesEmptied(games);
+    return citiesEmptied(games!);
   }, [games]);
 
   const contractStats = useMemo(() => {
-    return contractsFulFilled(games);
+    return contractsFulFilled(games!);
   }, [games]);
 
   const handleDownloadClick = async () => {

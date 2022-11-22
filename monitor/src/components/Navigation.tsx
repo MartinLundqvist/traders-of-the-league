@@ -1,10 +1,11 @@
 import { Button, Nav } from 'react-bootstrap';
-import { useData } from '../contexts/DataProvider';
+import { useQueryClient } from 'react-query';
 import { useNavigation } from '../contexts/NavigationProvider';
 
 const Navigation = (): JSX.Element => {
   const { activeRoute, setActiveRoute } = useNavigation();
-  const { refreshData } = useData();
+  const queryClient = useQueryClient();
+
   return (
     <Nav className='flex-column'>
       <Nav.Link
@@ -49,7 +50,7 @@ const Navigation = (): JSX.Element => {
       >
         Statistics
       </Nav.Link>
-      <Button onClick={() => refreshData()}>Refresh data</Button>
+      <Button onClick={() => queryClient.refetchQueries()}>Refresh data</Button>
     </Nav>
   );
 };

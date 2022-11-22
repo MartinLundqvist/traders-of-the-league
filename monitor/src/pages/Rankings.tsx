@@ -1,10 +1,10 @@
 import { Badge, Spinner, Table } from 'react-bootstrap';
-import { useData } from '../contexts/DataProvider';
+import { useRankings } from '../hooks';
 
 const Rankings = (): JSX.Element => {
-  const { rankings, hasLoaded } = useData();
+  const { isLoading, error, data: rankings } = useRankings();
 
-  if (!hasLoaded) {
+  if (isLoading) {
     return <Spinner animation='border' role='status'></Spinner>;
   }
 
@@ -19,7 +19,7 @@ const Rankings = (): JSX.Element => {
           </tr>
         </thead>
         <tbody>
-          {rankings.map((ranking, index) => (
+          {rankings?.map((ranking, index) => (
             <tr key={ranking.user.uuid + index}>
               <td>{ranking.user.name}</td>
               <td>

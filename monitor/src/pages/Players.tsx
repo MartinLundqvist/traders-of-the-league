@@ -1,8 +1,8 @@
 import { Badge, Spinner, Table } from 'react-bootstrap';
-import { useData } from '../contexts/DataProvider';
+import { usePlayers } from '../hooks';
 
 const Players = (): JSX.Element => {
-  const { players, hasLoaded } = useData();
+  const { isLoading, error, data: players } = usePlayers();
 
   const stringToLocalDate = (dateString: string): string => {
     const date = new Date(dateString);
@@ -10,7 +10,7 @@ const Players = (): JSX.Element => {
     // return date.toLocaleString();
   };
 
-  if (!hasLoaded) {
+  if (isLoading) {
     return <Spinner animation='border' role='status'></Spinner>;
   }
   return (
@@ -26,7 +26,7 @@ const Players = (): JSX.Element => {
           </tr>
         </thead>
         <tbody>
-          {players.map((player, index) => (
+          {players?.map((player, index) => (
             <tr key={player.user_id + index}>
               <td>{player.name}</td>
               <td>{player.email}</td>

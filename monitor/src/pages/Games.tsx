@@ -1,10 +1,10 @@
 import { Badge, Spinner, Table } from 'react-bootstrap';
-import { useData } from '../contexts/DataProvider';
+import { useGames } from '../hooks';
 
 const Games = (): JSX.Element => {
-  const { games, hasLoaded } = useData();
+  const { isLoading, error, data: games } = useGames();
 
-  if (!hasLoaded) {
+  if (isLoading) {
     return <Spinner animation='border' role='status'></Spinner>;
   }
 
@@ -19,7 +19,7 @@ const Games = (): JSX.Element => {
           </tr>
         </thead>
         <tbody>
-          {games.map((game, index) => (
+          {games?.map((game, index) => (
             <tr key={game.uuid + index}>
               <td>{game.name}</td>
               <td>{game.state.status}</td>

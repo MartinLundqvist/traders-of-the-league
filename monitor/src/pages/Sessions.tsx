@@ -1,10 +1,10 @@
 import { Badge, Spinner, Table } from 'react-bootstrap';
-import { useData } from '../contexts/DataProvider';
+import { useSessions } from '../hooks';
 
 const Sessions = (): JSX.Element => {
-  const { sessions, hasLoaded } = useData();
+  const { isLoading, error, data: sessions } = useSessions();
 
-  if (!hasLoaded) {
+  if (isLoading) {
     return <Spinner animation='border' role='status'></Spinner>;
   }
 
@@ -18,7 +18,7 @@ const Sessions = (): JSX.Element => {
           </tr>
         </thead>
         <tbody>
-          {sessions.map((session, index) => (
+          {sessions?.map((session, index) => (
             <tr key={session.uuid + index}>
               <td>{session.user.name}</td>
               <td>
