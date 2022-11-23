@@ -1,4 +1,4 @@
-import { IGame, TCity } from '../../../shared/types';
+import { IGame } from '../../../shared/types';
 
 interface ICityEmptied {
   cityName: string;

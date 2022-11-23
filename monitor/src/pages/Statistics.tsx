@@ -7,16 +7,12 @@ const Statistics = (): JSX.Element => {
   const { isLoading, error, data: games } = useGames();
   const linkref = useRef<HTMLAnchorElement>(null);
 
-  if (isLoading) {
-    return <Spinner animation='border' role='status'></Spinner>;
-  }
-
   const cityStats = useMemo(() => {
-    return citiesEmptied(games!);
+    return games ? citiesEmptied(games) : [];
   }, [games]);
 
   const contractStats = useMemo(() => {
-    return contractsFulFilled(games!);
+    return games ? contractsFulFilled(games) : [];
   }, [games]);
 
   const handleDownloadClick = async () => {
@@ -42,6 +38,10 @@ const Statistics = (): JSX.Element => {
       console.log('Error fetching data ' + JSON.stringify(err));
     }
   };
+
+  if (isLoading) {
+    return <Spinner animation='border' role='status'></Spinner>;
+  }
 
   return (
     <>

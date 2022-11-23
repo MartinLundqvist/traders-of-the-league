@@ -1,57 +1,55 @@
-import { Button, Nav } from 'react-bootstrap';
+import { Button, Container, Nav, Navbar } from 'react-bootstrap';
 import { useQueryClient } from 'react-query';
-import { useNavigation } from '../contexts/NavigationProvider';
+import { useLocation } from 'react-router-dom';
 
 const Navigation = (): JSX.Element => {
-  const { activeRoute, setActiveRoute } = useNavigation();
   const queryClient = useQueryClient();
+  const { pathname } = useLocation();
 
   return (
-    <Nav className='flex-column'>
-      <Nav.Link
-        active={activeRoute === 'main'}
-        onClick={() => setActiveRoute('main')}
-      >
-        Home
-      </Nav.Link>
-      <Nav.Link
-        active={activeRoute === 'games'}
-        onClick={() => setActiveRoute('games')}
-      >
-        Games
-      </Nav.Link>
-      <Nav.Link
-        active={activeRoute === 'sessions'}
-        onClick={() => setActiveRoute('sessions')}
-      >
-        Sessions
-      </Nav.Link>
-      <Nav.Link
-        active={activeRoute === 'chats'}
-        onClick={() => setActiveRoute('chats')}
-      >
-        Chats
-      </Nav.Link>
-      <Nav.Link
-        active={activeRoute === 'players'}
-        onClick={() => setActiveRoute('players')}
-      >
-        Players
-      </Nav.Link>
-      <Nav.Link
-        active={activeRoute === 'rankings'}
-        onClick={() => setActiveRoute('rankings')}
-      >
-        Rankings
-      </Nav.Link>
-      <Nav.Link
-        active={activeRoute === 'stats'}
-        onClick={() => setActiveRoute('stats')}
-      >
-        Statistics
-      </Nav.Link>
-      <Button onClick={() => queryClient.refetchQueries()}>Refresh data</Button>
-    </Nav>
+    <Navbar>
+      <Nav className='flex-column'>
+        <Nav.Item>
+          <Nav.Link href='home' active={pathname === '/home'}>
+            Home
+          </Nav.Link>
+        </Nav.Item>
+
+        <Nav.Item>
+          <Nav.Link href='games' active={pathname === '/games'}>
+            Games
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link href='sessions' active={pathname === '/sessions'}>
+            Sessions
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link href='chats' active={pathname === '/chats'}>
+            Chats
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link href='players' active={pathname === '/players'}>
+            Players
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link href='rankings' active={pathname === '/rankings'}>
+            Rankings
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link href='statistics' active={pathname === '/statistics'}>
+            Statistics
+          </Nav.Link>
+        </Nav.Item>
+        <Button onClick={() => queryClient.refetchQueries()}>
+          Refresh data
+        </Button>
+      </Nav>
+    </Navbar>
   );
 };
 
