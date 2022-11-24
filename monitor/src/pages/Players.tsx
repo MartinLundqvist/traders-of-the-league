@@ -1,4 +1,4 @@
-import { Badge, Spinner, Table } from 'react-bootstrap';
+import { Badge, Container, Spinner, Table } from 'react-bootstrap';
 import { usePlayers } from '../hooks';
 
 const Players = (): JSX.Element => {
@@ -14,7 +14,7 @@ const Players = (): JSX.Element => {
     return <Spinner animation='border' role='status'></Spinner>;
   }
   return (
-    <>
+    <Container>
       <Table striped bordered hover size='sm'>
         <thead>
           <tr>
@@ -41,7 +41,7 @@ const Players = (): JSX.Element => {
           ))}
         </tbody>
       </Table>
-    </>
+    </Container>
   );
 };
 

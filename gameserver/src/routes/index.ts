@@ -329,7 +329,7 @@ export const createRoutes = (
   });
 
   // This route gets all player rankings
-  router.get('/playerrankings', async (req, res) => {
+  router.get('/rankings', async (req, res) => {
     const rankings = await rankingStore.getAllRankings();
 
     res.status(200).send(rankings);
@@ -346,7 +346,7 @@ export const createRoutes = (
       .send({ message: 'Verification email sent: ', success: result });
   });
 
-  router.get('/allusers', async (req, res) => {
+  router.get('/users', async (req, res) => {
     const result = await getAllUsers();
 
     res.status(200).send(result);

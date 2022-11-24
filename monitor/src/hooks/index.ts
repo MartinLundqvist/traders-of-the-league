@@ -20,8 +20,8 @@ export const useSessions = () =>
   );
 
 export const useRankings = () =>
-  useQuery<IRanking[], Error>(['/playerrankings'], () =>
-    fetch(`${url}/playerrankings`).then((res) => res.json())
+  useQuery<IRanking[], Error>(['/rankings'], () =>
+    fetch(`${url}/rankings`).then((res) => res.json())
   );
 
 export const useChats = () =>
@@ -30,8 +30,8 @@ export const useChats = () =>
   );
 
 export const usePlayers = () =>
-  useQuery<IAuth0User[], Error>(['/allusers'], () =>
-    fetch(`${url}/allusers`).then((res) => res.json())
+  useQuery<IAuth0User[], Error>(['/users'], () =>
+    fetch(`${url}/users`).then((res) => res.json())
   );
 
 export const useServerStatus = () =>

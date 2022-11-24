@@ -1,4 +1,4 @@
-import { Badge, Spinner, Table } from 'react-bootstrap';
+import { Badge, Container, Spinner, Table } from 'react-bootstrap';
 import { useChats, useGames } from '../hooks';
 
 const Chats = (): JSX.Element => {
@@ -18,7 +18,7 @@ const Chats = (): JSX.Element => {
   }
 
   return (
-    <>
+    <Container>
       <Table striped bordered hover size='sm'>
         <thead>
           <tr>
@@ -39,7 +39,7 @@ const Chats = (): JSX.Element => {
           ))}
         </tbody>
       </Table>
-    </>
+    </Container>
   );
 };
 

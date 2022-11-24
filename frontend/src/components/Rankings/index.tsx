@@ -76,7 +76,7 @@ const Rankings = ({ className }: IRankingsProps): JSX.Element => {
   useEffect(() => {
     const loadRankings = async () => {
       try {
-        const raw = await fetch(`${URL}/playerrankings`);
+        const raw = await fetch(`${URL}/rankings`);
 
         if (raw.ok) {
           const response: IRanking[] = await raw.json();

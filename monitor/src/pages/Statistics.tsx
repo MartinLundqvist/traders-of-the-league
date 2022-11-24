@@ -1,5 +1,14 @@
 import { useEffect, useMemo, useRef } from 'react';
-import { Badge, Button, Card, Col, Row, Spinner, Table } from 'react-bootstrap';
+import {
+  Badge,
+  Button,
+  Card,
+  Col,
+  Container,
+  Row,
+  Spinner,
+  Table,
+} from 'react-bootstrap';
 import { useGames } from '../hooks';
 import { citiesEmptied, contractsFulFilled } from '../utils/gameStatistics';
 
@@ -44,7 +53,7 @@ const Statistics = (): JSX.Element => {
   }
 
   return (
-    <>
+    <Container>
       <Row xs={1} md={2} className='g-4'>
         <Col>
           <Card>
@@ -103,7 +112,7 @@ const Statistics = (): JSX.Element => {
         </Button>
         <a ref={linkref}></a>
       </Row>
-    </>
+    </Container>
   );
 };
 

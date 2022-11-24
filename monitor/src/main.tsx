@@ -7,7 +7,6 @@ import { createRoutes } from './routes';
 
 const queryClient = new QueryClient();
 
-// const router = createRoutes(queryClient);
 const router = createRoutes();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

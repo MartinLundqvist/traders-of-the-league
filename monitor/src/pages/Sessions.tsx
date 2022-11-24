@@ -1,4 +1,4 @@
-import { Badge, Spinner, Table } from 'react-bootstrap';
+import { Badge, Container, Spinner, Table } from 'react-bootstrap';
 import { useSessions } from '../hooks';
 
 const Sessions = (): JSX.Element => {
@@ -9,7 +9,7 @@ const Sessions = (): JSX.Element => {
   }
 
   return (
-    <>
+    <Container>
       <Table striped bordered hover size='sm'>
         <thead>
           <tr>
@@ -30,7 +30,7 @@ const Sessions = (): JSX.Element => {
           ))}
         </tbody>
       </Table>
-    </>
+    </Container>
   );
 };
 

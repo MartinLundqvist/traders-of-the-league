@@ -1,4 +1,4 @@
-import { Badge, Spinner, Table } from 'react-bootstrap';
+import { Badge, Container, Spinner, Table } from 'react-bootstrap';
 import { useRankings } from '../hooks';
 
 const Rankings = (): JSX.Element => {
@@ -9,7 +9,7 @@ const Rankings = (): JSX.Element => {
   }
 
   return (
-    <>
+    <Container>
       <Table striped bordered hover size='sm'>
         <thead>
           <tr>
@@ -32,7 +32,7 @@ const Rankings = (): JSX.Element => {
           ))}
         </tbody>
       </Table>
-    </>
+    </Container>
   );
 };
 

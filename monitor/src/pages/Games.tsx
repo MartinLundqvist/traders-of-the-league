@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Badge, Spinner, Table } from 'react-bootstrap';
+import { Badge, Container, Spinner, Table } from 'react-bootstrap';
 // import { QueryClient } from '@tanstack/react-query';
 // import { useLoaderData } from 'react-router-dom';
 import { IGame } from '../../../shared/types';
@@ -64,7 +64,7 @@ const Games = (): JSX.Element => {
   }
 
   return (
-    <>
+    <Container>
       <Table striped bordered hover size='sm'>
         <thead>
           <tr>
@@ -85,7 +85,7 @@ const Games = (): JSX.Element => {
           ))}
         </tbody>
       </Table>
-    </>
+    </Container>
   );
 };
 

@@ -1,10 +1,18 @@
-import { Alert, Badge, Card, Col, Row, Spinner } from 'react-bootstrap';
+import {
+  Alert,
+  Badge,
+  Card,
+  Col,
+  Container,
+  Row,
+  Spinner,
+} from 'react-bootstrap';
 
 import { useGames, useServerStatus, useSessions } from '../hooks';
 
 const Main = (): JSX.Element => {
   return (
-    <>
+    <Container>
       <ServerOnlineAlert />
       <Row xs={1} md={2} className='g-4'>
         <Col>
@@ -14,7 +22,7 @@ const Main = (): JSX.Element => {
           <SessionCard />
         </Col>
       </Row>
-    </>
+    </Container>
   );
 };
 

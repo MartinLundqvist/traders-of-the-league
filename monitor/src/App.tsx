@@ -1,4 +1,3 @@
-import { Container } from 'react-bootstrap';
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from './components/Header';
@@ -39,19 +38,13 @@ const App = (): JSX.Element => {
   return (
     <Wrapper>
       <div className='header'>
-        <Container>
-          <Header />
-        </Container>
+        <Header />
       </div>
       <div className='navigation'>
-        <Container>
-          <Navigation />
-        </Container>
+        <Navigation />
       </div>
       <div className='content'>
-        <Container>
-          <Outlet />
-        </Container>
+        <Outlet />
       </div>
     </Wrapper>
   );
