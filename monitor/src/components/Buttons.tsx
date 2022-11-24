@@ -48,3 +48,23 @@ export const RefreshDataButton = (): JSX.Element => {
     </Button>
   );
 };
+
+export const SortButton = ({
+  active,
+  ascending,
+  onClick,
+}: {
+  active?: boolean;
+  ascending?: boolean;
+  onClick: () => void;
+}): JSX.Element => {
+  const variant = active ? 'primary' : 'secondary';
+
+  const symbol = ascending ? <span>&darr;</span> : <span>&uarr;</span>;
+
+  return (
+    <Button variant={variant} size='sm' onClick={onClick}>
+      {symbol}
+    </Button>
+  );
+};
