@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import {
   IAuth0User,
   IChat,
@@ -10,31 +10,31 @@ import {
 const url = import.meta.env.VITE_URL;
 
 export const useGames = () =>
-  useQuery<IGame[], Error>('/games', () =>
+  useQuery<IGame[], Error>(['/games'], () =>
     fetch(`${url}/games`).then((res) => res.json())
   );
 
 export const useSessions = () =>
-  useQuery<ISession[], Error>('/sessions', () =>
+  useQuery<ISession[], Error>(['/sessions'], () =>
     fetch(`${url}/sessions`).then((res) => res.json())
   );
 
 export const useRankings = () =>
-  useQuery<IRanking[], Error>('/playerrankings', () =>
+  useQuery<IRanking[], Error>(['/playerrankings'], () =>
     fetch(`${url}/playerrankings`).then((res) => res.json())
   );
 
 export const useChats = () =>
-  useQuery<IChat[], Error>('/chats', () =>
+  useQuery<IChat[], Error>(['/chats'], () =>
     fetch(`${url}/chats`).then((res) => res.json())
   );
 
 export const usePlayers = () =>
-  useQuery<IAuth0User[], Error>('/allusers', () =>
+  useQuery<IAuth0User[], Error>(['/allusers'], () =>
     fetch(`${url}/allusers`).then((res) => res.json())
   );
 
 export const useServerStatus = () =>
-  useQuery<{ message: string }, Error>('/', () =>
+  useQuery<{ message: string }, Error>(['/'], () =>
     fetch(`${url}/`).then((res) => res.json())
   );

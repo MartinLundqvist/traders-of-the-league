@@ -1,49 +1,48 @@
-import { Button, Container, Nav, Navbar } from 'react-bootstrap';
-import { useQueryClient } from 'react-query';
-import { useLocation } from 'react-router-dom';
+import { Button, Nav, Navbar } from 'react-bootstrap';
+import { useQueryClient } from '@tanstack/react-query';
+import { LinkContainer } from 'react-router-bootstrap';
 
 const Navigation = (): JSX.Element => {
   const queryClient = useQueryClient();
-  const { pathname } = useLocation();
 
   return (
     <Navbar>
       <Nav className='flex-column'>
         <Nav.Item>
-          <Nav.Link href='home' active={pathname === '/home'}>
-            Home
-          </Nav.Link>
+          <LinkContainer to='home'>
+            <Nav.Link>Home</Nav.Link>
+          </LinkContainer>
         </Nav.Item>
 
         <Nav.Item>
-          <Nav.Link href='games' active={pathname === '/games'}>
-            Games
-          </Nav.Link>
+          <LinkContainer to='games'>
+            <Nav.Link>Games</Nav.Link>
+          </LinkContainer>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link href='sessions' active={pathname === '/sessions'}>
-            Sessions
-          </Nav.Link>
+          <LinkContainer to='sessions'>
+            <Nav.Link>Sessions</Nav.Link>
+          </LinkContainer>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link href='chats' active={pathname === '/chats'}>
-            Chats
-          </Nav.Link>
+          <LinkContainer to='chats'>
+            <Nav.Link>Chats</Nav.Link>
+          </LinkContainer>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link href='players' active={pathname === '/players'}>
-            Players
-          </Nav.Link>
+          <LinkContainer to='players'>
+            <Nav.Link>Players</Nav.Link>
+          </LinkContainer>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link href='rankings' active={pathname === '/rankings'}>
-            Rankings
-          </Nav.Link>
+          <LinkContainer to='rankings'>
+            <Nav.Link>Rankings</Nav.Link>
+          </LinkContainer>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link href='statistics' active={pathname === '/statistics'}>
-            Statistics
-          </Nav.Link>
+          <LinkContainer to='statistics'>
+            <Nav.Link>Statistics</Nav.Link>
+          </LinkContainer>
         </Nav.Item>
         <Button onClick={() => queryClient.refetchQueries()}>
           Refresh data

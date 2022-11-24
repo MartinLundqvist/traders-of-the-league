@@ -17,14 +17,9 @@ const Wrapper = styled.div`
     'header header'
     'navigation content';
 
-  > div {
-    padding: 0.5rem;
-    overflow-y: scroll;
-    overflow-x: hidden;
-  }
-
   .header {
     grid-area: header;
+    border-right: none;
     border-bottom: 1px solid var(--bs-dark);
   }
 
@@ -36,12 +31,12 @@ const Wrapper = styled.div`
   .content {
     padding-top: 0.5rem;
     grid-area: content;
+    overflow-y: scroll;
   }
 `;
 
 const App = (): JSX.Element => {
   return (
-    // <Container>
     <Wrapper>
       <div className='header'>
         <Container>
@@ -59,7 +54,6 @@ const App = (): JSX.Element => {
         </Container>
       </div>
     </Wrapper>
-    // </Container>
   );
 };
 
