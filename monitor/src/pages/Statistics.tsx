@@ -14,7 +14,6 @@ import { citiesEmptied, contractsFulFilled } from '../utils/gameStatistics';
 
 const Statistics = (): JSX.Element => {
   const { isLoading, error, data: games } = useGames();
-  const linkref = useRef<HTMLAnchorElement>(null);
 
   const cityStats = useMemo(() => {
     return games ? citiesEmptied(games) : [];
@@ -23,30 +22,6 @@ const Statistics = (): JSX.Element => {
   const contractStats = useMemo(() => {
     return games ? contractsFulFilled(games) : [];
   }, [games]);
-
-  const handleDownloadClick = async () => {
-    const url = import.meta.env.VITE_URL;
-
-    try {
-      const response = await fetch(`${url}/wongames`);
-      if (!response.ok) {
-        console.log('Error fetching won games');
-      }
-
-      const wonblob = await response.blob();
-      const bloburl = window.URL.createObjectURL(new Blob([wonblob]));
-
-      if (linkref && linkref.current) {
-        linkref.current.href = bloburl;
-        linkref.current.setAttribute('download', 'games.json');
-        linkref.current.click();
-      }
-
-      console.log(bloburl);
-    } catch (err) {
-      console.log('Error fetching data ' + JSON.stringify(err));
-    }
-  };
 
   if (isLoading) {
     return <Spinner animation='border' role='status'></Spinner>;
@@ -105,12 +80,6 @@ const Statistics = (): JSX.Element => {
             </Card.Body>
           </Card>
         </Col>
-      </Row>
-      <Row>
-        <Button onClick={() => handleDownloadClick()}>
-          Fetch Won Games Stats
-        </Button>
-        <a ref={linkref}></a>
       </Row>
     </Container>
   );

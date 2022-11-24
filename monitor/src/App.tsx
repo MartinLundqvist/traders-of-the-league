@@ -25,6 +25,7 @@ const Wrapper = styled.div`
   .navigation {
     grid-area: navigation;
     border-right: 1px solid var(--bs-dark);
+    padding-right: 1rem;
   }
 
   .content {
