@@ -1,16 +1,50 @@
 import { useEffect, useState } from 'react';
 import { Badge, Table } from 'react-bootstrap';
-import { ITable, TTableDataRow } from '../types';
 import { sortDataRows } from '../utils/sortDataRows';
 import { SortButton } from './Buttons';
+import { nanoid } from 'nanoid';
 
-const SortedTable = ({ table }: { table: ITable }): JSX.Element => {
+export type TTableDataRow = (string | number)[];
+
+export interface ITableColumnDef {
+  name: string;
+  cellRenderer?: (children: React.ReactNode) => JSX.Element;
+}
+
+interface IInnerTableColumnDef extends ITableColumnDef {
+  key: string;
+}
+
+export const createColumnDefs = (
+  columnDefs: ITableColumnDef[]
+): IInnerTableColumnDef[] => {
+  let results: IInnerTableColumnDef[] = [];
+
+  results = columnDefs.map((col) => ({ key: nanoid(), ...col }));
+
+  return results;
+};
+
+export const createData = (dataRows: TTableDataRow[]): TTableDataRow[] => {
+  let results: TTableDataRow[] = [];
+
+  results = dataRows.map((row) => [nanoid(), ...row]);
+
+  return results;
+};
+
+export interface ISortedTable {
+  columnDefs: IInnerTableColumnDef[];
+  data: TTableDataRow[];
+}
+
+const SortedTable = ({ table }: { table: ISortedTable }): JSX.Element => {
   const [sortingState, setSortingState] = useState<
     { active: boolean; ascending: boolean }[]
   >([]);
   const [sortedData, setSortedData] = useState<TTableDataRow[]>([]);
 
-  const { columns, keys, badges, data } = table;
+  const { columnDefs, data } = table;
 
   const handleSortButtonClick = (index: number) => {
     let _newSortingState = [...sortingState];
@@ -32,13 +66,14 @@ const SortedTable = ({ table }: { table: ITable }): JSX.Element => {
   useEffect(() => {
     setSortedData(data);
 
-    let _initialSortingState = columns.map((column, index) => ({
+    let _initialSortingState = columnDefs.map((column, index) => ({
       active: false,
       ascending: true,
     }));
-    _initialSortingState[0].active = true;
+    // _initialSortingState = [{active: false, ascending: true}, ..._initialSortingState];
+    _initialSortingState[1].active = true;
     setSortingState(_initialSortingState);
-  }, [columns, data]);
+  }, [columnDefs, data]);
 
   useEffect(() => {
     const sortTable = () => {
@@ -50,25 +85,27 @@ const SortedTable = ({ table }: { table: ITable }): JSX.Element => {
       }
 
       setSortedData((_sortedData) =>
-        sortDataRows([..._sortedData], index, sortingState[index].ascending)
+        sortDataRows([..._sortedData], index + 1, sortingState[index].ascending)
       );
     };
 
-    console.log(sortingState);
+    // console.log(sortingState);
 
     sortingState.length > 0 && sortTable();
   }, [sortingState]);
 
   if (sortingState.length === 0) return <></>;
 
+  // console.log(sortedData);
+
   return (
     <Table striped bordered hover size='sm'>
       <thead>
         <tr>
-          {columns.map((column, index) => (
-            <th key={column}>
+          {columnDefs.map((column, index) => (
+            <th key={column.key}>
               <div className='d-flex justify-content-between align-items-center bd-highlight mb-2'>
-                <div>{column}</div>
+                <div>{column.name}</div>
                 <SortButton
                   onClick={() => handleSortButtonClick(index)}
                   active={sortingState[index].active}
@@ -80,11 +117,13 @@ const SortedTable = ({ table }: { table: ITable }): JSX.Element => {
         </tr>
       </thead>
       <tbody>
-        {sortedData.map((row, index) => (
-          <tr key={keys[index]}>
-            {row.map((cell, index) => (
-              <td key={index}>
-                {badges[index] ? <Badge>{cell}</Badge> : cell}
+        {sortedData.map((row, rowIndex) => (
+          <tr key={row[0]}>
+            {row.slice(1).map((cell, colIndex) => (
+              <td key={colIndex}>
+                {columnDefs[colIndex].cellRenderer
+                  ? columnDefs[colIndex].cellRenderer!(cell)
+                  : cell}
               </td>
             ))}
           </tr>

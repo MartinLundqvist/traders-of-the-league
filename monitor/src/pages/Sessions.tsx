@@ -1,5 +1,6 @@
 import { Badge, Container, Spinner, Table } from 'react-bootstrap';
 import { useSessions } from '../hooks';
+import { useState } from 'react';
 
 const Sessions = (): JSX.Element => {
   const { isLoading, error, data: sessions } = useSessions();

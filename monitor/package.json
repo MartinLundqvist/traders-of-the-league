@@ -16,6 +16,7 @@
     "bootstrap": "^5.2.2",
     "D": "^1.0.0",
     "express": "^4.18.1",
+    "nanoid": "^4.0.0",
     "react": "^18.0.0",
     "react-bootstrap": "^2.6.0",
     "react-dom": "^18.0.0",
