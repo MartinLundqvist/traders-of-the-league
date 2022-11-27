@@ -1,4 +1,4 @@
-import { TTableDataRow } from '../types';
+import { TTableDataRow } from '../components/SortedTable';
 
 export const sortDataRows = (
   dataRows: TTableDataRow[],

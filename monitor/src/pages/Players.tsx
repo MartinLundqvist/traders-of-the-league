@@ -1,46 +1,47 @@
-import { Badge, Container, Spinner, Table } from 'react-bootstrap';
+import { useMemo } from 'react';
+import { Container, Spinner } from 'react-bootstrap';
+import { IAuth0User } from '../../../shared/types';
+import { RenderVerifiedBadgeCell } from '../components/RenderBadgeCell';
+import SortedTable, {
+  createColumnDefs,
+  createData,
+} from '../components/SortedTable';
 import { usePlayers } from '../hooks';
+import { stringToLocalDate } from '../utils/stringToLocalDate';
+
+const createTable = (players: IAuth0User[]) => {
+  const columnDefs = createColumnDefs([
+    { name: 'User name' },
+    { name: 'Email address' },
+    { name: 'Email verified', cellRenderer: RenderVerifiedBadgeCell },
+    { name: 'Joined', cellRenderer: stringToLocalDate },
+    { name: 'Last login', cellRenderer: stringToLocalDate },
+  ]);
+
+  const data = createData(
+    players.map((player) => [
+      player.name,
+      player.email,
+      player.email_verified,
+      player.created_at,
+      player.last_login,
+    ])
+  );
+
+  return { columnDefs, data };
+};
 
 const Players = (): JSX.Element => {
   const { isLoading, error, data: players } = usePlayers();
 
-  const stringToLocalDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    return date.toDateString();
-    // return date.toLocaleString();
-  };
+  const table = useMemo(() => players && createTable(players), [players]);
 
-  if (isLoading) {
+  if (isLoading || !table) {
     return <Spinner animation='border' role='status'></Spinner>;
   }
   return (
     <Container>
-      <Table striped bordered hover size='sm'>
-        <thead>
-          <tr>
-            <th>User name</th>
-            <th>Email address</th>
-            <th>Email verified?</th>
-            <th>Joined</th>
-            <th>Last login</th>
-          </tr>
-        </thead>
-        <tbody>
-          {players?.map((player, index) => (
-            <tr key={player.user_id + index}>
-              <td>{player.name}</td>
-              <td>{player.email}</td>
-              <td>
-                <Badge bg={player.email_verified ? 'success' : 'warning'}>
-                  {player.email_verified ? 'Verified' : 'Not Verified'}
-                </Badge>
-              </td>
-              <td>{stringToLocalDate(player.created_at)}</td>
-              <td>{stringToLocalDate(player.last_login)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+      <SortedTable columnDefs={table.columnDefs} data={table.data} />
     </Container>
   );
 };

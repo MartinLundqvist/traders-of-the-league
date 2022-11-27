@@ -1,36 +1,38 @@
+import { useMemo } from 'react';
 import { Badge, Container, Spinner, Table } from 'react-bootstrap';
+import { ISession } from '../../../shared/types';
+import { RenderConnectedBadgeCell } from '../components/RenderBadgeCell';
+import SortedTable, {
+  createColumnDefs,
+  createData,
+} from '../components/SortedTable';
 import { useSessions } from '../hooks';
-import { useState } from 'react';
+
+const createTable = (sessions: ISession[]) => {
+  const columnDefs = createColumnDefs([
+    { name: 'User name' },
+    { name: 'Connected', cellRenderer: RenderConnectedBadgeCell },
+  ]);
+
+  const data = createData(
+    sessions.map((session) => [session.user.name, session.user.connected])
+  );
+
+  return { columnDefs, data };
+};
 
 const Sessions = (): JSX.Element => {
   const { isLoading, error, data: sessions } = useSessions();
 
-  if (isLoading) {
+  const table = useMemo(() => sessions && createTable(sessions), [sessions]);
+
+  if (isLoading || !table) {
     return <Spinner animation='border' role='status'></Spinner>;
   }
 
   return (
     <Container>
-      <Table striped bordered hover size='sm'>
-        <thead>
-          <tr>
-            <th>User name</th>
-            <th>Connected?</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sessions?.map((session, index) => (
-            <tr key={session.uuid + index}>
-              <td>{session.user.name}</td>
-              <td>
-                <Badge bg={session.user.connected ? 'success' : 'secondary'}>
-                  {session.user.connected ? 'Online' : 'Offline'}
-                </Badge>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+      <SortedTable columnDefs={table.columnDefs} data={table.data} />
     </Container>
   );
 };

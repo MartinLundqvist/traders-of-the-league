@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
-import { Badge, Table } from 'react-bootstrap';
+import { Container, Pagination, Table } from 'react-bootstrap';
 import { sortDataRows } from '../utils/sortDataRows';
 import { SortButton } from './Buttons';
 import { nanoid } from 'nanoid';
 
-export type TTableDataRow = (string | number)[];
+export type TTableDataRow = (string | number | boolean)[];
 
 export interface ITableColumnDef {
   name: string;
-  cellRenderer?: (children: React.ReactNode) => JSX.Element;
+  cellRenderer?: (children: any) => JSX.Element | string | number;
 }
 
 interface IInnerTableColumnDef extends ITableColumnDef {
@@ -36,15 +36,21 @@ export const createData = (dataRows: TTableDataRow[]): TTableDataRow[] => {
 export interface ISortedTable {
   columnDefs: IInnerTableColumnDef[];
   data: TTableDataRow[];
+  rowsPerPage?: number;
 }
 
-const SortedTable = ({ table }: { table: ISortedTable }): JSX.Element => {
+const SortedTable = ({
+  columnDefs,
+  data,
+  rowsPerPage = 15,
+}: ISortedTable): JSX.Element => {
   const [sortingState, setSortingState] = useState<
     { active: boolean; ascending: boolean }[]
   >([]);
   const [sortedData, setSortedData] = useState<TTableDataRow[]>([]);
+  const [showPage, setShowPage] = useState(1);
 
-  const { columnDefs, data } = table;
+  const lastPage = Math.ceil(data.length / rowsPerPage);
 
   const handleSortButtonClick = (index: number) => {
     let _newSortingState = [...sortingState];
@@ -63,6 +69,20 @@ const SortedTable = ({ table }: { table: ISortedTable }): JSX.Element => {
     setSortingState(_newSortingState);
   };
 
+  const handlePageButtonClick = (increment: number) => {
+    if (showPage + increment > lastPage) {
+      setShowPage(1);
+      return;
+    }
+
+    if (showPage + increment < 1) {
+      setShowPage(lastPage);
+      return;
+    }
+
+    setShowPage((_prevPage) => _prevPage + increment);
+  };
+
   useEffect(() => {
     setSortedData(data);
 
@@ -70,8 +90,7 @@ const SortedTable = ({ table }: { table: ISortedTable }): JSX.Element => {
       active: false,
       ascending: true,
     }));
-    // _initialSortingState = [{active: false, ascending: true}, ..._initialSortingState];
-    _initialSortingState[1].active = true;
+    _initialSortingState[0].active = true;
     setSortingState(_initialSortingState);
   }, [columnDefs, data]);
 
@@ -89,14 +108,10 @@ const SortedTable = ({ table }: { table: ISortedTable }): JSX.Element => {
       );
     };
 
-    // console.log(sortingState);
-
     sortingState.length > 0 && sortTable();
   }, [sortingState]);
 
   if (sortingState.length === 0) return <></>;
-
-  // console.log(sortedData);
 
   return (
     <Table striped bordered hover size='sm'>
@@ -117,18 +132,37 @@ const SortedTable = ({ table }: { table: ISortedTable }): JSX.Element => {
         </tr>
       </thead>
       <tbody>
-        {sortedData.map((row, rowIndex) => (
-          <tr key={row[0]}>
-            {row.slice(1).map((cell, colIndex) => (
-              <td key={colIndex}>
-                {columnDefs[colIndex].cellRenderer
-                  ? columnDefs[colIndex].cellRenderer!(cell)
-                  : cell}
-              </td>
-            ))}
-          </tr>
-        ))}
+        {sortedData
+          .slice((showPage - 1) * rowsPerPage, showPage * rowsPerPage)
+          .map((row, rowIndex) => (
+            <tr key={row[0] as string}>
+              {row.slice(1).map((cell, colIndex) => (
+                <td key={colIndex}>
+                  {columnDefs[colIndex].cellRenderer
+                    ? columnDefs[colIndex].cellRenderer!(cell)
+                    : cell}
+                </td>
+              ))}
+            </tr>
+          ))}
       </tbody>
+      <tfoot>
+        <tr>
+          <td colSpan={columnDefs.length}>
+            <div className='d-flex justify-content-center align-items pt-2'>
+              <Pagination>
+                <Pagination.First onClick={() => setShowPage(1)} />
+                <Pagination.Prev onClick={() => handlePageButtonClick(-1)} />
+                <Pagination.Item>
+                  Page {showPage} / {lastPage}
+                </Pagination.Item>
+                <Pagination.Next onClick={() => handlePageButtonClick(1)} />
+                <Pagination.Last onClick={() => setShowPage(lastPage)} />
+              </Pagination>
+            </div>
+          </td>
+        </tr>
+      </tfoot>
     </Table>
   );
 };

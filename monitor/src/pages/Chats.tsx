@@ -1,5 +1,32 @@
+import { table } from 'console';
+import { useMemo } from 'react';
 import { Badge, Container, Spinner, Table } from 'react-bootstrap';
+import { IChat, IGame } from '../../../shared/types';
+import { RenderBadgeCell } from '../components/RenderBadgeCell';
+import SortedTable, {
+  createColumnDefs,
+  createData,
+} from '../components/SortedTable';
 import { useChats, useGames } from '../hooks';
+
+const createTable = (chats: IChat[], games: IGame[]) => {
+  const columnDefs = createColumnDefs([
+    { name: 'Game name' },
+    { name: '# messages', cellRenderer: RenderBadgeCell },
+  ]);
+
+  let data = createData(
+    chats.map((chat) => {
+      const game = games.find((game) => game.uuid === chat.gameUuid);
+
+      return [game?.name ?? '(Not found)', chat.messages.length];
+    })
+  );
+
+  // data = createData(data);
+
+  return { columnDefs, data };
+};
 
 const Chats = (): JSX.Element => {
   const {
@@ -13,32 +40,18 @@ const Chats = (): JSX.Element => {
     data: chats,
   } = useChats();
 
-  if (isLoadingGames || isLoadingChats) {
+  const table = useMemo(
+    () => games && chats && createTable(chats, games),
+    [games, chats]
+  );
+
+  if (isLoadingGames || isLoadingChats || !table) {
     return <Spinner animation='border' role='status'></Spinner>;
   }
 
   return (
     <Container>
-      <Table striped bordered hover size='sm'>
-        <thead>
-          <tr>
-            <th>Game name</th>
-            <th># messages</th>
-          </tr>
-        </thead>
-        <tbody>
-          {chats?.map((chat, index) => (
-            <tr key={chat.gameUuid + index}>
-              <td>
-                {games?.find((game) => game.uuid === chat.gameUuid)?.name}
-              </td>
-              <td>
-                <Badge>{chat.messages.length}</Badge>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+      <SortedTable columnDefs={table.columnDefs} data={table.data} />
     </Container>
   );
 };

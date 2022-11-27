@@ -1,13 +1,12 @@
 import { useMemo } from 'react';
-import { Badge, Container, Spinner } from 'react-bootstrap';
+import { Container, Spinner } from 'react-bootstrap';
 import { IGame } from '../../../shared/types';
-import SortedTable from '../components/SortedTable';
-import { useGames } from '../hooks';
-import {
-  TTableDataRow,
+import SortedTable, {
   createData,
   createColumnDefs,
 } from '../components/SortedTable';
+import { useGames } from '../hooks';
+import { RenderBadgeCell } from '../components/RenderBadgeCell';
 
 const createTable = (games: IGame[]) => {
   const columnDefs = createColumnDefs([
@@ -15,17 +14,13 @@ const createTable = (games: IGame[]) => {
     { name: 'Status' },
     {
       name: '# players',
-      cellRenderer: (children: React.ReactNode) => <Badge>{children}</Badge>,
+      cellRenderer: RenderBadgeCell,
     },
   ]);
 
-  let data: TTableDataRow[] = [];
-
-  games.forEach((game) => {
-    data.push([game.name, game.state.status, game.players.length]);
-  });
-
-  data = createData(data);
+  const data = createData(
+    games.map((game) => [game.name, game.state.status, game.players.length])
+  );
 
   return { columnDefs, data };
 };
@@ -41,7 +36,7 @@ const Games = (): JSX.Element => {
 
   return (
     <Container>
-      <SortedTable table={table} />
+      <SortedTable columnDefs={table.columnDefs} data={table.data} />
     </Container>
   );
 };

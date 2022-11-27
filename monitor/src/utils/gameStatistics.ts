@@ -1,4 +1,5 @@
 import { IGame } from '../../../shared/types';
+import { createContractUuid } from './createContractUuid';
 
 interface ICityEmptied {
   cityName: string;
@@ -42,12 +43,24 @@ export const citiesEmptied = (games: IGame[]): ICityEmptied[] => {
 };
 
 interface IContractFulfilled {
-  contractName: string;
+  uuid: string;
   nrFulFilled: number;
+  region: string;
+  color_1: string;
+  color_2: string;
+  value: number;
+}
+
+interface IMapEntry {
+  nrFulFilled: number;
+  region: string;
+  color_1: string;
+  color_2: string;
+  value: number;
 }
 
 export const contractsFulFilled = (games: IGame[]): IContractFulfilled[] => {
-  const _map = new Map<string, number>();
+  const _map = new Map<string, IMapEntry>();
 
   // Get the games that have been won
   //   const wonGames = games;
@@ -59,16 +72,23 @@ export const contractsFulFilled = (games: IGame[]): IContractFulfilled[] => {
     game.players.forEach((player) => {
       // Iterate over all contracts fulfilled
       player.contractsFulfilled.forEach((contract) => {
-        const currentValue = _map.get(contract.uuid);
-        const newValue = currentValue ? currentValue + 1 : 1;
-        _map.set(contract.uuid, newValue);
+        const contractUuid = createContractUuid(contract);
+        const currentValue = _map.get(contractUuid);
+        const newValue = currentValue ? currentValue.nrFulFilled + 1 : 1;
+        _map.set(contractUuid, {
+          nrFulFilled: newValue,
+          region: contract.region,
+          color_1: contract.cargo[0],
+          color_2: contract.cargo[1],
+          value: contract.value,
+        });
       });
     });
   });
 
   const results: IContractFulfilled[] = [];
   _map.forEach((value, key) => {
-    results.push({ contractName: key, nrFulFilled: value });
+    results.push({ uuid: key, ...value });
   });
 
   results.sort((a, b) => b.nrFulFilled - a.nrFulFilled);
