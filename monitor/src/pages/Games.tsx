@@ -7,9 +7,11 @@ import SortedTable, {
 } from '../components/SortedTable';
 import { useGames } from '../hooks';
 import { RenderBadgeCell } from '../components/RenderBadgeCell';
+import { epochToLocalDate } from '../utils/dateRenderers';
 
 const createTable = (games: IGame[]) => {
   const columnDefs = createColumnDefs([
+    { name: 'Started' },
     { name: 'Game name' },
     { name: 'Status' },
     {
@@ -19,7 +21,12 @@ const createTable = (games: IGame[]) => {
   ]);
 
   const data = createData(
-    games.map((game) => [game.name, game.state.status, game.players.length])
+    games.map((game) => [
+      epochToLocalDate(game.startTime),
+      game.name,
+      game.state.status,
+      game.players.length,
+    ])
   );
 
   return { columnDefs, data };

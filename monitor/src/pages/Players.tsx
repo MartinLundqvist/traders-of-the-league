@@ -7,7 +7,7 @@ import SortedTable, {
   createData,
 } from '../components/SortedTable';
 import { usePlayers } from '../hooks';
-import { stringToLocalDate } from '../utils/stringToLocalDate';
+import { stringToLocalDate } from '../utils/dateRenderers';
 
 const createTable = (players: IAuth0User[]) => {
   const columnDefs = createColumnDefs([
