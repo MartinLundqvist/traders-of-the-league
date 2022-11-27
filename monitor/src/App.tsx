@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from './components/Header';
 import Navigation from './components/Navigation';
+import Auth0CustomProvider from './contexts/Auth0CustomProvider';
 
 const Wrapper = styled.div`
   display: grid;
@@ -37,17 +38,19 @@ const Wrapper = styled.div`
 
 const App = (): JSX.Element => {
   return (
-    <Wrapper>
-      <div className='header'>
-        <Header />
-      </div>
-      <div className='navigation'>
-        <Navigation />
-      </div>
-      <div className='content'>
-        <Outlet />
-      </div>
-    </Wrapper>
+    <Auth0CustomProvider>
+      <Wrapper>
+        <div className='header'>
+          <Header />
+        </div>
+        <div className='navigation'>
+          <Navigation />
+        </div>
+        <div className='content'>
+          <Outlet />
+        </div>
+      </Wrapper>
+    </Auth0CustomProvider>
   );
 };
 

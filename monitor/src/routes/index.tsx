@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../App';
+import APITests from '../pages/APITests';
 import Chats from '../pages/Chats';
 import Games from '../pages/Games';
 import Main from '../pages/Main';
@@ -45,6 +46,10 @@ export const createRoutes = () => {
         {
           path: '/statistics',
           element: <Statistics />,
+        },
+        {
+          path: '/apitests',
+          element: <APITests />,
         },
       ],
     },

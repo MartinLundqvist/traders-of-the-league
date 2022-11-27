@@ -36,9 +36,12 @@ const Players = (): JSX.Element => {
 
   const table = useMemo(() => players && createTable(players), [players]);
 
+  console.log(players);
+
   if (isLoading || !table) {
     return <Spinner animation='border' role='status'></Spinner>;
   }
+
   return (
     <Container>
       <SortedTable columnDefs={table.columnDefs} data={table.data} />
