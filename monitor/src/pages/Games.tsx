@@ -11,7 +11,7 @@ import { epochToLocalDate } from '../utils/dateRenderers';
 
 const createTable = (games: IGame[]) => {
   const columnDefs = createColumnDefs([
-    { name: 'Started' },
+    { name: 'Started', cellRenderer: epochToLocalDate },
     { name: 'Game name' },
     { name: 'Status' },
     {
@@ -22,7 +22,7 @@ const createTable = (games: IGame[]) => {
 
   const data = createData(
     games.map((game) => [
-      epochToLocalDate(game.startTime),
+      game.startTime || 0,
       game.name,
       game.state.status,
       game.players.length,
