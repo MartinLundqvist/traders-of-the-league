@@ -1,4 +1,9 @@
-import express from 'express';
+import express, {
+  NextFunction,
+  Response,
+  Request,
+  ErrorRequestHandler,
+} from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
@@ -17,7 +22,12 @@ import {
   bugReportModel,
   rankingModel,
 } from './models';
-import { createGameAPIRoutes, createRoutes } from './routes';
+import {
+  createErrorHandler,
+  createGameAPIRoutes,
+  createProtectedRoutes,
+  createRoutes,
+} from './routes';
 import { RankingStore } from './stores/rankingStore';
 
 // Persist whether we are in development mode or not, and whether we are starting up only an in-memory version
@@ -66,6 +76,10 @@ app.use(
 // Configure and wire up rest API for the game server in case we are in AI mode.
 if (IN_MEMORY)
   app.use('/gameapi', createGameAPIRoutes(sessionStore, gameStore));
+
+// app.use('/protected', createProtectedRoutes());
+
+// app.use(createErrorHandler());
 
 // Set up the HTTP Server and connect it to the express app
 const httpServer = createServer(app);

@@ -19,7 +19,13 @@ const Page = (): JSX.Element => {
     try {
       const token = await getAccessTokenSilently();
 
-      const response = await fetch(`${URL}/protected/test`);
+      const response = await fetch(`${URL}/protected/test`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // const response = await fetch(`${URL}/protected/test`);
 
       if (response.ok) {
         const result = await response.json();

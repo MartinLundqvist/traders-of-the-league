@@ -21,16 +21,16 @@ const Auth0CustomProvider = ({
   console.log(window.location.pathname);
 
   return (
-    <Auth0Provider
-      clientId={CLIENT_ID}
-      domain={DOMAIN}
-      redirectUri={window.location.origin}
-      onRedirectCallback={onRedirectCallback}
-      audience={AUDIENCE}
-      scope='write:database'
+    <div
+    // clientId={CLIENT_ID}
+    // domain={DOMAIN}
+    // redirectUri={window.location.origin}
+    // onRedirectCallback={onRedirectCallback}
+    // audience={AUDIENCE}
+    // scope='write:database'
     >
       {children}
-    </Auth0Provider>
+    </div>
   );
 };
 

@@ -26,6 +26,8 @@ const getAuthToken = async (): Promise<string | null> => {
   try {
     const response = await axios(options);
 
+    console.log(response.data);
+
     if (response.status === 200) return response.data.access_token;
     return null;
   } catch (err) {

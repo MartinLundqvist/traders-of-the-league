@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { nanoid } from 'nanoid';
 import { GameEngine } from '../game-engine';
 import { ISession } from '../../../shared/types';
@@ -8,6 +8,9 @@ import { ChatStore } from '../stores/chatStore';
 import { BugReportStore } from '../stores/bugReportStore';
 import { getAllUsers, resendVerificationEmail } from '../auth-controllers';
 import { RankingStore } from '../stores/rankingStore';
+import { expressjwt, GetVerificationKey } from 'express-jwt';
+import { expressJwtSecret } from 'jwks-rsa';
+import guard from 'express-jwt-permissions';
 
 export const createGameAPIRoutes = (
   sessionStore: SessionStore,
@@ -355,6 +358,47 @@ export const createRoutes = (
   // This is merely for health checks. Probably don't even need the express package for this app hmm....
   router.get('/', (req, res) => {
     res.status(200).send({ message: 'Ok' });
+  });
+
+  return router;
+};
+
+export const createProtectedRoutes = (): Router => {
+  const router = Router();
+
+  const secret = expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: 'https://traders.eu.auth0.com/.well-known/jwks.json',
+  }) as GetVerificationKey;
+
+  router.use(
+    expressjwt({
+      secret: secret,
+      audience: 'https://hanseaticmonitor.fly.dev/api/',
+      issuer: 'https://traders.eu.auth0.com/',
+      algorithms: ['RS256'],
+    })
+  );
+
+  router.use(guard({ requestProperty: 'auth' }).check('write:database'));
+
+  router.get('/test', (req, res) => {
+    res.status(200).send({ message: 'OK' });
+  });
+
+  return router;
+};
+
+export const createErrorHandler = (): Router => {
+  const router = Router();
+
+  router.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    console.error(err);
+    if (res.headersSent) return next(err);
+
+    res.status(500).send(err.message);
   });
 
   return router;
