@@ -1,3 +1,4 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import { useQuery } from '@tanstack/react-query';
 import {
   IAuth0User,
@@ -29,31 +30,22 @@ export const useChats = () =>
     fetch(`${url}/chats`).then((res) => res.json())
   );
 
-// export const usePlayers = () =>
-//   useQuery<IAuth0User[], Error>(['/users'], () =>
-//     fetch(`${url}/users`)
-//       .then((res) => res.json())
-//       .catch((err) => err.message)
-//   );
-
 export const usePlayers = () =>
-  useQuery<IAuth0User[], Error>(['/users'], async () => {
-    try {
-      const raw = await fetch(`${url}/users`);
-      let response;
-
-      if (raw.ok) {
-        response = await raw.json();
-        return response;
-      }
-
-      throw new Error(response);
-    } catch (err) {
-      throw err;
-    }
-  });
+  useQuery<IAuth0User[], Error>(['/users'], () =>
+    fetch(`${url}/users`).then((res) => res.json())
+  );
 
 export const useServerStatus = () =>
   useQuery<{ message: string }, Error>(['/'], () =>
     fetch(`${url}/`).then((res) => res.json())
   );
+
+export const useAdmin = (): boolean => {
+  const { user } = useAuth0();
+
+  if (!user) return false;
+
+  if (user['https://hanseaticmonitor/roles'].length === 0) return false;
+
+  return user['https://hanseaticmonitor/roles'].includes('Game Administrator');
+};

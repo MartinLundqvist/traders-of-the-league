@@ -77,7 +77,7 @@ app.use(
 if (IN_MEMORY)
   app.use('/gameapi', createGameAPIRoutes(sessionStore, gameStore));
 
-// app.use('/protected', createProtectedRoutes());
+app.use('/protected', createProtectedRoutes());
 
 // app.use(createErrorHandler());
 

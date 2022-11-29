@@ -1,18 +1,19 @@
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 import { useState } from 'react';
 import { Button, Container, Spinner } from 'react-bootstrap';
+import { useAdmin } from '../hooks';
 
 const URL = import.meta.env.VITE_URL;
 
 const Page = (): JSX.Element => {
   const {
-    user,
     isAuthenticated,
     isLoading,
     loginWithRedirect,
     logout,
     getAccessTokenSilently,
   } = useAuth0();
+  const isAdmin = useAdmin();
   const [result, setResult] = useState('');
 
   const testAPICall = async () => {

@@ -1,7 +1,11 @@
-import { Button, Col, Container, Nav, Navbar, Row } from 'react-bootstrap';
+import { Col, Container, Nav, Navbar, Row } from 'react-bootstrap';
 import { useQueryClient } from '@tanstack/react-query';
 import { LinkContainer } from 'react-router-bootstrap';
-import { FetchWonGameDataButton, RefreshDataButton } from './Buttons';
+import {
+  AuthButton,
+  FetchWonGameDataButton,
+  RefreshDataButton,
+} from './Buttons';
 
 const Navigation = (): JSX.Element => {
   const queryClient = useQueryClient();
@@ -56,6 +60,9 @@ const Navigation = (): JSX.Element => {
         </Row>
         <Row>
           <FetchWonGameDataButton />
+        </Row>
+        <Row>
+          <AuthButton />
         </Row>
       </Col>
     </Container>

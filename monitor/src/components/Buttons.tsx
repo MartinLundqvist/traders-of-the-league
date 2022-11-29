@@ -1,3 +1,4 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRef } from 'react';
 import { Button } from 'react-bootstrap';
@@ -67,4 +68,13 @@ export const SortButton = ({
       {symbol}
     </Button>
   );
+};
+
+export const AuthButton = (): JSX.Element => {
+  const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
+
+  if (!isAuthenticated)
+    return <Button onClick={() => loginWithRedirect()}>Login</Button>;
+
+  return <Button onClick={() => logout()}>Logout</Button>;
 };
