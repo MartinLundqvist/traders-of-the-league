@@ -7,13 +7,14 @@ const CLIENT_SECRET = process.env.AUTH_CLIENT_SECRET;
 const DOMAIN = process.env.AUTH_DOMAIN;
 const AUDIENCE = process.env.AUTH_AUDIENCE;
 
-const getAuthToken = async (): Promise<string | null> => {
+export const getAuthToken = async (): Promise<string | null> => {
   const options: AxiosRequestConfig = {
     baseURL: DOMAIN,
     url: '/oauth/token',
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Accept-Encoding': 'application/json',
     },
     data: {
       client_id: CLIENT_ID,
