@@ -14,23 +14,20 @@ const Auth0CustomProvider = ({
 }: IAuth0CustomProviderProps): JSX.Element => {
   const navigate = useNavigate();
   const onRedirectCallback = (appState: AppState | undefined) => {
-    console.log(appState);
     navigate((appState && appState.returnTo) || window.location.pathname);
   };
 
-  console.log(window.location.pathname);
-
   return (
-    <div
-    // clientId={CLIENT_ID}
-    // domain={DOMAIN}
-    // redirectUri={window.location.origin}
-    // onRedirectCallback={onRedirectCallback}
-    // audience={AUDIENCE}
-    // scope='write:database'
+    <Auth0Provider
+      clientId={CLIENT_ID}
+      domain={DOMAIN}
+      redirectUri={window.location.origin}
+      onRedirectCallback={onRedirectCallback}
+      audience={AUDIENCE}
+      scope='write:database'
     >
       {children}
-    </div>
+    </Auth0Provider>
   );
 };
 

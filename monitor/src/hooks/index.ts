@@ -29,10 +29,29 @@ export const useChats = () =>
     fetch(`${url}/chats`).then((res) => res.json())
   );
 
+// export const usePlayers = () =>
+//   useQuery<IAuth0User[], Error>(['/users'], () =>
+//     fetch(`${url}/users`)
+//       .then((res) => res.json())
+//       .catch((err) => err.message)
+//   );
+
 export const usePlayers = () =>
-  useQuery<IAuth0User[], Error>(['/users'], () =>
-    fetch(`${url}/users`).then((res) => res.json())
-  );
+  useQuery<IAuth0User[], Error>(['/users'], async () => {
+    try {
+      const raw = await fetch(`${url}/users`);
+      let response;
+
+      if (raw.ok) {
+        response = await raw.json();
+        return response;
+      }
+
+      throw new Error(response);
+    } catch (err) {
+      throw err;
+    }
+  });
 
 export const useServerStatus = () =>
   useQuery<{ message: string }, Error>(['/'], () =>

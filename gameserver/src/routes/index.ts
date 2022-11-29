@@ -352,7 +352,11 @@ export const createRoutes = (
   router.get('/users', async (req, res) => {
     const result = await getAllUsers();
 
-    res.status(200).send(result);
+    if (result.length === 0) {
+      res.status(500).send('Auth0 returned no users');
+    } else {
+      res.status(200).send(result);
+    }
   });
 
   // This is merely for health checks. Probably don't even need the express package for this app hmm....

@@ -36,7 +36,7 @@ const Players = (): JSX.Element => {
 
   const table = useMemo(() => players && createTable(players), [players]);
 
-  console.log(players);
+  if (error) return <Container>{JSON.stringify(error.message)}</Container>;
 
   if (isLoading || !table) {
     return <Spinner animation='border' role='status'></Spinner>;
