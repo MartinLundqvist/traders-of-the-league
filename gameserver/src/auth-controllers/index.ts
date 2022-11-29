@@ -27,8 +27,6 @@ export const getAuthToken = async (): Promise<string | null> => {
   try {
     const response = await axios(options);
 
-    console.log(response);
-
     if (response.status === 200 && response.data.access_token) {
       return response.data.access_token;
     }
@@ -54,6 +52,7 @@ export const resendVerificationEmail = async (
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Accept-Encoding': 'application/json',
       Authorization: 'Bearer ' + token,
     },
     data: { user_id: user_id },
@@ -81,6 +80,7 @@ export const getAllUsers = async (): Promise<IAuth0User[]> => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      'Accept-Encoding': 'application/json',
       Authorization: 'Bearer ' + token,
     },
   };
