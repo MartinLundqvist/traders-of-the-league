@@ -1,5 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { useQuery } from '@tanstack/react-query';
+import { useLocation } from 'react-router-dom';
 import {
   IAuth0User,
   IChat,
@@ -48,4 +49,12 @@ export const useAdmin = (): boolean => {
   if (user['https://hanseaticmonitor/roles'].length === 0) return false;
 
   return user['https://hanseaticmonitor/roles'].includes('Game Administrator');
+};
+
+export const useQueryArray = (): string[] => {
+  const { search } = useLocation();
+
+  const query = new URLSearchParams(search);
+
+  return Array.from(query).map((value) => value[0]);
 };
