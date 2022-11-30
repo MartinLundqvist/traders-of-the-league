@@ -1,13 +1,14 @@
 import { useMemo, useRef, useState } from 'react';
 import { Container, Spinner } from 'react-bootstrap';
-import { IGame } from '../../../shared/types';
+import { IGame } from '../../../../shared/types';
 import SortedTable, {
   createData,
   createColumnDefs,
-} from '../components/SortedTable';
-import { useAdmin, useGames } from '../hooks';
-import { RenderBadgeCell } from '../components/RenderBadgeCell';
-import { epochToLocalDate } from '../utils/dateRenderers';
+} from '../../components/SortedTable';
+import { useAdmin, useGames } from '../../hooks';
+import { RenderBadgeCell } from '../../components/RenderBadgeCell';
+import { epochToLocalDate } from '../../utils/dateRenderers';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 const createTable = (games: IGame[]) => {
   const columnDefs = createColumnDefs([
@@ -36,14 +37,20 @@ const createTable = (games: IGame[]) => {
 
 const Games = (): JSX.Element => {
   const { isLoading, error, data: games } = useGames();
+  const navigate = useNavigate();
   const isAdmin = useAdmin();
 
   const consoleLogSelection = (selection: string[]) => {
     console.log(selection);
   };
 
-  const alertSelection = (selection: string[]) => {
-    window.alert('You have selected ' + selection.length);
+  const confirmDeleteSelection = (selection: string[]) => {
+    let query = '?';
+    selection.forEach((key) => {
+      query += key + '&';
+    });
+
+    navigate('/games/confirmdelete' + query);
   };
 
   const actions = [
@@ -52,8 +59,8 @@ const Games = (): JSX.Element => {
       action: consoleLogSelection,
     },
     {
-      label: 'Alert',
-      action: alertSelection,
+      label: 'Delete',
+      action: confirmDeleteSelection,
     },
   ];
 

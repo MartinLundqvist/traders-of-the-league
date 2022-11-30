@@ -3,6 +3,7 @@ import App from '../App';
 import APITests from '../pages/APITests';
 import Chats from '../pages/Chats';
 import Games from '../pages/Games';
+import ConfirmDelete from '../pages/Games/ConfirmDelete';
 import Main from '../pages/Main';
 import Players from '../pages/Players';
 import Rankings from '../pages/Rankings';
@@ -31,6 +32,11 @@ export const createRoutes = () => {
           path: '/games',
           element: <Games />,
         },
+        {
+          path: '/games/confirmdelete',
+          element: <ConfirmDelete />,
+        },
+
         {
           path: '/players',
           element: <Players />,
