@@ -37,6 +37,31 @@ const Page = (): JSX.Element => {
       console.error(e);
     }
   };
+  const deleteUser = async () => {
+    try {
+      const token = await getAccessTokenSilently();
+
+      const response = await fetch(
+        `${URL}/protected/user/auth0|62839e2666516b006f8cc864`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      // const response = await fetch(`${URL}/protected/test`);
+
+      if (response.ok) {
+        const result = await response.json();
+
+        setResult(JSON.stringify(result));
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   if (isLoading) return <Spinner animation='border' role='status'></Spinner>;
 
@@ -47,6 +72,7 @@ const Page = (): JSX.Element => {
     <Container>
       <Button onClick={() => logout()}>Logout</Button>
       <Button onClick={() => testAPICall()}>Make API call</Button>
+      <Button onClick={() => deleteUser()}>Delete User</Button>
       <div>{result}</div>
     </Container>
   );

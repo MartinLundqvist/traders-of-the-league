@@ -95,3 +95,30 @@ export const getAllUsers = async (): Promise<IAuth0User[]> => {
     return [];
   }
 };
+
+export const deleteUser = async (id: string): Promise<boolean> => {
+  const token = await getAuthToken();
+
+  if (!token) false;
+
+  const options: AxiosRequestConfig = {
+    baseURL: DOMAIN,
+    url: `/api/v2/users/${id}`,
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept-Encoding': 'application/json',
+      Authorization: 'Bearer ' + token,
+    },
+  };
+
+  try {
+    const response = await axios<any>(options);
+
+    if (response.status !== 204) return false;
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};

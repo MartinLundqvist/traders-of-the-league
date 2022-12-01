@@ -42,6 +42,8 @@ const Players = (): JSX.Element => {
     return <Spinner animation='border' role='status'></Spinner>;
   }
 
+  console.log(players);
+
   return (
     <Container>
       <SortedTable columnDefs={table.columnDefs} data={table.data} />

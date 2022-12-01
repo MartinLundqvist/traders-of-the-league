@@ -6,7 +6,11 @@ import { GameStore } from '../stores/gameStore';
 import { SessionStore } from '../stores/sessionStore';
 import { ChatStore } from '../stores/chatStore';
 import { BugReportStore } from '../stores/bugReportStore';
-import { getAllUsers, resendVerificationEmail } from '../auth-controllers';
+import {
+  deleteUser,
+  getAllUsers,
+  resendVerificationEmail,
+} from '../auth-controllers';
 import { RankingStore } from '../stores/rankingStore';
 import { expressjwt, GetVerificationKey } from 'express-jwt';
 import { expressJwtSecret } from 'jwks-rsa';
@@ -400,7 +404,6 @@ export const createProtectedRoutes = (
 
   router.delete('/gamesandchats', async (req, res) => {
     const uuids = req.body.uuids;
-    console.log(uuids);
 
     if (!uuids || uuids.length === 0) {
       res.status(500).send({ message: 'No uuids provided' });
@@ -408,11 +411,22 @@ export const createProtectedRoutes = (
       const gamesDeleted = await gameStore.deleteGames(uuids);
       const chatsDeleted = await chatStore.deleteChats(uuids);
 
-      res
-        .status(200)
-        .send({
-          message: `${gamesDeleted} games deleted and ${chatsDeleted} chats deleted.`,
-        });
+      res.status(200).send({
+        message: `${gamesDeleted} games deleted and ${chatsDeleted} chats deleted.`,
+      });
+    }
+  });
+
+  router.delete('/user/:id', async (req, res) => {
+    const { id } = req.params;
+
+    if (!id) {
+      res.status(500).send({ message: 'No ID provided' });
+    } else {
+      const success = await deleteUser(id);
+
+      if (success) res.status(200).send({ message: 'User deleted' });
+      if (!success) res.status(500).send({ message: 'User not found' });
     }
   });
 
