@@ -367,7 +367,13 @@ export const createRoutes = (
   return router;
 };
 
-export const createProtectedRoutes = (): Router => {
+export const createProtectedRoutes = (
+  gameStore: GameStore,
+  sessionStore: SessionStore,
+  chatStore: ChatStore,
+  bugReportStore: BugReportStore,
+  rankingStore: RankingStore
+): Router => {
   const router = Router();
 
   const secret = expressJwtSecret({
@@ -390,6 +396,24 @@ export const createProtectedRoutes = (): Router => {
 
   router.get('/test', (req, res) => {
     res.status(200).send({ message: 'OK' });
+  });
+
+  router.delete('/gamesandchats', async (req, res) => {
+    const uuids = req.body.uuids;
+    console.log(uuids);
+
+    if (!uuids || uuids.length === 0) {
+      res.status(500).send({ message: 'No uuids provided' });
+    } else {
+      const gamesDeleted = await gameStore.deleteGames(uuids);
+      const chatsDeleted = await chatStore.deleteChats(uuids);
+
+      res
+        .status(200)
+        .send({
+          message: `${gamesDeleted} games deleted and ${chatsDeleted} chats deleted.`,
+        });
+    }
   });
 
   return router;

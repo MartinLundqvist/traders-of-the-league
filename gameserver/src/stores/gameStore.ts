@@ -43,6 +43,27 @@ export class GameStore {
     }
   }
 
+  public async deleteGames(gameUuids: string[]): Promise<number> {
+    if (this.inMemory) {
+      gameUuids.forEach((uuid) => this.games?.delete(uuid));
+      return gameUuids.length;
+    }
+
+    let results = 0;
+
+    try {
+      const { deletedCount } = await this.gameModel
+        .deleteMany({ uuid: { $in: gameUuids } })
+        .exec();
+      results = deletedCount;
+    } catch (err) {
+      console.log('Error while deleting games from mongo database');
+      console.log(JSON.stringify(err));
+    }
+
+    return results;
+  }
+
   public async getGame(gameUuid: string): Promise<IGame | null> {
     if (this.inMemory) {
       return this.games?.get(gameUuid) || null;

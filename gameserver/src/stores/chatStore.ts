@@ -73,6 +73,27 @@ export class ChatStore {
     return results;
   }
 
+  public async deleteChats(gameUuids: string[]): Promise<number> {
+    if (this.inMemory) {
+      gameUuids.forEach((uuid) => this.chats?.delete(uuid));
+      return gameUuids.length;
+    }
+
+    let results = 0;
+
+    try {
+      const { deletedCount } = await this.chatModel
+        .deleteMany({ gameUuid: { $in: gameUuids } })
+        .exec();
+      results = deletedCount;
+    } catch (err) {
+      console.log('Error while deleting chats from mongo database');
+      console.log(JSON.stringify(err));
+    }
+
+    return results;
+  }
+
   private saveToFile(chat: IChat) {
     const data = JSON.stringify(chat);
     fs.writeFile(`./saves/${this.date.toISOString()}_chat.json`, data, () => {

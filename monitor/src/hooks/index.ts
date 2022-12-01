@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useLocation } from 'react-router-dom';
 import {
   IAuth0User,
@@ -40,6 +40,40 @@ export const useServerStatus = () =>
   useQuery<{ message: string }, Error>(['/'], () =>
     fetch(`${url}/`).then((res) => res.json())
   );
+
+export const useMutateGamesAndChats = () => {
+  const { getAccessTokenSilently } = useAuth0();
+  const queryClient = useQueryClient();
+
+  const deleteGamesAndChats = async (gameUuids: string[]) => {
+    const token = await getAccessTokenSilently();
+
+    const response = await fetch(`${url}/protected/gamesandchats`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        uuids: gameUuids,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    return response.json();
+  };
+
+  return useMutation({
+    mutationFn: deleteGamesAndChats,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/chats'] });
+      queryClient.invalidateQueries({ queryKey: ['/games'] });
+    },
+  });
+};
 
 export const useAdmin = (): boolean => {
   const { user } = useAuth0();
