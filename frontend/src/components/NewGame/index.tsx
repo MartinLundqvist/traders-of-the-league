@@ -61,7 +61,7 @@ const NewGame = ({ className }: INewGameProps): JSX.Element => {
   return (
     <ScrollFull className={className}>
       <Container>
-        <Title>Pick a name and a tempo for your game</Title>
+        <Title>Pick a game name and the total time available per player</Title>
         <div className='inputs'>
           <Input
             type='text'
