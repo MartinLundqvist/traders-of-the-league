@@ -23,6 +23,11 @@ const Navigation = (): JSX.Element => {
               </Nav.Item>
 
               <Nav.Item>
+                <LinkContainer to='bugreports'>
+                  <Nav.Link>Bug reports</Nav.Link>
+                </LinkContainer>
+              </Nav.Item>
+              <Nav.Item>
                 <LinkContainer to='games'>
                   <Nav.Link>Games</Nav.Link>
                 </LinkContainer>

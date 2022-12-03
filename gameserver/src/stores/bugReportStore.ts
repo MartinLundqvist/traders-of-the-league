@@ -60,6 +60,20 @@ export class BugReportStore {
     return results;
   }
 
+  public async deleteBugReport(date: string) {
+    if (this.inMemory) {
+      this.bugReports?.delete(date);
+      return;
+    }
+
+    try {
+      await this.bugReportModel.deleteOne({ date: date }).exec();
+    } catch (err) {
+      console.log('Error while deleting bug report from mongo');
+      console.log(JSON.stringify(err));
+    }
+  }
+
   private saveToFile(report: IBugReport) {
     const data = JSON.stringify(report);
     fs.writeFile(

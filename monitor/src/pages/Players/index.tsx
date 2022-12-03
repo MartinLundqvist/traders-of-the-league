@@ -1,13 +1,14 @@
 import { useMemo } from 'react';
 import { Container, Spinner } from 'react-bootstrap';
-import { IAuth0User } from '../../../shared/types';
-import { RenderVerifiedBadgeCell } from '../components/RenderBadgeCell';
+import { useNavigate } from 'react-router-dom';
+import { IAuth0User } from '../../../../shared/types';
+import { RenderVerifiedBadgeCell } from '../../components/RenderBadgeCell';
 import SortedTable, {
   createColumnDefs,
   createData,
-} from '../components/SortedTable';
-import { usePlayers } from '../hooks';
-import { stringToLocalDate } from '../utils/dateRenderers';
+} from '../../components/SortedTable';
+import { useAdmin, usePlayers } from '../../hooks';
+import { stringToLocalDate } from '../../utils/dateRenderers';
 
 const createTable = (players: IAuth0User[]) => {
   const columnDefs = createColumnDefs([
@@ -20,12 +21,14 @@ const createTable = (players: IAuth0User[]) => {
 
   const data = createData(
     players.map((player) => [
+      player.user_id,
       player.name,
       player.email,
       player.email_verified,
       player.created_at,
       player.last_login,
-    ])
+    ]),
+    true
   );
 
   return { columnDefs, data };
@@ -33,6 +36,26 @@ const createTable = (players: IAuth0User[]) => {
 
 const Players = (): JSX.Element => {
   const { isLoading, error, data: players } = usePlayers();
+  const navigate = useNavigate();
+  const isAdmin = useAdmin();
+
+  const confirmDeleteSelection = (selection: string[]) => {
+    let query = '?';
+    selection.forEach((key) => {
+      query += key + '&';
+    });
+
+    // console.log(query);
+
+    navigate('/players/confirmdelete' + query);
+  };
+
+  const actions = [
+    {
+      label: 'Delete',
+      action: confirmDeleteSelection,
+    },
+  ];
 
   const table = useMemo(() => players && createTable(players), [players]);
 
@@ -42,11 +65,14 @@ const Players = (): JSX.Element => {
     return <Spinner animation='border' role='status'></Spinner>;
   }
 
-  console.log(players);
-
   return (
     <Container>
-      <SortedTable columnDefs={table.columnDefs} data={table.data} />
+      <SortedTable
+        columnDefs={table.columnDefs}
+        data={table.data}
+        editable={isAdmin}
+        actions={actions}
+      />
     </Container>
   );
 };

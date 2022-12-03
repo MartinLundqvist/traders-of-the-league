@@ -115,6 +115,8 @@ export const deleteUser = async (id: string): Promise<boolean> => {
   try {
     const response = await axios<any>(options);
 
+    // console.log(response);
+
     if (response.status !== 204) return false;
     return true;
   } catch (err) {

@@ -37,6 +37,7 @@ const Page = (): JSX.Element => {
       console.error(e);
     }
   };
+
   const deleteUser = async () => {
     try {
       const token = await getAccessTokenSilently();

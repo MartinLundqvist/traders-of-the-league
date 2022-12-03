@@ -40,10 +40,6 @@ const Games = (): JSX.Element => {
   const navigate = useNavigate();
   const isAdmin = useAdmin();
 
-  const consoleLogSelection = (selection: string[]) => {
-    console.log(selection);
-  };
-
   const confirmDeleteSelection = (selection: string[]) => {
     let query = '?';
     selection.forEach((key) => {
@@ -54,10 +50,6 @@ const Games = (): JSX.Element => {
   };
 
   const actions = [
-    {
-      label: 'Print',
-      action: consoleLogSelection,
-    },
     {
       label: 'Delete',
       action: confirmDeleteSelection,

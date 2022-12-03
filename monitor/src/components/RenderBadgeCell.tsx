@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Badge from 'react-bootstrap/Badge';
 
 export const RenderBadgeCell = (children: React.ReactNode) => (
@@ -15,3 +16,20 @@ export const RenderConnectedBadgeCell = (connected: boolean) => (
     {connected ? 'Online' : 'Offline'}
   </Badge>
 );
+export const RenderPriorityBadgeCell = (priority: string) => {
+  let bg = '';
+  switch (priority) {
+    case 'Low':
+      bg = 'secondary';
+      break;
+    case 'Medium':
+      bg = 'warning';
+      break;
+    case 'High':
+      bg = 'danger';
+      break;
+    default:
+      bg = 'secondary';
+  }
+  return <Badge bg={bg}>{priority}</Badge>;
+};

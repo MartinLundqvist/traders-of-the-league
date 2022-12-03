@@ -417,16 +417,38 @@ export const createProtectedRoutes = (
     }
   });
 
-  router.delete('/user/:id', async (req, res) => {
-    const { id } = req.params;
+  router.delete('/users', async (req, res) => {
+    const { user_ids }: { user_ids: string[] } = req.body;
 
-    if (!id) {
+    // console.log(user_ids);
+
+    if (!user_ids) {
       res.status(500).send({ message: 'No ID provided' });
     } else {
-      const success = await deleteUser(id);
+      let success = false;
+      let count = 0;
 
-      if (success) res.status(200).send({ message: 'User deleted' });
-      if (!success) res.status(500).send({ message: 'User not found' });
+      await Promise.all(
+        user_ids.map(async (user_id) => {
+          success = await deleteUser(user_id);
+          success && count++;
+        })
+      );
+
+      res.status(200).send({ message: `${count} users deleted.` });
+    }
+  });
+  router.delete('/bugreport', async (req, res) => {
+    const { date }: { date: string } = req.body;
+
+    // console.log(date);
+
+    if (!date) {
+      res.status(500).send({ message: 'No Date provided' });
+    } else {
+      await bugReportStore.deleteBugReport(date);
+
+      res.status(200).send({ message: `Bug report deleted.` });
     }
   });
 
