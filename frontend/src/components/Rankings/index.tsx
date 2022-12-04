@@ -5,6 +5,8 @@ import { useLayout } from '../../contexts/LayoutProvider';
 import ScrollFull from '../../elements/ScrollFull';
 import { ButtonSmall, Title } from '../../elements/Typography';
 
+const REQUIRED_RANKED_GAMES = 3;
+
 const URL = import.meta.env.VITE_URL;
 
 const Container = styled.div`
@@ -83,8 +85,10 @@ const Rankings = ({ className }: IRankingsProps): JSX.Element => {
           const _ranked: IRanking[] = [];
           const _unRanked: IRanking[] = [];
           for (const ranking of response) {
-            if (ranking.rankingHistory.length > 4) _ranked.push(ranking);
-            if (ranking.rankingHistory.length < 5) _unRanked.push(ranking);
+            if (ranking.rankingHistory.length >= REQUIRED_RANKED_GAMES)
+              _ranked.push(ranking);
+            if (ranking.rankingHistory.length < REQUIRED_RANKED_GAMES)
+              _unRanked.push(ranking);
           }
 
           setRanked(_ranked);
@@ -138,7 +142,8 @@ const Rankings = ({ className }: IRankingsProps): JSX.Element => {
         </div>
         <div className='divider' />
         <div className='text-centered'>
-          You need minimum 5 ranked games to appear on the list
+          You need minimum {REQUIRED_RANKED_GAMES} ranked games to appear on the
+          list
         </div>
 
         <ButtonSmall onClick={() => setActiveRoute('start')}>
