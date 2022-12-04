@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Badge, Container, Spinner, Table } from 'react-bootstrap';
+import { Container, Spinner } from 'react-bootstrap';
 import { ISession } from '../../../shared/types';
 import { RenderConnectedBadgeCell } from '../components/RenderBadgeCell';
 import SortedTable, {
@@ -11,11 +11,16 @@ import { useSessions } from '../hooks';
 const createTable = (sessions: ISession[]) => {
   const columnDefs = createColumnDefs([
     { name: 'User name' },
+    { name: 'E-Mail' },
     { name: 'Connected', cellRenderer: RenderConnectedBadgeCell },
   ]);
 
   const data = createData(
-    sessions.map((session) => [session.user.name, session.user.connected])
+    sessions.map((session) => [
+      session.user.name,
+      session.email,
+      session.user.connected,
+    ])
   );
 
   return { columnDefs, data };

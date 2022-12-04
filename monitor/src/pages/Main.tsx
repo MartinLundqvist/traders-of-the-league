@@ -8,7 +8,14 @@ import {
   Spinner,
 } from 'react-bootstrap';
 
-import { useGames, useServerStatus, useSessions } from '../hooks';
+import {
+  useBugReports,
+  useGames,
+  usePlayers,
+  useServerStatus,
+  useSessions,
+} from '../hooks';
+import { lessThanTwoDaysOld } from '../utils/dateChecks';
 
 const Main = (): JSX.Element => {
   return (
@@ -17,6 +24,12 @@ const Main = (): JSX.Element => {
       <Row xs={1} md={2} className='g-4'>
         <Col>
           <GameCard />
+        </Col>
+        <Col>
+          <PlayerCard />
+        </Col>
+        <Col>
+          <BugReportCard />
         </Col>
         <Col>
           <SessionCard />
@@ -74,6 +87,55 @@ const SessionCard = (): JSX.Element => {
             }{' '}
           </Badge>{' '}
           are currently connected{' '}
+        </Card.Text>
+      </Card.Body>
+    </Card>
+  );
+};
+const PlayerCard = (): JSX.Element => {
+  const { isLoading, isError, data: players } = usePlayers();
+
+  if (isLoading) return <Spinner animation='border' role='status'></Spinner>;
+  if (isError) return <div>Error</div>;
+
+  return (
+    <Card>
+      <Card.Header>Player status</Card.Header>
+      <Card.Body>
+        <Card.Title>Players</Card.Title>
+        <Card.Text>
+          There are <Badge>{players?.length}</Badge> players in the database, of
+          which{' '}
+          <Badge>
+            {players?.filter((player) => player.logins_count > 5).length}{' '}
+          </Badge>{' '}
+          played more than five games{' '}
+        </Card.Text>
+      </Card.Body>
+    </Card>
+  );
+};
+const BugReportCard = (): JSX.Element => {
+  const { isLoading, isError, data: bugReports } = useBugReports();
+
+  if (isLoading) return <Spinner animation='border' role='status'></Spinner>;
+  if (isError) return <div>Error</div>;
+
+  return (
+    <Card>
+      <Card.Header>Bug Report status</Card.Header>
+      <Card.Body>
+        <Card.Title>BugReports</Card.Title>
+        <Card.Text>
+          There are <Badge>{bugReports?.length}</Badge> bug reports in the
+          database, of which{' '}
+          <Badge>
+            {
+              bugReports?.filter((report) => lessThanTwoDaysOld(report.date))
+                .length
+            }{' '}
+          </Badge>{' '}
+          are less than two days old{' '}
         </Card.Text>
       </Card.Body>
     </Card>

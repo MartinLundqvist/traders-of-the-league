@@ -1,4 +1,5 @@
 import { Col, Container, Row } from 'react-bootstrap';
+import AchievementsPicked from './AchievementsPicked';
 import CitiesEmptied from './CityiesEmptied';
 import ContractsFulfilled from './ContractsFulfilled';
 
@@ -11,6 +12,9 @@ const Statistics = (): JSX.Element => {
         </Col>
         <Col>
           <ContractsFulfilled />
+        </Col>
+        <Col>
+          <AchievementsPicked />
         </Col>
       </Row>
     </Container>
