@@ -2,7 +2,7 @@
   "name": "traders-of-the-league-gameserver",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "",
   "scripts": {
     "test": "nodemon src/tests/achievementTests.ts",
     "prebuild": "rm -rf build",
@@ -11,7 +11,7 @@
     "start:ai": "NODE_ENV=production IN_MEMORY=true node ./build/index.js",
     "dev": "nodemon src/index.ts",
     "dev:ai": "IN_MEMORY=true nodemon src/index.ts",
-    "test:gameengine": "nodemon src/tests/gameEngineTests.ts",
+    "test:gameengine": "nodemon src/tests/achievementTests.ts",
     "test:auth": "nodemon src/tests/authTests.ts"
   },
   "keywords": [],

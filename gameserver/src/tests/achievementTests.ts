@@ -32,6 +32,7 @@ import { IPlayer, TCargo, TRegion } from '../../../shared/types';
 import { MOCK_GAME } from '../game-engine/mockData';
 import { pickRandomAchievements } from '../game-engine/pickRandomAchievements';
 import { updateAchievementsProgressAndReturnEarnedAchievements } from '../game-engine/findAchievementsEarned';
+import { sumItemsMoreThan } from '../game-engine/utils/achievementFunctions';
 
 // type TProgressionValues = number | TCargo | TRegion;
 
@@ -245,21 +246,33 @@ const TEST_PLAYER: IPlayer = {
     {
       value: 2,
       cargo: ['yellow', 'brown'],
-      region: 'East',
+      region: 'Central',
       uuid: 'E_yel_bro_2',
     },
     {
       value: 2,
       cargo: ['yellow', 'brown'],
-      region: 'East',
+      region: 'Central',
       uuid: 'E_yel_bro_2',
     },
     {
-      value: 1,
-      cargo: ['gray', 'blue'],
-      region: 'East',
-      uuid: 'E_gry_blu_1',
+      value: 2,
+      cargo: ['yellow', 'brown'],
+      region: 'Central',
+      uuid: 'E_yel_bro_2',
     },
+    // {
+    //   value: 2,
+    //   cargo: ['yellow', 'brown'],
+    //   region: 'East',
+    //   uuid: 'E_yel_bro_2',
+    // },
+    // {
+    //   value: 1,
+    //   cargo: ['gray', 'blue'],
+    //   region: 'East',
+    //   uuid: 'E_gry_blu_1',
+    // },
     {
       value: 1,
       cargo: ['gray', 'brown'],
@@ -324,15 +337,17 @@ const test1 = () => {
 
 const test = () => {
   const innerAchievement = ACHIEVEMENTS.find(
-    (a) => a.uuid === 'Diversifier_A_2-5_4P'
+    (a) => a.uuid === 'Explorer_A_2-5_4P'
     // (a) => a.uuid === 'Diversifier_B_2-5_4P'
   )!;
 
   const { progressionFn, progressionArg, targetFn } = innerAchievement;
-  const progress = targetFn(progressionFn(TEST_PLAYER, progressionArg));
+  const progress = progressionFn(TEST_PLAYER, progressionArg);
+  const target = targetFn(progress);
 
-  console.log(TEST_PLAYER.contractsFulfilled);
+  // console.log(TEST_PLAYER.contractsFulfilled);
   console.log(progress);
+  console.log(target);
 
   // const nrPlayers = 5;
 
