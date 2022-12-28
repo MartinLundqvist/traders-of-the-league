@@ -262,3 +262,5 @@ export interface IAuth0User {
   given_name: string;
   family_name: string;
 }
+
+export type TWinCondition = 'Auto' | '10' | 'All';

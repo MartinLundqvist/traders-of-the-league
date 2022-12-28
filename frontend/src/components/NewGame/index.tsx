@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { TWinCondition } from '../../../../shared/types';
 import { useGameServer } from '../../contexts/GameServerProvider';
 import { useLayout } from '../../contexts/LayoutProvider';
 import ScrollFull from '../../elements/ScrollFull';
@@ -47,14 +48,14 @@ interface INewGameProps {
 const NewGame = ({ className }: INewGameProps): JSX.Element => {
   const [gameName, setGameName] = useState('');
   const [gameTempo, setGameTempo] = useState(5 * 60 * 1000);
-  const [citiesToEmpty, setCitiesToEmpty] = useState('Auto');
+  const [winCondition, setWinCondition] = useState<TWinCondition>('Auto');
   const [ranked, setRanked] = useState(false);
   const { createAndJoinNewGame } = useGameServer();
   const { setActiveRoute } = useLayout();
 
   const handleKeyDown = (key: string) => {
     if (key === 'Enter') {
-      createAndJoinNewGame(gameName, gameTempo, ranked);
+      createAndJoinNewGame(gameName, gameTempo, winCondition, ranked);
     }
   };
 
@@ -89,8 +90,8 @@ const NewGame = ({ className }: INewGameProps): JSX.Element => {
             />
             <Divider />
             <SelectSmall
-              value={citiesToEmpty}
-              onChange={(e) => setCitiesToEmpty(e.target.value)}
+              value={winCondition}
+              onChange={(e) => setWinCondition(e.target.value as TWinCondition)}
               label='Nr of cities to empty to win'
             >
               <option value='Auto'>Automatic</option>
@@ -104,7 +105,9 @@ const NewGame = ({ className }: INewGameProps): JSX.Element => {
             Back
           </ButtonSmall>
           <ButtonSmall
-            onClick={() => createAndJoinNewGame(gameName, gameTempo, ranked)}
+            onClick={() =>
+              createAndJoinNewGame(gameName, gameTempo, winCondition, ranked)
+            }
           >
             Create
           </ButtonSmall>

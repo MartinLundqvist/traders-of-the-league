@@ -7,6 +7,7 @@ import {
   IAchievement,
   IMessage,
   IChat,
+  TWinCondition,
 } from '../../shared/types';
 
 export type TSocketError =
@@ -54,6 +55,7 @@ export interface ClientToServerEvents {
   createAndJoinNewGame: (
     gameName: string,
     gameTempo: number,
+    winCondition: TWinCondition,
     ranked: boolean
   ) => void;
 

@@ -29,6 +29,7 @@ import {
   TGameStatus,
   TSocketConnection,
   TSocketError,
+  TWinCondition,
 } from '../../../shared/types';
 import { IBoardLayoutElement } from '../utils/createBoardLayout';
 // import { useAuthDev } from '../utils/useAuthDev';
@@ -45,6 +46,7 @@ interface IGameServerContext {
   createAndJoinNewGame: (
     gameName: string,
     gameTempo: number,
+    winCondition: TWinCondition,
     ranked: boolean
   ) => void;
 
@@ -446,6 +448,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
   const createAndJoinNewGame = (
     gameName: string,
     gameTempo: number,
+    winCondition: TWinCondition,
     ranked: boolean
   ) => {
     if (gameName.length < 3) {
@@ -456,6 +459,8 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
     console.log(
       'Creating a new game with name ' +
         gameName +
+        +' with win condition ' +
+        winCondition +
         ' at tempo ' +
         gameTempo / 1000 +
         ' seconds'
@@ -464,6 +469,7 @@ export const GameServerProvider = ({ children }: IGameServerProviderProps) => {
       'createAndJoinNewGame',
       gameName,
       gameTempo,
+      winCondition,
       ranked
     );
   };

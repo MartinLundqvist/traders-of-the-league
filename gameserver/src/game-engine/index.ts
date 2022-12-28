@@ -7,6 +7,7 @@ import {
   IRanking,
   IUser,
   TCargo,
+  TWinCondition,
 } from '../../../shared/types';
 import { createNewContracts } from './createNewContracts';
 import { getHexesWithinRangeOf } from './getHexesWithinRangeOf';
@@ -30,6 +31,10 @@ import {
   parseGameResults,
 } from './utils/rankingFunctions';
 import { createRatedGame } from './multiplayer-elo';
+import {
+  getNumberOfCitiesToEmpty,
+  parseWinCondition,
+} from './utils/parseWinCondition';
 
 const ELO_ALFA = 2;
 const ELO_INITIAL_RANKING = 1500;
@@ -37,14 +42,17 @@ const ELO_INITIAL_RANKING = 1500;
 const createGame = (
   gameName: string,
   gameTempo: number,
+  winCondition: TWinCondition,
   isRanked = true,
   gameUuid: string
 ): IGame => {
+  const numberOfCitiesToEmpty = parseWinCondition(winCondition);
+
   const newGame: IGame = {
     name: gameName,
     uuid: gameUuid,
     players: [],
-    numberOfCitiesToEmpty: 5,
+    numberOfCitiesToEmpty,
     achievements: [],
     board: BOARD,
     startTime: 0,
@@ -69,6 +77,8 @@ const createGame = (
   console.log(
     'Creating new game with tempo ' +
       newGame.tempo +
+      ' with win condition ' +
+      winCondition +
       ' which is ' +
       newGame.isRanked
       ? 'ranked.'
@@ -82,7 +92,10 @@ const start = (game: IGame, firstPlayerUuid: string) => {
   game.state.status = 'playing';
   game.state.currentRound.playerUuid = firstPlayerUuid;
   game.state.round = 1;
-  game.numberOfCitiesToEmpty = numberOfCitiesToEmpty[game.players.length];
+
+  let nrCitiesToEmpty = getNumberOfCitiesToEmpty(game);
+
+  game.numberOfCitiesToEmpty = nrCitiesToEmpty;
   game.startTime = new Date().getTime();
   game.state.currentRound.hexesWithinRange = getHexesWithinRangeOf({
     row: 6,

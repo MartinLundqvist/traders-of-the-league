@@ -27,6 +27,7 @@ content-type: application/json
     "user": {
     "name": "playerOne",
     "tempo": 300000,
+    "winCondition": "Auto",
     "ranked": true,
     "uuid": "mT-0QWhGBOycapscqFKTr",
     "connected": true

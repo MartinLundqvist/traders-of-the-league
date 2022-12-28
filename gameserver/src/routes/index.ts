@@ -41,11 +41,12 @@ export const createGameAPIRoutes = (
   });
 
   router.post('/createAndJoinNewGame', async (req, res, next) => {
-    const { gameName, gameTempo, ranked, user } = req.body;
+    const { gameName, gameTempo, winCondition, ranked, user } = req.body;
 
     const newGame = GameEngine.createGame(
       gameName,
       gameTempo,
+      winCondition,
       ranked,
       nanoid()
     );

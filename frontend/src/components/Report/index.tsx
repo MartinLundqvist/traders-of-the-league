@@ -100,6 +100,7 @@ const Report = ({ className }: IReportProps): JSX.Element => {
           ></InputSmall>
           <TitleSmall>Annoyance level </TitleSmall>
           <SelectSmall
+            value={priority}
             onChange={(e) => setPriority(e.target.value as TPriority)}
           >
             <option>Low</option>

@@ -8,6 +8,7 @@ import {
   ISession,
   IUser,
   TCargo,
+  TWinCondition,
 } from '../../../shared/types';
 import { GameStore } from '../stores/gameStore';
 import { SessionStore } from '../stores/sessionStore';
@@ -74,8 +75,12 @@ export class GameSession implements ISession {
     );
     this.socket.on(
       'createAndJoinNewGame',
-      (gameName: string, gameTempo: number, ranked: boolean) =>
-        this.createAndJoinNewGame(gameName, gameTempo, ranked)
+      (
+        gameName: string,
+        gameTempo: number,
+        winCondition: TWinCondition,
+        ranked: boolean
+      ) => this.createAndJoinNewGame(gameName, gameTempo, winCondition, ranked)
     );
     this.socket.on('fetchActiveGame', (callback: (success: boolean) => void) =>
       this.fetchActiveGame(callback)
@@ -213,6 +218,7 @@ export class GameSession implements ISession {
   private async createAndJoinNewGame(
     gameName: string,
     gameTempo: number,
+    winCondition: TWinCondition,
     ranked: boolean
   ) {
     // Create a new game object with initial values
@@ -220,6 +226,7 @@ export class GameSession implements ISession {
     const newGame = GameEngine.createGame(
       gameName,
       gameTempo,
+      winCondition,
       ranked,
       nanoid()
     );
