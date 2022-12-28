@@ -194,22 +194,72 @@ export const ButtonImage = ({
   );
 };
 
-export const SelectSmall = styled.select`
-  font: inherit;
-  font-size: 1.2rem;
-  border-radius: 0.5rem;
-  border-style: none;
-  box-shadow: 3px 3px 3px var(--color-bg-shadow);
-  background-color: var(--color-bg);
-  padding: 0.25rem 1rem 0.25rem 1rem;
-  max-height: 2rem;
-  outline: none;
+// export const SelectSmall = styled.select`
+//   font: inherit;
+//   font-size: 1.2rem;
+//   border-radius: 0.5rem;
+//   border-style: none;
+//   box-shadow: 3px 3px 3px var(--color-bg-shadow);
+//   background-color: var(--color-bg);
+//   padding: 0.25rem 1rem 0.25rem 1rem;
+//   max-height: 2rem;
+//   outline: none;
 
-  &:hover {
-    background-color: var(--color-bg-highlight);
-    cursor: pointer;
+//   &:hover {
+//     background-color: var(--color-bg-highlight);
+//     cursor: pointer;
+//   }
+// `;
+
+interface ISelectProps {
+  value: string | number;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  label?: string;
+  children: React.ReactNode;
+}
+
+const SelectSmallWrapper = styled.div`
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.9em;
+    select {
+      font: inherit;
+      font-size: 1.2rem;
+      border-radius: 0.5rem;
+      border-style: none;
+      box-shadow: 3px 3px 3px var(--color-bg-shadow);
+      background-color: var(--color-bg);
+      padding: 0.25rem 1rem 0.25rem 1rem;
+      max-height: 2rem;
+      outline: none;
+
+      &:hover {
+        background-color: var(--color-bg-highlight);
+        cursor: pointer;
+      }
+    }
   }
 `;
+
+export const SelectSmall = ({
+  value,
+  onChange,
+  label = undefined,
+  children,
+}: ISelectProps): JSX.Element => {
+  return (
+    <SelectSmallWrapper>
+      <label>
+        {label}
+        <select value={value} onChange={onChange}>
+          {children}
+        </select>
+      </label>
+    </SelectSmallWrapper>
+  );
+};
 
 export const Select = styled.select`
   font: inherit;
@@ -293,3 +343,9 @@ export const CheckBox = ({
     </CheckBoxWrapper>
   );
 };
+
+export const Divider = styled.div`
+  height: 2.5rem;
+  width: 1px;
+  background-color: var(--color-bg-shadow);
+`;

@@ -9,6 +9,7 @@ import {
   ButtonSmall,
   SelectSmall,
   CheckBox,
+  Divider,
 } from '../../elements/Typography';
 
 const Container = styled.div`
@@ -20,13 +21,15 @@ const Container = styled.div`
 
   .inputs {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 1rem;
   }
 
   .options {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     gap: 1rem;
   }
 
@@ -44,6 +47,7 @@ interface INewGameProps {
 const NewGame = ({ className }: INewGameProps): JSX.Element => {
   const [gameName, setGameName] = useState('');
   const [gameTempo, setGameTempo] = useState(5 * 60 * 1000);
+  const [citiesToEmpty, setCitiesToEmpty] = useState('Auto');
   const [ranked, setRanked] = useState(false);
   const { createAndJoinNewGame } = useGameServer();
   const { setActiveRoute } = useLayout();
@@ -54,14 +58,10 @@ const NewGame = ({ className }: INewGameProps): JSX.Element => {
     }
   };
 
-  useEffect(() => {
-    console.log(ranked);
-  }, [ranked]);
-
   return (
     <ScrollFull className={className}>
       <Container>
-        <Title>Pick a game name and the total time available per player</Title>
+        <Title>Pick a game name and options</Title>
         <div className='inputs'>
           <Input
             type='text'
@@ -74,17 +74,29 @@ const NewGame = ({ className }: INewGameProps): JSX.Element => {
             <SelectSmall
               value={gameTempo}
               onChange={(e) => setGameTempo(parseInt(e.target.value))}
+              label='Max game time per player'
             >
               <option value={1 * 60 * 1000}>1 mins</option>
               <option value={5 * 60 * 1000}>5 mins</option>
               <option value={15 * 60 * 1000}>15 mins</option>
               <option value={60 * 60 * 1000}>1 hour</option>
             </SelectSmall>
+            <Divider />
             <CheckBox
               id='ranked'
               onChange={(e) => setRanked(e.target.checked)}
               label='Ranked?'
             />
+            <Divider />
+            <SelectSmall
+              value={citiesToEmpty}
+              onChange={(e) => setCitiesToEmpty(e.target.value)}
+              label='Nr of cities to empty to win'
+            >
+              <option value='Auto'>Automatic</option>
+              <option value='10'>10 cities</option>
+              <option value='All'>All cities</option>
+            </SelectSmall>
           </div>
         </div>
         <div className='buttons'>
