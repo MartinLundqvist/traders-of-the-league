@@ -90,6 +90,7 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     progressionArg: [3],
     targetFn: sumItems,
     target: 4,
+    targetType: 'contract',
   },
   {
     nrPlayers: [2, 5],
@@ -102,6 +103,7 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     progressionArg: [3, 5],
     targetFn: sumItems,
     target: 4,
+    targetType: 'contract',
   },
   {
     nrPlayers: [2, 3],
@@ -114,6 +116,7 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     progressionArg: [1],
     targetFn: sumItems,
     target: 6,
+    targetType: 'contract',
   },
   {
     nrPlayers: [2, 3],
@@ -126,6 +129,7 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     progressionArg: [1, 2],
     targetFn: sumItems,
     target: 7,
+    targetType: 'contract',
   },
   {
     nrPlayers: [4, 5],
@@ -138,6 +142,7 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     progressionArg: [1],
     targetFn: sumItems,
     target: 5,
+    targetType: 'contract',
   },
   {
     nrPlayers: [4, 5],
@@ -150,6 +155,7 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     progressionArg: [1, 2],
     targetFn: sumItems,
     target: 6,
+    targetType: 'contract',
   },
   {
     nrPlayers: [2, 5],
@@ -163,6 +169,7 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     progressionArg: cargoColors,
     targetFn: sumItemsMoreThan[1],
     target: cargoColors.length,
+    targetType: 'cargo',
   },
   {
     nrPlayers: [2, 5],
@@ -176,6 +183,7 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     progressionArg: ['red', 'yellow', 'gray'] as TCargo[],
     targetFn: sumItemsMoreThan[2],
     target: 6,
+    targetType: 'cargo',
   },
   {
     nrPlayers: [2, 3],
@@ -188,6 +196,7 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     progressionArg: [],
     targetFn: sumItems,
     target: 3,
+    targetType: 'city',
   },
   {
     nrPlayers: [2, 3],
@@ -200,6 +209,7 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     progressionArg: [],
     targetFn: sumItems,
     target: 3,
+    targetType: 'city',
   },
   {
     nrPlayers: [4, 5],
@@ -212,6 +222,7 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     progressionArg: [],
     targetFn: sumItems,
     target: 2,
+    targetType: 'city',
   },
   {
     nrPlayers: [4, 5],
@@ -224,6 +235,7 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     progressionArg: [],
     targetFn: sumItems,
     target: 2,
+    targetType: 'city',
   },
   {
     nrPlayers: [2, 3],
@@ -236,6 +248,7 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     progressionArg: cargoColors,
     targetFn: maxItem,
     target: 6,
+    targetType: 'contract',
   },
   {
     nrPlayers: [2, 3],
@@ -248,6 +261,7 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     progressionArg: ['green'] as TCargo[],
     targetFn: sumItems,
     target: 4,
+    targetType: 'contract',
   },
   {
     nrPlayers: [4, 5],
@@ -260,6 +274,7 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     progressionArg: cargoColors,
     targetFn: maxItem,
     target: 5,
+    targetType: 'contract',
   },
   {
     nrPlayers: [4, 5],
@@ -272,6 +287,7 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     progressionArg: ['blue'] as TCargo[],
     targetFn: sumItems,
     target: 3,
+    targetType: 'contract',
   },
   {
     nrPlayers: [2, 3],
@@ -284,6 +300,7 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     progressionArg: ['West', 'Central', 'East'] as TRegion[],
     targetFn: sumItemsMoreThan[2],
     target: 6,
+    targetType: 'contract',
   },
   {
     nrPlayers: [2, 3],
@@ -296,6 +313,7 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     progressionArg: ['Central'] as TRegion[],
     targetFn: sumItems,
     target: 5,
+    targetType: 'contract',
   },
   {
     nrPlayers: [4, 5],
@@ -308,6 +326,7 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     progressionArg: ['West', 'Central', 'East'] as TRegion[],
     targetFn: sumItemsMoreThan[1],
     target: 3,
+    targetType: 'contract',
   },
   {
     nrPlayers: [4, 5],
@@ -320,6 +339,7 @@ export const ACHIEVEMENTS: IAchievementInner[] = [
     progressionArg: ['West'] as TRegion[],
     targetFn: sumItems,
     target: 4,
+    targetType: 'contract',
   },
 ];
 

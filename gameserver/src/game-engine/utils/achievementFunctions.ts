@@ -1,45 +1,50 @@
 import {
   IAchievement,
   IPlayer,
+  TAchievedTargets,
   TCargo,
   TRegion,
+  TTargetType,
 } from '../../../../shared/types';
 
 export type TProgressionValues = number | TCargo | TRegion;
 
+export type TProgressionFunction = (
+  player: IPlayer,
+  values: TProgressionValues[]
+) => { achievement: number[]; achievedTargets: TAchievedTargets };
+
 export interface IAchievementInner extends IAchievement {
   nrPlayers: number[]; // specifies the [min, max] number of players the achievement is valid for
   side: 'A' | 'B'; // indicates which side of the "card"
-  progressionFn: (player: IPlayer, values: TProgressionValues[]) => number[]; // The progression rule
+  progressionFn: TProgressionFunction; // The progression rule
   progressionArg: TProgressionValues[];
   targetFn: (array: number[]) => number; // The method for transforming the progression into a target value
+  targetType: TTargetType;
 }
 
-export const countNrContractsVP = (
-  player: IPlayer,
-  values: TProgressionValues[]
-): number[] => {
-  const result = new Array<number>(values.length);
-  result.fill(0);
+export const countNrContractsVP: TProgressionFunction = (player, values) => {
+  const achievement = new Array<number>(values.length);
+  achievement.fill(0);
+  const achievedTargets: TAchievedTargets = { contracts: [] };
 
   player.contractsFulfilled.forEach((contract) => {
     // Is the contract of one of the values we are looking for?
     let foundIndex = values.findIndex((value) => value === contract.value);
 
     if (foundIndex > -1) {
-      result[foundIndex] += 1;
+      achievement[foundIndex] += 1;
+      achievedTargets.contracts!.push(contract);
     }
   });
 
-  return result;
+  return { achievement, achievedTargets };
 };
 
-export const countNrCargoColor = (
-  player: IPlayer,
-  values: TProgressionValues[]
-): number[] => {
-  const result = new Array<number>(values.length);
-  result.fill(0);
+export const countNrCargoColor: TProgressionFunction = (player, values) => {
+  const achievement = new Array<number>(values.length);
+  achievement.fill(0);
+  const achievedTargets: TAchievedTargets = { cargo: [] };
 
   const playerCargo: TCargo[] = [];
   for (const contract of player.contractsFulfilled) {
@@ -48,62 +53,83 @@ export const countNrCargoColor = (
   }
 
   values.forEach((value, index) => {
-    const filtered = playerCargo.find((cargo) => cargo === value) || [];
-    result[index] = filtered.length;
+    // const filtered = playerCargo.find((cargo) => cargo === value);
+    const filtered = playerCargo.filter((cargo) => cargo === value);
+    if (filtered && filtered.length > 0) {
+      achievedTargets.cargo!.push(...filtered);
+    }
+    achievement[index] = filtered ? filtered.length : 0;
   });
 
-  return result;
+  return { achievement, achievedTargets };
 };
 
-export const countNrContractsColor = (
-  player: IPlayer,
-  values: TProgressionValues[]
-): number[] => {
-  const result = new Array<number>(values.length);
-  result.fill(0);
+export const countNrContractsColor: TProgressionFunction = (player, values) => {
+  const achievement = new Array<number>(values.length);
+  achievement.fill(0);
+
+  const achievedTargets: TAchievedTargets = { contracts: [] };
 
   player.contractsFulfilled.forEach((contract) => {
+    let addContract = false;
+
     // Does the contract contain one cargo of the values we are looking for?
-    let foundIndex = values.findIndex(
-      (value) => value === contract.cargo[0] || value === contract.cargo[1]
-    );
+    let foundIndex = values.findIndex((value) => value === contract.cargo[0]);
 
     if (foundIndex > -1) {
-      console.log(
-        'Found a contract with color ' +
-          values[foundIndex] +
-          ' in contract ' +
-          contract.uuid
-      );
-      result[foundIndex] += 1;
+      addContract = true;
+      achievement[foundIndex] += 1;
+    }
+
+    foundIndex = values.findIndex((value) => value === contract.cargo[1]);
+
+    if (foundIndex > -1) {
+      addContract = true;
+      achievement[foundIndex] += 1;
+    }
+
+    if (addContract) {
+      achievedTargets.contracts!.push(contract);
     }
   });
 
-  return result;
+  console.log(
+    `For player ${player.user.name} the achievement is:`,
+    values,
+    achievement
+  );
+
+  return { achievement, achievedTargets };
 };
-export const countNrContractsRegion = (
-  player: IPlayer,
-  values: TProgressionValues[]
-): number[] => {
-  const result = new Array<number>(values.length);
-  result.fill(0);
+export const countNrContractsRegion: TProgressionFunction = (
+  player,
+  values
+) => {
+  const achievement = new Array<number>(values.length);
+  achievement.fill(0);
+
+  const achievedTargets: TAchievedTargets = { contracts: [] };
+
   player.contractsFulfilled.forEach((contract) => {
     // Does the contract region come the values we are looking for?
     let foundIndex = values.findIndex((value) => value === contract.region);
 
     if (foundIndex > -1) {
-      result[foundIndex] += 1;
+      achievement[foundIndex] += 1;
+      achievedTargets.contracts!.push(contract);
     }
   });
 
-  return result;
+  return { achievement, achievedTargets };
 };
 
-export const countNrCitiesEmptied = (
-  player: IPlayer,
-  values: TProgressionValues[]
-): number[] => {
-  return [player.citiesEmptied.length];
+export const countNrCitiesEmptied: TProgressionFunction = (player, values) => {
+  const achievement = [player.citiesEmptied.length];
+  const achievedTargets: TAchievedTargets = {
+    cities: [...player.citiesEmptied],
+  };
+
+  return { achievement, achievedTargets };
 };
 
 export const sumItems = (array: number[]): number =>

@@ -21,13 +21,21 @@ export const updateAchievementsProgressAndReturnEarnedAchievements = (
     }
 
     const { progressionFn, progressionArg, targetFn } = innerAchievement;
-    const progress = targetFn(progressionFn(currentPlayer, progressionArg));
+    const { achievement: achProgress, achievedTargets } = progressionFn(
+      currentPlayer,
+      progressionArg
+    );
+    const progress = targetFn(achProgress);
+    // const progress = targetFn(progressionFn(currentPlayer, progressionArg));
 
     const playerAchievementProgress = currentPlayer.achievementsProgress.find(
       (achievementProgress) => achievementProgress.uuid === achievement.uuid
     );
-    playerAchievementProgress &&
-      (playerAchievementProgress.progress = progress);
+
+    if (playerAchievementProgress) {
+      playerAchievementProgress.progress = progress;
+      playerAchievementProgress.achievedTargets = achievedTargets;
+    }
 
     if (progress >= achievement.target) {
       newAchievements.push(achievement);

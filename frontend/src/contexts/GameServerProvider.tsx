@@ -1,4 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
+// import { useAuthDev } from '../utils/useAuthDev';
 import {
   createContext,
   useCallback,
@@ -32,7 +33,6 @@ import {
   TWinCondition,
 } from '../../../shared/types';
 import { IBoardLayoutElement } from '../utils/createBoardLayout';
-// import { useAuthDev } from '../utils/useAuthDev';
 import { useNotifications } from './NotificationsProvider';
 
 export type ChatSocket = Socket<ServerToClientEvents, ClientToServerEvents>;

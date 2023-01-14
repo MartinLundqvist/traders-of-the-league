@@ -74,10 +74,18 @@ export interface IAchievement {
   _id?: string;
 }
 
+export type TTargetType = 'contract' | 'city' | 'cargo';
+export interface TAchievedTargets {
+  cities?: IEmptiedCity[];
+  contracts?: IContract[];
+  cargo?: TCargo[];
+}
 export interface IAchievementProgress {
   uuid: string; // the unique identifier of the Achievement
   target: number; // This is the number of "things" that must have been completed (i.e., emptying x cities or taking one contract of each color etc.)
   progress: number; // This is the number of such things currently completed.
+  targetType: TTargetType;
+  achievedTargets: TAchievedTargets;
 }
 
 export interface ICity {

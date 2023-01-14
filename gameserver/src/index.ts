@@ -12,7 +12,14 @@ import { TGameServer } from './types';
 import { GameStore } from './stores/gameStore';
 import { SessionStore } from './stores/sessionStore';
 import { BugReportStore } from './stores/bugReportStore';
-import { MOCK_CHAT, MOCK_GAME, MOCK_SESSIONS } from './game-engine/mockData';
+import {
+  MOCK_CHAT,
+  MOCK_CHAT_ACHIEVEMENTS,
+  MOCK_GAME,
+  MOCK_GAME_ACHIEVEMENTS,
+  MOCK_SESSIONS,
+  MOCK_SESSIONS_ACHIEVEMENTS,
+} from './game-engine/mockData';
 import { ChatStore } from './stores/chatStore';
 import { closeDBConnection, connectToDB } from './database';
 import {
@@ -122,10 +129,11 @@ httpServer.listen(PORT, async () => {
   // Add a mock game to the gameStore which we can use for testing purposes
   if (DEVELOPMENT) {
     console.log('Restoring mock game and session');
-    await gameStore.saveGame(MOCK_GAME);
-    await sessionStore.saveSession(MOCK_SESSIONS[0]);
-    await sessionStore.saveSession(MOCK_SESSIONS[1]);
-    await chatStore.saveChat(MOCK_CHAT);
+    await gameStore.saveGame(MOCK_GAME_ACHIEVEMENTS);
+    for (const session of MOCK_SESSIONS_ACHIEVEMENTS) {
+      await sessionStore.saveSession(session);
+    }
+    await chatStore.saveChat(MOCK_CHAT_ACHIEVEMENTS);
   }
 });
 

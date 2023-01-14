@@ -28,7 +28,13 @@ for each achievement
 */
 
 import { ACHIEVEMENTS, cargoColors } from '../game-engine/constants';
-import { IPlayer, TCargo, TRegion } from '../../../shared/types';
+import {
+  IAchievement,
+  IAchievementProgress,
+  IPlayer,
+  TCargo,
+  TRegion,
+} from '../../../shared/types';
 import { MOCK_GAME } from '../game-engine/mockData';
 import { pickRandomAchievements } from '../game-engine/pickRandomAchievements';
 import { updateAchievementsProgressAndReturnEarnedAchievements } from '../game-engine/findAchievementsEarned';
@@ -235,119 +241,148 @@ import { sumItemsMoreThan } from '../game-engine/utils/achievementFunctions';
 //   },
 // ];
 
-const TEST_PLAYER: IPlayer = {
-  color: 'black',
-  user: { name: 'lynden', uuid: '1UiCjICtBFvRPSVb2cTAP', connected: true },
-  hasMadeEndGameMove: false,
-  hasTimedOut: false,
-  timedOutRound: 0,
-  timeLeft: 60 * 60 * 1000,
-  contractsFulfilled: [
-    {
-      value: 2,
-      cargo: ['yellow', 'brown'],
-      region: 'Central',
-      uuid: 'E_yel_bro_2',
-    },
-    {
-      value: 2,
-      cargo: ['yellow', 'brown'],
-      region: 'Central',
-      uuid: 'E_yel_bro_2',
-    },
-    {
-      value: 2,
-      cargo: ['yellow', 'brown'],
-      region: 'Central',
-      uuid: 'E_yel_bro_2',
-    },
-    // {
-    //   value: 2,
-    //   cargo: ['yellow', 'brown'],
-    //   region: 'East',
-    //   uuid: 'E_yel_bro_2',
-    // },
-    // {
-    //   value: 1,
-    //   cargo: ['gray', 'blue'],
-    //   region: 'East',
-    //   uuid: 'E_gry_blu_1',
-    // },
-    {
-      value: 1,
-      cargo: ['gray', 'brown'],
-      region: 'East',
-      uuid: 'E_gry_bro_1',
-    },
-    {
-      value: 3,
-      cargo: ['red', 'gray'],
-      region: 'East',
-      uuid: 'E_red_gry_3',
-    },
-    {
-      value: 3,
-      cargo: ['red', 'gray'],
-      region: 'West',
-      uuid: 'W_red_gry_3',
-    },
-    {
-      value: 3,
-      cargo: ['black', 'gray'],
-      region: 'West',
-      uuid: 'W_red_gry_3',
-    },
-  ],
-  citiesEmptied: [
-    { name: 'Riga', value: 2 },
-    { name: 'Tønsberg', value: 2 },
-    { name: 'Brügge', value: 2 },
-    { name: 'Bergen', value: 2 },
-  ],
-  achievements: [],
-  achievementsProgress: [
-    { uuid: 'Banker_A_2-5_4P', target: 4, progress: 0 },
-    { uuid: 'Merchant_A_2-3_5P', target: 6, progress: 0 },
-    { uuid: 'Diversifier_B_2-5_4P', target: 6, progress: 0 },
-    { uuid: 'Supplier_A_2-3_4P', target: 3, progress: 0 },
-    { uuid: 'Specialist_B_2-5_4P', target: 4, progress: 0 },
-  ],
-  position: { column: 8, row: 5 },
-  victoryPoints: 47,
-  cargo: ['black', 'blue', 'yellow', 'black', 'black'],
-};
+// const TEST_PLAYER: IPlayer = {
+//   color: 'black',
+//   user: { name: 'lynden', uuid: '1UiCjICtBFvRPSVb2cTAP', connected: true },
+//   hasMadeEndGameMove: false,
+//   hasTimedOut: false,
+//   timedOutRound: 0,
+//   timeLeft: 60 * 60 * 1000,
+//   contractsFulfilled: [
+//     {
+//       value: 2,
+//       cargo: ['yellow', 'brown'],
+//       region: 'Central',
+//       uuid: 'E_yel_bro_2',
+//     },
+//     {
+//       value: 2,
+//       cargo: ['yellow', 'brown'],
+//       region: 'Central',
+//       uuid: 'E_yel_bro_2',
+//     },
+//     {
+//       value: 2,
+//       cargo: ['yellow', 'brown'],
+//       region: 'Central',
+//       uuid: 'E_yel_bro_2',
+//     },
+//     // {
+//     //   value: 2,
+//     //   cargo: ['yellow', 'brown'],
+//     //   region: 'East',
+//     //   uuid: 'E_yel_bro_2',
+//     // },
+//     // {
+//     //   value: 1,
+//     //   cargo: ['gray', 'blue'],
+//     //   region: 'East',
+//     //   uuid: 'E_gry_blu_1',
+//     // },
+//     {
+//       value: 1,
+//       cargo: ['gray', 'brown'],
+//       region: 'East',
+//       uuid: 'E_gry_bro_1',
+//     },
+//     {
+//       value: 3,
+//       cargo: ['red', 'gray'],
+//       region: 'East',
+//       uuid: 'E_red_gry_3',
+//     },
+//     {
+//       value: 3,
+//       cargo: ['red', 'gray'],
+//       region: 'West',
+//       uuid: 'W_red_gry_3',
+//     },
+//     {
+//       value: 3,
+//       cargo: ['black', 'gray'],
+//       region: 'West',
+//       uuid: 'W_red_gry_3',
+//     },
+//   ],
+//   citiesEmptied: [
+//     { name: 'Riga', value: 2 },
+//     { name: 'Tønsberg', value: 2 },
+//     { name: 'Brügge', value: 2 },
+//     { name: 'Bergen', value: 2 },
+//   ],
+//   achievements: [],
+//   achievementsProgress: [
+//     { uuid: 'Banker_A_2-5_4P', target: 4, progress: 0 },
+//     { uuid: 'Merchant_A_2-3_5P', target: 6, progress: 0 },
+//     { uuid: 'Diversifier_B_2-5_4P', target: 6, progress: 0 },
+//     { uuid: 'Supplier_A_2-3_4P', target: 3, progress: 0 },
+//     { uuid: 'Specialist_B_2-5_4P', target: 4, progress: 0 },
+//   ],
+//   position: { column: 8, row: 5 },
+//   victoryPoints: 47,
+//   cargo: ['black', 'blue', 'yellow', 'black', 'black'],
+// };
 
-const test1 = () => {
-  const player = MOCK_GAME.players[1];
+// const test1 = () => {
+//   const player = MOCK_GAME.players[1];
 
-  ACHIEVEMENTS.forEach((achievement) => {
-    const progression = achievement.progressionFn(
-      player,
-      achievement.progressionArg
-    );
-    const target = achievement.targetFn(progression);
+//   ACHIEVEMENTS.forEach((achievement) => {
+//     const progression = achievement.progressionFn(
+//       player,
+//       achievement.progressionArg
+//     );
+//     const target = achievement.targetFn(progression);
 
-    console.log(achievement.name + achievement.side + ': ');
-    console.log(progression);
-    console.log(target);
-    console.log('Fulfilled? ' + (target >= achievement.target));
-    console.log('----------------------');
-  });
-};
+//     console.log(achievement.name + achievement.side + ': ');
+//     console.log(progression);
+//     console.log(target);
+//     console.log('Fulfilled? ' + (target >= achievement.target));
+//     console.log('----------------------');
+//   });
+// };
 
 const test = () => {
-  const innerAchievement = ACHIEVEMENTS.find(
-    (a) => a.uuid === 'Explorer_A_2-5_4P'
-    // (a) => a.uuid === 'Diversifier_B_2-5_4P'
-  )!;
+  const allAchievements: IAchievement[] = [];
+  const allAchievementProgressions: IAchievementProgress[] = [];
 
-  const { progressionFn, progressionArg, targetFn } = innerAchievement;
-  const progress = progressionFn(TEST_PLAYER, progressionArg);
-  const target = targetFn(progress);
+  ACHIEVEMENTS.forEach((achievement) => {
+    allAchievements.push({
+      description: achievement.description,
+      name: achievement.name,
+      target: achievement.target,
+      uuid: achievement.uuid,
+      value: achievement.value,
+    });
+
+    allAchievementProgressions.push({
+      progress: 0,
+      target: achievement.target,
+      targetType: achievement.targetType,
+      achievedTargets: {
+        cargo: [],
+        cities: [],
+        contracts: [],
+      },
+      uuid: achievement.uuid,
+    });
+  });
+
+  console.log(JSON.stringify(allAchievements));
+  console.log('----------------------');
+  console.log(JSON.stringify(allAchievementProgressions));
+
+  // const innerAchievement = ACHIEVEMENTS.find(
+  //   (a) => a.uuid === 'Explorer_A_2-5_4P'
+  //   // (a) => a.uuid === 'Diversifier_B_2-5_4P'
+  // )!;
+
+  // const { progressionFn, progressionArg, targetFn } = innerAchievement;
+  // const progress = progressionFn(TEST_PLAYER, progressionArg);
+  // const target = targetFn(progress);
 
   // console.log(TEST_PLAYER.contractsFulfilled);
-  console.log(progress);
-  console.log(target);
+  // console.log(progress);
+  // console.log(target);
 
   // const nrPlayers = 5;
 

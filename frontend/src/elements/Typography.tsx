@@ -344,8 +344,12 @@ export const CheckBox = ({
   );
 };
 
-export const Divider = styled.div`
-  height: 2.5rem;
-  width: 1px;
+interface IDividerProps {
+  landscape?: boolean;
+}
+
+export const Divider = styled.div<IDividerProps>`
+  height: ${(props) => (props.landscape ? '1px' : '2.5rem')};
+  width: ${(props) => (props.landscape ? '100%' : '1px')};
   background-color: var(--color-bg-shadow);
 `;

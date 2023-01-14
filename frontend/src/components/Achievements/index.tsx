@@ -40,7 +40,7 @@ const Achievements = ({ className }: IAchievementsProps): JSX.Element => {
       <div className='container'>
         {game.achievements.map((achievement) => (
           <AchievementWithPlayerStats
-            key={achievement.name}
+            key={achievement.uuid}
             achievement={achievement}
           />
         ))}

@@ -13,6 +13,7 @@ import { createNewContracts } from './createNewContracts';
 import { getHexesWithinRangeOf } from './getHexesWithinRangeOf';
 import { pickContractByRegion } from './pickContractByRegion';
 import {
+  ACHIEVEMENTS,
   BOARD,
   MAX_MOVES,
   numberOfCitiesToEmpty,
@@ -165,10 +166,16 @@ const dealAchievements = (game: IGame) => {
   // Create a fresh achievementsProgress array for each player.
   game.players.forEach((player) => {
     player.achievementsProgress = game.achievements.map((achievement) => {
+      const targetType = ACHIEVEMENTS.find(
+        (innerAchievement) => innerAchievement.uuid === achievement.uuid
+      )!.targetType;
+
       return {
         uuid: achievement.uuid,
         target: achievement.target,
         progress: 0,
+        targetType,
+        achievedTargets: {},
       };
     });
   });
@@ -536,7 +543,7 @@ const pickAchievementForCurrentPlayer = (
   // Likely unecessary, but bells and whistles...
   let valid =
     game.state.currentRound.achievementsEarned.findIndex(
-      (a) => a.name === achievement.name
+      (a) => a.uuid === achievement.uuid
     ) > -1;
 
   if (!valid) {
@@ -549,7 +556,7 @@ const pickAchievementForCurrentPlayer = (
   currentPlayer.victoryPoints += achievement.value;
 
   game.achievements = game.achievements.filter(
-    (a) => a.name !== achievement.name
+    (a) => a.uuid !== achievement.uuid
   );
 
   game.state.currentRound.achievementsEarned = [];
