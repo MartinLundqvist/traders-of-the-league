@@ -141,6 +141,11 @@ export const maxItem = (array: number[]): number =>
 const sumItemsMoreThanInner = (array: number[], x: number): number =>
   array.reduce((sum, item) => (item >= x ? (sum += x) : (sum += item)), 0);
 
+/**
+ * Calculates the sum of items in an array,
+ * but only up until the x-th item.
+ */
+
 export const sumItemsMoreThan = [
   (array: number[]) => sumItemsMoreThanInner(array, 0),
   (array: number[]) => sumItemsMoreThanInner(array, 1),
