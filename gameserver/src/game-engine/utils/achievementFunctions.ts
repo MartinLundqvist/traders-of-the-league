@@ -93,11 +93,11 @@ export const countNrContractsColor: TProgressionFunction = (player, values) => {
     }
   });
 
-  console.log(
-    `For player ${player.user.name} the achievement is:`,
-    values,
-    achievement
-  );
+  // console.log(
+  //   `For player ${player.user.name} the achievement is:`,
+  //   values,
+  //   achievement
+  // );
 
   return { achievement, achievedTargets };
 };
