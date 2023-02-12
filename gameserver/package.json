@@ -10,10 +10,7 @@
     "start:ai": "NODE_ENV=production IN_MEMORY=true node ./build/index.js",
     "dev": "nodemon src/index.ts",
     "dev:ai": "IN_MEMORY=true nodemon src/index.ts",
-    "tests": "jest",
-    "test": "nodemon src/tests/achievementTests.ts",
-    "test:gameengine": "nodemon src/tests/achievementTests.ts",
-    "test:auth": "nodemon src/tests/authTests.ts"
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
