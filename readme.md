@@ -30,7 +30,7 @@ For production, you need to point the server to a proper MongoDB instance. I use
 
 ## monitor
 
-React front-end bootstrapped with Vite.js that just pulls some simple metrics from the gameserver to show activity.
+React front-end bootstrapped with Vite.js that allows anyone to see metrics, and administrators to administrate the game databaseses.
 
 ## shared
 
