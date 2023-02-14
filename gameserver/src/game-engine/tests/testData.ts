@@ -1,5 +1,6 @@
-import { IPlayer } from '../../../../shared/types';
+import { ICity, IContract, IPlayer } from '../../../../shared/types';
 
+// This player is in Visby where there are gray and black cargo
 export const testPlayer: IPlayer = {
   user: {
     name: 'lynden',
@@ -383,3 +384,40 @@ export const testPlayer: IPlayer = {
   timeLeft: 3479450,
   timedOutRound: 0,
 };
+
+export const testCity: ICity = {
+  name: 'Visby',
+  nrContracts: 4,
+  contracts: [
+    {
+      value: 2,
+      cargo: ['yellow', 'blue'],
+      region: 'East',
+      uuid: 'E_yel_blu_2',
+    },
+    {
+      value: 4,
+      cargo: ['red', 'yellow'],
+      region: 'Central',
+      uuid: 'C_red_yel_4',
+    },
+  ],
+  coatOfArms: '',
+  goods: ['gray', 'black'],
+  region: 'East',
+};
+
+export const testContracts: IContract[] = [
+  {
+    value: 2,
+    cargo: ['yellow', 'blue'],
+    region: 'East',
+    uuid: 'E_yel_blu_2',
+  },
+  {
+    value: 4,
+    cargo: ['gray', 'yellow'],
+    region: 'Central',
+    uuid: 'C_red_yel_4',
+  },
+];

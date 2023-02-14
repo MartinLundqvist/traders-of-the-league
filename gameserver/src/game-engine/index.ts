@@ -16,7 +16,6 @@ import {
   ACHIEVEMENTS,
   BOARD,
   MAX_MOVES,
-  numberOfCitiesToEmpty,
   playerColors,
   playerInitialCargo,
 } from './constants';
