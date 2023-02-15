@@ -6,3 +6,4 @@ build
 saves
 trader-mongodb-data
 auth0Tests.http
+coverage
