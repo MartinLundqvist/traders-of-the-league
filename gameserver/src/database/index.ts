@@ -13,6 +13,7 @@ const connectToDB = async () => {
       return;
     }
 
+    mongoose.set('strictQuery', true);
     await mongoose.connect(DB_STRING || '');
     console.log('Connected to mongodb');
   } catch (err) {

@@ -13,7 +13,7 @@ import {
 import { GameStore } from '../stores/gameStore';
 import { SessionStore } from '../stores/sessionStore';
 import { TGameServer, TGameSocket } from '../types';
-import { nanoid } from 'nanoid';
+import { nanoid } from 'nanoid-3.3.4'; //TODO: Fix this!
 import { GameEngine } from '../game-engine';
 import { ChatStore } from '../stores/chatStore';
 import { RankingStore } from '../stores/rankingStore';

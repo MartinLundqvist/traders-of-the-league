@@ -6,7 +6,7 @@
   "scripts": {
     "prebuild": "rm -rf build",
     "build": "tsc --outDir ./build",
-    "start": "NODE_ENV=production node ./build/src/index.js",
+    "start": "NODE_ENV=production node ./build/index.js",
     "start:ai": "NODE_ENV=production IN_MEMORY=true node ./build/index.js",
     "dev": "nodemon src/index.ts",
     "dev:ai": "IN_MEMORY=true nodemon src/index.ts",
