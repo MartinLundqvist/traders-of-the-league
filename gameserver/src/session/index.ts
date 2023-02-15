@@ -15,8 +15,8 @@ import { SessionStore } from '../stores/sessionStore';
 import { TGameServer, TGameSocket } from '../types';
 import { nanoid } from 'nanoid';
 import { GameEngine } from '../game-engine';
-import { ChatStore } from 'src/stores/chatStore';
-import { RankingStore } from 'src/stores/rankingStore';
+import { ChatStore } from '../stores/chatStore';
+import { RankingStore } from '../stores/rankingStore';
 
 export class GameSession implements ISession {
   // Core ISession properties
