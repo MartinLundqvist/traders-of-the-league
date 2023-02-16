@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { nanoid } from 'nanoid-3.3.4'; // TODO: FIX THIS!
+import { nanoid } from 'nanoid'; // TODO: FIX THIS!
 import { GameEngine } from '../game-engine';
 import { ISession } from '../../../shared/types';
 import { GameStore } from '../stores/gameStore';
