@@ -73,8 +73,14 @@ export const SortButton = ({
 export const AuthButton = (): JSX.Element => {
   const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
 
+  console.log(window.location);
+
   if (!isAuthenticated)
     return <Button onClick={() => loginWithRedirect()}>Login</Button>;
 
-  return <Button onClick={() => logout()}>Logout</Button>;
+  return (
+    <Button onClick={() => logout({ returnTo: window.location.origin })}>
+      Logout
+    </Button>
+  );
 };
