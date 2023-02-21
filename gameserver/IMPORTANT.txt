@@ -1,6 +1,0 @@
-nanoid 4 has some breaking change. You have hacked around it here.
-- Delete the node_modules/nanoid-3.3.4 hack
-- Then decide whether to revert back to nanoid 3.3.4...
--... or to read up on how to migrate to 4.x.x
-
-Reinstall packages
