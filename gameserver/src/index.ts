@@ -30,7 +30,6 @@ import {
   rankingModel,
 } from './models';
 import {
-  createErrorHandler,
   createGameAPIRoutes,
   createProtectedRoutes,
   createRoutes,

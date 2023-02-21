@@ -187,7 +187,6 @@ export class GameSession implements ISession {
     callback: (session: ISession | null) => void
   ) {
     // We also need to initialize the local session properties
-    // TODO: This is a bit unelegant..
 
     // This is to prevent accidental dealings with bad sessions.
     if (!email || email.length < 2) {

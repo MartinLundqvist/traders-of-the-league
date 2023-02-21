@@ -47,18 +47,5 @@ export const pickRandomAchievements = (
     };
   });
 
-  // //create uniqe array of even numbers 0-15 that is numberOfPlayers + 1  long. This is to pick a "card" with two sides.
-  // const randomSet = new Set<number>();
-
-  // while (randomSet.size < numberOfPlayers + 1) {
-  //   randomSet.add(Math.floor(Math.random() * 8) * 2);
-  // }
-
-  // //then we randomize whether the card was picked A or B side when we create the array.
-  // const results = Array.from(randomSet).map((randomNumber) => {
-  //   const addZeroOrOne = Math.floor(Math.random() * 2);
-  //   return ACHIEVEMENTS[randomNumber + addZeroOrOne];
-  // });
-
   return results;
 };
