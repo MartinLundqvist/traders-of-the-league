@@ -11,10 +11,11 @@ import {
 } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { RenderPriorityBadgeCell } from '../../components/RenderBadgeCell';
-import { useBugReports, useMutateBugReport } from '../../hooks';
+import { useAdmin, useBugReports, useMutateBugReport } from '../../hooks';
 import { UTCStringToLocalDate } from '../../utils/dateRenderers';
 
 export const BugReport = (): JSX.Element => {
+  const isAdmin = useAdmin();
   const navigate = useNavigate();
   const { search } = useLocation();
   const { data, error, isLoading } = useBugReports();
@@ -83,9 +84,11 @@ export const BugReport = (): JSX.Element => {
       </Row>
       <div className='d-flex gap-2 mt-3'>
         <Button onClick={() => navigate('/bugreports')}>Back</Button>
-        <Button variant='danger' onClick={() => setShowModal(true)}>
-          Remove
-        </Button>
+        {isAdmin && (
+          <Button variant='danger' onClick={() => setShowModal(true)}>
+            Remove
+          </Button>
+        )}
       </div>
       <ConfirmModal
         show={showModal}
