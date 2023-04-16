@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useLayout } from '../../contexts/LayoutProvider';
-import rules from '../../assets/Rules.pdf';
+import rules from '../../assets/NewRules.pdf';
 
 const Wrapper = styled.div`
   display: flex;
